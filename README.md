@@ -1,4 +1,4 @@
-# Job Queue Daemon [![Build Status](https://dev.azure.com/keboola-dev/job-queue-daemon/_apis/build/status/keboola.job-queue-daemon?branchName=master)](https://dev.azure.com/keboola-dev/job-queue-daemon/_build/latest?definitionId=2&branchName=master)
+# Job Queue Daemon [![Build Status](https://dev.azure.com/keboola-dev/job-runner/_apis/build/status/keboola.job-runner?branchName=master)](https://dev.azure.com/keboola-dev/job-runner/_build/latest?definitionId=5&branchName=master)
 
 Symfony console application which is used inside an ECS task and wraps Docker runner library.
 
@@ -9,4 +9,4 @@ To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
 ## Run Tests
 
-`docker-compose run tests
+`docker-compose run tests`
