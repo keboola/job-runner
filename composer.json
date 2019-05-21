@@ -1,0 +1,103 @@
+{
+    "type": "project",
+    "name": "keboola/job-runner",
+    "description": "Job Runner ECS Task",
+    "keywords": [
+        "queue",
+        "runner",
+        "job"
+    ],    
+    "authors": [
+        {
+            "name": "Keboola",
+            "email": "devel@keboola.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "keboola/dockerbundle": "dev-odin-library-2@dev",
+        "keboola/job-queue-internal-api-php-client": "dev-master",
+        "symfony/console": "4.2.*",
+        "symfony/dotenv": "4.2.*",
+        "symfony/flex": "^1.1",
+        "symfony/framework-bundle": "4.2.*",
+        "symfony/yaml": "4.2.*"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/keboola/docker-bundle"
+        }
+    ],
+    "require-dev": {
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "keboola/coding-standard": ">=7.0.2",
+        "phpstan/phpstan-shim": "^0.11",
+        "symfony/phpunit-bridge": "4.2.*",
+        "symfony/test-pack": "^1.0"
+    },    
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "process-timeout": 3600        
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "tests": "php bin/phpunit",
+        "phpstan": "phpstan analyse --no-progress --level=max src tests -c phpstan.neon",
+        "phpcs": "phpcs --extensions=php src tests",
+        "phpcbf": "phpcbf --extensions=php src tests",
+        "phplint": "parallel-lint -j 10 --exclude vendor --exclude bin .",
+        "build": [
+            "@phplint",
+            "@phpcs",
+            "@tests",
+            "@phpstan"
+        ],
+        "ci": [
+            "@composer validate --no-check-all --strict",
+            "@build"
+        ]        
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.2.*"
+        }
+    }
+}

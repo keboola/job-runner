@@ -1,0 +1,13 @@
+version: '3'
+# for development purposes only
+
+services:
+  tests: &tests
+    build: .
+    command: 
+      composer ci
+
+  tests-local: 
+    <<: *tests
+    volumes:
+      - ./:/code
