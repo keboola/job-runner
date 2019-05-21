@@ -12,6 +12,7 @@ steps:
   displayName: 'Run Tests'
 
 - script: |
+    print "$AWS_ACCESS_KEY_ID"
     docker build -t keboola/job-runner .
     yes | eval $(docker run --rm -i -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY quay.io/keboola/aws-cli ecr get-login --region us-east-1 --no-include-email)
     docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:$COMMIT_ID
@@ -23,5 +24,4 @@ steps:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
     ECR_REPOSITORY_URI: $(ECR_REPOSITORY_URI)
-    ECS_AWS_SECRET: $(ECS_AWS_SECRET)
     COMMIT_ID: $(Build.SourceVersion)
