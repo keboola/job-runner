@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
    --no-install-recommends && rm -r /var/lib/apt/lists/*
 
-COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
-RUN docker-php-ext-install pdo_mysql zip
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+RUN docker-php-ext-install zip \
+	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 COPY composer.* ./
 RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
