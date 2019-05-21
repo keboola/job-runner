@@ -1,0 +1,12 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: docker info
+  displayName: 'Info'
+
+- script: docker-compose build
+  displayName: 'Build Tests'
+
+- script: docker-compose run tests
+  displayName: 'Run Tests'
