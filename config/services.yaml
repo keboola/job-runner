@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app_name: 'runner-sync-api'
+    instance_limits:
+        cpu_count: '%env(cpu_count)%'
+
 
 services:
     # default configuration for services in *this* file
@@ -15,4 +19,32 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Kernel.php}'
+
+    App\Command\RunCommand:
+        arguments:
+            $storageApiUrl: '%env(storage_api_url)%'
+            $legacyOauthApiUrl: '%env(legacy_oauth_api_url)%'
+            $instanceLimits: '%instance_limits%'
+            $jobQueueUrl: '%env(job_queue_url)%'
+
+    Keboola\ErrorControl\Monolog\S3Uploader:
+        arguments:
+            $storageApiUrl: "%env(storage_api_url)%"
+            $s3bucket: "%env(logs_s3_bucket)%"
+            $region: "%env(region)%"
+
+    Keboola\ErrorControl\Monolog\LogProcessor:
+        public: true
+        arguments:
+            $appName: "%app_name%"
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
+    Keboola\ObjectEncryptor\ObjectEncryptorFactory:
+        arguments:
+            $keyId: '%env(kms_key_id)%'
+            $region: '%env(region)%'
+            $keyVersion1: '%env(legacy_encryption_key)%'
+            # intentionally empty, legacy AES ciphers are not supported by this app
+            $keyVersion0:

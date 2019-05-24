@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "568cf224ab10437b4872001b99c27df1",
+    "content-hash": "9b5193d62ae97e2d8431f9cd91e6999d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.94.0",
+            "version": "3.94.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "fcc8593b3da8465d1181c73689117d13101a1c9a"
+                "reference": "402a7e30c4ad979ca264079cd224984840ce6b37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fcc8593b3da8465d1181c73689117d13101a1c9a",
-                "reference": "fcc8593b3da8465d1181c73689117d13101a1c9a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/402a7e30c4ad979ca264079cd224984840ce6b37",
+                "reference": "402a7e30c4ad979ca264079cd224984840ce6b37",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-05-20T18:14:09+00:00"
+            "time": "2019-05-23T18:07:25+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -473,6 +473,53 @@
             "time": "2018-08-09T09:06:17+00:00"
         },
         {
+            "name": "keboola/api-error-control",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/api-error-control.git",
+                "reference": "22b8673cc35110a07f6106ad778c5174c9903a4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/22b8673cc35110a07f6106ad778c5174c9903a4e",
+                "reference": "22b8673cc35110a07f6106ad778c5174c9903a4e",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.64",
+                "ext-json": "*",
+                "monolog/monolog": "^1.23",
+                "php": "^7.2",
+                "symfony/http-foundation": "^4.1",
+                "symfony/http-kernel": "^4.1"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "^1.0",
+                "keboola/coding-standard": "^6.0",
+                "phpstan/phpstan-shim": "^0.10",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\ErrorControl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "API Error control library - Utility classes for implementing logging in a KBC API",
+            "time": "2018-09-27T10:37:41+00:00"
+        },
+        {
             "name": "keboola/csv",
             "version": "1.1.4",
             "source": {
@@ -641,17 +688,11 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-master",
+            "version": "dev-odin-fake",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "73dc4e3a143921f0b80688a4635e559c7960d185"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/73dc4e3a143921f0b80688a4635e559c7960d185",
-                "reference": "73dc4e3a143921f0b80688a4635e559c7960d185",
-                "shasum": ""
+                "url": "D:\\Dropbox\\wwwroot\\job-queue-internal-api-php-client\\",
+                "reference": "ef6a1e440dea6014d8de02d4a5edf9a8c109b683"
             },
             "require": {
                 "ext-json": "*",
@@ -666,13 +707,44 @@
                 "phpstan/phpstan-shim": "^0.9.1",
                 "phpunit/phpunit": "^7.1"
             },
-            "type": "project",
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "Keboola\\JobQueueInternalClient\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Keboola\\JobQueueInternalClient\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "phpunit"
+                ],
+                "phpstan": [
+                    "phpstan analyse --no-progress --level=max src tests -c phpstan.neon"
+                ],
+                "phpcs": [
+                    "phpcs --extensions=php src tests"
+                ],
+                "phpcbf": [
+                    "phpcbf --extensions=php src tests"
+                ],
+                "phplint": [
+                    "parallel-lint -j 10 --exclude vendor ."
+                ],
+                "build": [
+                    "@phplint",
+                    "@phpcs",
+                    "@phpstan",
+                    "@tests"
+                ],
+                "ci": [
+                    "@composer validate --no-check-all --strict",
+                    "@build"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -689,7 +761,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2019-05-07T14:51:46+00:00"
+            "time": "2019-05-23T13:55:27+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",

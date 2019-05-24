@@ -1,7 +1,7 @@
 FROM php:7-cli
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV APP_ENV debug
+ENV APP_ENV prod
 
 WORKDIR /code
 
@@ -21,4 +21,4 @@ RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
 COPY . .
 RUN composer install $COMPOSER_FLAGS
 
-CMD composer ci
+CMD php \code\bin\console app:run

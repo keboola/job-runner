@@ -7,6 +7,9 @@ namespace App;
 use Keboola\DockerBundle\Docker\Configuration\Usage\Adapter;
 use Keboola\DockerBundle\Docker\Runner\UsageFile\UsageFileInterface;
 use Keboola\DockerBundle\Exception\ApplicationException;
+use Keboola\JobQueueInternalClient\Client;
+use Symfony\Component\Filesystem\Filesystem;
+
 
 class UsageFile implements UsageFileInterface
 {
@@ -30,13 +33,25 @@ class UsageFile implements UsageFileInterface
      */
     private $jobId = null;
 
+    /** @var Client */
+    private $client;
+
+    /** @var Filesystem */
+    private $fs;
+
     public function __construct()
     {
-        //$this->fs = new Filesystem;
+        $this->fs = new Filesystem;
+    }
+
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
     }
 
     /**
      * Stores usage to ES job
+     * @throws ApplicationException
      */
     public function storeUsage(): void
     {
@@ -45,24 +60,22 @@ class UsageFile implements UsageFileInterface
         }
         $usageFileName = $this->dataDir . '/out/usage' . $this->adapter->getFileExtension();
         var_dump($usageFileName);
-        /*
         if ($this->fs->exists($usageFileName)) {
             $usage = $this->adapter->readFromFile($usageFileName);
-            $job = $this->jobMapper->get($this->jobId);
+            // Todo simplify this
+            $job = $this->client->getFakeJobData([$this->jobId]);
             if ($job !== null) {
-                $currentUsage = $job->getUsage();
+                $currentUsage = $this->client->getJobUsage($this->jobId);
                 foreach ($usage as $usageItem) {
                     $currentUsage[] = $usageItem;
                 }
                 if ($currentUsage) {
-                    $job = $job->setUsage($currentUsage);
-                    $this->jobMapper->update($job);
+                    $this->client->setJobUsage($this->jobId, $currentUsage);
                 }
             } else {
                 throw new ApplicationException('Job not found', null, ['jobId' => $this->jobId]);
             }
         }
-        */
     }
 
     // phpcs:disable

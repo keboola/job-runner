@@ -18,8 +18,9 @@
         "php": "^7.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "keboola/api-error-control": "^0.4.1",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
-        "keboola/job-queue-internal-api-php-client": "dev-master",
+        "keboola/job-queue-internal-api-php-client": "dev-odin-fake@dev",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
@@ -30,6 +31,10 @@
         {
             "type": "git",
             "url": "https://github.com/keboola/docker-bundle"
+        },
+        {
+            "type": "git",
+            "url": "D:\\Dropbox\\wwwroot\\job-queue-internal-api-php-client\\"
         }
     ],
     "require-dev": {

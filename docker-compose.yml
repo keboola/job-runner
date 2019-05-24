@@ -2,8 +2,16 @@ version: '3'
 # for development purposes only
 
 services:
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: keboola/job-runner
+
   tests: &tests
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-tests
     command: 
       composer ci
 
@@ -11,3 +19,13 @@ services:
     <<: *tests
     volumes:
       - ./:/code
+      - /tmp/:/tmp/
+      - /var/run/docker.sock:/var/run/docker.sock      
+    environment:
+      - JOB_ID
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+    command:
+      - php 
+      - /code/bin/console 
+      - app:run
