@@ -22,7 +22,6 @@ services:
       - /tmp/:/tmp/
       - /var/run/docker.sock:/var/run/docker.sock      
     environment:
-      - JOB_ID
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
     command:

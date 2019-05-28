@@ -9,44 +9,32 @@ use Keboola\DockerBundle\Docker\Runner\UsageFile\UsageFileInterface;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\JobQueueInternalClient\Client;
 use Symfony\Component\Filesystem\Filesystem;
-
+use Throwable;
 
 class UsageFile implements UsageFileInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $dataDir = null;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $format = null;
 
-    /**
-     * @var Adapter
-     */
+    /** @var Adapter */
     private $adapter;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $jobId = null;
 
     /** @var Client */
-    private $client;
-
-    /** @var Filesystem */
-    private $fs;
+    private $queueClient;
 
     public function __construct()
     {
-        $this->fs = new Filesystem;
     }
 
-    public function setClient(Client $client)
+    public function setQueueClient(Client $queueClient): void
     {
-        $this->client = $client;
+        $this->queueClient = $queueClient;
     }
 
     /**
@@ -59,21 +47,13 @@ class UsageFile implements UsageFileInterface
             throw new ApplicationException('Usage file not initialized.');
         }
         $usageFileName = $this->dataDir . '/out/usage' . $this->adapter->getFileExtension();
-        var_dump($usageFileName);
-        if ($this->fs->exists($usageFileName)) {
-            $usage = $this->adapter->readFromFile($usageFileName);
-            // Todo simplify this
-            $job = $this->client->getFakeJobData([$this->jobId]);
-            if ($job !== null) {
-                $currentUsage = $this->client->getJobUsage($this->jobId);
-                foreach ($usage as $usageItem) {
-                    $currentUsage[] = $usageItem;
-                }
-                if ($currentUsage) {
-                    $this->client->setJobUsage($this->jobId, $currentUsage);
-                }
-            } else {
-                throw new ApplicationException('Job not found', null, ['jobId' => $this->jobId]);
+        $fs = new Filesystem();
+        if ($fs->exists($usageFileName)) {
+            try {
+                $usage = $this->adapter->readFromFile($usageFileName);
+                $this->queueClient->addJobUsage($this->jobId, $usage);
+            } catch (Throwable $e) {
+                throw new ApplicationException('Failed to store Job usage: ' . $e->getMessage(), $e);
             }
         }
     }
@@ -83,6 +63,7 @@ class UsageFile implements UsageFileInterface
     {
         $this->dataDir = $dataDir;
     }
+
     // phpcs:enable
 
     public function setFormat(string $format): void

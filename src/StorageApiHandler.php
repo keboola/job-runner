@@ -1,56 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
+use Keboola\DockerBundle\Monolog\Handler\StorageApiHandlerInterface;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Event;
 use function Keboola\Utils\sanitizeUtf8;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
-class StorageApiHandler extends AbstractHandler
+class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInterface
 {
-    /**
-     * Verbosity None - event will not be stored in Storage at all.
-     */
-    const VERBOSITY_NONE = 'none';
-
-    /**
-     * Verbosity Camouflage - event will be stored in Storage only as a generic message.
-     */
-    const VERBOSITY_CAMOUFLAGE = 'camouflage';
-
-    /**
-     * Verbosity Normal - event will be stored in Storage as received.
-     */
-    const VERBOSITY_NORMAL = 'normal';
-
-    /**
-     * Verbosity Verbose - event will be stored in Storage including all additonal event data.
-     */
-    const VERBOSITY_VERBOSE = 'verbose';
-
-    /**
-     * @var array
-     */
-    private $verbosity;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $appName;
 
-    /**
-     * @var Client
-     */
+    /** @var Client */
     protected $storageApiClient;
 
-    /**
-     * StorageApiHandler constructor.
-     * @param string $appName
-     * @param Client $client
-     */
-    public function __construct($appName, Client $client)
+    /** @var array */
+    private $verbosity;
+
+    public function __construct(string $appName, Client $client)
     {
         parent::__construct();
         $this->storageApiClient = $client;
@@ -66,10 +38,19 @@ class StorageApiHandler extends AbstractHandler
     }
 
     /**
+     * Get verbosity for each error level.
+     * @return array Key is Monolog error level, value is verbosity constant.
+     */
+    public function getVerbosity(): array
+    {
+        return $this->verbosity;
+    }
+
+    /**
      * Set verbosity for each error level. If a level is not provided, its verbosity will not be changed.
      * @param array $verbosity Key is Monolog error level, value is verbosity constant.
      */
-    public function setVerbosity(array $verbosity)
+    public function setVerbosity(array $verbosity): void
     {
         foreach ($verbosity as $level => $value) {
             $this->verbosity[$level] = $value;
@@ -77,20 +58,11 @@ class StorageApiHandler extends AbstractHandler
     }
 
     /**
-     * Get verbosity for each error level.
-     * @return array Key is Monolog error level, value is verbosity constant.
-     */
-    public function getVerbosity()
-    {
-        return $this->verbosity;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
-        if (($this->verbosity[$record['level']] == self::VERBOSITY_NONE) || empty($record['message'])) {
+        if (($this->verbosity[$record['level']] === self::VERBOSITY_NONE) || empty($record['message'])) {
             return false;
         }
 
@@ -102,18 +74,17 @@ class StorageApiHandler extends AbstractHandler
         }
         $event->setMessage(sanitizeUtf8($record['message']));
         $event->setRunId($this->storageApiClient->getRunId());
-        $event->setParams([]);
 
-        if ($this->verbosity[$record['level']] == self::VERBOSITY_VERBOSE) {
+        if ($this->verbosity[$record['level']] === self::VERBOSITY_VERBOSE) {
             $results = $record['context'];
         } else {
             $results = [];
         }
         $event->setResults($results);
 
-        if ($this->verbosity[$record['level']] == self::VERBOSITY_CAMOUFLAGE) {
-            $event->setMessage("Application error");
-            $event->setDescription("Contact support@keboola.com");
+        if ($this->verbosity[$record['level']] === self::VERBOSITY_CAMOUFLAGE) {
+            $event->setMessage('Application error');
+            $event->setDescription('Please contact Keboola Support for help.');
         }
 
         switch ($record['level']) {

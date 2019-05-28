@@ -18,7 +18,8 @@
         "php": "^7.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "keboola/api-error-control": "^0.4.1",
+        "ext-json": "*",
+        "keboola/api-error-control": "^0.4",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
         "keboola/job-queue-internal-api-php-client": "dev-odin-fake@dev",
         "symfony/console": "4.2.*",
@@ -38,12 +39,13 @@
         }
     ],
     "require-dev": {
+        "ext-zip": "*",
         "jakub-onderka/php-parallel-lint": "^1.0",
         "keboola/coding-standard": ">=7.0.2",
         "phpstan/phpstan-shim": "^0.11",
         "symfony/phpunit-bridge": "4.2.*",
         "symfony/test-pack": "^1.0"
-    },    
+    },
     "config": {
         "preferred-install": {
             "*": "dist"

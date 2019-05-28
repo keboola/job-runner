@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\StorageApiFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Runner;
-use Keboola\DockerBundle\Exception\ApplicationException;
+use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\Client;
-use Keboola\JobQueueInternalClient\Job;
+use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
-use Keboola\ObjectEncryptor\Wrapper\ProjectWrapper;
 use Keboola\StorageApi\Components;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -27,11 +27,11 @@ use Throwable;
 
 class RunCommand extends Command
 {
+    /** @var string */
+    protected static $defaultName = 'app:run';
+
     /** @var ObjectEncryptorFactory */
     private $objectEncryptorFactory;
-
-    /** @var string */
-    private $storageApiUrl;
 
     /** @var string */
     private $legacyOauthApiUrl;
@@ -39,20 +39,28 @@ class RunCommand extends Command
     /** @var array */
     private $instanceLimits;
 
-    /** @var string */
-    private $jobQueueUrl;
+    /** @var QueueClient */
+    private $queueClient;
+
+    /** @var Logger */
+    private $logger;
+
+    /** @var StorageApiFactory */
+    private $storageApiFactory;
 
     public function __construct(
+        Logger $logger,
         ObjectEncryptorFactory $objectEncryptorFactory,
-        string $storageApiUrl,
-        string $jobQueueUrl,
+        QueueClient $queueClient,
+        StorageApiFactory $storageApiFactory,
         string $legacyOauthApiUrl,
         array $instanceLimits
     ) {
-        parent::__construct('app:run');
+        parent::__construct(self::$defaultName);
         $this->objectEncryptorFactory = $objectEncryptorFactory;
-        $this->storageApiUrl = $storageApiUrl;
-        $this->jobQueueUrl = $jobQueueUrl;
+        $this->queueClient = $queueClient;
+        $this->logger = $logger;
+        $this->storageApiFactory = $storageApiFactory;
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
         $this->instanceLimits = $instanceLimits;
     }
@@ -62,62 +70,62 @@ class RunCommand extends Command
         $this
             // the short description shown while running "php bin/console list"
             ->setDescription('blabla')
-
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('more blablabla')
-        ;
+            ->setHelp('more blablabla');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $logger = new Logger('runner-logger');
-        $logger->pushHandler(new StreamHandler("php://stdout", Logger::INFO));
+        $logger = $this->logger;
+        $logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
+        // get job
+        if (empty(getenv('JOB_ID'))) {
+            $output->writeln('JOB_ID env variable is missing.');
+            return 2;
+        }
+        $jobId = getenv('JOB_ID');
         try {
-            // get job
-            if (empty(getenv('JOB_ID'))) {
-                throw new ApplicationException('JOB_ID env variable is missing.');
-            }
-            $jobId = getenv('JOB_ID');
             $logger->info('Running job ' . $jobId);
-
-            $queueClient = new Client($this->jobQueueUrl, 'token');
-            /** @var Job $job */
-            $job = $queueClient->getFakeJobData([$jobId])[0];
+            $job = $this->queueClient->getJob($jobId);
 
             // init encryption
             $this->objectEncryptorFactory->setComponentId($job->getComponentId());
             $this->objectEncryptorFactory->setProjectId($job->getProjectId());
             $this->objectEncryptorFactory->setConfigurationId($job->getConfigId());
-            $this->objectEncryptorFactory->setStackId(parse_url($this->storageApiUrl, PHP_URL_HOST));
+            $this->objectEncryptorFactory->setStackId(parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST));
             $encryptor = $this->objectEncryptorFactory->getEncryptor();
-            var_dump($encryptor->encrypt('578-159263-XDgY3z51cUbfiPQ8katmY6Id0w3PeUTd7q0mO4HV', ProjectWrapper::class));
-            //var_dump($encryptor->encrypt('HELP_TUTORIAL', ProjectWrapper::class));
             $token = $encryptor->decrypt($job->getToken());
 
             // set up logging to storage
             $options = [
-                'url' => $this->storageApiUrl,
+                'url' => $this->storageApiFactory->getUrl(),
                 'token' => $token,
                 'userAgent' => $job->getComponentId(),
                 'jobPollRetryDelay' => self::getStepPollDelayFunction(),
             ];
-            $clientWithoutLogger = new \Keboola\StorageApi\Client($options);
+            $clientWithoutLogger = $this->storageApiFactory->getClient($options);
+            $clientWithoutLogger->setRunId($jobId);
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $logger->pushHandler($handler);
-            $containerLogger = new ContainerLogger('container-logger', [$handler]);
+            $containerLogger = new ContainerLogger('container-logger');
             $options['logger'] = $logger;
-            $clientWithLogger = new \Keboola\StorageApi\Client($options);
-            $loggerService = new LoggersService($logger, $containerLogger, $handler);
+            $clientWithLogger = $this->storageApiFactory->getClient($options);
+            $clientWithLogger->setRunId($jobId);
+            $loggerService = new LoggersService($logger, $containerLogger, clone $handler);
 
             // get job configuration
-            $component = $this->getComponent($clientWithLogger, $job->getComponentId());
+            $component = $this->getComponent($clientWithoutLogger, $job->getComponentId());
+            if (!empty($job->getTag())) {
+                $this->logger->warn(sprintf('Overriding component tag with: "%s"', $job->getTag()));
+                $component['data']['definition']['tag'] = $job->getTag();
+            }
             $componentClass = new Component($component);
             $jobDefinitionParser = new JobDefinitionParser();
             if ($job->getConfigData()) {
                 $jobDefinitionParser->parseConfigData($componentClass, $job->getConfigData(), $job->getConfigId());
             } else {
-                $components = new Components($clientWithLogger);
+                $components = new Components($clientWithoutLogger);
                 $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
                 $jobDefinitionParser->parseConfig($componentClass, $encryptor->decrypt($configuration));
             }
@@ -132,46 +140,43 @@ class RunCommand extends Command
                 $this->instanceLimits
             );
             $usageFile = new UsageFile();
-            $usageFile->setClient($queueClient);
+            $usageFile->setQueueClient($this->queueClient);
             $usageFile->setFormat($componentClass->getConfigurationFormat());
             $usageFile->setJobId($job->getId());
 
             // run job
-            $runner->run($jobDefinitions, 'run', $job->getMode(), $job->getId(), $usageFile, $job->getRowId());
-
-            $output->writeln('done something');
+            $outputs = $runner->run($jobDefinitions, 'run', $job->getMode(), $job->getId(), $usageFile, $job->getRowId());
+            if (count($outputs) === 0) {
+                $result = [
+                    'message' => 'No configurations executed.',
+                    'images' => [],
+                    'configVersion' => null,
+                ];
+            } else {
+                $result = [
+                    'message' => 'Component processing finished.',
+                    'images' => array_map(function (Output $output) {
+                        return $output->getImages();
+                    }, $outputs),
+                    'configVersion' => $outputs[0]->getConfigVersion(),
+                ];
+            }
+            // todo postJobResult needs to be called in exception handlers too
+            $this->queueClient->postJobResult($jobId, Client::STATUS_SUCCESS, $result);
             return 0;
         } catch (UserException $e) {
+            $this->queueClient->postJobResult($jobId, Client::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with user error: ' . $e->getMessage());
             return 1;
         } catch (Throwable $e) {
+            $this->queueClient->postJobResult($jobId, Client::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with app error: ' . $e->getMessage());
             $logger->error($e->getTraceAsString());
             return 2;
         }
     }
 
-    /**
-     * @param \Keboola\StorageApi\Client $client
-     * @param $id
-     * @return array
-     */
-    protected function getComponent(\Keboola\StorageApi\Client $client, $id)
-    {
-        // Check list of components
-        $components = $client->indexAction();
-        foreach ($components["components"] as $c) {
-            if ($c["id"] == $id) {
-                $component = $c;
-            }
-        }
-        //if (!isset($component)) {
-        //    throw new \Keboola\Syrup\Exception\UserException("Component '{$id}' not found.");
-        //}
-        return $component;
-    }
-
-    public static function getStepPollDelayFunction()
+    public static function getStepPollDelayFunction(): callable
     {
         return function ($tries) {
             switch ($tries) {
@@ -183,5 +188,25 @@ class RunCommand extends Command
                     return 5;
             }
         };
+    }
+
+    /**
+     * @param \Keboola\StorageApi\Client $client
+     * @param $id
+     * @return array
+     */
+    protected function getComponent(\Keboola\StorageApi\Client $client, string $id): array
+    {
+        // Check list of components
+        $components = $client->indexAction();
+        foreach ($components['components'] as $c) {
+            if ($c['id'] === $id) {
+                $component = $c;
+            }
+        }
+        //if (!isset($component)) {
+        //    throw new \Keboola\Syrup\Exception\UserException("Component '{$id}' not found.");
+        //}
+        return $component;
     }
 }
