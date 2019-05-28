@@ -148,17 +148,17 @@ class RunCommand extends Command
             $this->queueClient->postJobResult($jobId, QueueClient::STATUS_SUCCESS, $result);
             return 0;
         } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with encryption error: ' . $e->getMessage());
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (UserException $e) {
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with user error: ' . $e->getMessage());
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (Throwable $e) {
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with application error: ' . $e->getMessage());
             $logger->error($e->getTraceAsString());
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 2;
         }
     }
