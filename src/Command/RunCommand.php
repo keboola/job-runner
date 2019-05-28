@@ -14,9 +14,11 @@ use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
-use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
+use Keboola\JobQueueInternalClient\Job;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -67,12 +69,8 @@ class RunCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            // the short description shown while running "php bin/console list"
-            ->setDescription('blabla')
-            // the full command description shown when running the command with
-            // the "--help" option
-            ->setHelp('more blablabla');
+        $this->setDescription('Run job')
+            ->setHelp('Run job identified by JOB_ID environment variable.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -89,20 +87,13 @@ class RunCommand extends Command
             $logger->info('Running job ' . $jobId);
             $job = $this->queueClient->getJob($jobId);
 
-            // init encryption
-            $this->objectEncryptorFactory->setComponentId($job->getComponentId());
-            $this->objectEncryptorFactory->setProjectId($job->getProjectId());
-            $this->objectEncryptorFactory->setConfigurationId($job->getConfigId());
-            $this->objectEncryptorFactory->setStackId(parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST));
-            $encryptor = $this->objectEncryptorFactory->getEncryptor();
+            $encryptor = $this->initEncryption($job);
             $token = $encryptor->decrypt($job->getToken());
 
-            // set up logging to storage
+            // set up logging to storage API
             $options = [
-                'url' => $this->storageApiFactory->getUrl(),
                 'token' => $token,
                 'userAgent' => $job->getComponentId(),
-                'jobPollRetryDelay' => self::getStepPollDelayFunction(),
             ];
             $clientWithoutLogger = $this->storageApiFactory->getClient($options);
             $clientWithoutLogger->setRunId($jobId);
@@ -114,22 +105,8 @@ class RunCommand extends Command
             $clientWithLogger->setRunId($jobId);
             $loggerService = new LoggersService($logger, $containerLogger, clone $handler);
 
-            // get job configuration
-            $component = $this->getComponent($clientWithoutLogger, $job->getComponentId());
-            if (!empty($job->getTag())) {
-                $this->logger->warn(sprintf('Overriding component tag with: "%s"', $job->getTag()));
-                $component['data']['definition']['tag'] = $job->getTag();
-            }
-            $componentClass = new Component($component);
-            $jobDefinitionParser = new JobDefinitionParser();
-            if ($job->getConfigData()) {
-                $jobDefinitionParser->parseConfigData($componentClass, $job->getConfigData(), $job->getConfigId());
-            } else {
-                $components = new Components($clientWithoutLogger);
-                $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-                $jobDefinitionParser->parseConfig($componentClass, $encryptor->decrypt($configuration));
-            }
-            $jobDefinitions = $jobDefinitionParser->getJobDefinitions();
+            $component = $this->getComponentClass($clientWithoutLogger, $job);
+            $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger, $encryptor);
 
             // set up runner
             $runner = new Runner(
@@ -141,11 +118,18 @@ class RunCommand extends Command
             );
             $usageFile = new UsageFile();
             $usageFile->setQueueClient($this->queueClient);
-            $usageFile->setFormat($componentClass->getConfigurationFormat());
+            $usageFile->setFormat($component->getConfigurationFormat());
             $usageFile->setJobId($job->getId());
 
             // run job
-            $outputs = $runner->run($jobDefinitions, 'run', $job->getMode(), $job->getId(), $usageFile, $job->getRowId());
+            $outputs = $runner->run(
+                $jobDefinitions,
+                'run',
+                $job->getMode(),
+                $job->getId(),
+                $usageFile,
+                $job->getRowId()
+            );
             if (count($outputs) === 0) {
                 $result = [
                     'message' => 'No configurations executed.',
@@ -161,52 +145,69 @@ class RunCommand extends Command
                     'configVersion' => $outputs[0]->getConfigVersion(),
                 ];
             }
-            // todo postJobResult needs to be called in exception handlers too
-            $this->queueClient->postJobResult($jobId, Client::STATUS_SUCCESS, $result);
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_SUCCESS, $result);
             return 0;
+        } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $logger->error('Job ended with encryption error: ' . $e->getMessage());
+            return 1;
         } catch (UserException $e) {
-            $this->queueClient->postJobResult($jobId, Client::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
             $logger->error('Job ended with user error: ' . $e->getMessage());
             return 1;
         } catch (Throwable $e) {
-            $this->queueClient->postJobResult($jobId, Client::STATUS_ERROR, ['message' => $e->getMessage()]);
-            $logger->error('Job ended with app error: ' . $e->getMessage());
+            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $logger->error('Job ended with application error: ' . $e->getMessage());
             $logger->error($e->getTraceAsString());
             return 2;
         }
     }
 
-    public static function getStepPollDelayFunction(): callable
-    {
-        return function ($tries) {
-            switch ($tries) {
-                case ($tries < 15):
-                    return 1;
-                case ($tries < 30):
-                    return 2;
-                default:
-                    return 5;
-            }
-        };
+    private function getJobDefinitions(
+        Component $component,
+        Job $job,
+        StorageClient $client,
+        ObjectEncryptor $encryptor
+    ): array {
+        $jobDefinitionParser = new JobDefinitionParser();
+        if ($job->getConfigData()) {
+            $jobDefinitionParser->parseConfigData($component, $job->getConfigData(), $job->getConfigId());
+        } else {
+            $components = new Components($client);
+            $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+            $jobDefinitionParser->parseConfig($component, $encryptor->decrypt($configuration));
+        }
+        return $jobDefinitionParser->getJobDefinitions();
     }
 
-    /**
-     * @param \Keboola\StorageApi\Client $client
-     * @param $id
-     * @return array
-     */
-    protected function getComponent(\Keboola\StorageApi\Client $client, string $id): array
+    private function getComponentClass(StorageClient $client, Job $job): Component
+    {
+        $component = $this->getComponent($client, $job->getComponentId());
+        if (!empty($job->getTag())) {
+            $this->logger->warn(sprintf('Overriding component tag with: "%s"', $job->getTag()));
+            $component['data']['definition']['tag'] = $job->getTag();
+        }
+        return new Component($component);
+    }
+
+    private function initEncryption(Job $job): ObjectEncryptor
+    {
+        $this->objectEncryptorFactory->setComponentId($job->getComponentId());
+        $this->objectEncryptorFactory->setProjectId($job->getProjectId());
+        $this->objectEncryptorFactory->setConfigurationId($job->getConfigId());
+        $this->objectEncryptorFactory->setStackId(parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST));
+        return $this->objectEncryptorFactory->getEncryptor();
+    }
+
+    private function getComponent(StorageClient $client, string $id): array
     {
         // Check list of components
         $components = $client->indexAction();
-        foreach ($components['components'] as $c) {
-            if ($c['id'] === $id) {
-                $component = $c;
+        foreach ($components['components'] as $component) {
+            if ($component['id'] === $id) {
+                return $component;
             }
         }
-        //if (!isset($component)) {
-        //    throw new \Keboola\Syrup\Exception\UserException("Component '{$id}' not found.");
-        //}
-        return $component;
+        throw new UserException(sprintf('Component "%s" was not found.', $id));
     }
 }

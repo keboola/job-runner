@@ -165,7 +165,7 @@ YAML;
             ->method('addJobUsage')
             ->with(
                 self::equalTo('1'),
-                self::callback(function ($actualUsage) use ($usage) {
+                self::callback(function ($actualUsage) {
                     return $actualUsage === [];
                 })
             );

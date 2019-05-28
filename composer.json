@@ -35,7 +35,7 @@
         },
         {
             "type": "git",
-            "url": "D:\\Dropbox\\wwwroot\\job-queue-internal-api-php-client\\"
+            "url": "https://github.com/keboola/job-queue-internal-api-php-client"
         }
     ],
     "require-dev": {
@@ -51,7 +51,7 @@
             "*": "dist"
         },
         "sort-packages": true,
-        "process-timeout": 3600        
+        "process-timeout": 7200
     },
     "autoload": {
         "psr-4": {

@@ -191,7 +191,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
 
         self::assertEquals(0, $return);
         $output = '';
-        foreach ($this->getContainerHandler()->getRecords() as $record) {
+        foreach ($this->getTestHandler()->getRecords() as $record) {
             if ($record['level'] === Logger::ERROR) {
                 $output .= $record['message'];
             }
@@ -307,7 +307,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
 
         self::assertEquals(0, $return);
         $output = '';
-        foreach ($this->getContainerHandler()->getRecords() as $record) {
+        foreach ($this->getTestHandler()->getRecords() as $record) {
             if ($record['level'] === Logger::ERROR) {
                 $output .= $record['message'];
             }
@@ -330,7 +330,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             'action' => 'run',
             'storage' => [],
         ];
-        self::assertEquals($expectedConfig, json_decode(strrev(base64_decode($output)), true));
+        self::assertEquals($expectedConfig, json_decode(strrev((string) base64_decode($output)), true));
     }
 
     public function testRunTag(): void

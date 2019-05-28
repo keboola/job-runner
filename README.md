@@ -10,7 +10,12 @@ To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 Create a services stack using `provisioning\job-runner.json` CF template if not present.
 Create a testing stack using `test-cf-stack.json` CF template. Go to the `JobRunnerUser` created in Resources and create new Access Key for the user.
 
+- modify `.env` file to set `kms_key_id` `logs_s3_bucket` to the created ones 
+- `docker-compose build`
+- Set environment variables `KBC_TEST_TOKEN` + `KBC_TEST_URL` obtained from a testing KBC project and `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` obtained from the above created user.
+- `docker-compose run tests`
 
 ## Run Tests
 
 `docker-compose run tests`
+

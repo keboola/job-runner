@@ -20,7 +20,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class BaseFunctionalTest extends TestCase
+abstract class BaseFunctionalTest extends TestCase
 {
     /** @var StorageClient */
     private $storageClient;
@@ -83,7 +83,9 @@ class BaseFunctionalTest extends TestCase
         $tokenInfo = $this->storageClient->verifyToken();
         $this->objectEncryptorFactory->setComponentId($jobData['params']['component']);
         $this->objectEncryptorFactory->setProjectId($tokenInfo['owner']['id']);
-        $jobData['token']['token'] = $this->objectEncryptorFactory->getEncryptor()->encrypt(getenv('KBC_TEST_TOKEN'));
+        $jobData['token']['token'] = $this->objectEncryptorFactory->getEncryptor()->encrypt(
+            (string) getenv('KBC_TEST_TOKEN')
+        );
         $jobData['project']['id'] = $tokenInfo['owner']['id'];
         $job = new Job($jobData);
         $queueClient = self::getMockBuilder(QueueClient::class)
@@ -97,10 +99,10 @@ class BaseFunctionalTest extends TestCase
             $this->callback(function ($result) use ($expectedJobResult) {
                 // Todo solve this is in a more flexible way - row tests produce more images and digests
                 if ($expectedJobResult !== null) {
-                    self::assertEquals($expectedJobResult, $result);
+                    self::assertEquals($expectedJobResult, $result, var_export($result, true));
                 } else {
-                    self::assertArrayHasKey('message', $result);
-                    self::assertArrayHasKey('images', $result);
+                    self::assertArrayHasKey('message', $result, var_export($result, true));
+                    self::assertArrayHasKey('images', $result, var_export($result, true));
                     self::assertArrayHasKey('configVersion', $result);
                     self::assertEquals('Component processing finished.', $result['message']);
                     self::assertGreaterThan(1, $result['images']);
@@ -119,7 +121,7 @@ class BaseFunctionalTest extends TestCase
                 ->getMock();
             $storageApiFactory->expects(self::any())->method('getClient')->willReturn($mockClient);
         } else {
-            $storageApiFactory = new StorageApiFactory(getenv('KBC_TEST_URL'));
+            $storageApiFactory = new StorageApiFactory((string) getenv('KBC_TEST_URL'));
         }
         /** @var StorageApiFactory $storageApiFactory */
         $command = new RunCommand(
@@ -127,7 +129,7 @@ class BaseFunctionalTest extends TestCase
             $this->objectEncryptorFactory,
             $queueClient,
             $storageApiFactory,
-            getenv('legacy_oauth_api_url'),
+            (string) getenv('legacy_oauth_api_url'),
             ['cpu_count' => 1]
         );
         putenv('JOB_ID=' . $job->getId());

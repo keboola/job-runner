@@ -12,6 +12,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-tests
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/:/tmp/
+    environment:
+      - KBC_TEST_URL
+      - KBC_TEST_TOKEN
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
     command: 
       composer ci
 
@@ -20,10 +28,7 @@ services:
     volumes:
       - ./:/code
       - /tmp/:/tmp/
-      - /var/run/docker.sock:/var/run/docker.sock      
-    environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
+      - /var/run/docker.sock:/var/run/docker.sock
     command:
       - php 
       - /code/bin/console 

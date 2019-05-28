@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Keboola\DockerBundle\Tests\JobExecutorTest;
+namespace App\Tests\Functional;
 
-use App\Tests\Functional\BaseFunctionalTest;
 use Keboola\ObjectEncryptor\Legacy\Wrapper\ComponentProjectWrapper;
 use Keboola\ObjectEncryptor\Wrapper\ComponentWrapper;
 use Keboola\StorageApi\Components;
@@ -68,7 +67,7 @@ class EncryptionTest extends BaseFunctionalTest
                 $output = $record['message'];
             }
         }
-        $config = json_decode(strrev(base64_decode($output)), true);
+        $config = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('first', $config['parameters']['key1']);
         self::assertEquals('second', $config['parameters']['#key2']);
         self::assertEquals('third', $config['parameters']['#key3']);
@@ -144,7 +143,7 @@ class EncryptionTest extends BaseFunctionalTest
                 $output = $record['message'];
             }
         }
-        $config = json_decode(strrev(base64_decode($output)), true);
+        $config = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('first', $config['parameters']['configKey1']);
         self::assertEquals('second', $config['parameters']['#configKey2']);
         self::assertEquals('third', $config['parameters']['#configKey3']);
@@ -213,7 +212,7 @@ class EncryptionTest extends BaseFunctionalTest
                 $output = $record['message'];
             }
         }
-        $state = json_decode(strrev(base64_decode($output)), true);
+        $state = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('fifth', $state['#key5']);
         self::assertEquals('sixth', $state['key6']);
     }

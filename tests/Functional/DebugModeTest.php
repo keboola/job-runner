@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Keboola\DockerBundle\Tests\Executor;
+namespace App\Tests\Functional;
 
-use App\Tests\Functional\BaseFunctionalTest;
 use Aws\S3\S3Client;
 use Keboola\Csv\CsvFile;
 use Keboola\StorageApi\Components;
@@ -106,11 +105,11 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode($config, true);
+        $config = \GuzzleHttp\json_decode((string) $config, true);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('in/tables/source.csv');
-        $lines = explode("\n", trim($tableData));
+        $lines = explode("\n", trim((string) $tableData));
         sort($lines);
         self::assertEquals(
             [
@@ -129,11 +128,11 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode($config, true);
+        $config = \GuzzleHttp\json_decode((string) $config, true);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('out/tables/destination.csv');
-        $lines = explode("\n", trim($tableData));
+        $lines = explode("\n", trim((string) $tableData));
         sort($lines);
         self::assertEquals(
             [
@@ -338,7 +337,7 @@ class DebugModeTest extends BaseFunctionalTest
                 $output = $record['message'];
             }
         }
-        $config = \GuzzleHttp\json_decode(strrev(base64_decode($output)), true);
+        $config = \GuzzleHttp\json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
 
@@ -358,7 +357,7 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($zipFileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode($config, true);
+        $config = \GuzzleHttp\json_decode((string) $config, true);
         self::assertNotEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('[hidden]', $config['parameters']['#encrypted']);
         self::assertEquals('not-[hidden]', $config['parameters']['plain']);
