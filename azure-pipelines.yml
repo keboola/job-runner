@@ -10,6 +10,11 @@ steps:
 
 - script: docker-compose run tests
   displayName: 'Run Tests'
+  env:
+    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+    KBC_TEST_URL: $(KBC_TEST_URL)
+    KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
 
 - script: |
     docker build -t keboola/job-runner .
@@ -22,7 +27,5 @@ steps:
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-    KBC_TEST_URL: $(KBC_TEST_URL)
-    KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
     ECR_REPOSITORY_URI: $(ECR_REPOSITORY_URI)
     COMMIT_ID: $(Build.SourceVersion)
