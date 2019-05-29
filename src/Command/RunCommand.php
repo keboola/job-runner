@@ -85,7 +85,8 @@ class RunCommand extends Command
         $jobId = getenv('JOB_ID');
         try {
             $logger->info('Running job ' . $jobId);
-            $job = $this->queueClient->getJob($jobId);
+            /** @var Job $job */
+            $job = $this->queueClient->getFakeJobData([$jobId])[0];
 
             $encryptor = $this->initEncryption($job);
             $token = $encryptor->decrypt($job->getToken());
