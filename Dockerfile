@@ -21,4 +21,4 @@ RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
 COPY . .
 RUN composer install $COMPOSER_FLAGS
 
-CMD php \code\bin\console app:run
+CMD php /code/bin/console app:run
