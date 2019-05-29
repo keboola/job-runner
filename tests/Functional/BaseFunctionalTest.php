@@ -96,7 +96,7 @@ abstract class BaseFunctionalTest extends TestCase
         $queueClient->expects(self::once())->method('postJobResult')->with(
             self::anything(),
             self::anything(), //todo self::equalTo('success'),
-            $this->callback(function ($result) use ($expectedJobResult) {
+            $this->callback(function (/*$result*/) /*use ($expectedJobResult)*/ {
                 // Todo solve this is in a more flexible way - row tests produce more images and digests
                 // also it is very hard to debug this way
                 /*
