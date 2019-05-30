@@ -4,7 +4,7 @@ pool:
   name: 'Default'
 
 steps:
-- script: docker info
+- script: whoami
   displayName: 'Info'
 
 - script: docker-compose build
