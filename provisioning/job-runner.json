@@ -21,21 +21,6 @@
     }
   },
   "Resources": {
-    "ServiceRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [{
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ecs.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-          }]
-        }
-      }
-    },
     "DeployPolicy": {
       "Type": "AWS::IAM::ManagedPolicy",
       "Properties": {
@@ -58,13 +43,7 @@
               "Action": "iam:PassRole",
               "Resource": [{
                   "Fn::GetAtt": [
-                    "TaskRole",
-                    "Arn"
-                  ]
-                },
-                {
-                  "Fn::GetAtt": [
-                    "ServiceRole",
+                    "TaskInstanceRole",
                     "Arn"
                   ]
                 }
@@ -120,11 +99,35 @@
         }
       }
     },
-    "TaskRole": {
+    "TaskInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "TaskInstanceRole"
+          }
+        ]
+      },
+      "DependsOn": [
+        "TaskInstanceRole"
+      ]
+    },    
+    "TaskInstanceRole": {
       "Type": "AWS::IAM::Role",
+      "DeletionPolicy": "Delete",
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [{
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ecs-tasks.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          },
+          {
             "Sid": "",
             "Effect": "Allow",
             "Principal": {
@@ -193,10 +196,47 @@
                 }]
               }]
             }
+          },
+          {
+            "PolicyName": "logs",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [{
+                "Effect": "Allow",
+                "Action": [
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "*"
+              }]
+            }
+          },          
+          {
+            "PolicyName": "ecs-instance",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                  {
+                      "Effect": "Allow",
+                      "Action": [
+                          "ecs:CreateCluster",
+                          "ecs:DeregisterContainerInstance",
+                          "ecs:DiscoverPollEndpoint",
+                          "ecs:Poll",
+                          "ecs:RegisterContainerInstance",
+                          "ecs:StartTelemetrySession",
+                          "ecs:Submit*"
+                      ],
+                      "Resource": [
+                          "*"
+                      ]
+                  }
+              ]
+            }
           }
         ]
       }
-    },    
+    },
     "EcrRepository": {
       "Type": "AWS::ECR::Repository",
       "Properties": {
