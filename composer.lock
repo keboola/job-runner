@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.96.0",
+            "version": "3.97.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "6dff66f544e9d9daeb5b2557ade5091d1caa7f77"
+                "reference": "a01af113c33627ee1a8ba3a681de17240d0adccf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6dff66f544e9d9daeb5b2557ade5091d1caa7f77",
-                "reference": "6dff66f544e9d9daeb5b2557ade5091d1caa7f77",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a01af113c33627ee1a8ba3a681de17240d0adccf",
+                "reference": "a01af113c33627ee1a8ba3a681de17240d0adccf",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-05-28T18:07:15+00:00"
+            "time": "2019-05-29T18:17:02+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -692,7 +692,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client",
-                "reference": "80ec3cebe59aef9fb2071de1c42459b3627ebe36"
+                "reference": "05e80757b05ce4858fb04e926981f1c252ad53fe"
             },
             "require": {
                 "ext-json": "*",
@@ -761,7 +761,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2019-05-29T11:16:02+00:00"
+            "time": "2019-05-30T10:14:54+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
