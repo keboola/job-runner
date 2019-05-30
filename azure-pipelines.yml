@@ -1,5 +1,7 @@
+#pool:
+#  vmImage: 'ubuntu-latest'
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
 
 steps:
 - script: docker info
