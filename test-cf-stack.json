@@ -1,0 +1,106 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Stack for testing Job Runner Task",
+    "Parameters": {
+        "KeboolaStack": {
+            "Type": "String",
+            "Description": "All resources will be tagged by this value."
+        },
+        "LogsBucket": {
+            "Type": "String",
+            "Description": "Keboola logs bucket. S3LogsBucket output of connection/services stack."
+        },
+        "KmsKeyArn": {
+            "Type": "String",
+            "Description": "DockerRunnerKMSKey created by Syrup Services stack"
+        },
+        "DeployPolicy": {
+            "Type": "String",
+            "Description": "DeployPolicy created by Job Runner Services Stack"
+        }
+    },
+    "Resources": {
+        "JobRunnerUser": {
+            "Type": "AWS::IAM::User",
+            "DeletionPolicy": "Delete",
+            "Properties": {
+                "Path": "/",
+                "ManagedPolicyArns": [{
+                    "Ref": "DeployPolicy"
+                }],
+                "Policies": [
+                    {
+                        "PolicyName": "kms-key",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "kms:Encrypt",
+                                        "kms:Decrypt",
+                                        "kms:ReEncrypt*",
+                                        "kms:GenerateDataKey*",
+                                        "kms:DescribeKey"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Ref": "KmsKeyArn"
+                                        }
+                                    ],
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName": "ecr",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "ecr:GetAuthorizationToken",
+                                        "ecr:BatchCheckLayerAvailability",
+                                        "ecr:GetDownloadUrlForLayer",
+                                        "ecr:BatchGetImage"
+                                    ],
+                                    "Resource": "*",
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName": "debug-logs",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:PutObject",
+                                        "s3:PutObjectAcl"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    "arn:aws:s3:::",
+                                                    {
+                                                        "Ref": "LogsBucket"
+                                                    },
+                                                    "/*"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

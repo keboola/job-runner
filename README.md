@@ -7,6 +7,10 @@ Use `docker-composer run tests-local` to get development environment.
 To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
 To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
+Create a services stack using `provisioning\job-runner.json` CF template if not present.
+Create a testing stack using `test-cf-stack.json` CF template. Go to the `JobRunnerUser` created in Resources and create new Access Key for the user.
+
+
 ## Run Tests
 
 `docker-compose run tests`
