@@ -696,7 +696,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client",
-                "reference": "0a9b526b68996b3719e8fd25b78de56bd5f68eb1"
+                "reference": "070d3fac7b66fff05d7a54ba3a0a007e4cd8d516"
             },
             "require": {
                 "ext-json": "*",
@@ -768,7 +768,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2019-07-11T12:50:43+00:00"
+            "time": "2019-07-12T11:32:40+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
