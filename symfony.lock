@@ -8,9 +8,6 @@
     "evenement/evenement": {
         "version": "v3.0.1"
     },
-    "facebook/webdriver": {
-        "version": "1.6.0"
-    },
     "graylog2/gelf-php": {
         "version": "1.6.2"
     },
@@ -241,9 +238,6 @@
     "symfony/monolog-bridge": {
         "version": "v4.2.8"
     },
-    "symfony/panther": {
-        "version": "v0.3.0"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -261,9 +255,6 @@
         ]
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.11.0"
-    },
-    "symfony/polyfill-php72": {
         "version": "v1.11.0"
     },
     "symfony/process": {

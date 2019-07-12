@@ -21,9 +21,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createBuckets();
         $this->createTable('in.c-executor-test', 'source');
 
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
@@ -54,7 +52,6 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                     ],
                 ],
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -103,7 +100,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         ];
 
         self::expectException(ClientException::class);
-        self::expectExceptionMessage('Unsupported row value');
+        self::expectExceptionMessage('Invalid type for path "job.params.row');
         $this->getCommand($jobData);
     }
 
@@ -338,9 +335,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createBuckets();
         $this->createTable('in.c-executor-test', 'source');
 
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
@@ -372,7 +367,6 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                     ],
                 ],
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -423,9 +417,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             (new FileUploadOptions())->setTags(['executor-test', 'incremental-test'])
         );
 
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
@@ -460,7 +452,6 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                     ],
                 ],
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
         $return = $command->run(new StringInput(''), new NullOutput());

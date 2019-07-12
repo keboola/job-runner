@@ -8,7 +8,7 @@ use App\Command\RunCommand;
 use App\StorageApiFactory;
 use Keboola\Csv\CsvFile;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
-use Keboola\JobQueueInternalClient\Job;
+use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Client as StorageClient;
@@ -81,13 +81,11 @@ abstract class BaseFunctionalTest extends TestCase
         ?array $expectedJobResult = null
     ): RunCommand {
         $tokenInfo = $this->storageClient->verifyToken();
-        $this->objectEncryptorFactory->setComponentId($jobData['params']['component']);
-        $this->objectEncryptorFactory->setProjectId($tokenInfo['owner']['id']);
-        $jobData['token']['token'] = $this->objectEncryptorFactory->getEncryptor()->encrypt(
-            (string) getenv('KBC_TEST_TOKEN')
-        );
+        $jobData['token']['token'] = (string) getenv('KBC_TEST_TOKEN');
         $jobData['project']['id'] = $tokenInfo['owner']['id'];
-        $job = new Job($jobData);
+        $storageApiFactory = new JobFactory\StorageClientFactory($this->storageClient->getApiUrl());
+        $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
+        $job = $jobFactory->createNewJob($jobData);
         $queueClient = self::getMockBuilder(QueueClient::class)
             ->setMethods(['getJob', 'postJobResult'])
             ->disableOriginalConstructor()

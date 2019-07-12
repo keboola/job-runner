@@ -19,15 +19,12 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
 
         $configId = $this->createConfigurationRows(false);
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -173,16 +170,13 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
         $configId = $this->createConfigurationRows(false);
 
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
                 'row' => '234',
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -227,20 +221,17 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
         $this->createBuckets();
         $this->createTable('in.c-executor-test', 'source');
 
-        $jobId = $this->getClient()->generateId();
         $expectedJobResult = [
             'message' => 'No configurations executed.',
             'configVersion' => null,
             'images' => [],
         ];
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData, null, $expectedJobResult);
 

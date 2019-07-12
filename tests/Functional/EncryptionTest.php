@@ -46,15 +46,12 @@ class EncryptionTest extends BaseFunctionalTest
         $configuration->setName('Test configuration');
         $configuration->setConfiguration($configData);
         $configId = $components->addConfiguration($configuration)['id'];
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -122,15 +119,12 @@ class EncryptionTest extends BaseFunctionalTest
             ],
         ]);
         $components->addConfigurationRow($configRow);
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 
@@ -191,15 +185,12 @@ class EncryptionTest extends BaseFunctionalTest
             ],
         ]);
         $configId = $components->addConfiguration($configuration)['id'];
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $command = $this->getCommand($jobData);
 

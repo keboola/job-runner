@@ -56,6 +56,13 @@ services:
 
     Keboola\JobQueueInternalClient\Client:
         arguments:
-            $url: '%env(job_queue_url)%'
-            $token: 'token'
-            $options: []
+            $logger: '@Monolog\Logger'
+            $internalQueueApiUrl: '%env(job_queue_url)%'
+            $internalQueueToken: '%env(job_queue_token)%'
+
+    Keboola\JobQueueInternalClient\JobFactory\StorageClientFactory:
+        arguments:
+            $storageApiUrl: '%env(storage_api_url)%'
+
+    Keboola\JobQueueInternalClient\JobFactory:
+        arguments:

@@ -45,9 +45,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                 ]
             ));
 
-        $jobId = $this->getClient()->generateId();
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
@@ -71,7 +69,6 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                     ],
                 ],
             ],
-            'status' => 'waiting',
         ];
         /** @var Client $clientMock */
         $command = $this->getCommand($jobData, $clientMock);

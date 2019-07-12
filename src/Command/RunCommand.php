@@ -15,7 +15,8 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
-use Keboola\JobQueueInternalClient\Job;
+use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
@@ -145,20 +146,20 @@ class RunCommand extends Command
                     'configVersion' => $outputs[0]->getConfigVersion(),
                 ];
             }
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_SUCCESS, $result);
+            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
             return 0;
         } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
             $logger->error('Job ended with encryption error: ' . $e->getMessage());
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (UserException $e) {
             $logger->error('Job ended with user error: ' . $e->getMessage());
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (Throwable $e) {
             $logger->error('Job ended with application error: ' . $e->getMessage());
             $logger->error($e->getTraceAsString());
-            $this->queueClient->postJobResult($jobId, QueueClient::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 2;
         }
     }

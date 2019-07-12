@@ -16,7 +16,6 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
     {
         $this->createBuckets();
         $this->createTable('in.c-executor-test', 'source');
-        $jobId = $this->getClient()->generateId();
         $configuration = new Configuration();
         $configuration->setComponentId('keboola.python-transformation');
         $configuration->setName('test-config');
@@ -49,13 +48,11 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
         $components = new Components($this->getClient());
         $configId = $components->addConfiguration($configuration)['id'];
         $jobData = [
-            'id' => $jobId,
             'params' => [
                 'component' => 'keboola.python-transformation',
                 'mode' => 'run',
                 'config' => $configId,
             ],
-            'status' => 'waiting',
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
