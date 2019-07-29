@@ -6,14 +6,6 @@
       "Type": "String",
       "Description": "All resources will be tagged by this value."
     },
-    "LogsBucket": {
-      "Type": "String",
-      "Description": "Keboola logs bucket. S3LogsBucket output of connection/services stack."
-    },
-    "KmsKeyArn": {
-      "Type": "String",
-      "Description": "DockerRunnerKMSKey created by Syrup Services stack"
-    },
     "EcrRepositoryName": {
       "Type": "String",
       "Description": "ECR repository name",
@@ -38,18 +30,6 @@
           "Version": "2012-10-17",
           "Statement": [
             {
-              "Sid": "AllowPassRoles",
-              "Effect": "Allow",
-              "Action": "iam:PassRole",
-              "Resource": [{
-                  "Fn::GetAtt": [
-                    "TaskInstanceRole",
-                    "Arn"
-                  ]
-                }
-              ]
-            },
-            {
               "Sid": "AllowEcrPush",
               "Effect": "Allow",
               "Action": [
@@ -72,169 +52,9 @@
                 "ecr:GetAuthorizationToken"
               ],
               "Resource": "*"
-            },
-            {
-              "Sid": "AllowLogsAccess",
-              "Effect": "Allow",
-              "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:PutRetentionPolicy",
-                "logs:DeleteLogGroup"
-              ],
-              "Resource": {
-                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/ecs/${KeboolaStack}-job-runner/*"
-              }
-            },
-             {
-              "Sid": "AllowLogsDescribe",
-              "Effect": "Allow",
-              "Action": [
-                "logs:DescribeLogGroups"
-              ],
-              "Resource": "*"
             }
           ]
         }
-      }
-    },
-    "TaskInstanceProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "Path": "/",
-        "Roles": [
-          {
-            "Ref": "TaskInstanceRole"
-          }
-        ]
-      },
-      "DependsOn": [
-        "TaskInstanceRole"
-      ]
-    },    
-    "TaskInstanceRole": {
-      "Type": "AWS::IAM::Role",
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [{
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ecs-tasks.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-          },
-          {
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "ecs-tasks.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-          }]
-        },
-        "Path": "/",
-        "Policies": [{
-            "PolicyName": "kms-key",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [{
-                "Action": [
-                  "kms:Encrypt",
-                  "kms:Decrypt",
-                  "kms:ReEncrypt*",
-                  "kms:GenerateDataKey*",
-                  "kms:DescribeKey"
-                ],
-                "Resource": [{
-                  "Ref": "KmsKeyArn"
-                }],
-                "Effect": "Allow"
-              }]
-            }
-          },
-          {
-            "PolicyName": "ecr",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [{
-                "Action": [
-                  "ecr:GetAuthorizationToken",
-                  "ecr:BatchCheckLayerAvailability",
-                  "ecr:GetDownloadUrlForLayer",
-                  "ecr:BatchGetImage"
-                ],
-                "Resource": "*",
-                "Effect": "Allow"
-              }]
-            }
-          },
-          {
-            "PolicyName": "debug-logs",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [{
-                "Effect": "Allow",
-                "Action": [
-                  "s3:PutObject",
-                  "s3:PutObjectAcl"
-                ],
-                "Resource": [{
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "LogsBucket"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }]
-              }]
-            }
-          },
-          {
-            "PolicyName": "logs",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [{
-                "Effect": "Allow",
-                "Action": [
-                  "logs:CreateLogStream",
-                  "logs:PutLogEvents"
-                ],
-                "Resource": "*"
-              }]
-            }
-          },          
-          {
-            "PolicyName": "ecs-instance",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                  {
-                      "Effect": "Allow",
-                      "Action": [
-                          "ecs:CreateCluster",
-                          "ecs:DeregisterContainerInstance",
-                          "ecs:DiscoverPollEndpoint",
-                          "ecs:Poll",
-                          "ecs:RegisterContainerInstance",
-                          "ecs:StartTelemetrySession",
-                          "ecs:Submit*"
-                      ],
-                      "Resource": [
-                          "*"
-                      ]
-                  }
-              ]
-            }
-          }
-        ]
       }
     },
     "EcrRepository": {
