@@ -16,8 +16,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/:/tmp/
     environment:
-      - CPU_COUNT=1
+      - CPU_COUNT
       - LEGACY_OAUTH_API_URL
+      - REGION
       - LOGS_S3_BUCKET
       - KMS_KEY
       - STORAGE_API_URL
