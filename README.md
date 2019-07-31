@@ -2,20 +2,54 @@
 
 Symfony console application which is used inside an ECS task and wraps Docker runner library.
 
-## Development
+## Running locally
 Use `docker-composer run tests-local` to get development environment.
 To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
 To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
-Create a services stack using `provisioning\job-runner.json` CF template if not present.
-Create a testing stack using `test-cf-stack.json` CF template. Go to the `JobRunnerUser` created in Resources and create new Access Key for the user.
+Create the main stack using `provisioning\job-runner.json` CF template if not present. 
+Create a user (`JobRunnerUser`) for local development using 
+the `test-cf-stack.json` CF template. Use `DeployPolicy` from the main stack. 
+Create AWS key for the created user.  Set the following environment variables:
 
-- modify `.env` file to set `kms_key_id` `logs_s3_bucket` to the created ones 
-- `docker-compose build`
-- Set environment variables `KBC_TEST_TOKEN` + `KBC_TEST_URL` obtained from a testing KBC project and `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` obtained from the above created user.
-- `docker-compose run tests`
+- `KEBOOLA_STACK` - `Stack` output of the above Main stack. Specifically it's a part of path of the AWS Systems Manager (SSM) parameters - `/keboola/$KEBOOLA_STACK/job-runner/`
+- `REGION` - `Region` output of the above Main stack.
+- `AWS_ACCESS_KEY_ID` - The created security credentials for the `JobRunnerUser` user.
+- `AWS_SECRET_ACCESS_KEY` - The created security credentials for the `JobRunnerUser` user.
+- `KMS_KEY` - `KmsKey` returned by the test CF stack
+- `LEGACY_OAUTH_API_URL` - usually https://syrup.keboola.com/oauth-v2/
+- `LOGS_S3_BUCKET` - `S3LogsBucket` returned by the test CF stack
+- `STORAGE_API_URL` - Keboola Connection URL - e.g. https://connection.keboola.com/
+- `JOB_QUEUE_URL` - URL of development Queue internal API - e.g. https://9v6f8zdu63.execute-api.eu-central-1.amazonaws.com/test/jobs
+- `JOB_QUEUE_TOKEN` - Arbitrary non-empty value
+- `TEST_STORAGE_TOKEN` - Keboola Connection test token (needed only to run tests)
+- `JOB_ID` - Job ID (need only to run the command itself)
+- possibly `legacy_encryption_key` (see below)
 
-## Run Tests
+### legacy_encryption_key
+The thing also needs a `legacy_encryption_key` environment variable. There are two options:
 
-`docker-compose run tests`
+- The easy way - set the `legacy_encryption_key` environment variable to arbitrary 16 character string and close your eyes.
+- The hard way - create a SSM parameter with the name: `/keboola/NAME_OF_THE_MAIN_STACK/job-runner/legacy_encryption_key` with `SecureString` type and an arbitrary 16 character value. And use the `get-parameters` composer command to download it to the `.env` file.
+
+You can export the variables manually or you can create and fill the file `set-env.sh` as copy of the attached `set-env.template.sh`.
+
+Than you can run tests:
+
+    docker-compose build
+    source ./set-env.sh && docker-compose run tests-local composer install
+
+If the above environment variables are set, the `.env` file will be produced from the SSM parameters. 
+
+## Development
+To run locally, set the environment variables and execute:
+    
+    source ./set-env.sh && docker-compose run tests-local
+
+To run tests on live code, execute:
+
+    source ./set-env.sh && docker-compose run --rm tests-local composer install
+    source ./set-env.sh && docker-compose run --rm tests-local composer get-parameters
+    source ./set-env.sh && docker-compose run --rm tests-local composer ci
+
 

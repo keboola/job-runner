@@ -1,11 +1,10 @@
 FROM keboola/job-runner
 
-ENV APP_ENV prod
+ENV APP_ENV dev
 
 RUN pecl channel-update pecl.php.net \
     && pecl config-set php_ini /usr/local/etc/php.ini \
     && pecl install xdebug-beta \
     && docker-php-ext-enable xdebug
-ENV APACHE_LOCK_DIR=/var/apache/lock/
 
 CMD [/bin/bash]

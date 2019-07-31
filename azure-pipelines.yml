@@ -15,8 +15,17 @@ steps:
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-    KBC_TEST_URL: $(KBC_TEST_URL)
+    STORAGE_API_URL: $(KBC_TEST_URL)
     KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
+    KEBOOLA_STACK=job-runner-test
+    REGION=us-east-1
+    CPU_COUNT=1
+    KMS_KEY=cca3d50b-353c-4a5d-aa94-10a24f8bc6b0
+    LEGACY_OAUTH_API_URL=https://syrup.keboola.com/oauth-v2/
+    LOGS_S3_BUCKET=connection-testing-services-s3logsbucket-nz8zaaeo5ve6
+    JOB_QUEUE_URL=https://9v6f8zdu63.execute-api.eu-central-1.amazonaws.com/test/jobs
+    JOB_QUEUE_TOKEN=dummy
+
 
 - script: |
     docker build -t keboola/job-runner .

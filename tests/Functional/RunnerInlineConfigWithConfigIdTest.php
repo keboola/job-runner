@@ -28,7 +28,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             ],
         ];
         $clientMock = self::getMockBuilder(Client::class)
-            ->setConstructorArgs([['token' => getenv('KBC_TEST_TOKEN'), 'url' => getenv('KBC_TEST_URL')]])
+            ->setConstructorArgs([['token' => getenv('KBC_TEST_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
         $clientMock->expects(self::any())
@@ -38,7 +38,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                     'services' => [
                         [
                             'id' => 'oauth',
-                            'url' => getenv('legacy_oauth_api_url'),
+                            'url' => getenv('LEGACY_OAUTH_API_URL'),
                         ],
                     ],
                     'components' => [$componentData],

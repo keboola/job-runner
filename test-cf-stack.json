@@ -13,13 +13,18 @@
         "DeployPolicy": {
             "Type": "String",
             "Description": "DeployPolicy created by Job Runner Services Stack"
-        }
+        },
+        "JobRunnerMainStack": {
+            "Type": "String",
+            "Default": "job-runner-testing-services",
+            "Description": "Job Runner Stack name"
+        }        
     },
     "Resources": {
         "TestKmsKey": {
             "Type" : "AWS::KMS::Key",
             "Properties" : {
-                "Description": "KMS Key for internal queue tests",
+                "Description": "KMS Key for runner tests",
                 "Enabled": true,
                 "KeyPolicy": {
                     "Version": "2012-10-17",
@@ -126,7 +131,25 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    {
+                        "PolicyName": "ssm-parameters-read-job-runner",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "ssm:GetParametersByPath",
+                                        "ssm:GetParameter"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/keboola/${JobRunnerMainStack}/job-runner/*"
+                                    }
+                                }
+                            ]
+                        }
+                    }                    
                 ]
             },
             "DependsOn": ["TestKmsKey"]
@@ -141,6 +164,11 @@
         "Region": {
             "Value": {
                 "Ref": "AWS::Region"
+            }
+        },
+        "S3LogsBucket": {
+            "Value": {
+                "Ref": "LogsBucket"
             }
         }
     }

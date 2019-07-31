@@ -21,21 +21,18 @@
         "ext-json": "*",
         "keboola/api-error-control": "^0.4",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
-        "keboola/job-queue-internal-api-php-client": "dev-odin-second@dev",
+        "keboola/job-queue-internal-api-php-client": "^0.1",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "keboola/aws-parameter-filler": "^0.2.3"
     },
     "repositories": [
         {
             "type": "git",
             "url": "https://github.com/keboola/docker-bundle"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/keboola/job-queue-internal-api-php-client"
         }
     ],
     "require-dev": {
@@ -44,7 +41,8 @@
         "keboola/coding-standard": ">=7.0.2",
         "phpstan/phpstan-shim": "^0.11",
         "symfony/phpunit-bridge": "4.2.*",
-        "symfony/test-pack": "^1.0"
+        "symfony/test-pack": "^1.0",
+        "infection/infection": "^0.13"
     },
     "config": {
         "preferred-install": {
@@ -83,10 +81,12 @@
             "@auto-scripts"
         ],
         "tests": "php bin/phpunit",
+        "get-parameters": "aws-parameter-filler .env /keboola/$KEBOOLA_STACK/job-queue-daemon/ $REGION",
         "phpstan": "phpstan analyse --no-progress --level=max src tests -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "phpcbf": "phpcbf --extensions=php src tests",
         "phplint": "parallel-lint -j 10 --exclude vendor --exclude bin .",
+        "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
         "build": [
             "@phplint",
             "@phpcs",

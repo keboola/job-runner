@@ -6,7 +6,7 @@
 parameters:
     app_name: 'job-runner'
     instance_limits:
-        cpu_count: '%env(cpu_count)%'
+        cpu_count: '%env(CPU_COUNT)%'
 
 services:
     # default configuration for services in *this* file
@@ -22,7 +22,7 @@ services:
 
     App\Command\RunCommand:
         arguments:
-            $legacyOauthApiUrl: '%env(legacy_oauth_api_url)%'
+            $legacyOauthApiUrl: '%env(LEGACY_OAUTH_API_URL)%'
             $instanceLimits: '%instance_limits%'
 
     Monolog\Logger:
@@ -31,13 +31,13 @@ services:
 
     App\StorageApiFactory:
         arguments:
-            $storageApiUrl: "%env(storage_api_url)%"
+            $storageApiUrl: "%env(STORAGE_API_URL)%"
 
     Keboola\ErrorControl\Monolog\S3Uploader:
         arguments:
-            $storageApiUrl: "%env(storage_api_url)%"
-            $s3bucket: "%env(logs_s3_bucket)%"
-            $region: "%env(region)%"
+            $storageApiUrl: "%env(STORAGE_API_URL)%"
+            $s3bucket: "%env(LOGS_S3_BUCKET)%"
+            $region: "%env(REGION)%"
 
     Keboola\ErrorControl\Monolog\LogProcessor:
         public: true
@@ -48,8 +48,8 @@ services:
 
     Keboola\ObjectEncryptor\ObjectEncryptorFactory:
         arguments:
-            $keyId: '%env(kms_key_id)%'
-            $region: '%env(region)%'
+            $keyId: '%env(KMS_KEY)%'
+            $region: '%env(REGION)%'
             $keyVersion1: '%env(legacy_encryption_key)%'
             # intentionally empty, legacy AES ciphers are not supported by this app
             $keyVersion0:
@@ -57,12 +57,12 @@ services:
     Keboola\JobQueueInternalClient\Client:
         arguments:
             $logger: '@Monolog\Logger'
-            $internalQueueApiUrl: '%env(job_queue_url)%'
-            $internalQueueToken: '%env(job_queue_token)%'
+            $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
+            $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
 
     Keboola\JobQueueInternalClient\JobFactory\StorageClientFactory:
         arguments:
-            $storageApiUrl: '%env(storage_api_url)%'
+            $storageApiUrl: '%env(STORAGE_API_URL)%'
 
     Keboola\JobQueueInternalClient\JobFactory:
         arguments:

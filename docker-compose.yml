@@ -16,10 +16,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/:/tmp/
     environment:
-      - KBC_TEST_URL
+      - CPU_COUNT=1
+      - LEGACY_OAUTH_API_URL
+      - LOGS_S3_BUCKET
+      - KMS_KEY
+      - STORAGE_API_URL
+      - JOB_QUEUE_URL
+      - JOB_QUEUE_TOKEN
       - KBC_TEST_TOKEN
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
     command: 
       composer ci
 
@@ -30,6 +34,4 @@ services:
       - /tmp/:/tmp/
       - /var/run/docker.sock:/var/run/docker.sock
     command:
-      - php 
-      - /code/bin/console 
-      - app:run
+      - /bin/bash

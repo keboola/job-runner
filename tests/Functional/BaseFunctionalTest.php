@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
 use App\StorageApiFactory;
+use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\JobFactory;
@@ -18,7 +19,6 @@ use Keboola\Temp\Temp;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 abstract class BaseFunctionalTest extends TestCase
 {
@@ -40,26 +40,15 @@ abstract class BaseFunctionalTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        if (empty(getenv('kms_key_id'))) {
-            throw new RuntimeException('The environment variable "kms_key_id" is empty.');
-        }
-        if (empty(getenv('legacy_encryption_key'))) {
-            throw new RuntimeException('The environment variable "legacy_encryption_key" is empty.');
-        }
-        if (empty(getenv('region'))) {
-            throw new RuntimeException('The environment variable "region" is empty.');
-        }
-        if (empty(getenv('legacy_oauth_api_url'))) {
-            throw new RuntimeException('The environment variable "legacy_oauth_api_url" is empty.');
-        }
-        if (empty(getenv('KBC_TEST_URL'))) {
-            throw new RuntimeException('The environment variable "KBC_TEST_URL" is empty.');
-        }
-        if (empty(getenv('KBC_TEST_TOKEN'))) {
-            throw new RuntimeException('The environment variable "KBC_TEST_TOKEN" is empty.');
+        $requiredEnvs = ['KMS_KEY', 'REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'KBC_TEST_TOKEN',
+            'legacy_encryption_key'];
+        foreach ($requiredEnvs as $env) {
+            if (empty(getenv($env))) {
+                throw new Exception(sprintf('Environment variable "%s" is empty', $env));
+            }
         }
         $this->storageClient = new StorageClient([
-            'url' => getenv('KBC_TEST_URL'),
+            'url' => getenv('STORAGE_API_URL'),
             'token' => getenv('KBC_TEST_TOKEN'),
         ]);
         $this->handler = new TestHandler();
@@ -67,12 +56,12 @@ abstract class BaseFunctionalTest extends TestCase
         $this->temp = new Temp('docker');
         $this->temp->initRunFolder();
         $this->objectEncryptorFactory = new ObjectEncryptorFactory(
-            getenv('kms_key_id'),
-            getenv('region'),
+            getenv('KMS_KEY'),
+            getenv('REGION'),
             getenv('legacy_encryption_key'),
             ''
         );
-        $this->objectEncryptorFactory->setStackId(parse_url(getenv('KBC_TEST_URL'), PHP_URL_HOST));
+        $this->objectEncryptorFactory->setStackId(parse_url(getenv('STORAGE_API_URL'), PHP_URL_HOST));
     }
 
     protected function getCommand(
@@ -116,12 +105,12 @@ abstract class BaseFunctionalTest extends TestCase
         /** @var QueueClient $queueClient */
         if ($mockClient) {
             $storageApiFactory = self::getMockBuilder(StorageApiFactory::class)
-                ->setConstructorArgs([getenv('KBC_TEST_URL')])
+                ->setConstructorArgs([getenv('STORAGE_API_URL')])
                 ->setMethods(['getClient'])
                 ->getMock();
             $storageApiFactory->expects(self::any())->method('getClient')->willReturn($mockClient);
         } else {
-            $storageApiFactory = new StorageApiFactory((string) getenv('KBC_TEST_URL'));
+            $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
         }
         /** @var StorageApiFactory $storageApiFactory */
         $command = new RunCommand(
@@ -129,7 +118,7 @@ abstract class BaseFunctionalTest extends TestCase
             $this->objectEncryptorFactory,
             $queueClient,
             $storageApiFactory,
-            (string) getenv('legacy_oauth_api_url'),
+            (string) getenv('LEGACY_OAUTH_API_URL'),
             ['cpu_count' => 1]
         );
         putenv('JOB_ID=' . $job->getId());
