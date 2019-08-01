@@ -56,12 +56,12 @@ abstract class BaseFunctionalTest extends TestCase
         $this->temp = new Temp('docker');
         $this->temp->initRunFolder();
         $this->objectEncryptorFactory = new ObjectEncryptorFactory(
-            getenv('KMS_KEY'),
-            getenv('REGION'),
-            getenv('legacy_encryption_key'),
+            (string) getenv('KMS_KEY'),
+            (string) getenv('REGION'),
+            (string) getenv('legacy_encryption_key'),
             ''
         );
-        $this->objectEncryptorFactory->setStackId(parse_url(getenv('STORAGE_API_URL'), PHP_URL_HOST));
+        $this->objectEncryptorFactory->setStackId(parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST));
     }
 
     protected function getCommand(
