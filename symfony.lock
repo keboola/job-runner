@@ -2,14 +2,17 @@
     "aws/aws-sdk-php": {
         "version": "3.93.12"
     },
+    "composer/ca-bundle": {
+        "version": "1.2.1"
+    },
+    "composer/xdebug-handler": {
+        "version": "1.3.3"
+    },
     "defuse/php-encryption": {
         "version": "v2.2.1"
     },
     "evenement/evenement": {
         "version": "v3.0.1"
-    },
-    "facebook/webdriver": {
-        "version": "1.6.0"
     },
     "graylog2/gelf-php": {
         "version": "1.6.2"
@@ -23,11 +26,23 @@
     "guzzlehttp/psr7": {
         "version": "1.5.2"
     },
+    "infection/infection": {
+        "version": "0.13.4"
+    },
     "jakub-onderka/php-parallel-lint": {
         "version": "v1.0.0"
     },
+    "justinrainbow/json-schema": {
+        "version": "5.2.8"
+    },
     "keboola-legacy/php-encryption": {
         "version": "0.2.1"
+    },
+    "keboola/api-error-control": {
+        "version": "0.4.1"
+    },
+    "keboola/aws-parameter-filler": {
+        "version": "0.2.3"
     },
     "keboola/coding-standard": {
         "version": "8.0.0"
@@ -56,6 +71,9 @@
     "keboola/output-mapping": {
         "version": "9.1.1"
     },
+    "keboola/php-component": {
+        "version": "4.4.2"
+    },
     "keboola/php-encryption": {
         "version": "0.2.3"
     },
@@ -77,6 +95,15 @@
     "mtdowling/jmespath.php": {
         "version": "2.4.0"
     },
+    "ocramius/package-versions": {
+        "version": "1.5.1"
+    },
+    "padraic/humbug_get_contents": {
+        "version": "1.1.2"
+    },
+    "padraic/phar-updater": {
+        "version": "v1.0.6"
+    },
     "paragonie/constant_time_encoding": {
         "version": "v2.2.3"
     },
@@ -88,6 +115,9 @@
     },
     "phpstan/phpstan-shim": {
         "version": "0.11.7"
+    },
+    "pimple/pimple": {
+        "version": "v3.2.3"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -130,6 +160,9 @@
     },
     "react/stream": {
         "version": "v1.1.0"
+    },
+    "sebastian/diff": {
+        "version": "3.0.2"
     },
     "seld/jsonlint": {
         "version": "1.7.1"
@@ -238,9 +271,6 @@
     "symfony/monolog-bridge": {
         "version": "v4.2.8"
     },
-    "symfony/panther": {
-        "version": "v0.3.0"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -258,9 +288,6 @@
         ]
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.11.0"
-    },
-    "symfony/polyfill-php72": {
         "version": "v1.11.0"
     },
     "symfony/process": {
@@ -308,5 +335,8 @@
     },
     "vkartaviy/retry": {
         "version": "v0.2.2"
+    },
+    "webmozart/assert": {
+        "version": "1.4.0"
     }
 }

@@ -17,20 +17,12 @@ class RunCommandTest extends KernelTestCase
 
         $command = $application->find('app:run');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command'  => $command->getName(),
-
-            // pass arguments to the helper
-            //'username' => 'Wouter',
-
-            // prefix the key with two dashes when passing options,
-            // e.g: '--some-option' => 'option_value',
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
         ]);
 
-        // the output of the command in the console
         $output = $commandTester->getDisplay();
-        $this->assertContains('print something', $output);
-
-        // ...
+        $this->assertEquals(2, $ret);
+        $this->assertContains('JOB_ID env variable is missing.', $output);
     }
 }

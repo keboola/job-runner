@@ -10,16 +10,49 @@
             "Type": "String",
             "Description": "Keboola logs bucket. S3LogsBucket output of connection/services stack."
         },
-        "KmsKeyArn": {
-            "Type": "String",
-            "Description": "DockerRunnerKMSKey created by Syrup Services stack"
-        },
         "DeployPolicy": {
             "Type": "String",
             "Description": "DeployPolicy created by Job Runner Services Stack"
-        }
+        },
+        "JobRunnerMainStack": {
+            "Type": "String",
+            "Default": "job-runner-testing-services",
+            "Description": "Job Runner Stack name"
+        }        
     },
     "Resources": {
+        "TestKmsKey": {
+            "Type" : "AWS::KMS::Key",
+            "Properties" : {
+                "Description": "KMS Key for runner tests",
+                "Enabled": true,
+                "KeyPolicy": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "Enable IAM User Permissions",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "arn:aws:iam::",
+                                            {
+                                                "Ref": "AWS::AccountId"
+                                            },
+                                            ":root"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "Action": "kms:*",
+                            "Resource": "*"
+                        }
+                    ]
+                }
+            }
+        },
         "JobRunnerUser": {
             "Type": "AWS::IAM::User",
             "DeletionPolicy": "Delete",
@@ -44,7 +77,7 @@
                                     ],
                                     "Resource": [
                                         {
-                                            "Ref": "KmsKeyArn"
+                                            "Fn::GetAtt": ["TestKmsKey", "Arn"]
                                         }
                                     ],
                                     "Effect": "Allow"
@@ -98,8 +131,44 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    {
+                        "PolicyName": "ssm-parameters-read-job-runner",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "ssm:GetParametersByPath",
+                                        "ssm:GetParameter"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/keboola/${JobRunnerMainStack}/job-runner/*"
+                                    }
+                                }
+                            ]
+                        }
+                    }                    
                 ]
+            },
+            "DependsOn": ["TestKmsKey"]
+        }
+    },
+    "Outputs": {
+        "KmsKey": {
+            "Value": {
+                "Ref": "TestKmsKey"
+            }
+        },
+        "Region": {
+            "Value": {
+                "Ref": "AWS::Region"
+            }
+        },
+        "S3LogsBucket": {
+            "Value": {
+                "Ref": "LogsBucket"
             }
         }
     }
