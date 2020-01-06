@@ -11,6 +11,7 @@ steps:
   displayName: 'Build Tests'
 
 - script: docker-compose run tests
+  enabled: false
   displayName: 'Run Tests'
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
