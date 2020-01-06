@@ -34,6 +34,7 @@ steps:
     docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:latest
     docker push $ECR_REPOSITORY_URI:$COMMIT_ID
     docker push $ECR_REPOSITORY_URI:latest
+  enabled: false
   displayName: 'Push to Dev AWS'
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
@@ -52,7 +53,7 @@ steps:
     docker push $ECR_REPOSITORY_URI:latest
   displayName: 'Push to US-EAST-2'
   env:
-    ECR_REPOSITORY_URI:  $(US_EAST_2_ECR_REPOSITORY_URI)
+    ECR_REPOSITORY_URI: $(US_EAST_2_ECR_REPOSITORY_URI)
     AWS_ACCESS_KEY_ID: $(PROD_AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(PROD_AWS_SECRET_ACCESS_KEY)
     COMMIT_ID: $(Build.SourceVersion)
