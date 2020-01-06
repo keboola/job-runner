@@ -32,10 +32,24 @@ steps:
     docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:$COMMIT_ID
     docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:latest
     docker push $ECR_REPOSITORY_URI:$COMMIT_ID
-    docker push $ECR_REPOSITORY_URI:latest 
+    docker push $ECR_REPOSITORY_URI:latest
   displayName: 'Push to Dev AWS'
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
     ECR_REPOSITORY_URI: $(ECR_REPOSITORY_URI)
+    COMMIT_ID: $(Build.SourceVersion)
+
+- script: |
+    docker build -t keboola/job-runner .
+    yes | eval $(docker run --rm -i -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY quay.io/keboola/aws-cli ecr get-login --region us-east-1 --no-include-email)
+    docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:$COMMIT_ID
+    docker tag keboola/job-runner:latest $ECR_REPOSITORY_URI:latest
+    docker push $ECR_REPOSITORY_URI:$COMMIT_ID
+    docker push $ECR_REPOSITORY_URI:latest
+  displayName: 'Push to US-EAST-2'
+  env:
+    AWS_ACCESS_KEY_ID: $(PROD_AWS_ACCESS_KEY_ID)
+    AWS_SECRET_ACCESS_KEY: $(PROD_AWS_SECRET_ACCESS_KEY)
+    ECR_REPOSITORY_URI: 147946154733.dkr.ecr.us-east-2.amazonaws.com/keboola/job-runner
     COMMIT_ID: $(Build.SourceVersion)
