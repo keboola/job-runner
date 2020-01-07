@@ -36,7 +36,8 @@
                 "ecr:PutImage",
                 "ecr:CompleteLayerUpload",
                 "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart"
+                "ecr:UploadLayerPart",
+                "ecr:BatchCheckLayerAvailability"
               ],
               "Resource": [{
                 "Fn::GetAtt": [
@@ -66,7 +67,7 @@
       }
     }
   },
-  "Outputs": { 
+  "Outputs": {
     "DeployPolicy": {
       "Value": {
         "Ref": "DeployPolicy"
