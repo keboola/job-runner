@@ -69,9 +69,7 @@ abstract class BaseFunctionalTest extends TestCase
         ?Client $mockClient = null,
         ?array $expectedJobResult = null
     ): RunCommand {
-        $tokenInfo = $this->storageClient->verifyToken();
-        $jobData['token']['token'] = (string) getenv('KBC_TEST_TOKEN');
-        $jobData['project']['id'] = $tokenInfo['owner']['id'];
+        $jobData['token'] = (string) getenv('KBC_TEST_TOKEN');
         $storageApiFactory = new JobFactory\StorageClientFactory($this->storageClient->getApiUrl());
         $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
         $job = $jobFactory->createNewJob($jobData);

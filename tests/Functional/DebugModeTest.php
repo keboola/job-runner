@@ -29,42 +29,40 @@ class DebugModeTest extends BaseFunctionalTest
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'debug',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'tables' => [
-                                [
-                                    'source' => 'in.c-executor-test.source',
-                                    'destination' => 'source.csv',
-                                ],
-                            ],
-                        ],
-                        'output' => [
-                            'tables' => [
-                                [
-                                    'source' => 'destination.csv',
-                                    'destination' => 'out.c-executor-test.modified',
-                                ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'debug',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-executor-test.source',
+                                'destination' => 'source.csv',
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'plain' => 'not-secret',
-                        'script' => [
-                            'import csv',
-                            'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
-                                'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
-                            '   lazy_lines = (line.replace("\0", "") for line in in_file)',
-                            '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
-                            '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
-                            '   writer.writeheader()',
-                            '   for row in reader:',
-                            '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
-                                '+ "ping", "newValue": row["newValue"] + "pong"})',
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'destination.csv',
+                                'destination' => 'out.c-executor-test.modified',
+                            ],
                         ],
+                    ],
+                ],
+                'parameters' => [
+                    'plain' => 'not-secret',
+                    'script' => [
+                        'import csv',
+                        'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
+                            'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
+                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
+                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
+                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
+                        '   writer.writeheader()',
+                        '   for row in reader:',
+                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
+                            '+ "ping", "newValue": row["newValue"] + "pong"})',
                     ],
                 ],
             ],
@@ -182,35 +180,33 @@ class DebugModeTest extends BaseFunctionalTest
         }
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'debug',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'tables' => [
-                                [
-                                    'source' => 'in.c-executor-test.source',
-                                    'destination' => 'source.csv',
-                                ],
-                            ],
-                        ],
-                        'output' => [
-                            'tables' => [
-                                [
-                                    'source' => 'destination.csv',
-                                    'destination' => 'out.c-executor-test.modified',
-                                ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'debug',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-executor-test.source',
+                                'destination' => 'source.csv',
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'plain' => 'not-secret',
-                        'script' => [
-                            'import sys',
-                            'print("Intentional error", file=sys.stderr)',
-                            'exit(1)',
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'destination.csv',
+                                'destination' => 'out.c-executor-test.modified',
+                            ],
                         ],
+                    ],
+                ],
+                'parameters' => [
+                    'plain' => 'not-secret',
+                    'script' => [
+                        'import sys',
+                        'print("Intentional error", file=sys.stderr)',
+                        'exit(1)',
                     ],
                 ],
             ],
@@ -292,11 +288,9 @@ class DebugModeTest extends BaseFunctionalTest
         $configId = $components->addConfiguration($configuration)['id'];
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'debug',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'debug',
+            'config' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -384,11 +378,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'debug',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'debug',
+            'config' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -585,11 +577,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'debug',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'debug',
+            'config' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',

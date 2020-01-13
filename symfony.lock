@@ -89,6 +89,12 @@
     "keboola/storage-api-client": {
         "version": "10.6.0"
     },
+    "microsoft/azure-storage-blob": {
+        "version": "1.5.0"
+    },
+    "microsoft/azure-storage-common": {
+        "version": "1.4.1"
+    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
@@ -106,6 +112,9 @@
     },
     "paragonie/constant_time_encoding": {
         "version": "v2.2.3"
+    },
+    "php": {
+        "version": "7.4"
     },
     "phpseclib/mcrypt_compat": {
         "version": "1.0.9"

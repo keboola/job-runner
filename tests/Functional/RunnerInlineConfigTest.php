@@ -22,33 +22,31 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'tables' => [
-                                [
-                                    'source' => 'in.c-executor-test.source',
-                                    'destination' => 'input.csv',
-                                ],
-                            ],
-                        ],
-                        'output' => [
-                            'tables' => [
-                                [
-                                    'source' => 'result.csv',
-                                    'destination' => 'out.c-executor-test.output',
-                                ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-executor-test.source',
+                                'destination' => 'input.csv',
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'script' => [
-                            'from shutil import copyfile',
-                            'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'result.csv',
+                                'destination' => 'out.c-executor-test.output',
+                            ],
                         ],
+                    ],
+                ],
+                'parameters' => [
+                    'script' => [
+                        'from shutil import copyfile',
+                        'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
                     ],
                 ],
             ],
@@ -87,20 +85,18 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobId = $this->getClient()->generateId();
         $jobData = [
             'id' => $jobId,
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'configData' => [
-                    'storage' => [],
-                    'parameters' => [],
-                ],
-                'row' => [1, 2, 3],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [],
+                'parameters' => [],
             ],
+            'row' => [1, 2, 3],
             'status' => 'waiting',
         ];
 
         self::expectException(ClientException::class);
-        self::expectExceptionMessage('Invalid type for path "job.params.row');
+        self::expectExceptionMessage('Invalid type for path "job.row');
         $this->getCommand($jobData);
     }
 
@@ -140,23 +136,21 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobId = $this->getClient()->generateId();
         $jobData = [
             'id' => $jobId,
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'configData' => [
-                    'storage' => [],
-                    'parameters' => [
-                        'script' => [
-                            'from pathlib import Path',
-                            'import sys',
-                            'contents = Path("/data/config.json").read_text()',
-                            'print(contents, file=sys.stderr)',
-                        ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [],
+                'parameters' => [
+                    'script' => [
+                        'from pathlib import Path',
+                        'import sys',
+                        'contents = Path("/data/config.json").read_text()',
+                        'print(contents, file=sys.stderr)',
                     ],
-                    'authorization' => [
-                        'oauth_api' => [
-                            'id' => '12345',
-                        ],
+                ],
+                'authorization' => [
+                    'oauth_api' => [
+                        'id' => '12345',
                     ],
                 ],
             ],
@@ -253,26 +247,24 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobId = $this->getClient()->generateId();
         $jobData = [
             'id' => $jobId,
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'configData' => [
-                    'storage' => [],
-                    'parameters' => [
-                        'script' => [
-                            'from pathlib import Path',
-                            'import sys',
-                            'import base64',
-                            // [::-1] reverses string, because substr(base64(str)) may be equal to base64(substr(str)
-                            'contents = Path("/data/config.json").read_text()[::-1]',
-                            'print(base64.standard_b64encode(contents.encode("utf-8")).' .
-                                'decode("utf-8"), file=sys.stderr)',
-                        ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [],
+                'parameters' => [
+                    'script' => [
+                        'from pathlib import Path',
+                        'import sys',
+                        'import base64',
+                        // [::-1] reverses string, because substr(base64(str)) may be equal to base64(substr(str)
+                        'contents = Path("/data/config.json").read_text()[::-1]',
+                        'print(base64.standard_b64encode(contents.encode("utf-8")).' .
+                            'decode("utf-8"), file=sys.stderr)',
                     ],
-                    'authorization' => [
-                        'oauth_api' => [
-                            'id' => '12345',
-                        ],
+                ],
+                'authorization' => [
+                    'oauth_api' => [
+                        'id' => '12345',
                     ],
                 ],
             ],
@@ -310,7 +302,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             }
         }
         $expectedConfig = [
-            'parameters' => $jobData['params']['configData']['parameters'],
+            'parameters' => $jobData['configData']['parameters'],
             'authorization' => [
                 'oauth_api' => [
                     'credentials' => [
@@ -336,34 +328,32 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'tag' => '1.1.12',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'tables' => [
-                                [
-                                    'source' => 'in.c-executor-test.source',
-                                    'destination' => 'input.csv',
-                                ],
-                            ],
-                        ],
-                        'output' => [
-                            'tables' => [
-                                [
-                                    'source' => 'result.csv',
-                                    'destination' => 'out.c-executor-test.output',
-                                ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'tag' => '1.1.12',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-executor-test.source',
+                                'destination' => 'input.csv',
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'script' => [
-                            'from shutil import copyfile',
-                            'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'result.csv',
+                                'destination' => 'out.c-executor-test.output',
+                            ],
                         ],
+                    ],
+                ],
+                'parameters' => [
+                    'script' => [
+                        'from shutil import copyfile',
+                        'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
                     ],
                 ],
             ],
@@ -418,37 +408,35 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         );
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'tag' => '1.1.12',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'files' => [
-                                [
-                                    'query' => 'tags: toprocess AND NOT tags: downloaded',
-                                    'processed_tags' => [
-                                        'downloaded',
-                                        'experimental',
-                                    ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'tag' => '1.1.12',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'files' => [
+                            [
+                                'query' => 'tags: toprocess AND NOT tags: downloaded',
+                                'processed_tags' => [
+                                    'downloaded',
+                                    'experimental',
                                 ],
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'script' => [
-                            'from shutil import copyfile',
-                            'import ntpath',
-                            'import json',
-                            'for filename in os.listdir("/data/in/files/"):',
-                            '   if not filename.endswith(".manifest"):',
-                            '       print("ntp" + filename)',
-                            '       copyfile("/data/in/files/" + filename, "/data/out/files/" + filename)',
-                            '       with open("/data/out/files/" + filename + ".manifest", "w") as outfile:',
-                            '           data = {"tags": ["executor-test", "processed"]}',
-                            '           json.dump(data, outfile)',
-                        ],
+                ],
+                'parameters' => [
+                    'script' => [
+                        'from shutil import copyfile',
+                        'import ntpath',
+                        'import json',
+                        'for filename in os.listdir("/data/in/files/"):',
+                        '   if not filename.endswith(".manifest"):',
+                        '       print("ntp" + filename)',
+                        '       copyfile("/data/in/files/" + filename, "/data/out/files/" + filename)',
+                        '       with open("/data/out/files/" + filename + ".manifest", "w") as outfile:',
+                        '           data = {"tags": ["executor-test", "processed"]}',
+                        '           json.dump(data, outfile)',
                     ],
                 ],
             ],
