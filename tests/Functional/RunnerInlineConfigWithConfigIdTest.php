@@ -46,26 +46,24 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             ));
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'config' => 'executor-test',
-                'configData' => [
-                    'storage' => [
-                        'input' => [
-                            'tables' => [
-                                [
-                                    'source' => 'in.c-executor-test.source',
-                                    'destination' => 'input.csv',
-                                ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'config' => 'executor-test',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-executor-test.source',
+                                'destination' => 'input.csv',
                             ],
                         ],
                     ],
-                    'parameters' => [
-                        'script' => [
-                            'from shutil import copyfile',
-                            'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
-                        ],
+                ],
+                'parameters' => [
+                    'script' => [
+                        'from shutil import copyfile',
+                        'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
                     ],
                 ],
             ],

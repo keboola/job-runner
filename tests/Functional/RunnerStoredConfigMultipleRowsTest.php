@@ -20,11 +20,9 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
 
         $configId = $this->createConfigurationRows(false);
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'config' => $configId,
         ];
         $command = $this->getCommand($jobData);
 
@@ -171,12 +169,10 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
         $configId = $this->createConfigurationRows(false);
 
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'config' => $configId,
-                'row' => '234',
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'config' => $configId,
+            'row' => '234',
         ];
         $command = $this->getCommand($jobData);
 
@@ -227,11 +223,9 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             'images' => [],
         ];
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'config' => $configId,
         ];
         $command = $this->getCommand($jobData, null, $expectedJobResult);
 

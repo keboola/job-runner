@@ -21,7 +21,7 @@
         "ext-json": "*",
         "keboola/api-error-control": "^0.4",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
-        "keboola/job-queue-internal-api-php-client": "^0.1",
+        "keboola/job-queue-internal-api-php-client": "^1.2",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",

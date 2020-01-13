@@ -48,11 +48,9 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
         $components = new Components($this->getClient());
         $configId = $components->addConfiguration($configuration)['id'];
         $jobData = [
-            'params' => [
-                'component' => 'keboola.python-transformation',
-                'mode' => 'run',
-                'config' => $configId,
-            ],
+            'component' => 'keboola.python-transformation',
+            'mode' => 'run',
+            'config' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
