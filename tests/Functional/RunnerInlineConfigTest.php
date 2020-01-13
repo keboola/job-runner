@@ -302,7 +302,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             }
         }
         $expectedConfig = [
-            'parameters' => $jobData['params']['configData']['parameters'],
+            'parameters' => $jobData['configData']['parameters'],
             'authorization' => [
                 'oauth_api' => [
                     'credentials' => [
