@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.132.3",
+            "version": "3.133.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f814995664d4ad616f674e664ae069b9f4e340bf"
+                "reference": "6ecd907672784cca89584c7553fa38589c1efcb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f814995664d4ad616f674e664ae069b9f4e340bf",
-                "reference": "f814995664d4ad616f674e664ae069b9f4e340bf",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6ecd907672784cca89584c7553fa38589c1efcb6",
+                "reference": "6ecd907672784cca89584c7553fa38589c1efcb6",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-01-10T19:14:49+00:00"
+            "time": "2020-01-21T19:14:39+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -607,7 +607,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "a0faff1d93f6b0fe6857099d8549fba619f40c41"
+                "reference": "ca1422b2b9f7dad1b568d1aa47b753c007f34698"
             },
             "require": {
                 "ext-json": "*",
@@ -643,7 +643,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2020-01-13T08:10:38+00:00"
+            "time": "2020-01-13T09:38:25+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -739,16 +739,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "1.2.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "ef7bdbe84d8354122c4dc46251adc008924ea2d8"
+                "reference": "f318a3f6b8a6fb1ea57d2c9b74ad87950aaeaf83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ef7bdbe84d8354122c4dc46251adc008924ea2d8",
-                "reference": "ef7bdbe84d8354122c4dc46251adc008924ea2d8",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/f318a3f6b8a6fb1ea57d2c9b74ad87950aaeaf83",
+                "reference": "f318a3f6b8a6fb1ea57d2c9b74ad87950aaeaf83",
                 "shasum": ""
             },
             "require": {
@@ -791,7 +791,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2020-01-10T14:15:18+00:00"
+            "time": "2020-01-17T11:48:44+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1192,16 +1192,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "10.11.2",
+            "version": "10.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "c79296dc970612f14af2c1c9ea76b9c9ea76af6b"
+                "reference": "6b4cdf6d91de4d86a76b619c6481153974d637b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/c79296dc970612f14af2c1c9ea76b9c9ea76af6b",
-                "reference": "c79296dc970612f14af2c1c9ea76b9c9ea76af6b",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/6b4cdf6d91de4d86a76b619c6481153974d637b0",
+                "reference": "6b4cdf6d91de4d86a76b619c6481153974d637b0",
                 "shasum": ""
             },
             "require": {
@@ -1238,7 +1238,7 @@
             ],
             "description": "Keboola Storage API PHP CLient",
             "homepage": "http://keboola.com",
-            "time": "2019-12-04T12:39:46+00:00"
+            "time": "2020-01-13T13:45:45+00:00"
         },
         {
             "name": "microsoft/azure-storage-blob",
@@ -3915,16 +3915,16 @@
     "packages-dev": [
         {
             "name": "composer/ca-bundle",
-            "version": "1.2.5",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149"
+                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/62e8fc2dc550e5d6d8c9360c7721662670f58149",
-                "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/47fe531de31fca4a1b997f87308e7d7804348f7e",
+                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e",
                 "shasum": ""
             },
             "require": {
@@ -3967,7 +3967,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2019-12-11T14:44:42+00:00"
+            "time": "2020-01-13T10:02:55+00:00"
         },
         {
             "name": "composer/xdebug-handler",
