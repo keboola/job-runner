@@ -63,7 +63,13 @@
       "Properties": {
         "RepositoryName": {
           "Ref": "EcrRepositoryName"
-        }
+        },
+        "Tags": [
+          {
+            "Key": "KeboolaRole",
+            "Value": "job-queue"
+          }
+        ]
       }
     }
   },
