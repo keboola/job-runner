@@ -68,6 +68,12 @@
           {
             "Key": "KeboolaRole",
             "Value": "job-queue"
+          },
+          {
+            "Key": "KeboolaStack",
+            "Value": {
+              "Ref": "KeboolaStack"
+            }
           }
         ]
       }
