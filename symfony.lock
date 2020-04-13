@@ -101,6 +101,9 @@
     "mtdowling/jmespath.php": {
         "version": "2.4.0"
     },
+    "mustache/mustache": {
+        "version": "v2.13.0"
+    },
     "ocramius/package-versions": {
         "version": "1.5.1"
     },
