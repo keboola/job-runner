@@ -1,5 +1,5 @@
 parameters:
-    scanFiles:
+    bootstrapFiles:
         - bin/.phpunit/phpunit-6.5-0/vendor/autoload.php
     ignoreErrors:
         - '#Parameter \#3 \$queueClient of class App\\Command\\RunCommand constructor expects Keboola\\JobQueueInternalClient\\Client, PHPUnit\\Framework\\MockObject\\MockObject given.#'
