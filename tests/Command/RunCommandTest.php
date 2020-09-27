@@ -32,10 +32,15 @@ class RunCommandTest extends KernelTestCase
 
     public function testExecuteSuccess(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(getenv('KMS_KEY'), getenv('REGION'), '', '');
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory((string) getenv('KMS_KEY'), (string) getenv('REGION'), '', '');
         $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(new NullLogger(), $jobFactory, getenv('JOB_QUEUE_URL'), getenv('JOB_QUEUE_URL'));
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_URL')
+        );
         $job = $jobFactory->createNewJob([
             'component' => 'keboola.ex-http',
             'token' => getenv('KBC_TEST_TOKEN'),

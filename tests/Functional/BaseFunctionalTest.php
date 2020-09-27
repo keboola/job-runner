@@ -61,7 +61,9 @@ abstract class BaseFunctionalTest extends TestCase
             (string) getenv('legacy_encryption_key'),
             ''
         );
-        $this->objectEncryptorFactory->setStackId(parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST));
+        $this->objectEncryptorFactory->setStackId(
+            (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST)
+        );
     }
 
     protected function getCommand(
