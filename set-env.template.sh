@@ -11,7 +11,9 @@ export KMS_KEY=key id or alias
 export LEGACY_OAUTH_API_URL=https://syrup.keboola.com/oauth-v2/
 export LOGS_S3_BUCKET=s3bucket
 export STORAGE_API_URL=https://connection.keboola.com/
-export JOB_QUEUE_URL=https://queue.internal.api
+export JOB_QUEUE_URL=https://localhost:81
 export JOB_QUEUE_TOKEN=dummy
 
 export TEST_STORAGE_TOKEN=
+export SP_PASSWORD
+export SP_APP_ID

@@ -29,6 +29,8 @@ services:
       - STORAGE_API_URL
     command: 
       composer ci
+    depends_on:
+      - internal-api
 
   tests-local: 
     <<: *tests
@@ -38,3 +40,36 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
       - /bin/bash
+
+
+  internal-api:
+    image: keboolapes.azurecr.io/job-queue-internal-api:latest
+    ports:
+      - "81:80"
+    volumes:
+      # to get wait-for-it
+      - ./:/build-code
+    environment:
+      - log_abs_connection_string=
+      - log_abs_container=debug-files
+      - logs_s3_bucket=
+      - logs_s3_bucket_region=
+      - MYSQL_ROOT_PASSWORD=root
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=jobs
+
+    command: ['sh', '-c', '/build-code/docker/wait-for-it.sh --strict --timeout=120 mysql:3306 -- php bin/console doctrine:migrations:migrate && apache2-foreground']
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=jobs
+      - MYSQL_ROOT_PASSWORD=root
