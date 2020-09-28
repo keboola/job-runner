@@ -196,7 +196,9 @@ class RunCommand extends Command
         $this->objectEncryptorFactory->setComponentId($job->getComponentId());
         $this->objectEncryptorFactory->setProjectId($job->getProjectId());
         $this->objectEncryptorFactory->setConfigurationId($job->getConfigId());
-        $this->objectEncryptorFactory->setStackId(parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST));
+        $this->objectEncryptorFactory->setStackId(
+            (string) parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST)
+        );
         return $this->objectEncryptorFactory->getEncryptor();
     }
 

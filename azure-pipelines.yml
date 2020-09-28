@@ -3,9 +3,22 @@
 pool:
   name: 'Default'
 
+pr: none
+trigger:
+  batch: true
+  branches:
+    include:
+      - '*'
+  tags:
+    include:
+      - '*'
+
 steps:
-- script: docker info
-  displayName: 'Info'
+- task: Docker@2
+  displayName: Test ACR login
+  inputs:
+    command: login
+    containerRegistry: 'Keboola PS Test ACR'
 
 - script: docker-compose build
   displayName: 'Build Tests'

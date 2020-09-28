@@ -33,11 +33,13 @@ services:
         arguments:
             $storageApiUrl: "%env(STORAGE_API_URL)%"
 
-    Keboola\ErrorControl\Monolog\S3Uploader:
+    Keboola\ErrorControl\Uploader\UploaderFactory:
         arguments:
             $storageApiUrl: "%env(STORAGE_API_URL)%"
-            $s3bucket: "%env(LOGS_S3_BUCKET)%"
-            $region: "%env(REGION)%"
+            $s3Bucket: "%env(LOGS_S3_BUCKET)%"
+            $s3Region: "%env(REGION)%"
+            $absConnectionString: "%env(log_abs_connection_string)%"
+            $absContainer: "%env(log_abs_container)%"
 
     Keboola\ErrorControl\Monolog\LogProcessor:
         public: true

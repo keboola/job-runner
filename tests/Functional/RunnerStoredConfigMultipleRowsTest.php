@@ -158,7 +158,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             ]
         );
         $row->setIsDisabled($disabled);
-        $components->addConfigurationRow($row)['id'];
+        $components->addConfigurationRow($row);
         return $configId;
     }
 

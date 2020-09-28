@@ -42,6 +42,26 @@ Than you can run tests:
 If the above environment variables are set, the `.env` file will be produced from the SSM parameters. 
 
 ## Development
+
+## Development
+Create a service principal to download Internal Queue API image and login:
+
+	SERVICE_PRINCIPAL_NAME=devel-job-queue-internal-api-pull
+
+	ACR_REGISTRY_ID=$(az acr show --name keboolapes --query id --output tsv --subscription c5182964-8dca-42c8-a77a-fa2a3c6946ea)
+
+	SP_PASSWORD=$(az ad sp create-for-rbac --name http://$SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
+	
+	SP_APP_ID=$(az ad sp show --id http://$SERVICE_PRINCIPAL_NAME --query appId --output tsv)
+
+	SP_APP_ID=$(az ad sp show --id http://$SERVICE_PRINCIPAL_NAME --query password --output tsv)
+
+Login and pull the image:
+
+	docker login keboolapes.azurecr.io --username $SP_APP_ID --password $SP_PASSWORD
+
+	docker pull keboolapes.azurecr.io/job-queue-internal-api:latest
+
 To run locally, set the environment variables and execute:
     
     source ./set-env.sh && docker-compose run tests-local
