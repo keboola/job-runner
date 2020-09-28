@@ -39,7 +39,7 @@ class RunCommandTest extends KernelTestCase
             new NullLogger(),
             $jobFactory,
             (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_URL')
+            (string) getenv('JOB_QUEUE_TOKEN')
         );
         $job = $jobFactory->createNewJob([
             'component' => 'keboola.ex-http',
