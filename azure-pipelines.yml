@@ -28,21 +28,21 @@ steps:
 - script: docker-compose build
   displayName: 'Build Tests'
 
-# - script: docker-compose run tests
-#   displayName: 'Run Tests'
-#   env:
-#     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-#     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#     STORAGE_API_URL: $(KBC_TEST_URL)
-#     KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
-#     KEBOOLA_STACK: $(KEBOOLA_STACK)
-#     REGION: $(REGION)
-#     CPU_COUNT: $(CPU_COUNT)
-#     KMS_KEY: $(KMS_KEY)
-#     LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
-#     LOGS_S3_BUCKET: $(LOGS_S3_BUCKET)
-#     JOB_QUEUE_URL: $(JOB_QUEUE_URL)
-#     JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
+- script: docker-compose run tests
+  displayName: 'Run Tests'
+  env:
+    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+    STORAGE_API_URL: $(KBC_TEST_URL)
+    KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
+    KEBOOLA_STACK: $(KEBOOLA_STACK)
+    REGION: $(REGION)
+    CPU_COUNT: $(CPU_COUNT)
+    KMS_KEY: $(KMS_KEY)
+    LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
+    LOGS_S3_BUCKET: $(LOGS_S3_BUCKET)
+    JOB_QUEUE_URL: $(JOB_QUEUE_URL)
+    JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
 
 - task: Docker@2
   displayName: Build and tag the image
