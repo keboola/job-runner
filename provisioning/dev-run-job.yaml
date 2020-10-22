@@ -1,0 +1,77 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: job-runner
+  labels:
+    app: job-runner
+spec:
+  template:
+    metadata:
+      labels:
+        app: job-runner
+        #aadpodidbinding: $KEBOOLA_STACK-encryption-api-identity
+      annotations:  
+        log: "true"
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: job-runner
+          image: job-runner:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: socket
+              mountPath: /var/run/docker.sock
+            - name: temp
+              mountPath: /tmp/
+          env:
+            - name: JOB_ID
+              value: '133'
+            - name: KEBOOLA_STACK
+              value: 'job-runner-test'
+            - name: KEBOOLA_STACK_REGION
+              value: 'us-east-1'
+            - name: REGION
+              value: 'us-east-1'
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_ACCESS_KEY_ID            
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_SECRET_ACCESS_KEY    
+            - name: CPU_COUNT
+              value: '1'
+            - name: KMS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: KMS_KEY
+            - name: LEGACY_OAUTH_API_URL
+              value: 'https://syrup.keboola.com/oauth-v2/'
+            - name: LOGS_S3_BUCKET
+              value: 'connection-testing-services-s3logsbucket-nz8zaaeo5ve6'
+            - name: STORAGE_API_URL
+              value: 'https://connection.keboola.com/'
+            - name: JOB_QUEUE_URL
+              value: 'http://localhost:80/'
+            - name: JOB_QUEUE_TOKEN
+              value: 'dummy'
+      volumes:
+        - name: socket
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+        - name: temp
+          hostPath:
+            path: /tmp/
+            type: Directory
