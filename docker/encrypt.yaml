@@ -1,0 +1,53 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: job-runner-encrypt
+  labels:
+    app: job-runner-encrypt
+spec:
+  # todo, toto vyhodit
+  selector:
+    matchLabels:
+      app: job-runner-encrypt
+  manualSelector: true
+  template:
+    metadata:
+      labels:
+        app: job-runner-encrypt
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: job-runner-encrypt
+          image: job-runner:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          command:
+            - "php"
+          args: 
+            - "/code/docker/encryptValue.php"
+            - "6553-165618-nq1bvSAoW7nd3fbktddqHULp67mty8plLREkpkVU"
+          env:
+            - name: KEBOOLA_STACK
+              value: 'job-runner-test'
+            - name: REGION
+              value: 'us-east-1'
+            - name: AWS_ACCESS_KEY_ID
+              value: 'AKIAQ4QRYXTAHLSE5UFO'
+              #value: 'AKIAQ4QRYXTALNODOCXF'
+            - name: AWS_SECRET_ACCESS_KEY
+              value: '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'
+              #value: '4bDcX7X8wZfWfN2OqtB5pK6mNHhu4c33rU/0uE1'
+            - name: CPU_COUNT
+              value: '1'
+            - name: KMS_KEY
+              value: 'cca3d50b-353c-4a5d-aa94-10a24f8bc6b0'
+              #value: '2f9ca52b-8c8a-423f-b009-ea2723defe85'
+            - name: STORAGE_API_URL
+              value: 'https://connection.keboola.com/'

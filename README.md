@@ -43,8 +43,8 @@ If the above environment variables are set, the `.env` file will be produced fro
 
 ## Development
 
-## Development
-Create a service principal to download Internal Queue API image and login:
+### Prepare Images
+Create a service principal to download Internal Queue API image and Job Runner Image and login:
 
 	SERVICE_PRINCIPAL_NAME=devel-job-queue-internal-api-pull
 
@@ -58,18 +58,85 @@ Create a service principal to download Internal Queue API image and login:
 
 Login and pull the image:
 
-	docker login keboolapes.azurecr.io --username $SP_APP_ID --password $SP_PASSWORD
+	docker login keboolapes.azurecr.io --username "6950d4c8-4719-4956-8daa-6e61b405f541" --password "RDEk4Gjz4u~.NuF6_P6I5~99L2sq.o_g4S"
 
 	docker pull keboolapes.azurecr.io/job-queue-internal-api:latest
 
-To run locally, set the environment variables and execute:
-    
-    source ./set-env.sh && docker-compose run tests-local
-
-To run tests on live code, execute:
-
-    source ./set-env.sh && docker-compose run --rm tests-local composer install
-    source ./set-env.sh && docker-compose run --rm tests-local composer get-parameters
-    source ./set-env.sh && docker-compose run --rm tests-local composer ci
+	docker pull keboolapes.azurecr.io/job-runner:latest
 
 
+### Start Internal API
+Copy `dev-environments.yaml.template` to `dev-environments.yaml` and
+fill in AWS Key and Credentials with access to the Key and required component images.
+
+Run:
+```
+kubectl apply -f provisioning/dev-environments.yaml
+```
+
+Run
+```
+kubectl apply -f provisioning/dev-internal-api.yaml
+```
+
+This will start the internal API server. It takes a while to start. Check that it runs by executing:
+
+```
+curl http://localhost/jobs
+```
+
+which should return empty list `[]`.
+
+(provided that the kubernetes cluster runs on localhost)
+
+### Encrypt token
+
+Run:
+
+```
+kubectl apply -f provisioning/dev-encrypt.yaml
+kubectl wait --for=condition=complete job/job-runner-encrypt --timeout=900s
+```
+
+If you get `field is immutable` error run:
+```
+kubectl delete job/job-runner-encrypt
+```
+
+Get the encrypted token value:
+
+```
+kubectl logs job/job-runner-encrypt
+```
+
+This will return sth like:
+
+```
+KBC::Secure::eJwBXXXX
+```
+
+Create a job - a minimal configuration:
+
+```
+curl --location --request POST 'localhost:80/jobs' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "token": {
+        "token": "KBC::Secure::eJwBXXXX",
+        "id": "165618"
+    },
+    "project": {
+        "id": "6553"
+    },
+    "id": "133",
+    "status": "processing",
+    "params": {
+        "config": "2797256784",
+        "component": "keboola.ex-http",
+        "mode": "run"
+    }
+}'
+```
+
+Provided that `config` and `component` are valid. Take care that `id` must be unique and `status` must be `processing`.
+The job runner can then use with `http://localhost:80` and `JOB_ID` variable set to the chosen id.
