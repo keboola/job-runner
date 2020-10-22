@@ -444,6 +444,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $command = $this->getCommand($jobData);
         $return = $command->run(new StringInput(''), new NullOutput());
         self::assertEquals(0, $return);
+        sleep(2);
         $listFileOptions = new ListFilesOptions();
         $listFileOptions->setTags(['downloaded']);
         $files = $this->getClient()->listFiles($listFileOptions);
