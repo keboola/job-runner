@@ -39,20 +39,25 @@ steps:
     JOB_QUEUE_URL: $(JOB_QUEUE_URL)
     JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
 
-- script: |
-    docker build -t keboola/job-runner .
-    eval $(docker run --rm -i -e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) -e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) quay.io/keboola/aws-cli ecr get-login --region us-east-1 --no-include-email)
-    docker tag keboola/job-runner:latest $(ECR_REPOSITORY_URI):$(Build.SourceVersion)
-    docker tag keboola/job-runner:latest $(ECR_REPOSITORY_URI):latest
-    docker push $(ECR_REPOSITORY_URI):$(Build.SourceVersion)
-    docker push $(ECR_REPOSITORY_URI):latest
-  displayName: 'Push to Dev AWS'
+# Push test image to test ACR
+- task: Docker@2
+  displayName: Test ACR login
+  inputs:
+    command: login
+    containerRegistry: 'Keboola PS Test ACR'
 
 - script: |
-    docker build -t keboola/job-runner .
-    eval $(docker run --rm -i -e AWS_ACCESS_KEY_ID=$(PROD_AWS_ACCESS_KEY_ID) -e AWS_SECRET_ACCESS_KEY=$(PROD_AWS_SECRET_ACCESS_KEY) quay.io/keboola/aws-cli ecr get-login --region eu-central-1 --no-include-email)
-    docker tag keboola/job-runner:latest $(EU_CENTRAL_1_ECR_REPOSITORY_URI):$(Build.SourceVersion)
-    docker tag keboola/job-runner:latest $(EU_CENTRAL_1_ECR_REPOSITORY_URI):latest
-    docker push $(EU_CENTRAL_1_ECR_REPOSITORY_URI):$(Build.SourceVersion)
-    docker push $(EU_CENTRAL_1_ECR_REPOSITORY_URI):latest
-  displayName: 'Push to EU-CENTRAL-1'
+    docker tag $(imageName):$(tag) keboolapes.azurecr.io/$(imageName):$(tag)
+    docker tag $(imageName):latest keboolapes.azurecr.io/$(imageName):latest
+    docker images
+  displayName: Tag the image for Test ACR
+
+- task: Docker@2
+  displayName: Push the test image to Test ACR
+  inputs:
+    containerRegistry: 'Keboola PS Test ACR'
+    repository: $(imageName)
+    command: push
+    tags: |
+      $(tag)
+      latest
