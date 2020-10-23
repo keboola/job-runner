@@ -58,7 +58,7 @@ Create a service principal to download Internal Queue API image and Job Runner I
 
 Login and pull the image:
 
-	docker login keboolapes.azurecr.io --username "6950d4c8-4719-4956-8daa-6e61b405f541" --password "RDEk4Gjz4u~.NuF6_P6I5~99L2sq.o_g4S"
+	docker login keboolapes.azurecr.io --username $SP_APP_ID --password $SP_PASSWORD
 
 	docker pull keboolapes.azurecr.io/job-queue-internal-api:latest
 
