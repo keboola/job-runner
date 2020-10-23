@@ -1,6 +1,3 @@
-pool:
-  name: 'Default'
-
 pr: none
 trigger:
   batch: true
@@ -19,7 +16,7 @@ variables:
 stages:
   - stage: Prepare
     pool:
-      vmImage: Default
+      name: 'Default'
     jobs:
       - job: test
         displayName: 'Test'
