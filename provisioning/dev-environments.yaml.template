@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-environments
+  namespace: default
+data:
+  AWS_ACCESS_KEY_ID: 'XXXX'
+  AWS_SECRET_ACCESS_KEY: 'XXXX'
+  KMS_KEY: 'XXXX'
+  STORAGE_API_TOKEN: 'XXXX'

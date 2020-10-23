@@ -1,0 +1,59 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: job-runner-encrypt
+  labels:
+    app: job-runner-encrypt
+spec:
+  template:
+    metadata:
+      labels:
+        app: job-runner-encrypt
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: job-runner-encrypt
+          image: keboolapes.azurecr.io/job-runner:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          command:
+            - "php"
+          args: 
+            - "/code/docker/encryptValue.php"
+            - "$STORAGE_API_TOKEN"
+          env:
+            - name: KEBOOLA_STACK
+              value: 'job-runner-test'
+            - name: REGION
+              value: 'us-east-1'
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_ACCESS_KEY_ID            
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_SECRET_ACCESS_KEY            
+            - name: CPU_COUNT
+              value: '1'
+            - name: KMS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: KMS_KEY
+            - name: STORAGE_API_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: STORAGE_API_TOKEN
+            - name: STORAGE_API_URL
+              value: 'https://connection.keboola.com/'

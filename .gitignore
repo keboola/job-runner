@@ -19,3 +19,4 @@
 /.php_cs.cache
 /docker/db-data
 /set-env.sh
+/provisioning/dev-environments.yaml
