@@ -199,11 +199,6 @@ class RunCommand extends Command
         $this->objectEncryptorFactory->setStackId(
             (string) parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST)
         );
-        var_dump($job->getComponentId());
-        var_dump($job->getProjectId());
-        var_dump($job->getConfigId());
-        var_dump((string) parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST));
-        var_dump(getenv('AWS_ACCESS_KEY_ID'));
         return $this->objectEncryptorFactory->getEncryptor();
     }
 
