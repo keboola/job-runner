@@ -3,6 +3,7 @@ kind: Job
 apiVersion: batch/v1
 metadata:
   name: job-runner-encrypt
+  namespace: dev-job-runner  
   labels:
     app: job-runner-encrypt
 spec:
