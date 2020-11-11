@@ -271,7 +271,10 @@ class DebugModeTest extends BaseFunctionalTest
             ],
             'parameters' => [
                 'plain' => 'not-secret',
-                '#encrypted' => $this->getEncryptorFactory()->getEncryptor()->encrypt('secret'),
+                '#encrypted' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'secret',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                ),
                 'script' => [
                     'from pathlib import Path',
                     'import sys',

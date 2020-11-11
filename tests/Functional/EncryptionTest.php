@@ -30,7 +30,9 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
+                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
+                ),
                 '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -87,7 +89,10 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'configKey1' => 'first',
-                '#configKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
+                '#configKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'second',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
+                ),
                 '#configKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -109,7 +114,10 @@ class EncryptionTest extends BaseFunctionalTest
         $configRow->setConfiguration([
             'parameters' => [
                 'rowKey1' => 'value1',
-                '#rowKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('value2'),
+                '#rowKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'value2',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
+                ),
                 '#rowKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'value3',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -165,7 +173,10 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
+                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'second',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
+                ),
                 '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()

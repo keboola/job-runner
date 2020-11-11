@@ -7,40 +7,6 @@ Use `docker-composer run tests-local` to get development environment.
 To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
 To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
-Create the main stack using `provisioning\job-runner.json` CF template if not present. 
-Create a user (`JobRunnerUser`) for local development using 
-the `test-cf-stack.json` CF template. Use `DeployPolicy` from the main stack. 
-Create AWS key for the created user.  Set the following environment variables:
-
-- `KEBOOLA_STACK` - `Stack` output of the above Main stack. Specifically it's a part of path of the AWS Systems Manager (SSM) parameters - `/keboola/$KEBOOLA_STACK/job-runner/`
-- `REGION` - `Region` output of the above Main stack.
-- `AWS_ACCESS_KEY_ID` - The created security credentials for the `JobRunnerUser` user.
-- `AWS_SECRET_ACCESS_KEY` - The created security credentials for the `JobRunnerUser` user.
-- `KMS_KEY` - `KmsKey` returned by the test CF stack
-- `LEGACY_OAUTH_API_URL` - usually https://syrup.keboola.com/oauth-v2/
-- `LOGS_S3_BUCKET` - `S3LogsBucket` returned by the test CF stack
-- `STORAGE_API_URL` - Keboola Connection URL - e.g. https://connection.keboola.com/
-- `JOB_QUEUE_URL` - URL of development Queue internal API - e.g. https://9v6f8zdu63.execute-api.eu-central-1.amazonaws.com/test/jobs
-- `JOB_QUEUE_TOKEN` - Arbitrary non-empty value
-- `TEST_STORAGE_TOKEN` - Keboola Connection test token (needed only to run tests)
-- `JOB_ID` - Job ID (need only to run the command itself)
-- possibly `legacy_encryption_key` (see below)
-
-### legacy_encryption_key
-The thing also needs a `legacy_encryption_key` environment variable. There are two options:
-
-- The easy way - set the `legacy_encryption_key` environment variable to arbitrary 16 character string and close your eyes.
-- The hard way - create a SSM parameter with the name: `/keboola/NAME_OF_THE_MAIN_STACK/job-runner/legacy_encryption_key` with `SecureString` type and an arbitrary 16 character value. And use the `get-parameters` composer command to download it to the `.env` file.
-
-You can export the variables manually or you can create and fill the file `set-env.sh` as copy of the attached `set-env.template.sh`.
-
-Than you can run tests:
-
-    docker-compose build
-    source ./set-env.sh && docker-compose run tests-local composer install
-
-If the above environment variables are set, the `.env` file will be produced from the SSM parameters. 
-
 ## Development
 
 ### Prepare Images
@@ -64,7 +30,8 @@ Login and pull the image:
 - Set the following environment variables in `set-env.sh` file (use `set-env.template.sh` as sample):
     - `STORAGE_API_URL` - Keboola Connection URL.
     - `TEST_STORAGE_API_TOKEN` - Token to a test project.
-  
+    - `LEGACY_ENCRYPTION_KEY` - Arbitrary 16 character string.
+
 ### AWS Setup
 - Create a user (`JobRunnerUser`) for local development using the `provisioning/dev/aws.json` CF template. 
     - Create AWS key for the created user. 
@@ -111,7 +78,7 @@ Login and pull the image:
 
 - Deploy the key vault and log container. Provide tenant ID, service principal ID and group ID from the previous commands:
     ```bash
-    az deployment group create --resource-group testing-job-runner --template-file provisioning/azure.json --parameters vault_name=testing-job-runner tenant_id=9b85ee6f-4fb0-4a46-8cb7-4dcc6b262a89 service_principal_object_id=$SERVICE_PRINCIPAL_ID group_object_id=$GROUP_ID storage_account_name=testingjobrunner container_name=debug-files
+    az deployment group create --resource-group testing-job-runner --template-file provisioning/dev/azure.json --parameters vault_name=testing-job-runner tenant_id=9b85ee6f-4fb0-4a46-8cb7-4dcc6b262a89 service_principal_object_id=$SERVICE_PRINCIPAL_ID group_object_id=$GROUP_ID storage_account_name=testingjobrunner container_name=debug-files
     az keyvault show --name testing-job-runner --query "properties.vaultUri"
     ```
 
@@ -197,3 +164,4 @@ curl --location --request POST 'localhost:80/jobs' \
 
 Provided that `config` and `component` are valid. Take care that `id` must be unique and `status` must be `processing`.
 The job runner can then use with `http://localhost:80` and `JOB_ID` variable set to the chosen id.
+
