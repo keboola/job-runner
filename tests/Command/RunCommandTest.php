@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class RunCommandTest extends KernelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         putenv('AWS_ACCESS_KEY_ID=' . getenv('TEST_AWS_ACCESS_KEY_ID'));
