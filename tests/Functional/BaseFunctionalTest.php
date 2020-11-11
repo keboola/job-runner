@@ -40,8 +40,15 @@ abstract class BaseFunctionalTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $requiredEnvs = ['KMS_KEY', 'REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'KBC_TEST_TOKEN',
-            'legacy_encryption_key'];
+        $requiredEnvs = ['AWS_KMS_KEY', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'AZURE_KEY_VAULT_URL',
+            'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY', 'TEST_AZURE_CLIENT_ID',
+            'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
+        ];
+        putenv('AWS_ACCESS_KEY_ID=' . getenv('TEST_AWS_ACCESS_KEY_ID'));
+        putenv('AWS_SECRET_ACCESS_KEY=' . getenv('TEST_AWS_SECRET_ACCESS_KEY'));
+        putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
+        putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
+        putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         foreach ($requiredEnvs as $env) {
             if (empty(getenv($env))) {
                 throw new Exception(sprintf('Environment variable "%s" is empty', $env));
@@ -49,17 +56,18 @@ abstract class BaseFunctionalTest extends TestCase
         }
         $this->storageClient = new StorageClient([
             'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('KBC_TEST_TOKEN'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
         $this->handler = new TestHandler();
         $this->logger = new Logger('test-runner', [$this->handler]);
         $this->temp = new Temp('docker');
         $this->temp->initRunFolder();
         $this->objectEncryptorFactory = new ObjectEncryptorFactory(
-            (string) getenv('KMS_KEY'),
-            (string) getenv('REGION'),
-            (string) getenv('legacy_encryption_key'),
-            ''
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
         );
         $this->objectEncryptorFactory->setStackId(
             (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST)
@@ -71,7 +79,7 @@ abstract class BaseFunctionalTest extends TestCase
         ?Client $mockClient = null,
         ?array $expectedJobResult = null
     ): RunCommand {
-        $jobData['token'] = (string) getenv('KBC_TEST_TOKEN');
+        $jobData['token'] = (string) getenv('TEST_STORAGE_API_TOKEN');
         $storageApiFactory = new JobFactory\StorageClientFactory($this->storageClient->getApiUrl());
         $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
         $job = $jobFactory->createNewJob($jobData);
