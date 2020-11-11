@@ -35,6 +35,7 @@ stages:
             env:
               CPU_COUNT: $(CPU_COUNT)
               LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
+              LEGACY_ENCRYPTION_KEY: $(LEGACY_ENCRYPTION_KEY)
               JOB_QUEUE_URL: $(JOB_QUEUE_URL)
               JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
               STORAGE_API_URL: $(STORAGE_API_URL)

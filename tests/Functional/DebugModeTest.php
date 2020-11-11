@@ -246,7 +246,10 @@ class DebugModeTest extends BaseFunctionalTest
             $csv->writeRow([$i, '100', '1000']);
         }
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
-
+        // need to set this before hand so that the encryption wrappers are available
+        $tokenInfo = $this->getClient()->verifyToken();
+        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
+        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
         $configuration = new Configuration();
         $configuration->setComponentId('keboola.python-transformation');
         $configuration->setName('test-config');

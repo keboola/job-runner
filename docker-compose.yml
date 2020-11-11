@@ -18,6 +18,7 @@ services:
     environment:
       - CPU_COUNT
       - LEGACY_OAUTH_API_URL
+      - LEGACY_ENCRYPTION_KEY
       - JOB_QUEUE_URL
       - JOB_QUEUE_TOKEN
       - STORAGE_API_URL

@@ -96,7 +96,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         ];
 
         self::expectException(ClientException::class);
-        self::expectExceptionMessage('Invalid type for path "job.row');
+        self::expectExceptionMessage('Invalid type for path "job.configRowId');
         $this->getCommand($jobData);
     }
 
