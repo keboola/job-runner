@@ -47,8 +47,8 @@
     "keboola/api-error-control": {
         "version": "0.4.1"
     },
-    "keboola/aws-parameter-filler": {
-        "version": "0.2.3"
+    "keboola/azure-key-vault-client": {
+        "version": "1.1.0"
     },
     "keboola/coding-standard": {
         "version": "8.0.0"
@@ -79,9 +79,6 @@
     },
     "keboola/output-mapping": {
         "version": "9.1.1"
-    },
-    "keboola/php-component": {
-        "version": "4.4.2"
     },
     "keboola/php-encryption": {
         "version": "0.2.3"

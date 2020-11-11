@@ -3,7 +3,7 @@ kind: Job
 apiVersion: batch/v1
 metadata:
   name: job-runner-encrypt
-  namespace: dev-job-runner  
+  namespace: dev-job-runner
   labels:
     app: job-runner-encrypt
 spec:
@@ -30,27 +30,46 @@ spec:
             - "/code/docker/encryptValue.php"
             - "$STORAGE_API_TOKEN"
           env:
-            - name: KEBOOLA_STACK
-              value: 'job-runner-test'
-            - name: REGION
-              value: 'us-east-1'
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_REGION
+            - name: AWS_KMS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AWS_KMS_KEY
+            - name: AZURE_KEY_VAULT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: AZURE_KEY_VAULT_URL
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 configMapKeyRef:
                   name: dev-environments
-                  key: AWS_ACCESS_KEY_ID            
+                  key: AWS_ACCESS_KEY_ID
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 configMapKeyRef:
                   name: dev-environments
-                  key: AWS_SECRET_ACCESS_KEY            
-            - name: CPU_COUNT
-              value: '1'
-            - name: KMS_KEY
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: CLIENT_ID
               valueFrom:
                 configMapKeyRef:
                   name: dev-environments
-                  key: KMS_KEY
+                  key: CLIENT_ID
+            - name: CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: CLIENT_SECRET
+            - name: TENANT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-environments
+                  key: TENANT_ID
             - name: STORAGE_API_TOKEN
               valueFrom:
                 configMapKeyRef:

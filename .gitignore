@@ -1,22 +1,11 @@
-###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
-/public/bundles/
-/var/
+/var/cache/
+/var/log/
 /vendor/
-###< symfony/framework-bundle ###
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-/phpcs.xml
-###< squizlabs/php_codesniffer ###
-
-###> symfony/phpunit-bridge ###
-.phpunit
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-/.idea
 /.php_cs.cache
+.phpunit
 /docker/db-data
 /set-env.sh
-/provisioning/dev-environments.yaml
+/provisioning/dev/environments.yaml

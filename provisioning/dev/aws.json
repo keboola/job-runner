@@ -131,25 +131,7 @@
                                 }
                             ]
                         }
-                    },
-                    {
-                        "PolicyName": "ssm-parameters-read-job-runner",
-                        "PolicyDocument": {
-                            "Version": "2012-10-17",
-                            "Statement": [
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "ssm:GetParametersByPath",
-                                        "ssm:GetParameter"
-                                    ],
-                                    "Resource": {
-                                        "Fn::Sub": "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/keboola/${JobRunnerMainStack}/job-runner/*"
-                                    }
-                                }
-                            ]
-                        }
-                    }                    
+                    }
                 ]
             },
             "DependsOn": ["TestKmsKey"]

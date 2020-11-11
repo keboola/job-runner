@@ -4,10 +4,11 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 $of = new \Keboola\ObjectEncryptor\ObjectEncryptorFactory(
-    getenv('KMS_KEY'),
-    getenv('REGION'),
+    getenv('AWS_KMS_KEY'),
+    getenv('AWS_REGION'),
     '',
-    ''
+    '',
+    getenv('AZURE_KEY_VAULT_URL')
 );
 $of->setStackId((string) parse_url(getenv('STORAGE_API_URL'), PHP_URL_HOST));
 echo $of->getEncryptor()->encrypt($argv[1], \Keboola\ObjectEncryptor\Wrapper\GenericKMSWrapper::class);

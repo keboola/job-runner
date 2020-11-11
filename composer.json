@@ -19,15 +19,15 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "keboola/api-error-control": "^3.1",
+        "keboola/api-error-control": "^3.2",
+        "keboola/object-encryptor": "^0.3",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
-        "keboola/job-queue-internal-api-php-client": "^2.0",
+        "keboola/job-queue-internal-api-php-client": "^3.1",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
-        "symfony/flex": "^1.1",
+        "symfony/flex": "^1.10",
         "symfony/framework-bundle": "4.4.*",
-        "symfony/yaml": "4.4.*",
-        "keboola/aws-parameter-filler": "^0.3"
+        "symfony/yaml": "4.4.*"
     },
     "repositories": [
         {
@@ -42,7 +42,7 @@
         "phpstan/phpstan": "^0.12",
         "symfony/phpunit-bridge": "4.4.*",
         "symfony/test-pack": "^1.0",
-        "infection/infection": "^0.17"
+        "infection/infection": "^0.20"
     },
     "config": {
         "preferred-install": {
