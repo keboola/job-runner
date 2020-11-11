@@ -165,3 +165,12 @@ curl --location --request POST 'localhost:80/jobs' \
 Provided that `config` and `component` are valid. Take care that `id` must be unique and `status` must be `processing`.
 The job runner can then use with `http://localhost:80` and `JOB_ID` variable set to the chosen id.
 
+### Run tests
+Init the local environment:
+
+    docker-compose build
+    source ./set-env.sh && docker-compose run tests-local composer install
+
+To run tests locally, set the environment variables and execute:
+
+    source ./set-env.sh && docker-compose run --rm tests composer ci
