@@ -89,7 +89,7 @@ class RunCommand extends Command
             $job = $this->queueClient->getJob($jobId);
 
             $encryptor = $this->initEncryption($job);
-            $token = $encryptor->decrypt($job->getToken());
+            $token = $encryptor->decrypt($job->getTokenString());
 
             // set up logging to storage API
             $options = [
@@ -129,7 +129,7 @@ class RunCommand extends Command
                 $job->getMode(),
                 $job->getId(),
                 $usageFile,
-                $job->getRowId()
+                $job->getConfigRowId()
             );
             if (count($outputs) === 0) {
                 $result = [
