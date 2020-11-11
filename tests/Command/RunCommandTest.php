@@ -59,7 +59,7 @@ class RunCommandTest extends KernelTestCase
         );
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [

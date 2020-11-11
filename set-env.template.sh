@@ -9,7 +9,7 @@ export STORAGE_API_URL=https://connection.keboola.com/
 
 # AWS Stuff
 export AWS_REGION=us-east-1
-export AWS_KMS_KEY=
+export AWS_KMS_KEY_ID=
 export AWS_LOGS_S3_BUCKET=
 
 # Azure stuff

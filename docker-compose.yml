@@ -22,7 +22,7 @@ services:
       - JOB_QUEUE_TOKEN
       - STORAGE_API_URL
       - AWS_REGION
-      - AWS_KMS_KEY
+      - AWS_KMS_KEY_ID
       - AWS_LOGS_S3_BUCKET
       - AZURE_KEY_VAULT_URL
       - AZURE_LOG_ABS_CONNECTION_STRING

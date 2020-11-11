@@ -72,7 +72,7 @@ Login and pull the image:
         - `TEST_AWS_ACCESS_KEY_ID` - The created security credentials for the `JobRunnerUser` user.
         - `TEST_AWS_SECRET_ACCESS_KEY` - The created security credentials for the `JobRunnerUser` user.
         - `AWS_REGION` - `Region` output of the above stack.
-        - `AWS_KMS_KEY` - `KmsKey` output of the above stack.
+        - `AWS_KMS_KEY_ID` - `KmsKey` output of the above stack.
         - `AWS_LOGS_S3_BUCKET` - `S3LogsBucket` output of the above stack.
 
 ### Azure Setup
