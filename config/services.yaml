@@ -57,7 +57,7 @@ services:
             $keyVersion1: '%env(LEGACY_ENCRYPTION_KEY)%'
             # intentionally empty, legacy AES ciphers are not supported by this app
             $keyVersion0:
-            $akvUrl: '%env(AZURE_AKV_URL)%'
+            $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
 
     Keboola\JobQueueInternalClient\Client:
         arguments:
