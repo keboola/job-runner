@@ -22,7 +22,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'configData' => [
                 'storage' => [
@@ -85,13 +85,13 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobId = $this->getClient()->generateId();
         $jobData = [
             'id' => $jobId,
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'configData' => [
                 'storage' => [],
                 'parameters' => [],
             ],
-            'row' => [1, 2, 3],
+            'configRowId' => [1, 2, 3],
             'status' => 'waiting',
         ];
 
@@ -116,7 +116,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             ],
         ];
         $clientMock = self::getMockBuilder(Client::class)
-            ->setConstructorArgs([['token' => getenv('KBC_TEST_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
+            ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
         $clientMock->expects(self::any())
@@ -227,7 +227,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             ],
         ];
         $clientMock = self::getMockBuilder(Client::class)
-            ->setConstructorArgs([['token' => getenv('KBC_TEST_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
+            ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
         $clientMock->expects(self::any())
@@ -328,7 +328,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $this->createTable('in.c-executor-test', 'source');
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'tag' => '1.1.12',
             'configData' => [
@@ -408,7 +408,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         );
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'tag' => '1.1.12',
             'configData' => [

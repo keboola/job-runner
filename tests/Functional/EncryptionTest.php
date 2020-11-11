@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use Keboola\ObjectEncryptor\Legacy\Wrapper\ComponentProjectWrapper;
-use Keboola\ObjectEncryptor\Wrapper\ComponentWrapper;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
@@ -33,10 +31,13 @@ class EncryptionTest extends BaseFunctionalTest
                 ],
                 'key1' => 'first',
                 '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
-                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt('third', ComponentWrapper::class),
+                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'third',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                ),
                 '#key4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'fourth',
-                    ComponentProjectWrapper::class
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
                 ),
             ],
         ];
@@ -89,11 +90,11 @@ class EncryptionTest extends BaseFunctionalTest
                 '#configKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
                 '#configKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
-                    ComponentWrapper::class
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
                 ),
                 '#configKey4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'fourth',
-                    ComponentProjectWrapper::class
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
                 ),
             ],
         ];
@@ -109,10 +110,13 @@ class EncryptionTest extends BaseFunctionalTest
             'parameters' => [
                 'rowKey1' => 'value1',
                 '#rowKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('value2'),
-                '#rowKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt('value3', ComponentWrapper::class),
+                '#rowKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'value3',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                ),
                 '#rowKey4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'value4',
-                    ComponentProjectWrapper::class
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
                 ),
             ],
         ]);
@@ -162,10 +166,13 @@ class EncryptionTest extends BaseFunctionalTest
                 ],
                 'key1' => 'first',
                 '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second'),
-                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt('third', ComponentWrapper::class),
+                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'third',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                ),
                 '#key4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'fourth',
-                    ComponentProjectWrapper::class
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
                 ),
             ],
         ];

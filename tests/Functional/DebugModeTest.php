@@ -29,7 +29,7 @@ class DebugModeTest extends BaseFunctionalTest
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
             'configData' => [
                 'storage' => [
@@ -180,7 +180,7 @@ class DebugModeTest extends BaseFunctionalTest
         }
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
             'configData' => [
                 'storage' => [
@@ -288,9 +288,9 @@ class DebugModeTest extends BaseFunctionalTest
         $configId = $components->addConfiguration($configuration)['id'];
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -378,9 +378,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -577,9 +577,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',

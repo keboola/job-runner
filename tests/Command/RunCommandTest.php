@@ -14,6 +14,16 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class RunCommandTest extends KernelTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        putenv('AWS_ACCESS_KEY_ID=' . getenv('TEST_AWS_ACCESS_KEY_ID'));
+        putenv('AWS_SECRET_ACCESS_KEY=' . getenv('TEST_AWS_SECRET_ACCESS_KEY'));
+        putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
+        putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
+        putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
+    }
+
     public function testExecuteFailure(): void
     {
         $kernel = static::createKernel();
@@ -33,7 +43,13 @@ class RunCommandTest extends KernelTestCase
     public function testExecuteSuccess(): void
     {
         $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory((string) getenv('KMS_KEY'), (string) getenv('REGION'), '', '');
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
         $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
         $client = new Client(
             new NullLogger(),
@@ -42,10 +58,10 @@ class RunCommandTest extends KernelTestCase
             (string) getenv('JOB_QUEUE_TOKEN')
         );
         $job = $jobFactory->createNewJob([
-            'component' => 'keboola.ex-http',
-            'token' => getenv('KBC_TEST_TOKEN'),
+            'componentId' => 'keboola.ex-http',
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'config' => 'dummy',
+            'configId' => 'dummy',
             'configData' => [
                 'storage' => [],
                 'parameters' => [
