@@ -40,7 +40,7 @@ abstract class BaseFunctionalTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $requiredEnvs = ['AWS_KMS_KEY', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'AZURE_KEY_VAULT_URL',
+        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'AZURE_KEY_VAULT_URL',
             'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY', 'TEST_AZURE_CLIENT_ID',
             'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
         ];
@@ -63,7 +63,7 @@ abstract class BaseFunctionalTest extends TestCase
         $this->temp = new Temp('docker');
         $this->temp->initRunFolder();
         $this->objectEncryptorFactory = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_KMS_KEY_ID'),
             (string) getenv('AWS_REGION'),
             '',
             '',
