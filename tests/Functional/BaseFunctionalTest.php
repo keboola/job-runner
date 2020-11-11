@@ -40,9 +40,9 @@ abstract class BaseFunctionalTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL', 'AZURE_KEY_VAULT_URL',
-            'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY', 'TEST_AZURE_CLIENT_ID',
-            'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
+        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL',
+            'AZURE_KEY_VAULT_URL', 'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY',
+            'TEST_AZURE_CLIENT_ID', 'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
         ];
         putenv('AWS_ACCESS_KEY_ID=' . getenv('TEST_AWS_ACCESS_KEY_ID'));
         putenv('AWS_SECRET_ACCESS_KEY=' . getenv('TEST_AWS_SECRET_ACCESS_KEY'));
