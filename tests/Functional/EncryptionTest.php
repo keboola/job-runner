@@ -30,7 +30,8 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt('second',
+                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'second',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
                 ),
                 '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
