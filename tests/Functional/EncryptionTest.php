@@ -30,10 +30,6 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
-                    'second',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
-                ),
                 '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -51,9 +47,9 @@ class EncryptionTest extends BaseFunctionalTest
         $configuration->setConfiguration($configData);
         $configId = $components->addConfiguration($configuration)['id'];
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $command = $this->getCommand($jobData);
 
@@ -68,7 +64,6 @@ class EncryptionTest extends BaseFunctionalTest
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('first', $config['parameters']['key1']);
-        self::assertEquals('second', $config['parameters']['#key2']);
         self::assertEquals('third', $config['parameters']['#key3']);
         self::assertEquals('fourth', $config['parameters']['#key4']);
     }
@@ -90,10 +85,6 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'configKey1' => 'first',
-                '#configKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
-                    'second',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
-                ),
                 '#configKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -115,10 +106,6 @@ class EncryptionTest extends BaseFunctionalTest
         $configRow->setConfiguration([
             'parameters' => [
                 'rowKey1' => 'value1',
-                '#rowKey2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
-                    'value2',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
-                ),
                 '#rowKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'value3',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -131,9 +118,9 @@ class EncryptionTest extends BaseFunctionalTest
         ]);
         $components->addConfigurationRow($configRow);
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $command = $this->getCommand($jobData);
 
@@ -148,11 +135,9 @@ class EncryptionTest extends BaseFunctionalTest
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('first', $config['parameters']['configKey1']);
-        self::assertEquals('second', $config['parameters']['#configKey2']);
         self::assertEquals('third', $config['parameters']['#configKey3']);
         self::assertEquals('fourth', $config['parameters']['#configKey4']);
         self::assertEquals('value1', $config['parameters']['rowKey1']);
-        self::assertEquals('value2', $config['parameters']['#rowKey2']);
         self::assertEquals('value3', $config['parameters']['#rowKey3']);
         self::assertEquals('value4', $config['parameters']['#rowKey4']);
     }
@@ -174,10 +159,6 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key2' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
-                    'second',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredConfigurationWrapperClass()
-                ),
                 '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
                     'third',
                     $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
@@ -195,15 +176,18 @@ class EncryptionTest extends BaseFunctionalTest
         $configuration->setConfiguration($configData);
         $configuration->setState([
             'component' => [
-                '#key5' => $this->getEncryptorFactory()->getEncryptor()->encrypt('fifth'),
+                '#key5' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'fifth',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                ),
                 'key6' => 'sixth',
             ],
         ]);
         $configId = $components->addConfiguration($configuration)['id'];
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $command = $this->getCommand($jobData);
 
