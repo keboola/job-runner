@@ -28,7 +28,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             ],
         ];
         $clientMock = self::getMockBuilder(Client::class)
-            ->setConstructorArgs([['token' => getenv('KBC_TEST_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
+            ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
         $clientMock->expects(self::any())
@@ -46,9 +46,9 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             ));
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
-            'config' => 'executor-test',
+            'configId' => 'executor-test',
             'configData' => [
                 'storage' => [
                     'input' => [

@@ -13,7 +13,7 @@ class RunnerLoggingOutputTest extends BaseFunctionalTest
     public function testRun(): void
     {
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'configData' => [
                 'parameters' => [

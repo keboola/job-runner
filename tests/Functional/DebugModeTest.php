@@ -29,7 +29,7 @@ class DebugModeTest extends BaseFunctionalTest
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
             'configData' => [
                 'storage' => [
@@ -180,7 +180,7 @@ class DebugModeTest extends BaseFunctionalTest
         }
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
             'configData' => [
                 'storage' => [
@@ -246,7 +246,10 @@ class DebugModeTest extends BaseFunctionalTest
             $csv->writeRow([$i, '100', '1000']);
         }
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
-
+        // need to set this before hand so that the encryption wrappers are available
+        $tokenInfo = $this->getClient()->verifyToken();
+        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
+        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
         $configuration = new Configuration();
         $configuration->setComponentId('keboola.python-transformation');
         $configuration->setName('test-config');
@@ -271,7 +274,10 @@ class DebugModeTest extends BaseFunctionalTest
             ],
             'parameters' => [
                 'plain' => 'not-secret',
-                '#encrypted' => $this->getEncryptorFactory()->getEncryptor()->encrypt('secret'),
+                '#encrypted' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                    'secret',
+                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                ),
                 'script' => [
                     'from pathlib import Path',
                     'import sys',
@@ -288,9 +294,9 @@ class DebugModeTest extends BaseFunctionalTest
         $configId = $components->addConfiguration($configuration)['id'];
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -378,9 +384,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
@@ -577,9 +583,9 @@ class DebugModeTest extends BaseFunctionalTest
         }
 
         $jobData = [
-            'component' => 'keboola.python-transformation',
+            'componentId' => 'keboola.python-transformation',
             'mode' => 'debug',
-            'config' => $configId,
+            'configId' => $configId,
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',

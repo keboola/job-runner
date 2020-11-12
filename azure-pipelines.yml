@@ -33,18 +33,24 @@ stages:
           - script: docker-compose run tests
             displayName: 'Run Tests'
             env:
-              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              STORAGE_API_URL: $(KBC_TEST_URL)
-              KBC_TEST_TOKEN: $(KBC_TEST_TOKEN)
-              KEBOOLA_STACK: $(KEBOOLA_STACK)
-              REGION: $(REGION)
               CPU_COUNT: $(CPU_COUNT)
-              KMS_KEY: $(KMS_KEY)
               LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
-              LOGS_S3_BUCKET: $(LOGS_S3_BUCKET)
+              LEGACY_ENCRYPTION_KEY: $(LEGACY_ENCRYPTION_KEY)
               JOB_QUEUE_URL: $(JOB_QUEUE_URL)
               JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
+              STORAGE_API_URL: $(STORAGE_API_URL)
+              AWS_REGION: $(AWS_REGION)
+              AWS_KMS_KEY_ID: $(AWS_KMS_KEY_ID)
+              AWS_LOGS_S3_BUCKET: $(AWS_LOGS_S3_BUCKET)
+              AZURE_KEY_VAULT_URL: $(AZURE_KEY_VAULT_URL)
+              AZURE_LOG_ABS_CONNECTION_STRING: $(AZURE_LOG_ABS_CONNECTION_STRING)
+              AZURE_LOG_ABS_CONTAINER: $(AZURE_LOG_ABS_CONTAINER)
+              TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
+              TEST_AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
+              TEST_AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
+              TEST_AZURE_CLIENT_ID: $(TEST_AZURE_CLIENT_ID)
+              TEST_AZURE_CLIENT_SECRET: $(TEST_AZURE_CLIENT_SECRET)
+              TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
 
   - stage: Deploy
     pool:
