@@ -84,7 +84,7 @@ stages:
             displayName: Tag the image for Test ACR
 
           - task: Docker@2
-            displayName: Push the test image to Test ACR
+            displayName: Push the image to Test ACR
             inputs:
               containerRegistry: 'Keboola PS Test ACR'
               repository: $(imageName)
@@ -104,7 +104,7 @@ stages:
             displayName: Tag the image for Production ACR
 
           - task: Docker@2
-            displayName: Push the test image to Production ACR
+            displayName: Push the image to Production ACR
             inputs:
               containerRegistry: 'Keboola ACR'
               repository: $(imageName)
