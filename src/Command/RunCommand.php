@@ -97,7 +97,7 @@ class RunCommand extends Command
                 'userAgent' => $job->getComponentId(),
             ];
             $clientWithoutLogger = $this->storageApiFactory->getClient($options);
-            $logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['admin']['name']);
+            $logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
             $clientWithoutLogger->setRunId($jobId);
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $logger->pushHandler($handler);
