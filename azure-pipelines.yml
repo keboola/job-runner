@@ -89,6 +89,23 @@ stages:
               containerRegistry: 'Keboola PS Test ACR'
               repository: $(imageName)
               command: push
-              tags: |
-                $(tag)
-                latest
+
+          # Push image to production ACR
+          - task: Docker@2
+            displayName: Production ACR login
+            inputs:
+              command: login
+              containerRegistry: 'Keboola ACR'
+
+          - script: |
+              docker tag $(imageName):$(tag) keboola.azurecr.io/$(imageName):$(tag)
+              docker tag $(imageName):latest keboola.azurecr.io/$(imageName):latest
+              docker images
+            displayName: Tag the image for Production ACR
+
+          - task: Docker@2
+            displayName: Push the test image to Production ACR
+            inputs:
+              containerRegistry: 'Keboola ACR'
+              repository: $(imageName)
+              command: push
