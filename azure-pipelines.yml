@@ -14,7 +14,8 @@ variables:
   productionTag: production-$(Build.SourceVersion)
 
 stages:
-  - stage: Prepare
+  - stage: prepare
+    displayName: Prepare & Test 
     pool:
       name: 'Default'
     jobs:
@@ -53,7 +54,8 @@ stages:
               TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
 
   # Push test image to test ACR
-  - stage: Deploy Test
+  - stage: deploy_test
+    displyName: Deploy Test
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -93,7 +95,8 @@ stages:
                 latest              
 
   # Push image to production ACR
-  - stage: Deploy Production
+  - stage: deploy_prod
+    displayName: Deploy Production
     #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     pool:
       vmImage: ubuntu-latest
@@ -101,16 +104,6 @@ stages:
       - job: deploy
         displayName: 'Deploy'
         steps:
-          - task: Docker@2
-            displayName: Build and tag the image
-            inputs:
-              command: build
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                $(productionTag)
-                latest
-
           - task: Docker@2
             displayName: Production ACR login
             inputs:
