@@ -89,6 +89,9 @@ stages:
               containerRegistry: 'Keboola PS Test ACR'
               repository: $(imageName)
               command: push
+              tags: |
+                $(tag)
+                latest              
 
           # Push image to production ACR
           - task: Docker@2
@@ -96,12 +99,14 @@ stages:
             inputs:
               command: login
               containerRegistry: 'Keboola ACR'
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))              
 
           - script: |
-              docker tag $(imageName):$(tag) keboola.azurecr.io/$(imageName):$(tag)
+              docker tag $(imageName):$(productionTag) keboola.azurecr.io/$(imageName):$(productionTag)
               docker tag $(imageName):latest keboola.azurecr.io/$(imageName):latest
               docker images
             displayName: Tag the image for Production ACR
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))            
 
           - task: Docker@2
             displayName: Push the image to Production ACR
@@ -109,3 +114,7 @@ stages:
               containerRegistry: 'Keboola ACR'
               repository: $(imageName)
               command: push
+              tags: |
+                $(productionTag)
+                latest
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
