@@ -55,7 +55,7 @@ stages:
 
   # Push test image to test ACR
   - stage: deploy_test
-    displyName: Deploy Test
+    displayName: Deploy Test
     pool:
       vmImage: ubuntu-latest
     jobs:
