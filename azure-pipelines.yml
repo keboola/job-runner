@@ -105,6 +105,16 @@ stages:
         displayName: 'Deploy'
         steps:
           - task: Docker@2
+            displayName: Build and tag the image
+            inputs:
+              command: build
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: $(imageName)
+              tags: |
+                $(productionTag)
+                latest
+
+          - task: Docker@2
             displayName: Production ACR login
             inputs:
               command: login
