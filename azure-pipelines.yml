@@ -52,7 +52,8 @@ stages:
               TEST_AZURE_CLIENT_SECRET: $(TEST_AZURE_CLIENT_SECRET)
               TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
 
-  - stage: Deploy
+  # Push test image to test ACR
+  - stage: Deploy Test
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -67,10 +68,8 @@ stages:
               repository: $(imageName)
               tags: |
                 $(tag)
-                $(productionTag)
                 latest
 
-          # Push test image to test ACR
           - task: Docker@2
             displayName: Test ACR login
             inputs:
@@ -93,20 +92,36 @@ stages:
                 $(tag)
                 latest              
 
-          # Push image to production ACR
+  # Push image to production ACR
+  - stage: Deploy Production
+    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    pool:
+      vmImage: ubuntu-latest
+    jobs:
+      - job: deploy
+        displayName: 'Deploy'
+        steps:
+          - task: Docker@2
+            displayName: Build and tag the image
+            inputs:
+              command: build
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: $(imageName)
+              tags: |
+                $(productionTag)
+                latest
+
           - task: Docker@2
             displayName: Production ACR login
             inputs:
               command: login
               containerRegistry: 'Keboola ACR'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))              
 
           - script: |
               docker tag $(imageName):$(productionTag) keboola.azurecr.io/$(imageName):$(productionTag)
               docker tag $(imageName):latest keboola.azurecr.io/$(imageName):latest
               docker images
             displayName: Tag the image for Production ACR
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))            
 
           - task: Docker@2
             displayName: Push the image to Production ACR
@@ -117,4 +132,3 @@ stages:
               tags: |
                 $(productionTag)
                 latest
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
