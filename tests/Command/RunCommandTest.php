@@ -7,9 +7,13 @@ namespace App\Tests\Command;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use Psr\Log\NullLogger;
+use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class RunCommandTest extends KernelTestCase
@@ -71,19 +75,84 @@ class RunCommandTest extends KernelTestCase
             ],
         ]);
         $job = $client->createJob($job);
-        // when a job runner receives a job it's already marked as processing
-        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
-        $client->updateJob($job);
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
         $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
         putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
         ]);
 
-        $this->assertEquals(0, $ret);
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Output mapping done.'));
+        self::assertEquals(0, $ret);
+    }
+
+    public function testExecuteSkip(): void
+    {
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_TOKEN')
+        );
+        $job = $jobFactory->createNewJob([
+            'componentId' => 'keboola.ex-http',
+            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'storage' => [],
+                'parameters' => [
+                    'baseUrl' => 'https://help.keboola.com/',
+                    'path' => 'tutorial/opportunity.csv',
+                ],
+            ],
+        ]);
+        $job = $client->createJob($job);
+        // set the job to processing, the job will succeed but do nothing
+        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
+        $client->updateJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute(
+            ['command' => $command->getName()],
+            ['verbosity' => OutputInterface::VERBOSITY_DEBUG,
+            'capture_stderr_separately' => true]
+        );
+
+        self::assertTrue($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertFalse($testHandler->hasInfoThatContains('Output mapping done.'));
+        self::assertEquals(0, $ret);
     }
 }

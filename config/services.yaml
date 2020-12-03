@@ -25,10 +25,6 @@ services:
             $legacyOauthApiUrl: '%env(LEGACY_OAUTH_API_URL)%'
             $instanceLimits: '%instance_limits%'
 
-    Monolog\Logger:
-        arguments:
-            $name: '%app_name%'
-
     App\StorageApiFactory:
         arguments:
             $storageApiUrl: "%env(STORAGE_API_URL)%"
@@ -40,6 +36,8 @@ services:
             $s3Region: "%env(AWS_REGION)%"
             $absConnectionString: "%env(AZURE_LOG_ABS_CONNECTION_STRING)%"
             $absContainer: "%env(AZURE_LOG_ABS_CONTAINER)%"
+
+    Monolog\Formatter\JsonFormatter:
 
     Keboola\ErrorControl\Monolog\LogProcessor:
         public: true
@@ -61,7 +59,6 @@ services:
 
     Keboola\JobQueueInternalClient\Client:
         arguments:
-            $logger: '@Monolog\Logger'
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
             $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
 

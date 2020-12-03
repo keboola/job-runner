@@ -1,0 +1,8 @@
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: php://stdout
+            formatter: Monolog\Formatter\JsonFormatter
+            level: debug
+            channels: ["!event", "!request"]
