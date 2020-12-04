@@ -71,6 +71,7 @@ stages:
               repository: keboolapes.azurecr.io/$(imageName)
               tags: |
                 $(tag)
+                $(productionTag)
                 latest
 
           - task: Docker@2
@@ -81,6 +82,7 @@ stages:
               command: push
               tags: |
                 $(tag)
+                $(productionTag)
 
           - task: Docker@2
             displayName: Push latest image to Test ACR
@@ -115,8 +117,6 @@ stages:
 
           - script: |
               printf "%s" "$(productionTag)" > artifact
-            env:
-              BASE_PATH: $(Build.SourcesDirectory)
             displayName: Create artifact
 
           - task: PublishPipelineArtifact@1
