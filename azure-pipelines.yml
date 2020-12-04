@@ -33,6 +33,7 @@ stages:
 
           - script: docker-compose run tests
             displayName: 'Run Tests'
+            enabled: false
             env:
               CPU_COUNT: $(CPU_COUNT)
               LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
