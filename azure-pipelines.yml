@@ -114,7 +114,9 @@ stages:
                 latest
 
           - script: |
-              printf "%s" "$(productionTag)" > $(Build.SourceDirectory)/artifact
+              printf "%s" "$(productionTag)" > $BASE_PATH/artifact
+            env:
+              BASE_PATH: $(Build.SourcesDirectory)
             displayName: Create artifact
 
           - task: PublishPipelineArtifact@1
