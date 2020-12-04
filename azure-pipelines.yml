@@ -114,12 +114,12 @@ stages:
                 latest
 
           - script: |
-              printf "%s" "$(productionTag)" > $BASE_PATH/artifact
+              printf "%s" "$(productionTag)" > artifact
             env:
               BASE_PATH: $(Build.SourcesDirectory)
             displayName: Create artifact
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: '$(Build.SourceDirectory)/artifact'
+              targetPath: 'artifact'
               artifact: 'keboola.job-runner.latest-build'
