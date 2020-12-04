@@ -67,22 +67,10 @@ stages:
             inputs:
               command: build
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
+              repository: keboolapes.azurecr.io/$(imageName)
               tags: |
                 $(tag)
                 latest
-
-          - task: Docker@2
-            displayName: Test ACR login
-            inputs:
-              command: login
-              containerRegistry: 'Keboola PS Test ACR'
-
-          - script: |
-              docker tag $(imageName):$(tag) keboolapes.azurecr.io/$(imageName):$(tag)
-              docker tag $(imageName):latest keboolapes.azurecr.io/$(imageName):latest
-              docker images
-            displayName: Tag the image for Test ACR
 
           - task: Docker@2
             displayName: Push the image to Test ACR
@@ -106,7 +94,7 @@ stages:
   # Push image to production ACR
   - stage: deploy_prod
     displayName: Deploy Production
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -116,31 +104,19 @@ stages:
           - task: Docker@2
             displayName: Build and tag the image
             inputs:
-              command: build
+              command: buildAndPush
+              containerRegistry: 'Keboola ACR'
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
+              repository: keboola.azurecr.io/$(imageName)
               tags: |
                 $(productionTag)
                 latest
-
-          - task: Docker@2
-            displayName: Production ACR login
-            inputs:
-              command: login
-              containerRegistry: 'Keboola ACR'
 
           - script: |
-              docker tag $(imageName):$(productionTag) keboola.azurecr.io/$(imageName):$(productionTag)
-              docker tag $(imageName):latest keboola.azurecr.io/$(imageName):latest
-              docker images
-            displayName: Tag the image for Production ACR
+              printf "%s" "$(productionTag)" > $(Build.SourceDirectory)/artifact
+            displayName: Create artifact
 
-          - task: Docker@2
-            displayName: Push the image to Production ACR
+          - task: PublishPipelineArtifact@1
             inputs:
-              containerRegistry: 'Keboola ACR'
-              repository: $(imageName)
-              command: push
-              tags: |
-                $(productionTag)
-                latest
+              targetPath: '$(Build.SourceDirectory)/artifact'
+              artifact: 'keboola.job-runner.latest-build'
