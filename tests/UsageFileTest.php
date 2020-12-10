@@ -7,7 +7,7 @@ namespace App\Tests;
 use App\UsageFile;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\JobQueueInternalClient\Client;
-use Keboola\JobQueueInternalClient\ClientException;
+use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\Temp\Temp;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;

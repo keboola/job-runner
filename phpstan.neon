@@ -5,4 +5,5 @@ parameters:
         - '#Method App\\UsageFile::setDataDir\(\) has parameter \$dataDir with no typehint specified.#'
         - '#Parameter \#4 \$storageApiFactory of class App\\Command\\RunCommand constructor expects App\\StorageApiFactory, App\\StorageApiFactory\|PHPUnit\\Framework\\MockObject\\MockObject given.#'
         - '#Parameter \#2 \$mockClient of method App\\Tests\\Functional\\BaseFunctionalTest::getCommand\(\) expects Keboola\\StorageApi\\Client\|null, PHPUnit\\Framework\\MockObject\\MockObject given.#'
+        - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
     checkMissingIterableValueType: false

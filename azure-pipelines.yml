@@ -28,7 +28,10 @@ stages:
               command: login
               containerRegistry: 'Keboola PS Test ACR'
 
-          - script: docker-compose build
+          - script: |
+              docker-compose down
+              docker-compose build
+              docker-compose pull internal-api
             displayName: 'Build Tests'
 
           - script: docker-compose run tests

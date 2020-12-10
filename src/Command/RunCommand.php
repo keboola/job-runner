@@ -15,14 +15,15 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
+use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,7 +53,7 @@ class RunCommand extends Command
     private $storageApiFactory;
 
     public function __construct(
-        Logger $logger,
+        LoggerInterface $logger,
         ObjectEncryptorFactory $objectEncryptorFactory,
         QueueClient $queueClient,
         StorageApiFactory $storageApiFactory,
@@ -77,7 +78,6 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = $this->logger;
-        $logger->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
         // get job
         if (empty(getenv('JOB_ID'))) {
             $output->writeln('JOB_ID env variable is missing.');
@@ -87,9 +87,10 @@ class RunCommand extends Command
         try {
             $logger->info('Running job ' . $jobId);
             $job = $this->queueClient->getJob($jobId);
-
             $encryptor = $this->initEncryption($job);
             $token = $encryptor->decrypt($job->getTokenString());
+            $job = $this->queueClient->getJobFactory()->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
+            $this->queueClient->updateJob($job);
 
             // set up logging to storage API
             $options = [
@@ -153,6 +154,10 @@ class RunCommand extends Command
             $logger->error('Job ended with encryption error: ' . $e->getMessage());
             $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
+        } catch (StateTargetEqualsCurrentException $e) {
+            $logger->info('Job is already running');
+            // end with success so that there are no restarts
+            return 0;
         } catch (UserException $e) {
             $logger->error('Job ended with user error: ' . $e->getMessage());
             $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
