@@ -68,30 +68,21 @@ stages:
           - task: Docker@2
             displayName: Build and tag the image
             inputs:
-              command: build
+              command: buildAndPush
+              containerRegistry: 'Keboola PS Test ACR'
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: keboolapes.azurecr.io/$(imageName)
+              repository: $(imageName)
               tags: |
-                $(tag)
                 $(productionTag)
-                latest
+                $(tag)
 
           - task: Docker@2
-            displayName: Push the image to Test ACR
+            displayName: Build and tag the image
             inputs:
+              command: buildAndPush
               containerRegistry: 'Keboola PS Test ACR'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
               repository: $(imageName)
-              command: push
-              tags: |
-                $(tag)
-                $(productionTag)
-
-          - task: Docker@2
-            displayName: Push latest image to Test ACR
-            inputs:
-              containerRegistry: 'Keboola PS Test ACR'
-              repository: $(imageName)
-              command: push
               tags: |
                 latest
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -112,7 +103,7 @@ stages:
               command: buildAndPush
               containerRegistry: 'Keboola ACR'
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: keboola.azurecr.io/$(imageName)
+              repository: $(imageName)
               tags: |
                 $(productionTag)
                 latest
