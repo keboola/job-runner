@@ -32,16 +32,30 @@ class RunCommandTest extends KernelTestCase
     {
         $kernel = static::createKernel();
         $application = new Application($kernel);
-
         $command = $application->find('app:run');
+
+        $reflectionProperty = new ReflectionProperty($command, 'logger');
+        $reflectionProperty->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $reflectionProperty->getValue($command);
+        $handler = new TestHandler();
+        $logger->pushHandler($handler);
+
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
         ]);
 
-        $output = $commandTester->getDisplay();
         $this->assertEquals(2, $ret);
-        $this->assertContains('JOB_ID env variable is missing.', $output);
+        $records = $handler->getRecords();
+        $errorRecord = null;
+        foreach ($records as $record) {
+            if ($record['message'] === 'Job ended with application error: The "JOB_ID" environment variable is missing.') {
+                $errorRecord = $record;
+            }
+        }
+        self::assertArrayHasKey('context', $errorRecord, print_r($records, true));
+        self::assertStringStartsWith('https://connection', $errorRecord['context']['attachment']);
     }
 
     public function testExecuteSuccess(): void
