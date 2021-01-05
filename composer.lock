@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b024829386235e453ec86d61dee46f87",
+    "content-hash": "99cfdb8ab7d9d632201cde7afc43e343",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.171.11",
+            "version": "3.171.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "eeebac8f6efd141af09c44dbd9cca4f1d327ef21"
+                "reference": "2a575d8336a6005fcd7b8c3d54783ee5ddc3ceac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/eeebac8f6efd141af09c44dbd9cca4f1d327ef21",
-                "reference": "eeebac8f6efd141af09c44dbd9cca4f1d327ef21",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2a575d8336a6005fcd7b8c3d54783ee5ddc3ceac",
+                "reference": "2a575d8336a6005fcd7b8c3d54783ee5ddc3ceac",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-01-04T19:13:09+00:00"
+            "time": "2021-01-05T19:12:58+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -482,16 +482,16 @@
         },
         {
             "name": "keboola/api-error-control",
-            "version": "dev-odin-PS-1141",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/api-error-control.git",
-                "reference": "f78407fd3b072f00b8422029bfb8c329f47865a0"
+                "reference": "a31003cfd919f65f5a168580f605d7ece5edca5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/f78407fd3b072f00b8422029bfb8c329f47865a0",
-                "reference": "f78407fd3b072f00b8422029bfb8c329f47865a0",
+                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/a31003cfd919f65f5a168580f605d7ece5edca5c",
+                "reference": "a31003cfd919f65f5a168580f605d7ece5edca5c",
                 "shasum": ""
             },
             "require": {
@@ -528,7 +528,7 @@
                 }
             ],
             "description": "API Error control library - Utility classes for implementing logging in a KBC API",
-            "time": "2021-01-05T11:17:47+00:00"
+            "time": "2021-01-05T20:37:34+00:00"
         },
         {
             "name": "keboola/azure-key-vault-client",
@@ -5774,7 +5774,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/api-error-control": 20,
         "keboola/dockerbundle": 20
     },
     "prefer-stable": false,

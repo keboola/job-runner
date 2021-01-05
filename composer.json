@@ -19,7 +19,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "keboola/api-error-control": "dev-odin-PS-1141",
+        "keboola/api-error-control": "^3.3.0",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
         "keboola/job-queue-internal-api-php-client": "^3.2",
         "keboola/object-encryptor": "^0.3",
