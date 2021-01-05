@@ -80,7 +80,7 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = $this->logger;
-        $jobId = getenv('JOB_ID');
+        $jobId = (string) getenv('JOB_ID');
         try {
             // get job
             if (empty($jobId)) {
