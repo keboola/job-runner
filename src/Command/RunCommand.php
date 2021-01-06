@@ -24,6 +24,7 @@ use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -116,7 +117,7 @@ class RunCommand extends Command
             // set up runner
             $runner = new Runner(
                 $this->objectEncryptorFactory,
-                $clientWithLogger,
+                new ClientWrapper($clientWithLogger, null, $logger, ''),
                 $loggerService,
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
