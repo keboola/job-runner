@@ -11,9 +11,11 @@ use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
+use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\ErrorControl\Message\ExceptionTransformer;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
@@ -78,13 +80,13 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $logger = $this->logger;
-        // get job
-        if (empty(getenv('JOB_ID'))) {
-            $output->writeln('JOB_ID env variable is missing.');
-            return 2;
-        }
-        $jobId = getenv('JOB_ID');
+        $jobId = (string) getenv('JOB_ID');
         try {
+            // get job
+            if (empty($jobId)) {
+                throw new ApplicationException('The "JOB_ID" environment variable is missing.');
+            }
+
             $logger->info('Running job ' . $jobId);
             $job = $this->queueClient->getJob($jobId);
             $encryptor = $this->initEncryption($job);
@@ -151,7 +153,10 @@ class RunCommand extends Command
             $this->queueClient->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
             return 0;
         } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
-            $logger->error('Job ended with encryption error: ' . $e->getMessage());
+            $logger->error(
+                'Job ended with encryption error: ' . $e->getMessage(),
+                ExceptionTransformer::transformException($e)->getFullArray()
+            );
             $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (StateTargetEqualsCurrentException $e) {
@@ -159,13 +164,20 @@ class RunCommand extends Command
             // end with success so that there are no restarts
             return 0;
         } catch (UserException $e) {
-            $logger->error('Job ended with user error: ' . $e->getMessage());
+            $logger->error(
+                'Job ended with user error: ' . $e->getMessage(),
+                ExceptionTransformer::transformException($e)->getFullArray()
+            );
             $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
             return 1;
         } catch (Throwable $e) {
-            $logger->error('Job ended with application error: ' . $e->getMessage());
-            $logger->error($e->getTraceAsString());
-            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $logger->error(
+                'Job ended with application error: ' . $e->getMessage(),
+                ExceptionTransformer::transformException($e)->getFullArray()
+            );
+            if ($jobId) {
+                $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+            }
             return 2;
         }
     }
