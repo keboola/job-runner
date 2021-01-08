@@ -216,7 +216,7 @@ class DebugModeTest extends BaseFunctionalTest
 
         $return = $command->run(new StringInput(''), new NullOutput());
 
-        self::assertEquals(1, $return);
+        self::assertEquals(0, $return);
         // check that output mapping was not done
         self::assertFalse($this->getClient()->tableExists('out.c-executor-test.modified'));
         sleep(2);

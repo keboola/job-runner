@@ -38,26 +38,27 @@ class RunCommandTest extends KernelTestCase
         $reflectionProperty->setAccessible(true);
         /** @var Logger $logger */
         $logger = $reflectionProperty->getValue($command);
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
 
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
         ]);
 
-        $this->assertEquals(2, $ret);
-        $records = $handler->getRecords();
-        $errorRecord = null;
+        $records = $testHandler->getRecords();
+        $errorRecord = [];
         foreach ($records as $record) {
-            if ($record['message'] === 'Job ended with application error: ' .
-                'The "JOB_ID" environment variable is missing.'
+            if ($record['message'] === 'Job "" ended with application error: ' .
+                '"The "JOB_ID" environment variable is missing."'
             ) {
                 $errorRecord = $record;
             }
         }
         self::assertArrayHasKey('context', $errorRecord, print_r($records, true));
         self::assertStringStartsWith('https://connection', $errorRecord['context']['attachment']);
+        self::assertTrue($testHandler->hasErrorThatContains('Failed to save result for job ""'));
+        self::assertEquals(0, $ret);
     }
 
     public function testExecuteSuccess(): void
@@ -110,7 +111,71 @@ class RunCommandTest extends KernelTestCase
         ]);
 
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
-        self::assertTrue($testHandler->hasInfoThatContains('Output mapping done.'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertEquals(0, $ret);
+    }
+
+    public function testExecuteDoubleFailure(): void
+    {
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_TOKEN')
+        );
+        $job = $jobFactory->createNewJob([
+            'componentId' => 'keboola.ex-http',
+            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'storage' => [],
+                'parameters' => [
+                    'baseUrl' => 'https://help.keboola.com/',
+                    'path' => 'tutorial/opportunity.csv',
+                ],
+            ],
+        ]);
+        $job = $client->createJob($job);
+        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_ERROR]);
+        $client->updateJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue(
+            $testHandler->hasErrorThatContains('Job "' . $job->getId() . '" ended with application error: "')
+        );
+        self::assertTrue(
+            $testHandler->hasErrorThatContains('Failed to save result for job "' . $job->getId() . '". Error: "')
+        );
+        self::assertFalse($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertEquals(0, $ret);
     }
 
@@ -167,8 +232,8 @@ class RunCommandTest extends KernelTestCase
             'capture_stderr_separately' => true]
         );
 
-        self::assertTrue($testHandler->hasInfoThatContains('Job is already running'));
-        self::assertFalse($testHandler->hasInfoThatContains('Output mapping done.'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" is already running'));
         self::assertEquals(0, $ret);
     }
 }

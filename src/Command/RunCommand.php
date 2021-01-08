@@ -80,7 +80,6 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $logger = $this->logger;
         $jobId = (string) getenv('JOB_ID');
         try {
             // get job
@@ -88,7 +87,7 @@ class RunCommand extends Command
                 throw new ApplicationException('The "JOB_ID" environment variable is missing.');
             }
 
-            $logger->info('Running job ' . $jobId);
+            $this->logger->info(sprintf('Running job "%s".', $jobId));
             $job = $this->queueClient->getJob($jobId);
             $encryptor = $this->initEncryption($job);
             $token = $encryptor->decrypt($job->getTokenString());
@@ -101,15 +100,15 @@ class RunCommand extends Command
                 'userAgent' => $job->getComponentId(),
             ];
             $clientWithoutLogger = $this->storageApiFactory->getClient($options);
-            $logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
+            $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
             $clientWithoutLogger->setRunId($jobId);
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
-            $logger->pushHandler($handler);
+            $this->logger->pushHandler($handler);
             $containerLogger = new ContainerLogger('container-logger');
-            $options['logger'] = $logger;
+            $options['logger'] = $this->logger;
             $clientWithLogger = $this->storageApiFactory->getClient($options);
             $clientWithLogger->setRunId($jobId);
-            $loggerService = new LoggersService($logger, $containerLogger, clone $handler);
+            $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             $component = $this->getComponentClass($clientWithoutLogger, $job);
             $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger, $encryptor);
@@ -117,7 +116,7 @@ class RunCommand extends Command
             // set up runner
             $runner = new Runner(
                 $this->objectEncryptorFactory,
-                new ClientWrapper($clientWithLogger, null, $logger, ''),
+                new ClientWrapper($clientWithLogger, null, $this->logger, ''),
                 $loggerService,
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
@@ -151,35 +150,41 @@ class RunCommand extends Command
                     'configVersion' => $outputs[0]->getConfigVersion(),
                 ];
             }
-            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
-            return 0;
+            $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
+            $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
         } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
-            $logger->error(
-                'Job ended with encryption error: ' . $e->getMessage(),
+            $this->logger->error(
+                sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
-            return 1;
+            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
         } catch (StateTargetEqualsCurrentException $e) {
-            $logger->info('Job is already running');
-            // end with success so that there are no restarts
-            return 0;
+            $this->logger->info(sprintf('Job "%s" is already running', $jobId));
         } catch (UserException $e) {
-            $logger->error(
-                'Job ended with user error: ' . $e->getMessage(),
+            $this->logger->error(
+                sprintf('Job "%s" ended with user error: "%s".', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
-            return 1;
+            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
         } catch (Throwable $e) {
-            $logger->error(
-                'Job ended with application error: ' . $e->getMessage(),
+            $this->logger->error(
+                sprintf('Job "%s" ended with application error: "%s"', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            if ($jobId) {
-                $this->queueClient->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
-            }
-            return 2;
+            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+        }
+        // end with success so that there are no restarts
+        return 0;
+    }
+
+    private function postJobResult(string $jobId, string $status, array $result): void
+    {
+        try {
+            $this->queueClient->postJobResult($jobId, $status, $result);
+        } catch (Throwable $e) {
+            $this->logger->error(
+                sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage())
+            );
         }
     }
 
