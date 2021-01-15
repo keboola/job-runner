@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\LogInfo;
 use App\StorageApiFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
@@ -16,6 +17,7 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ErrorControl\Message\ExceptionTransformer;
+use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
@@ -52,11 +54,15 @@ class RunCommand extends Command
     /** @var Logger */
     private $logger;
 
+    /** @var LogProcessor */
+    private $logProcessor;
+
     /** @var StorageApiFactory */
     private $storageApiFactory;
 
     public function __construct(
         LoggerInterface $logger,
+        LogProcessor $logProcessor,
         ObjectEncryptorFactory $objectEncryptorFactory,
         QueueClient $queueClient,
         StorageApiFactory $storageApiFactory,
@@ -70,6 +76,7 @@ class RunCommand extends Command
         $this->storageApiFactory = $storageApiFactory;
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
         $this->instanceLimits = $instanceLimits;
+        $this->logProcessor = $logProcessor;
     }
 
     protected function configure(): void
@@ -95,6 +102,11 @@ class RunCommand extends Command
             $this->queueClient->updateJob($job);
 
             // set up logging to storage API
+            $this->logProcessor->setLogInfo(new LogInfo(
+                $job->getId(),
+                $job->getComponentId(),
+                $job->getProjectId(),
+            ));
             $options = [
                 'token' => $token,
                 'userAgent' => $job->getComponentId(),

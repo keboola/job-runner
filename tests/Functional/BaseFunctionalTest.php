@@ -8,6 +8,8 @@ use App\Command\RunCommand;
 use App\StorageApiFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
+use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
@@ -125,6 +127,7 @@ abstract class BaseFunctionalTest extends TestCase
         /** @var StorageApiFactory $storageApiFactory */
         $command = new RunCommand(
             $this->logger,
+            new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $this->objectEncryptorFactory,
             $queueClient,
             $storageApiFactory,

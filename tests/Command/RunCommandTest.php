@@ -110,6 +110,15 @@ class RunCommandTest extends KernelTestCase
             'command' => $command->getName(),
         ]);
 
+        $jobRecord = [];
+        foreach ($testHandler->getRecords() as $record) {
+            if ($record['message'] === 'Output mapping done.') {
+                $jobRecord = $record;
+            }
+        }
+        self::assertNotEmpty($jobRecord);
+        self::assertEquals('keboola.ex-http', $jobRecord['component']);
+        self::assertEquals($job->getId(), $jobRecord['runId']);
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
