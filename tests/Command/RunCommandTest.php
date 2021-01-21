@@ -147,10 +147,11 @@ class RunCommandTest extends KernelTestCase
             (string) getenv('JOB_QUEUE_URL'),
             (string) getenv('JOB_QUEUE_TOKEN')
         );
-        $tokenInfo = $storageClientFactory->getClient(getenv('TEST_STORAGE_API_TOKEN'))->verifytoken();
+        $storageClient = $storageClientFactory->getClient((string) getenv('TEST_STORAGE_API_TOKEN'));
+        $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
         $job = $jobFactory->loadFromExistingJobData([
-            'id' => $storageClientFactory->getClient(getenv('TEST_STORAGE_API_TOKEN'))->generateId(),
+            'id' => $storageClient->generateId(),
             'componentId' => 'keboola.runner-config-test',
             'projectId' => $tokenInfo['owner']['id'],
             'projectName' => $tokenInfo['owner']['name'],
