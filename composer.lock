@@ -792,12 +792,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "738303324b0d6e57df54ca531134be9ad82ac7b9"
+                "reference": "c875d89d5e7299b7bb560dfdd293bdda6a262624"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/738303324b0d6e57df54ca531134be9ad82ac7b9",
-                "reference": "738303324b0d6e57df54ca531134be9ad82ac7b9",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/c875d89d5e7299b7bb560dfdd293bdda6a262624",
+                "reference": "c875d89d5e7299b7bb560dfdd293bdda6a262624",
                 "shasum": ""
             },
             "require": {
@@ -840,7 +840,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2021-01-20T13:43:09+00:00"
+            "time": "2021-01-21T11:17:58+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",

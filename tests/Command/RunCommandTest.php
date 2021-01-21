@@ -79,18 +79,20 @@ class RunCommandTest extends KernelTestCase
             (string) getenv('JOB_QUEUE_TOKEN')
         );
         $job = $jobFactory->createNewJob([
-            'componentId' => 'keboola.ex-http',
-            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [
-                'storage' => [],
                 'parameters' => [
-                    'baseUrl' => 'https://help.keboola.com/',
-                    'path' => 'tutorial/opportunity.csv',
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
                 ],
             ],
         ]);
+        self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
         $job = $client->createJob($job);
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -117,11 +119,82 @@ class RunCommandTest extends KernelTestCase
             }
         }
         self::assertNotEmpty($jobRecord);
-        self::assertEquals('keboola.ex-http', $jobRecord['component']);
+        self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertTrue($testHandler->hasInfoThatContains(
+            'Config: { " p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
+        ));
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertEquals(0, $ret);
+    }
+
+    public function testExecuteUnEncryptedJobData(): void
+    {
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_TOKEN')
+        );
+        $tokenInfo = $storageClientFactory->getClient(getenv('TEST_STORAGE_API_TOKEN'))->verifytoken();
+        // fabricate an erroneous job which contains unencrypted values
+        $job = $jobFactory->loadFromExistingJobData([
+            'id' => $storageClientFactory->getClient(getenv('TEST_STORAGE_API_TOKEN'))->generateId(),
+            'componentId' => 'keboola.runner-config-test',
+            'projectId' => $tokenInfo['owner']['id'],
+            'projectName' => $tokenInfo['owner']['name'],
+            'tokenDescription' => $tokenInfo['description'],
+            'tokenId' => $tokenInfo['id'],
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'status' => JobFactory::STATUS_CREATED,
+            'desiredStatus' => JobFactory::DESIRED_STATUS_PROCESSING,
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
+                ],
+            ],
+        ]);
+        // check that the encrypted value was NOT encrypted
+        self::assertEquals('bar', $job->getConfigData()['parameters']['arbitrary']['#foo']);
+        $job = $client->createJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertTrue($testHandler->hasErrorThatContains(
+            'Job "' . $job->getId() . '" ended with encryption error: "Value is not an encrypted value."'
+        ));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertEquals(0, $ret);
     }
 
@@ -144,7 +217,7 @@ class RunCommandTest extends KernelTestCase
         );
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
-            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [
@@ -207,7 +280,7 @@ class RunCommandTest extends KernelTestCase
         );
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
-            'tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [
