@@ -21,7 +21,7 @@ use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
-use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
@@ -103,7 +103,7 @@ class RunCommand extends Command
             $this->logProcessor->setLogInfo(new LogInfo(
                 $job->getId(),
                 $job->getComponentId(),
-                $job->getProjectId(),
+                $job->getProjectId()
             ));
             $options = [
                 'token' => $token,
@@ -200,7 +200,7 @@ class RunCommand extends Command
 
     private function getJobDefinitions(
         Component $component,
-        Job $job,
+        JobInterface $job,
         StorageClient $client
     ): array {
         $jobDefinitionParser = new JobDefinitionParser();
@@ -217,7 +217,7 @@ class RunCommand extends Command
         return $jobDefinitionParser->getJobDefinitions();
     }
 
-    private function getComponentClass(StorageClient $client, Job $job): Component
+    private function getComponentClass(StorageClient $client, JobInterface $job): Component
     {
         $component = $this->getComponent($client, $job->getComponentId());
         if (!empty($job->getTag())) {
