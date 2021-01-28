@@ -21,8 +21,7 @@ use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
-use Keboola\JobQueueInternalClient\JobFactory\Job;
-use Keboola\ObjectEncryptor\ObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
@@ -96,8 +95,7 @@ class RunCommand extends Command
 
             $this->logger->info(sprintf('Running job "%s".', $jobId));
             $job = $this->queueClient->getJob($jobId);
-            $encryptor = $this->initEncryption($job);
-            $token = $encryptor->decrypt($job->getTokenString());
+            $token = $job->getTokenDecrypted();
             $job = $this->queueClient->getJobFactory()->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
             $this->queueClient->updateJob($job);
 
@@ -105,7 +103,7 @@ class RunCommand extends Command
             $this->logProcessor->setLogInfo(new LogInfo(
                 $job->getId(),
                 $job->getComponentId(),
-                $job->getProjectId(),
+                $job->getProjectId()
             ));
             $options = [
                 'token' => $token,
@@ -123,7 +121,7 @@ class RunCommand extends Command
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             $component = $this->getComponentClass($clientWithoutLogger, $job);
-            $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger, $encryptor);
+            $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger);
 
             // set up runner
             $runner = new Runner(
@@ -202,22 +200,24 @@ class RunCommand extends Command
 
     private function getJobDefinitions(
         Component $component,
-        Job $job,
-        StorageClient $client,
-        ObjectEncryptor $encryptor
+        JobInterface $job,
+        StorageClient $client
     ): array {
         $jobDefinitionParser = new JobDefinitionParser();
         if ($job->getConfigData()) {
-            $jobDefinitionParser->parseConfigData($component, $job->getConfigData(), $job->getConfigId());
+            $jobDefinitionParser->parseConfigData($component, $job->getConfigDataDecrypted(), $job->getConfigId());
         } else {
             $components = new Components($client);
             $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-            $jobDefinitionParser->parseConfig($component, $encryptor->decrypt($configuration));
+            $jobDefinitionParser->parseConfig(
+                $component,
+                $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration)
+            );
         }
         return $jobDefinitionParser->getJobDefinitions();
     }
 
-    private function getComponentClass(StorageClient $client, Job $job): Component
+    private function getComponentClass(StorageClient $client, JobInterface $job): Component
     {
         $component = $this->getComponent($client, $job->getComponentId());
         if (!empty($job->getTag())) {
@@ -225,17 +225,6 @@ class RunCommand extends Command
             $component['data']['definition']['tag'] = $job->getTag();
         }
         return new Component($component);
-    }
-
-    private function initEncryption(Job $job): ObjectEncryptor
-    {
-        $this->objectEncryptorFactory->setComponentId($job->getComponentId());
-        $this->objectEncryptorFactory->setProjectId($job->getProjectId());
-        $this->objectEncryptorFactory->setConfigurationId($job->getConfigId());
-        $this->objectEncryptorFactory->setStackId(
-            (string) parse_url($this->storageApiFactory->getUrl(), PHP_URL_HOST)
-        );
-        return $this->objectEncryptorFactory->getEncryptor();
     }
 
     private function getComponent(StorageClient $client, string $id): array

@@ -35,12 +35,12 @@ services:
       - TEST_AZURE_CLIENT_SECRET
       - TEST_AZURE_TENANT_ID
 
-    command: 
+    command:
       composer ci
     depends_on:
       - internal-api
 
-  tests-local: 
+  tests-local:
     <<: *tests
     volumes:
       - ./:/code
