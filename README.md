@@ -24,7 +24,6 @@ Login and pull the image:
     ```bash
 	docker login keboolapes.azurecr.io --username $SP_APP_ID --password $SP_PASSWORD
 	docker pull keboolapes.azurecr.io/job-queue-internal-api:latest
-	docker pull keboolapes.azurecr.io/job-runner:latest
     ```
 
 - Set the following environment variables in `set-env.sh` file (use `set-env.template.sh` as sample):
@@ -95,12 +94,12 @@ fill in AWS Key and Credentials with access to the Key and required component im
 
 Run:
 ```
-kubectl apply -f provisioning/dev-environments.yaml
+kubectl apply -f provisioning/dev/environments.yaml
 ```
 
 Run
 ```
-kubectl apply -f provisioning/dev-internal-api.yaml
+kubectl apply -f provisioning/dev/internal-api.yaml
 ```
 
 This will start the internal API server. It takes a while to start. Check that it runs by executing:
