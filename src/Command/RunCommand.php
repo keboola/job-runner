@@ -22,6 +22,7 @@ use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
+use Keboola\JobQueueInternalClient\JobFactory\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
@@ -145,20 +146,21 @@ class RunCommand extends Command
                 $usageFile,
                 $job->getConfigRowId()
             );
+            $result = new JobResult();
             if (count($outputs) === 0) {
-                $result = [
-                    'message' => 'No configurations executed.',
-                    'images' => [],
-                    'configVersion' => null,
-                ];
+                $result->setMessage('No configurations executed.');
             } else {
-                $result = [
-                    'message' => 'Component processing finished.',
-                    'images' => array_map(function (Output $output) {
-                        return $output->getImages();
-                    }, $outputs),
-                    'configVersion' => $outputs[0]->getConfigVersion(),
-                ];
+                $result
+                    ->setMessage('Component processing finished.')
+                    ->setConfigVersion($outputs[0]->getConfigVersion())
+                    ->setImages(
+                        array_map(
+                            function (Output $output) {
+                                return $output->getImages();
+                            },
+                            $outputs
+                        )
+                    );
             }
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
@@ -167,7 +169,11 @@ class RunCommand extends Command
                 sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->postJobResult(
+                $jobId,
+                JobFactory::STATUS_ERROR,
+                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_APPLICATION)
+            );
         } catch (StateTargetEqualsCurrentException $e) {
             $this->logger->info(sprintf('Job "%s" is already running', $jobId));
         } catch (UserException $e) {
@@ -175,19 +181,27 @@ class RunCommand extends Command
                 sprintf('Job "%s" ended with user error: "%s".', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->postJobResult(
+                $jobId,
+                JobFactory::STATUS_ERROR,
+                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_USER)
+            );
         } catch (Throwable $e) {
             $this->logger->error(
                 sprintf('Job "%s" ended with application error: "%s"', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()
             );
-            $this->postJobResult($jobId, JobFactory::STATUS_ERROR, ['message' => $e->getMessage()]);
+            $this->postJobResult(
+                $jobId,
+                JobFactory::STATUS_ERROR,
+                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_APPLICATION)
+            );
         }
         // end with success so that there are no restarts
         return 0;
     }
 
-    private function postJobResult(string $jobId, string $status, array $result): void
+    private function postJobResult(string $jobId, string $status, JobResult $result): void
     {
         try {
             $this->queueClient->postJobResult($jobId, $status, $result);
