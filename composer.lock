@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab121bed106065684b1c7cfef5bb9ef8",
+    "content-hash": "f72ff03413562574d738f12e64223b0e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.173.3",
+            "version": "3.173.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b805c50f0338180e7328c7ad5bcb0aceae11a75a"
+                "reference": "1400b2d08ded25bd9c6876edb0490b8cb9aeaa60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b805c50f0338180e7328c7ad5bcb0aceae11a75a",
-                "reference": "b805c50f0338180e7328c7ad5bcb0aceae11a75a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1400b2d08ded25bd9c6876edb0490b8cb9aeaa60",
+                "reference": "1400b2d08ded25bd9c6876edb0490b8cb9aeaa60",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-02-04T21:45:53+00:00"
+            "time": "2021-02-05T19:19:35+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -741,16 +741,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "12.2.0",
+            "version": "12.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "aafeabe35208cb49e4d6ad5a95f83c9285bdbb30"
+                "reference": "b11a71da81abd9ae6aa20bfa55ebd807ac667260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/aafeabe35208cb49e4d6ad5a95f83c9285bdbb30",
-                "reference": "aafeabe35208cb49e4d6ad5a95f83c9285bdbb30",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/b11a71da81abd9ae6aa20bfa55ebd807ac667260",
+                "reference": "b11a71da81abd9ae6aa20bfa55ebd807ac667260",
                 "shasum": ""
             },
             "require": {
@@ -784,20 +784,20 @@
                 }
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
-            "time": "2021-02-04T16:36:37+00:00"
+            "time": "2021-02-05T18:18:20+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-odin-PS-1673",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "f21196eadf89f25780aa067e498cfe4eacfc6b83"
+                "reference": "3bb8904d51fcfe9e82518bbfd8bdcc5d089c03c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/f21196eadf89f25780aa067e498cfe4eacfc6b83",
-                "reference": "f21196eadf89f25780aa067e498cfe4eacfc6b83",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/3bb8904d51fcfe9e82518bbfd8bdcc5d089c03c7",
+                "reference": "3bb8904d51fcfe9e82518bbfd8bdcc5d089c03c7",
                 "shasum": ""
             },
             "require": {
@@ -840,7 +840,7 @@
                 "keboola",
                 "queue"
             ],
-            "time": "2021-02-05T16:02:50+00:00"
+            "time": "2021-02-05T17:23:19+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -5826,8 +5826,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
