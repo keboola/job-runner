@@ -32,5 +32,6 @@ class CleanupCommandTest extends KernelTestCase
         ]);
         self::assertTrue($testHandler->hasInfoThatContains('Jinkies'));
         self::assertEquals(0, $ret);
+        putenv('JOB_ID=');
     }
 }
