@@ -47,11 +47,15 @@ class CleanupCommand extends Command
         $this->logger->info('Jinkies');
         fwrite(STDOUT, 'Jinkies2');
         $ff = fopen('php://stdout', 'w');
-        fwrite($ff, 'Jinkies3');
+        if ($ff !== false) {
+            fwrite($ff, 'Jinkies3');
+        }
         file_put_contents('/code/touch', 'Jinkies4');
         fwrite(STDERR, 'Jinkies4');
         $ff = fopen('php://stderr', 'w');
-        fwrite($ff, 'Jinkies5');
+        if ($ff !== false) {
+            fwrite($ff, 'Jinkies5');
+        }
         sleep(10);
         return 0;
     }
