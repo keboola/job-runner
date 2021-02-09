@@ -44,11 +44,24 @@ class CleanupCommand extends Command
             return 0;
         }
         $proc = Process::fromShellCommandline('exec 1> >(tee /proc/1/fd/1)');
+        $proc->run();
         $proc = Process::fromShellCommandline('exec 2> >(tee /proc/1/fd/2)');
         $proc->run();
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
         $this->logger->error('Jinkies2');
+
+        fclose(STDOUT);
+        fclose(STDERR);
+        $STDOUT = fopen('/proc/1/fd/1', 'wb');
+        $STDERR = fopen('/proc/1/fd/2', 'wb');
+
+        if ($STDERR !== false) {
+            fwrite($STDERR, "Jinkies3\n");
+        }
+        if ($STDOUT !== false) {
+            fwrite($STDOUT, "Jinkies4\n");
+        }
         sleep(10);
         return 0;
     }
