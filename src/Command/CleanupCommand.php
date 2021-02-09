@@ -51,10 +51,10 @@ class CleanupCommand extends Command
         $this->logger->info('Jinkies');
         $this->logger->error('Jinkies2');
 
-        fclose(STDOUT);
-        fclose(STDERR);
-        $STDOUT = fopen('/proc/1/fd/1', 'wb');
-        $STDERR = fopen('/proc/1/fd/2', 'wb');
+        //fclose(STDOUT);
+        //fclose(STDERR);
+        $STDOUT = @fopen('/proc/1/fd/1', 'wb');
+        $STDERR = @fopen('/proc/1/fd/2', 'wb');
 
         if ($STDERR !== false) {
             fwrite($STDERR, "Jinkies3\n");
