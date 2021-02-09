@@ -46,16 +46,11 @@ class CleanupCommand extends Command
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
         fwrite(STDOUT, 'Jinkies2');
-        $ff = fopen('php://stdout', 'w');
-        if ($ff !== false) {
-            fwrite($ff, 'Jinkies3');
+        $ff = fopen('/proc/1/fd/1', 'w');
+        if ($ff) {
+            fwrite($ff, 'Jinkies');
         }
-        file_put_contents('/code/touch', 'Jinkies4');
-        fwrite(STDERR, 'Jinkies4');
-        $ff = fopen('php://stderr', 'w');
-        if ($ff !== false) {
-            fwrite($ff, 'Jinkies5');
-        }
+
         sleep(10);
         return 0;
     }
