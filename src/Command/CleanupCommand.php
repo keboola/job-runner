@@ -45,7 +45,7 @@ class CleanupCommand extends Command
         }
         $proc = Process::fromShellCommandline('exec 1> >(tee /proc/1/fd/1)');
         var_dump($proc->run());
-        var_dump($proc->getOutput());
+        var_dump($proc->getErrorOutput());
         $proc = Process::fromShellCommandline('exec 2> >(tee /proc/1/fd/2)');
         var_dump($proc->run());
         var_dump($proc->getOutput());
