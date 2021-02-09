@@ -45,8 +45,7 @@ class CleanupCommand extends Command
 
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
-        fwrite(STDOUT, 'Jinkies2');
-        $ff = fopen('/proc/1/fd/1', 'w');
+        $ff = @fopen('/proc/1/fd/1', 'w');
         if ($ff) {
             fwrite($ff, 'Jinkies');
         }
