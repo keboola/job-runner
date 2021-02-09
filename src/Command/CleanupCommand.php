@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class CleanupCommand extends Command
 {
@@ -42,14 +43,12 @@ class CleanupCommand extends Command
             $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
             return 0;
         }
-
+        $proc = Process::fromShellCommandline('exec 1> >(tee /proc/1/fd/1)');
+        $proc = Process::fromShellCommandline('exec 2> >(tee /proc/1/fd/2)');
+        $proc->run();
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
-        $ff = @fopen('/proc/1/fd/1', 'w');
-        if ($ff) {
-            fwrite($ff, 'Jinkies');
-        }
-
+        $this->logger->error('Jinkies2');
         sleep(10);
         return 0;
     }
