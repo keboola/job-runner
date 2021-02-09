@@ -44,9 +44,15 @@ class CleanupCommand extends Command
             return 0;
         }
         $proc = Process::fromShellCommandline('exec 1> >(tee /proc/1/fd/1)');
-        $proc->run();
+        var_dump($proc->run());
+        var_dump($proc->getOutput());
         $proc = Process::fromShellCommandline('exec 2> >(tee /proc/1/fd/2)');
-        $proc->run();
+        var_dump($proc->run());
+        var_dump($proc->getOutput());
+        $proc = Process::fromShellCommandline('ps -ef');
+        var_dump($proc->run());
+        var_dump($proc->getOutput());
+
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
         $this->logger->error('Jinkies2');
