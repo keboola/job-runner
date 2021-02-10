@@ -43,7 +43,7 @@ class CleanupCommand extends Command
             $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
             return 0;
         }
-        $this->logger->info('Jinkies');
+        $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
         sleep(10);
         return 0;
