@@ -8,7 +8,6 @@ WORKDIR /code
 RUN apt-get update && apt-get install -y \
         git \
         unzip \
-        vim \
         libzip-dev \
    --no-install-recommends && rm -r /var/lib/apt/lists/*
 

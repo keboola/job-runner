@@ -43,31 +43,8 @@ class CleanupCommand extends Command
             $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
             return 0;
         }
-        $proc = Process::fromShellCommandline('exec 1> >(tee /proc/1/fd/1)');
-        var_dump($proc->run());
-        var_dump($proc->getErrorOutput());
-        $proc = Process::fromShellCommandline('exec 2> >(tee /proc/1/fd/2)');
-        var_dump($proc->run());
-        var_dump($proc->getOutput());
-        $proc = Process::fromShellCommandline('ps -ef');
-        var_dump($proc->run());
-        var_dump($proc->getOutput());
-
-        $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
-        $this->logger->error('Jinkies2');
-
-        //fclose(STDOUT);
-        //fclose(STDERR);
-        $STDOUT = @fopen('/proc/1/fd/1', 'wb');
-        $STDERR = @fopen('/proc/1/fd/2', 'wb');
-
-        if ($STDERR !== false) {
-            fwrite($STDERR, "Jinkies3\n");
-        }
-        if ($STDOUT !== false) {
-            fwrite($STDOUT, "Jinkies4\n");
-        }
+        $this->logger->info('Jinkies');
         sleep(10);
         return 0;
     }
