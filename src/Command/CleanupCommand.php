@@ -45,6 +45,7 @@ class CleanupCommand extends Command
         }
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         $this->logger->info('Jinkies');
+        $this->logger->error('Jinkies2');
         sleep(10);
         return 0;
     }
