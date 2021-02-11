@@ -74,6 +74,7 @@ class CleanupCommand extends Command
             }
         }
         $this->logger->info(sprintf('Finished container cleanup for job "%s".', $jobId));
+        sleep(1);
         return 0;
     }
 }
