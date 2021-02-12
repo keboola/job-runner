@@ -37,6 +37,8 @@ services:
             $legacyOauthApiUrl: '%env(LEGACY_OAUTH_API_URL)%'
             $instanceLimits: '%instance_limits%'
 
+    App\Command\CleanupCommand:
+
     App\StorageApiFactory:
         arguments:
             $storageApiUrl: "%env(STORAGE_API_URL)%"

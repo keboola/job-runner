@@ -741,16 +741,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "12.2.1",
+            "version": "12.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "b11a71da81abd9ae6aa20bfa55ebd807ac667260"
+                "reference": "0913c1915cc1e98909d5c5ef1f20c3b7da16f23a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/b11a71da81abd9ae6aa20bfa55ebd807ac667260",
-                "reference": "b11a71da81abd9ae6aa20bfa55ebd807ac667260",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/0913c1915cc1e98909d5c5ef1f20c3b7da16f23a",
+                "reference": "0913c1915cc1e98909d5c5ef1f20c3b7da16f23a",
                 "shasum": ""
             },
             "require": {
@@ -784,7 +784,7 @@
                 }
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
-            "time": "2021-02-05T18:18:20+00:00"
+            "time": "2021-02-08T15:47:20+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -5101,16 +5101,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.71",
+            "version": "0.12.74",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d508fa3b0ecc5fc91ac70c6c7ac2862f968ba2b5"
+                "reference": "bc5f9483c8f461c86653dcbd040cf0d2778c91a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d508fa3b0ecc5fc91ac70c6c7ac2862f968ba2b5",
-                "reference": "d508fa3b0ecc5fc91ac70c6c7ac2862f968ba2b5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bc5f9483c8f461c86653dcbd040cf0d2778c91a2",
+                "reference": "bc5f9483c8f461c86653dcbd040cf0d2778c91a2",
                 "shasum": ""
             },
             "require": {
@@ -5139,7 +5139,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2021-02-01T18:24:00+00:00"
+            "time": "2021-02-08T15:00:25+00:00"
         },
         {
             "name": "sanmai/pipeline",
