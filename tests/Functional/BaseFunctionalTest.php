@@ -86,12 +86,13 @@ abstract class BaseFunctionalTest extends TestCase
         $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
         $job = $jobFactory->createNewJob($jobData);
         $queueClient = self::getMockBuilder(QueueClient::class)
-            ->setMethods(['getJob', 'postJobResult', 'getJobFactory', 'updateJob'])
+            ->setMethods(['getJob', 'postJobResult', 'getJobFactory', 'updateJob', 'patchJob'])
             ->disableOriginalConstructor()
             ->getMock();
         $queueClient->expects(self::once())->method('getJob')->willReturn($job);
         $queueClient->expects(self::any())->method('getJobFactory')->willReturn($jobFactory);
         $queueClient->expects(self::any())->method('updateJob')->willReturn([]);
+        $queueClient->expects(self::any())->method('patchJob')->willReturn([]);
         $queueClient->expects(self::once())->method('postJobResult')->with(
             self::anything(),
             self::anything(), //todo self::equalTo('success'),

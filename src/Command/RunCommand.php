@@ -23,6 +23,7 @@ use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobResult;
+use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
@@ -98,7 +99,10 @@ class RunCommand extends Command
             $job = $this->queueClient->getJob($jobId);
             $token = $job->getTokenDecrypted();
             $job = $this->queueClient->getJobFactory()->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
-            $this->queueClient->updateJob($job);
+            $this->queueClient->patchJob(
+                $job->getId(),
+                (new JobPatchData())->setStatus($job->getStatus())
+            );
 
             // set up logging to storage API
             $this->logProcessor->setLogInfo(new LogInfo(
