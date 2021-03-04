@@ -91,7 +91,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 'storage' => [],
                 'parameters' => [],
             ],
-            'configRowIds' => "1, 2, 3",
+            'configRowIds' => '1, 2, 3',
             'status' => 'waiting',
         ];
 
