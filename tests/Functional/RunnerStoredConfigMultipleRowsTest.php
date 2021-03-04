@@ -172,7 +172,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             'componentId' => 'keboola.python-transformation',
             'mode' => 'run',
             'configId' => $configId,
-            'configRowId' => '234',
+            'configRowIds' => ['234'],
         ];
         $command = $this->getCommand($jobData);
 

@@ -3,7 +3,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: dev-job-queue-internal-api
-  namespace: dev-job-runner  
+  namespace: dev-job-runner
   labels:
     app: dev-job-queue-internal-api
 spec:
@@ -38,7 +38,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: 'root'
         - name: dev-job-queue-internal-api
-          image: keboolapes.azurecr.io/job-queue-internal-api:latest
+          image: keboolapes.azurecr.io/job-queue-internal-api:7262
           imagePullPolicy: Never
           resources:
             requests:
@@ -51,7 +51,7 @@ spec:
             - containerPort: 80
           command:
             - "/bin/sh"
-          args: 
+          args:
             - "-c"
             - 'printf "waiting" && sleep 20 && printf "migrating" && php bin/console doctrine:schema:update --force && apache2-foreground'
           env:

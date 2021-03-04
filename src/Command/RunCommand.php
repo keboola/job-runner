@@ -148,7 +148,7 @@ class RunCommand extends Command
                 $job->getMode(),
                 $job->getId(),
                 $usageFile,
-                $job->getConfigRowId()
+                $job->getConfigRowIds()
             );
             $result = new JobResult();
             if (count($outputs) === 0) {
