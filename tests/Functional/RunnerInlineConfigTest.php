@@ -80,7 +80,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         self::assertFalse($this->getTestHandler()->hasWarningThatContains('Overriding component tag'));
     }
 
-    public function testRunInvalidRowId(): void
+    public function testRunInvalidRowIds(): void
     {
         $jobId = $this->getClient()->generateId();
         $jobData = [
@@ -91,12 +91,12 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 'storage' => [],
                 'parameters' => [],
             ],
-            'configRowId' => [1, 2, 3],
+            'configRowIds' => '1, 2, 3',
             'status' => 'waiting',
         ];
 
         self::expectException(ClientException::class);
-        self::expectExceptionMessage('Invalid type for path "job.configRowId');
+        self::expectExceptionMessage('Invalid type for path "job.configRowIds');
         $this->getCommand($jobData);
     }
 
