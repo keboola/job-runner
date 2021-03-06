@@ -161,11 +161,11 @@ class DebugModeTest extends BaseFunctionalTest
                 'decode_content' => false,
             ],
         ]);
-        $s3Client->getObject(array(
+        $s3Client->getObject([
             'Bucket' => $fileInfo['s3Path']['bucket'],
             'Key' => $fileInfo['s3Path']['key'],
             'SaveAs' => $target,
-        ));
+        ]);
         return $target;
     }
 
