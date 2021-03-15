@@ -40,9 +40,6 @@ class RunCommand extends Command
     /** @var string */
     protected static $defaultName = 'app:run';
 
-    /** @var ObjectEncryptorFactory */
-    private $objectEncryptorFactory;
-
     /** @var string */
     private $legacyOauthApiUrl;
 
