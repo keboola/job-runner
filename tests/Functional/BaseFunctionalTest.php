@@ -129,7 +129,6 @@ abstract class BaseFunctionalTest extends TestCase
         $command = new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
-            $this->objectEncryptorFactory,
             $queueClient,
             $storageApiFactory,
             (string) getenv('LEGACY_OAUTH_API_URL'),
