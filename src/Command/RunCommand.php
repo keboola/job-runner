@@ -64,14 +64,12 @@ class RunCommand extends Command
     public function __construct(
         LoggerInterface $logger,
         LogProcessor $logProcessor,
-        ObjectEncryptorFactory $objectEncryptorFactory,
         QueueClient $queueClient,
         StorageApiFactory $storageApiFactory,
         string $legacyOauthApiUrl,
         array $instanceLimits
     ) {
         parent::__construct(self::$defaultName);
-        $this->objectEncryptorFactory = $objectEncryptorFactory;
         $this->queueClient = $queueClient;
         $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
@@ -130,7 +128,7 @@ class RunCommand extends Command
 
             // set up runner
             $runner = new Runner(
-                $this->objectEncryptorFactory,
+                $job->getEncryptorFactory(),
                 new ClientWrapper($clientWithLogger, null, $this->logger, ''),
                 $loggerService,
                 $this->legacyOauthApiUrl,
