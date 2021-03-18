@@ -16,8 +16,9 @@ variables:
 stages:
   - stage: prepare
     displayName: Prepare & Test 
+
     pool:
-      name: 'Default'
+      vmImage: 'ubuntu-latest'
     jobs:
       - job: test
         displayName: 'Test'
