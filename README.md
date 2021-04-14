@@ -29,6 +29,7 @@ Login and pull the image:
 - Set the following environment variables in `set-env.sh` file (use `set-env.template.sh` as sample):
     - `STORAGE_API_URL` - Keboola Connection URL.
     - `TEST_STORAGE_API_TOKEN` - Token to a test project.
+    - `TEST_STORAGE_API_TOKEN_MASTER` - Master token to the same project.  
     - `LEGACY_ENCRYPTION_KEY` - Arbitrary 16 character string.
 
 ### AWS Setup

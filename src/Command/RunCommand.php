@@ -126,7 +126,7 @@ class RunCommand extends Command
             // set up runner
             $runner = new Runner(
                 $job->getEncryptorFactory(),
-                new ClientWrapper($clientWithLogger, null, $this->logger, $job->getBranchId()),
+                new ClientWrapper($clientWithLogger, null, $this->logger, $job->getBranchId() ?? ''),
                 $loggerService,
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
