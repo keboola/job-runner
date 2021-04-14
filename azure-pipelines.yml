@@ -34,7 +34,11 @@ stages:
               docker-compose pull internal-api
             displayName: 'Build Tests'
 
-          - script: docker-compose run tests
+          - script: |
+              docker-compose up -d internal-api
+              docker-compose logs internal-api
+              
+              docker-compose run tests
             displayName: 'Run Tests'
             env:
               CPU_COUNT: $(CPU_COUNT)
