@@ -230,8 +230,13 @@ class DebugModeTest extends BaseFunctionalTest
             '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
             $files[0]['tags']
         );
-        // @todo uncomment
-        //self::assertContains('JobId:' . $jobId, $files[0]['tags']);
+        $jobTag = '';
+        foreach ($files[0]['tags'] as $tag) {
+            if (str_starts_with($tag, 'JobId')) {
+                $jobTag = $tag;
+            }
+        }
+        self::assertStringStartsWith('JobId:', $jobTag);
         self::assertContains('debug', $files[0]['tags']);
         self::assertGreaterThan(1000, $files[0]['sizeBytes']);
     }

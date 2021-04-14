@@ -82,7 +82,6 @@
             "@auto-scripts"
         ],
         "tests": "php bin/phpunit",
-        "get-parameters": "aws-parameter-filler .env /keboola/$KEBOOLA_STACK/job-queue-daemon/ $REGION",
         "phpstan": "phpstan analyse --no-progress --level=max src tests -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "phpcbf": "phpcbf --extensions=php src tests",

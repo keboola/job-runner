@@ -15,7 +15,7 @@ variables:
 
 stages:
   - stage: prepare
-    displayName: Prepare & Test 
+    displayName: Prepare & Test
     pool:
       name: 'Default'
     jobs:
@@ -34,7 +34,11 @@ stages:
               docker-compose pull internal-api
             displayName: 'Build Tests'
 
-          - script: docker-compose run tests
+          - script: |
+              docker-compose up -d internal-api
+              docker-compose logs internal-api
+
+              docker-compose run tests
             displayName: 'Run Tests'
             env:
               CPU_COUNT: $(CPU_COUNT)
@@ -50,6 +54,7 @@ stages:
               AZURE_LOG_ABS_CONNECTION_STRING: $(AZURE_LOG_ABS_CONNECTION_STRING)
               AZURE_LOG_ABS_CONTAINER: $(AZURE_LOG_ABS_CONTAINER)
               TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
+              TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
               TEST_AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
               TEST_AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
               TEST_AZURE_CLIENT_ID: $(TEST_AZURE_CLIENT_ID)
