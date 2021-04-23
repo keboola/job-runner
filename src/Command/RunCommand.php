@@ -111,7 +111,7 @@ class RunCommand extends Command
             ];
             $clientWithoutLogger = $this->storageApiFactory->getClient($options);
             $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
-            $clientWithoutLogger->setRunId($jobId);
+            $clientWithoutLogger->setRunId($job->getRunId());
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
             $containerLogger = new ContainerLogger('container-logger');
