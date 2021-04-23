@@ -136,8 +136,8 @@ class RunCommandTest extends KernelTestCase
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
         $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
-        $event = reset($events);
-        self::assertContains('execution finished', $event['message']);
+        $event = end($events);
+        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $event['message']);
         self::assertEquals($job->getRunId(), $event['runId']);
     }
 
