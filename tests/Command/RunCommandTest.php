@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Keboola\StorageApi\Client as StorageClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Psr\Log\NullLogger;
@@ -83,6 +84,7 @@ class RunCommandTest extends KernelTestCase
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'configId' => 'dummy',
+            'parentRunId' => '123',
             'configData' => [
                 'parameters' => [
                     'operation' => 'unsafe-dump-config',
@@ -128,6 +130,15 @@ class RunCommandTest extends KernelTestCase
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
+
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $event = end($events);
+        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $event['message']);
+        self::assertEquals($job->getRunId(), $event['runId']);
     }
 
     public function testExecuteUnEncryptedJobData(): void
