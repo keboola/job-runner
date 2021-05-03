@@ -146,7 +146,12 @@ class RunCommand extends Command
             $usageFile->setJobId($job->getId());
 
             // resolve variables and shared code
-            $jobDefinitions = $this->resolveVariables($clientWrapper, $jobDefinitions);
+            $jobDefinitions = $this->resolveVariables(
+                $clientWrapper,
+                $jobDefinitions,
+                $job->getVariableValuesId(),
+                $job->getVariableValuesData()
+            );
 
             // run job
             $outputs = $runner->run(
@@ -264,8 +269,12 @@ class RunCommand extends Command
         throw new UserException(sprintf('Component "%s" was not found.', $id));
     }
 
-    private function resolveVariables(ClientWrapper $clientWrapper, array $jobDefinitions): array
-    {
+    private function resolveVariables(
+        ClientWrapper $clientWrapper,
+        array $jobDefinitions,
+        ?string $variableValuesId,
+        array $variableValuesData
+    ): array {
         $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
         $variableResolver = new VariableResolver($clientWrapper, $this->logger);
 
@@ -274,8 +283,8 @@ class RunCommand extends Command
         foreach ($jobDefinitions as $jobDefinition) {
             $newConfiguration = $variableResolver->resolveVariables(
                 $sharedCodeResolver->resolveSharedCode($jobDefinition->getConfiguration()),
-                empty($params['variableValuesId']) ? [] : $params['variableValuesId'],
-                empty($params['variableValuesData']) ? [] : $params['variableValuesData']
+                $variableValuesId,
+                $variableValuesData
             );
             $newJobDefinitions[] = new JobDefinition(
                 $newConfiguration,
