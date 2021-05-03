@@ -20,6 +20,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "keboola/api-error-control": "^3.3.0",
+        "keboola/configuration-variables-resolver": "dev-miro-PS-1469",
         "keboola/dockerbundle": "dev-odin-library-2@dev",
         "keboola/job-queue-internal-api-php-client": "^4.0.0",
         "keboola/object-encryptor": "^0.3",
@@ -34,6 +35,10 @@
         {
             "type": "git",
             "url": "https://github.com/keboola/docker-bundle"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/keboola/configuration-variables-resolver"
         }
     ],
     "require-dev": {
