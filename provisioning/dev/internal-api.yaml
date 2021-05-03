@@ -38,8 +38,8 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: 'root'
         - name: dev-job-queue-internal-api
-          image: keboolapes.azurecr.io/job-queue-internal-api:7262
-          imagePullPolicy: Never
+          image: keboolapes.azurecr.io/job-queue-internal-api:latest
+          imagePullPolicy: Always
           resources:
             requests:
               cpu: "200m"
@@ -73,6 +73,8 @@ spec:
               value: 'root'
             - name: DATABASE_NAME
               value: 'jobs'
+            - name: DATABASE_SSL_VERIFY_ENABLED
+              value: '0'
           readinessProbe:
             httpGet:
               path: /health-check

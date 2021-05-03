@@ -8,6 +8,10 @@ use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
+use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Options\Components\Configuration;
+use Keboola\StorageApi\Options\Components\ConfigurationRow;
+use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Psr\Log\NullLogger;
@@ -139,6 +143,131 @@ class RunCommandTest extends KernelTestCase
         $event = end($events);
         self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $event['message']);
         self::assertEquals($job->getRunId(), $event['runId']);
+    }
+
+    public function testExecuteVariablesSharedCode(): void
+    {
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_TOKEN')
+        );
+        $componentsApi = new Components($storageClientFactory->getClient(
+            (string) getenv('TEST_STORAGE_API_TOKEN')
+        ));
+        $configurationApi = new Configuration();
+        $configurationApi->setComponentId('keboola.shared-code');
+        $configurationApi->setName('test-code');
+        $sharedCodeId = $componentsApi->addConfiguration($configurationApi)['id'];
+        $configurationApi->setConfigurationId($sharedCodeId);
+        $configurationRowApi = new ConfigurationRow($configurationApi);
+        $configurationRowApi->setRowId('code-id');
+        $configurationRowApi->setConfiguration(['code_content' => 'my-shared-code']);
+        $componentsApi->addConfigurationRow($configurationRowApi);
+        $configurationApi = new Configuration();
+        $configurationApi->setComponentId('keboola.variables');
+        $configurationApi->setName('test-variables');
+        $configurationApi->setConfiguration(['variables' => [['name' => 'fooVar', 'type' => 'string']]]);
+        $variablesId = $componentsApi->addConfiguration($configurationApi)['id'];
+        $configurationApi = new Configuration();
+        $configurationApi->setComponentId('keboola.runner-config-test');
+        $configurationApi->setName('test-configuration');
+        $configurationApi->setConfiguration(
+            [
+                'parameters' => [
+                    'operation' => 'dump-config',
+                    'arbitrary' => [
+                        'variable' => 'bar {{fooVar}}',
+                        'sharedCode' => '{{code-id}}',
+                    ],
+                ],
+                'variables_id' => $variablesId,
+                'shared_code_id' => $sharedCodeId,
+                'shared_code_row_ids' => ['code-id'],
+            ]
+        );
+        $configurationId = $componentsApi->addConfiguration($configurationApi)['id'];
+        try {
+            $job = $jobFactory->createNewJob([
+                'componentId' => 'keboola.runner-config-test',
+                '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+                'mode' => 'run',
+                'configId' => $configurationId,
+                'variableValuesData' => [
+                    'values' => [
+                        [
+                            'name' => 'fooVar',
+                            'value' => 'Kochba',
+                        ],
+                    ],
+                ],
+            ]);
+            $job = $client->createJob($job);
+            $kernel = static::createKernel();
+            $application = new Application($kernel);
+
+            $command = $application->find('app:run');
+
+            $property = new ReflectionProperty($command, 'logger');
+            $property->setAccessible(true);
+            /** @var Logger $logger */
+            $logger = $property->getValue($command);
+            $testHandler = new TestHandler();
+            $logger->pushHandler($testHandler);
+
+            putenv('JOB_ID=' . $job->getId());
+            $commandTester = new CommandTester($command);
+            $ret = $commandTester->execute([
+                'command' => $command->getName(),
+            ]);
+
+            $code = '';
+            foreach ($testHandler->getRecords() as $record) {
+                if (str_contains($record['message'], 'arbitrary')) {
+                    $code = $record['message'];
+                }
+            }
+            self::assertStringStartsWith('Config: {', $code);
+            $record = substr($code, 8);
+            $data = json_decode($record, true);
+            self::assertEquals(
+                [
+                    'parameters' => [
+                        'arbitrary' => [
+                            'variable' => 'bar Kochba',
+                            'sharedCode' => 'my-shared-code',
+                        ],
+                        'operation' => 'dump-config',
+                    ],
+                    'variables_id' => $variablesId,
+                    'shared_code_id' => $sharedCodeId,
+                    'shared_code_row_ids' => ['code-id'],
+                    'image_parameters' => [],
+                    'action' => 'run',
+                    'storage' => [],
+                    'authorization' => [],
+                ],
+                $data
+            );
+            self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+            self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+            self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+            self::assertEquals(0, $ret);
+        } finally {
+            $componentsApi->deleteConfiguration('keboola.runner-config-test', $configurationId);
+            $componentsApi->deleteConfiguration('keboola.shared-code', $sharedCodeId);
+            $componentsApi->deleteConfiguration('keboola.variables', $variablesId);
+        }
     }
 
     public function testExecuteUnEncryptedJobData(): void

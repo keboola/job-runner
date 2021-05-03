@@ -69,6 +69,7 @@ services:
       - DATABASE_HOST=mysql
       - DATABASE_PORT=3306
       - DATABASE_NAME=jobs
+      - DATABASE_SSL_VERIFY_ENABLED=0
 
     command: ['sh', '-c', '/build-code/docker/wait-for-it.sh --strict --timeout=120 mysql:3306 -- php bin/console doctrine:migrations:migrate && apache2-foreground']
     depends_on:

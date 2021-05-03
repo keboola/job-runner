@@ -8,7 +8,10 @@ use App\LogInfo;
 use App\StorageApiFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
+use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
+use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
+use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
@@ -124,9 +127,15 @@ class RunCommand extends Command
             $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger);
 
             // set up runner
+            $clientWrapper = new ClientWrapper(
+                $clientWithLogger,
+                null,
+                $this->logger,
+                $job->getBranchId() ?? ''
+            );
             $runner = new Runner(
                 $job->getEncryptorFactory(),
-                new ClientWrapper($clientWithLogger, null, $this->logger, $job->getBranchId() ?? ''),
+                $clientWrapper,
                 $loggerService,
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
@@ -135,6 +144,14 @@ class RunCommand extends Command
             $usageFile->setQueueClient($this->queueClient);
             $usageFile->setFormat($component->getConfigurationFormat());
             $usageFile->setJobId($job->getId());
+
+            // resolve variables and shared code
+            $jobDefinitions = $this->resolveVariables(
+                $clientWrapper,
+                $jobDefinitions,
+                $job->getVariableValuesId(),
+                $job->getVariableValuesData()
+            );
 
             // run job
             $outputs = $runner->run(
@@ -250,5 +267,36 @@ class RunCommand extends Command
             }
         }
         throw new UserException(sprintf('Component "%s" was not found.', $id));
+    }
+
+    private function resolveVariables(
+        ClientWrapper $clientWrapper,
+        array $jobDefinitions,
+        ?string $variableValuesId,
+        array $variableValuesData
+    ): array {
+        $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
+        $variableResolver = new VariableResolver($clientWrapper, $this->logger);
+
+        $newJobDefinitions = [];
+        /** @var JobDefinition $jobDefinition */
+        foreach ($jobDefinitions as $jobDefinition) {
+            $newConfiguration = $variableResolver->resolveVariables(
+                $sharedCodeResolver->resolveSharedCode($jobDefinition->getConfiguration()),
+                $variableValuesId,
+                $variableValuesData
+            );
+            $newJobDefinitions[] = new JobDefinition(
+                $newConfiguration,
+                $jobDefinition->getComponent(),
+                $jobDefinition->getConfigId(),
+                $jobDefinition->getConfigVersion(),
+                $jobDefinition->getState(),
+                $jobDefinition->getRowId(),
+                $jobDefinition->isDisabled()
+            );
+        }
+
+        return $newJobDefinitions;
     }
 }
