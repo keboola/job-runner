@@ -162,7 +162,9 @@ class RunCommandTest extends KernelTestCase
             (string) getenv('JOB_QUEUE_URL'),
             (string) getenv('JOB_QUEUE_TOKEN')
         );
-        $componentsApi = new Components($storageClientFactory->getClient(getenv('TEST_STORAGE_API_TOKEN')));
+        $componentsApi = new Components($storageClientFactory->getClient(
+            (string) getenv('TEST_STORAGE_API_TOKEN')
+        ));
         $configurationApi = new Configuration();
         $configurationApi->setComponentId('keboola.shared-code');
         $configurationApi->setName('test-code');
