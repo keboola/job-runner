@@ -344,6 +344,9 @@
     "symfony/dependency-injection": {
         "version": "v4.2.8"
     },
+    "symfony/deprecation-contracts": {
+        "version": "v2.4.0"
+    },
     "symfony/dom-crawler": {
         "version": "v4.2.8"
     },

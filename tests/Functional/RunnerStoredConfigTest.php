@@ -141,7 +141,7 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
             'token' => getenv('TEST_STORAGE_API_TOKEN_MASTER'),
         ]);
         $branchApi = new DevBranches($client);
-        $branchId = $branchApi->createBranch('runner-test-branch')['id'];
+        $branchId = $branchApi->createBranch(uniqid('runner-test-branch'))['id'];
         try {
             $jobData = [
                 'componentId' => 'keboola.python-transformation',
