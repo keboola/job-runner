@@ -1,7 +1,7 @@
 {
     "type": "project",
     "name": "keboola/job-runner",
-    "description": "Job Runner ECS Task",
+    "description": "Job Runner Task",
     "keywords": [
         "queue",
         "runner",
@@ -42,7 +42,8 @@
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "keboola/coding-standard": ">=9.0.0",
         "phpstan/phpstan": "^0.12",
-        "symfony/phpunit-bridge": "4.4.*",
+        "phpstan/phpstan-phpunit": "^0.12.17",
+        "phpunit/phpunit": "^9.5.2",
         "symfony/test-pack": "^1.0",
         "infection/infection": "^0.20"
     },
@@ -82,7 +83,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "tests": "php bin/phpunit",
+        "tests": "phpunit --coverage-clover build/logs/clover.xml --coverage-xml=build/logs/coverage-xml --log-junit=build/logs/phpunit.junit.xml",
         "phpstan": "phpstan analyse --no-progress --level=max src tests -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "phpcbf": "phpcbf --extensions=php src tests",
@@ -90,9 +91,9 @@
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
         "build": [
             "@phplint",
+            "@phpstan",
             "@phpcs",
-            "@tests",
-            "@phpstan"
+            "@tests"
         ],
         "ci": [
             "@composer validate --no-check-all --strict",
