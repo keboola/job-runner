@@ -141,7 +141,10 @@ class RunCommandTest extends KernelTestCase
         ]);
         $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
         $event = end($events);
-        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $event['message']);
+        self::assertStringContainsString(
+            'Running component keboola.runner-config-test (row 1 of 1)',
+            $event['message']
+        );
         self::assertEquals($job->getRunId(), $event['runId']);
     }
 

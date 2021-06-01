@@ -4,5 +4,5 @@ monolog:
             type: stream
             path: php://stderr
             formatter: Monolog\Formatter\JsonFormatter
-            level: debug
+            level: info
             channels: ["!event", "!request"]

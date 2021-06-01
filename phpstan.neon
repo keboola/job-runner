@@ -1,7 +1,14 @@
 parameters:
-    bootstrapFiles:
-        - bin/.phpunit/phpunit-6.5-0/vendor/autoload.php
+    level: max
+    checkMissingIterableValueType: false
+    paths:
+        - src
+        - tests
     ignoreErrors:
         - '#Method App\\UsageFile::setDataDir\(\) has parameter \$dataDir with no typehint specified.#'
         - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
-    checkMissingIterableValueType: false
+        - '#Unable to resolve the template type CallbackInput in call to method PHPUnit\\Framework\\Assert\:\:callback\(\)#'
+        - '#Unreachable statement \- code above always terminates\.#'
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon

@@ -9,3 +9,9 @@
 /docker/db-data
 /set-env.sh
 /provisioning/dev/environments.yaml
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+/build/logs

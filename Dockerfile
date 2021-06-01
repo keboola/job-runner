@@ -38,7 +38,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install zip \
-	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer --1
+	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 COPY composer.* ./
 RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
