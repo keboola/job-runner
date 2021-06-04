@@ -36,32 +36,32 @@ stages:
               docker-compose pull internal-api
             displayName: 'Build Tests'
 
-#          - script: |
-#              docker-compose up -d internal-api
-#              docker-compose logs internal-api
-#
-#              docker-compose run tests
-#            displayName: 'Run Tests'
-#            env:
-#              CPU_COUNT: $(CPU_COUNT)
-#              LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
-#              LEGACY_ENCRYPTION_KEY: $(LEGACY_ENCRYPTION_KEY)
-#              JOB_QUEUE_URL: $(JOB_QUEUE_URL)
-#              JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
-#              STORAGE_API_URL: $(STORAGE_API_URL)
-#              AWS_REGION: $(AWS_REGION)
-#              AWS_KMS_KEY_ID: $(AWS_KMS_KEY_ID)
-#              AWS_LOGS_S3_BUCKET: $(AWS_LOGS_S3_BUCKET)
-#              AZURE_KEY_VAULT_URL: $(AZURE_KEY_VAULT_URL)
-#              AZURE_LOG_ABS_CONNECTION_STRING: $(AZURE_LOG_ABS_CONNECTION_STRING)
-#              AZURE_LOG_ABS_CONTAINER: $(AZURE_LOG_ABS_CONTAINER)
-#              TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
-#              TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
-#              TEST_AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-#              TEST_AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-#              TEST_AZURE_CLIENT_ID: $(TEST_AZURE_CLIENT_ID)
-#              TEST_AZURE_CLIENT_SECRET: $(TEST_AZURE_CLIENT_SECRET)
-#              TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
+          - script: |
+              docker-compose up -d internal-api
+              docker-compose logs internal-api
+
+              docker-compose run tests
+            displayName: 'Run Tests'
+            env:
+              CPU_COUNT: $(CPU_COUNT)
+              LEGACY_OAUTH_API_URL: $(LEGACY_OAUTH_API_URL)
+              LEGACY_ENCRYPTION_KEY: $(LEGACY_ENCRYPTION_KEY)
+              JOB_QUEUE_URL: $(JOB_QUEUE_URL)
+              JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
+              STORAGE_API_URL: $(STORAGE_API_URL)
+              AWS_REGION: $(AWS_REGION)
+              AWS_KMS_KEY_ID: $(AWS_KMS_KEY_ID)
+              AWS_LOGS_S3_BUCKET: $(AWS_LOGS_S3_BUCKET)
+              AZURE_KEY_VAULT_URL: $(AZURE_KEY_VAULT_URL)
+              AZURE_LOG_ABS_CONNECTION_STRING: $(AZURE_LOG_ABS_CONNECTION_STRING)
+              AZURE_LOG_ABS_CONTAINER: $(AZURE_LOG_ABS_CONTAINER)
+              TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
+              TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
+              TEST_AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
+              TEST_AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
+              TEST_AZURE_CLIENT_ID: $(TEST_AZURE_CLIENT_ID)
+              TEST_AZURE_CLIENT_SECRET: $(TEST_AZURE_CLIENT_SECRET)
+              TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
 
           - script: |
               set -Eeuo pipefail
@@ -101,7 +101,7 @@ stages:
 
           # Push test image to test AWS ECR
           - task: ECRPushImage@1
-            displayName: 'Push [$(productionTag)]'
+            displayName: 'Push ECR [$(productionTag)]'
             inputs:
               regionName: 'eu-central-1'
               imageSource: 'imagename'
@@ -115,7 +115,7 @@ stages:
               AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
 
           - task: ECRPushImage@1
-            displayName: 'Push [$(tag)]'
+            displayName: 'Push ECR [$(tag)]'
             inputs:
               regionName: 'eu-central-1'
               imageSource: 'imagename'
@@ -129,7 +129,7 @@ stages:
               AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
 
           - task: ECRPushImage@1
-            displayName: 'Push latest'
+            displayName: 'Push ECR latest'
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               regionName: 'eu-central-1'
@@ -143,9 +143,8 @@ stages:
               AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
               AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
 
-
           - task: Docker@2
-            displayName: Build and tag the image
+            displayName: 'Push ACR [$(productionTag), $(tag)]'
             inputs:
               command: push
               containerRegistry: 'Keboola PS Test ACR'
@@ -156,7 +155,7 @@ stages:
                 $(tag)
 
           - task: Docker@2
-            displayName: Build and tag the image
+            displayName: 'Push ACR [latest]'
             inputs:
               command: push
               containerRegistry: 'Keboola PS Test ACR'
@@ -169,7 +168,7 @@ stages:
   # Push image to production ACR
   - stage: deploy_prod
     displayName: Deploy Production
-    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -210,7 +209,7 @@ stages:
               pushTag: latest
 
           - task: Docker@2
-            displayName: 'Push image to ACR'
+            displayName: 'Push to ACR [$(productionTag), latest]'
             inputs:
               command: buildAndPush
               containerRegistry: 'Keboola ACR'
