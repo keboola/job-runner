@@ -168,7 +168,7 @@ stages:
   # Push image to production ACR
   - stage: deploy_prod
     displayName: Deploy Production
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     pool:
       vmImage: ubuntu-latest
     jobs:
