@@ -97,31 +97,51 @@ stages:
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(tag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):latest
-
             displayName: 'Load image'
 
-#          - task: ECRPushImage@1
-#            displayName: 'Push to ECR [$(productionTag)]'
-#            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#            inputs:
-#              awsCredentials: 'Production - ECR Distribution'
-#              regionName: 'us-east-1'
-#              imageSource: 'imagename'
-#              sourceImageName: keboola/$(imageName)
-#              sourceImageTag: latest
-#              repositoryName: 'keboola/$(imageName)'
-#              pushTag: $(productionTag)
-#
-#          - task: ECRPushImage@1
-#            displayName: 'Push to ECR [latest]'
-#            inputs:
-#              awsCredentials: 'Production - ECR Distribution'
-#              regionName: 'us-east-1'
-#              imageSource: 'imagename'
-#              sourceImageName: keboola/$(imageName)
-#              sourceImageTag: latest
-#              repositoryName: 'keboola/$(imageName)'
-#              pushTag: latest
+          # Push test image to test AWS ECR
+          - task: ECRPushImage@1
+            displayName: 'Push [$(productionTag)]'
+            inputs:
+              regionName: 'eu-central-1'
+              imageSource: 'imagename'
+              sourceImageName: keboola/$(imageName)
+              sourceImageTag: $(tag)
+              repositoryName: 'keboola/$(imageName)'
+              pushTag: $(productionTag)
+              autoCreateRepository: true
+            env:
+              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
+
+          - task: ECRPushImage@1
+            displayName: 'Push [$(tag)]'
+            inputs:
+              regionName: 'eu-central-1'
+              imageSource: 'imagename'
+              sourceImageName: keboola/$(imageName)
+              sourceImageTag: $(tag)
+              repositoryName: 'keboola/$(imageName)'
+              pushTag: $(productionTag)
+              autoCreateRepository: true
+            env:
+              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
+
+          - task: ECRPushImage@1
+            displayName: 'Push latest'
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              regionName: 'eu-central-1'
+              imageSource: 'imagename'
+              sourceImageName: keboola/$(imageName)
+              sourceImageTag: 'latest'
+              repositoryName: 'keboola/$(imageName)'
+              pushTag: 'latest'
+              autoCreateRepository: true
+            env:
+              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
 
 
           - task: Docker@2
