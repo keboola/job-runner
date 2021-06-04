@@ -84,12 +84,12 @@ stages:
         displayName: 'Deploy'
         steps:
           - download: current
-            artifact: docker-images-aws
+            artifact: docker-images
             displayName: 'Download artifacts'
 
           - script: |
               set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image-aws.tar
+              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
 
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(tag)
@@ -182,7 +182,7 @@ stages:
 
           - script: |
               set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image-aws.tar
+              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
             displayName: 'Load image'
