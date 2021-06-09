@@ -18,7 +18,7 @@
             "Type": "String",
             "Default": "job-runner-testing-services",
             "Description": "Job Runner Stack name"
-        }        
+        }
     },
     "Resources": {
         "TestKmsKey": {
