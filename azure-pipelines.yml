@@ -164,7 +164,6 @@ stages:
               repository: $(imageName)
               tags: |
                 latest
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
   # Push image to production ACR
   - stage: deploy_prod
