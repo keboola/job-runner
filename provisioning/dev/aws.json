@@ -1,25 +1,7 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Stack for testing Job Runner Task",
-    "Parameters": {
-        "KeboolaStack": {
-            "Type": "String",
-            "Description": "All resources will be tagged by this value."
-        },
-        "LogsBucket": {
-            "Type": "String",
-            "Description": "Keboola logs bucket. S3LogsBucket output of connection/services stack."
-        },
-        "DeployPolicy": {
-            "Type": "String",
-            "Description": "DeployPolicy created by Job Runner Services Stack"
-        },
-        "JobRunnerMainStack": {
-            "Type": "String",
-            "Default": "job-runner-testing-services",
-            "Description": "Job Runner Stack name"
-        }
-    },
+    "Parameters": {},
     "Resources": {
         "TestKmsKey": {
             "Type" : "AWS::KMS::Key",
@@ -53,14 +35,34 @@
                 }
             }
         },
+        "JobRunnerS3LogsBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "LifecycleConfiguration": {
+                    "Rules": [
+                        {
+                            "Id": "Delete debug files",
+                            "Prefix": "debug-files/",
+                            "ExpirationInDays": 7,
+                            "Status": "Enabled"
+                        }
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "KeboolaStack",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    }
+                ]
+            }
+        },
         "JobRunnerUser": {
             "Type": "AWS::IAM::User",
             "DeletionPolicy": "Delete",
             "Properties": {
                 "Path": "/",
-                "ManagedPolicyArns": [{
-                    "Ref": "DeployPolicy"
-                }],
                 "Policies": [
                     {
                         "PolicyName": "kms-key",
@@ -104,27 +106,38 @@
                         }
                     },
                     {
-                        "PolicyName": "debug-logs",
+                        "PolicyName": "UseS3BucketPolicy",
                         "PolicyDocument": {
-                            "Version": "2012-10-17",
                             "Statement": [
                                 {
+                                    "Sid": "UseS3Bucket",
                                     "Effect": "Allow",
                                     "Action": [
                                         "s3:PutObject",
-                                        "s3:PutObjectAcl"
+                                        "s3:GetObject",
+                                        "s3:ListBucket",
+                                        "s3:DeleteObject"
                                     ],
                                     "Resource": [
                                         {
                                             "Fn::Join": [
                                                 "",
                                                 [
-                                                    "arn:aws:s3:::",
+                                                    "",
                                                     {
-                                                        "Ref": "LogsBucket"
+                                                        "Fn::GetAtt": [
+                                                            "JobRunnerS3LogsBucket",
+                                                            "Arn"
+                                                        ]
                                                     },
                                                     "/*"
                                                 ]
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "JobRunnerS3LogsBucket",
+                                                "Arn"
                                             ]
                                         }
                                     ]
@@ -150,7 +163,7 @@
         },
         "S3LogsBucket": {
             "Value": {
-                "Ref": "LogsBucket"
+                "Ref": "JobRunnerS3LogsBucket"
             }
         }
     }
