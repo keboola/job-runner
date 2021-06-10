@@ -464,4 +464,66 @@ class RunCommandTest extends KernelTestCase
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" is already running'));
         self::assertEquals(0, $ret);
     }
+
+    public function testExecuteCustomBackendConfig(): void
+    {
+        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $objectEncryptor = new ObjectEncryptorFactory(
+            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('AWS_REGION'),
+            '',
+            '',
+            (string) getenv('AZURE_KEY_VAULT_URL'),
+        );
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $client = new Client(
+            new NullLogger(),
+            $jobFactory,
+            (string) getenv('JOB_QUEUE_URL'),
+            (string) getenv('JOB_QUEUE_TOKEN')
+        );
+        $job = $jobFactory->createNewJob([
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
+                ],
+                'runtime' => [
+                    'backend' => [
+                        'type' => 'custom',
+                    ],
+                ],
+            ],
+        ]);
+        $job = $client->createJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute(
+            ['command' => $command->getName()],
+            ['verbosity' => OutputInterface::VERBOSITY_DEBUG,
+            'capture_stderr_separately' => true]
+        );
+
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertEquals(0, $ret);
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
+use App\JobDefinitionFactory;
 use App\StorageApiFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
@@ -131,6 +132,7 @@ abstract class BaseFunctionalTest extends TestCase
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $queueClient,
             $storageApiFactory,
+            new JobDefinitionFactory(),
             (string) getenv('LEGACY_OAUTH_API_URL'),
             ['cpu_count' => 1]
         );
