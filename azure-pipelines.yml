@@ -156,6 +156,7 @@ stages:
 
           - task: Docker@2
             displayName: 'Push ACR [latest]'
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               command: push
               containerRegistry: 'Keboola PS Test ACR'
@@ -163,7 +164,6 @@ stages:
               repository: $(imageName)
               tags: |
                 latest
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
   # Push image to production ACR
   - stage: deploy_prod
