@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff6b3340e1fba4c5064939520defd4b8",
+    "content-hash": "1109021d0f7c2777c368954419eb2ea6",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.183.9",
+            "version": "3.184.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3b3aafdceac4cb820e2ae65a8785e4d07db471a7"
+                "reference": "2450c0568aae59842b5e4cdf50a12c213ed9640e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3b3aafdceac4cb820e2ae65a8785e4d07db471a7",
-                "reference": "3b3aafdceac4cb820e2ae65a8785e4d07db471a7",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2450c0568aae59842b5e4cdf50a12c213ed9640e",
+                "reference": "2450c0568aae59842b5e4cdf50a12c213ed9640e",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.183.9"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.184.1"
             },
-            "time": "2021-05-28T18:28:19+00:00"
+            "time": "2021-06-10T18:19:17+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -760,11 +760,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-2",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "04bea6ba016ddf84fe896d29f45269eb6b9ab3db"
+                "reference": "0302185baeb4106a6d143b494a93f4635e5ab73c"
             },
             "require": {
                 "ext-json": "*",
@@ -774,7 +774,7 @@
                 "keboola/object-encryptor": "^0.3",
                 "keboola/output-mapping": "^14.0.0",
                 "keboola/php-utils": "^2.3.1",
-                "keboola/staging-provider": "^1.1",
+                "keboola/staging-provider": "^2.0",
                 "mustache/mustache": "^2.13",
                 "symfony/http-foundation": "^4.1",
                 "symfony/monolog-bridge": "^4.1",
@@ -855,16 +855,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "12.9.0",
+            "version": "12.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "1bc92ea9e3a3815b26dae0190ffb1ef2c77a9459"
+                "reference": "53ffb3e45b53e0ef46c3921eb31d409ae331f677"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/1bc92ea9e3a3815b26dae0190ffb1ef2c77a9459",
-                "reference": "1bc92ea9e3a3815b26dae0190ffb1ef2c77a9459",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/53ffb3e45b53e0ef46c3921eb31d409ae331f677",
+                "reference": "53ffb3e45b53e0ef46c3921eb31d409ae331f677",
                 "shasum": ""
             },
             "require": {
@@ -900,22 +900,22 @@
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
                 "issues": "https://github.com/keboola/input-mapping/issues",
-                "source": "https://github.com/keboola/input-mapping/tree/12.9.0"
+                "source": "https://github.com/keboola/input-mapping/tree/12.10.1"
             },
-            "time": "2021-05-14T18:20:58+00:00"
+            "time": "2021-06-07T12:46:22+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "4.7.1",
+            "version": "4.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "cd18e61a7e443bc4b20e0f508b03a3a12935e1f9"
+                "reference": "854fc6689e39feb41786f2b56d35584d67880407"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/cd18e61a7e443bc4b20e0f508b03a3a12935e1f9",
-                "reference": "cd18e61a7e443bc4b20e0f508b03a3a12935e1f9",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/854fc6689e39feb41786f2b56d35584d67880407",
+                "reference": "854fc6689e39feb41786f2b56d35584d67880407",
                 "shasum": ""
             },
             "require": {
@@ -959,9 +959,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/4.7.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/4.8.1"
             },
-            "time": "2021-05-03T09:50:10+00:00"
+            "time": "2021-06-11T09:18:35+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1340,16 +1340,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "1.1.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "97b1ecc1773488176e9b811d466ac252e14223fd"
+                "reference": "5c1a8046950e6c70349fcf80a2e601323b9a8fcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/97b1ecc1773488176e9b811d466ac252e14223fd",
-                "reference": "97b1ecc1773488176e9b811d466ac252e14223fd",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/5c1a8046950e6c70349fcf80a2e601323b9a8fcc",
+                "reference": "5c1a8046950e6c70349fcf80a2e601323b9a8fcc",
                 "shasum": ""
             },
             "require": {
@@ -1383,9 +1383,9 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/1.1.0"
+                "source": "https://github.com/keboola/staging-provider/tree/2.0.0"
             },
-            "time": "2021-05-10T15:17:21+00:00"
+            "time": "2021-06-11T09:28:41+00:00"
         },
         {
             "name": "keboola/storage-api-client",
@@ -7308,16 +7308,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.4",
+            "version": "9.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c73c6737305e779771147af66c96ca6a7ed8a741"
+                "reference": "89ff45ea9d70e35522fb6654a2ebc221158de276"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c73c6737305e779771147af66c96ca6a7ed8a741",
-                "reference": "c73c6737305e779771147af66c96ca6a7ed8a741",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/89ff45ea9d70e35522fb6654a2ebc221158de276",
+                "reference": "89ff45ea9d70e35522fb6654a2ebc221158de276",
                 "shasum": ""
             },
             "require": {
@@ -7347,7 +7347,7 @@
                 "sebastian/global-state": "^5.0.1",
                 "sebastian/object-enumerator": "^4.0.3",
                 "sebastian/resource-operations": "^3.0.3",
-                "sebastian/type": "^2.3",
+                "sebastian/type": "^2.3.2",
                 "sebastian/version": "^3.0.2"
             },
             "require-dev": {
@@ -7395,7 +7395,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.4"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.5"
             },
             "funding": [
                 {
@@ -7407,7 +7407,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-23T07:16:29+00:00"
+            "time": "2021-06-05T04:49:07+00:00"
         },
         {
             "name": "sanmai/pipeline",
@@ -8331,16 +8331,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "2.3.1",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "81cd61ab7bbf2de744aba0ea61fae32f721df3d2"
+                "reference": "0d1c587401514d17e8f9258a27e23527cb1b06c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/81cd61ab7bbf2de744aba0ea61fae32f721df3d2",
-                "reference": "81cd61ab7bbf2de744aba0ea61fae32f721df3d2",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/0d1c587401514d17e8f9258a27e23527cb1b06c1",
+                "reference": "0d1c587401514d17e8f9258a27e23527cb1b06c1",
                 "shasum": ""
             },
             "require": {
@@ -8375,7 +8375,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/2.3.1"
+                "source": "https://github.com/sebastianbergmann/type/tree/2.3.2"
             },
             "funding": [
                 {
@@ -8383,7 +8383,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-26T13:18:59+00:00"
+            "time": "2021-06-04T13:02:07+00:00"
         },
         {
             "name": "sebastian/version",
@@ -9256,5 +9256,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

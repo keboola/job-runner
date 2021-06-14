@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiFactory;
 use App\StorageApiHandler;
@@ -12,7 +13,6 @@ use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
-use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
@@ -27,9 +27,7 @@ use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobResult;
 use Keboola\JobQueueInternalClient\JobPatchData;
-use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
-use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -61,11 +59,15 @@ class RunCommand extends Command
     /** @var StorageApiFactory */
     private $storageApiFactory;
 
+    /** @var JobDefinitionFactory */
+    private $jobDefinitionFactory;
+
     public function __construct(
         LoggerInterface $logger,
         LogProcessor $logProcessor,
         QueueClient $queueClient,
         StorageApiFactory $storageApiFactory,
+        JobDefinitionFactory $jobDefinitionFactory,
         string $legacyOauthApiUrl,
         array $instanceLimits
     ) {
@@ -73,6 +75,7 @@ class RunCommand extends Command
         $this->queueClient = $queueClient;
         $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
+        $this->jobDefinitionFactory = $jobDefinitionFactory;
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
@@ -124,7 +127,7 @@ class RunCommand extends Command
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             $component = $this->getComponentClass($clientWithoutLogger, $job);
-            $jobDefinitions = $this->getJobDefinitions($component, $job, $clientWithoutLogger);
+            $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWithoutLogger);
 
             // set up runner
             $clientWrapper = new ClientWrapper(
@@ -228,25 +231,6 @@ class RunCommand extends Command
         }
     }
 
-    private function getJobDefinitions(
-        Component $component,
-        JobInterface $job,
-        StorageClient $client
-    ): array {
-        $jobDefinitionParser = new JobDefinitionParser();
-        if ($job->getConfigData()) {
-            $jobDefinitionParser->parseConfigData($component, $job->getConfigDataDecrypted(), $job->getConfigId());
-        } else {
-            $components = new Components($client);
-            $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-            $jobDefinitionParser->parseConfig(
-                $component,
-                $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration)
-            );
-        }
-        return $jobDefinitionParser->getJobDefinitions();
-    }
-
     private function getComponentClass(StorageClient $client, JobInterface $job): Component
     {
         $component = $this->getComponent($client, $job->getComponentId());
@@ -269,6 +253,10 @@ class RunCommand extends Command
         throw new UserException(sprintf('Component "%s" was not found.', $id));
     }
 
+    /**
+     * @param array<JobDefinition> $jobDefinitions
+     * @return array<JobDefinition>
+     */
     private function resolveVariables(
         ClientWrapper $clientWrapper,
         array $jobDefinitions,
@@ -279,7 +267,6 @@ class RunCommand extends Command
         $variableResolver = new VariableResolver($clientWrapper, $this->logger);
 
         $newJobDefinitions = [];
-        /** @var JobDefinition $jobDefinition */
         foreach ($jobDefinitions as $jobDefinition) {
             $newConfiguration = $variableResolver->resolveVariables(
                 $sharedCodeResolver->resolveSharedCode($jobDefinition->getConfiguration()),
