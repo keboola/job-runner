@@ -33,15 +33,16 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && apt-get update \
     && apt-cache policy docker-ce \
     && apt-get -y install docker-ce \
-    && rm -rf /var/lib/apt/lists/*    
-    
+    && rm -rf /var/lib/apt/lists/*
+
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install zip \
 	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
-COPY composer.* ./
+COPY composer.* symfony.lock ./
 RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
+
 COPY . .
 RUN composer install $COMPOSER_FLAGS
 
