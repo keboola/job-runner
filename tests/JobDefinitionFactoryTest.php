@@ -41,6 +41,35 @@ class JobDefinitionFactoryTest extends TestCase
         self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
     }
 
+    public function testCreateJobDefinitionWithConfigDataAndBackend(): void
+    {
+        $configData = [
+            'runtime' => [
+                'foo' => 'bar',
+                'backend' => [
+                    'type' => 'invalid',
+                ],
+            ],
+        ];
+
+        $jobData = [
+            'status' => JobFactory::STATUS_CREATED,
+            'projectId' => 'my-project',
+            'componentId' => 'my-component',
+            'configId' => 'my-config',
+            'configData' => $configData,
+            'backend' => [
+                'type' => 'custom',
+            ],
+        ];
+
+        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
+        self::assertSame(
+            'custom',
+            $jobDefinitions[0]->getConfiguration()['runtime']['backend']['type'] ?? null
+        );
+    }
+
     public function testCreateJobDefinitionWithConfigId(): void
     {
         $configuration = [
@@ -70,6 +99,39 @@ class JobDefinitionFactoryTest extends TestCase
         self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
         self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
         self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
+    }
+
+    public function testCreateJobDefinitionWithConfigIdAndBackend(): void
+    {
+        $configuration = [
+            'id' => 'my-config',
+            'version' => '1',
+            'state' => [],
+            'rows' => [],
+            'runtime' => [
+                'foo' => 'bar',
+                'backend' => [
+                    'type' => 'invalid',
+                ],
+            ],
+        ];
+
+        $jobData = [
+            'status' => JobFactory::STATUS_CREATED,
+            'projectId' => 'my-project',
+            'componentId' => 'my-component',
+            'configId' => 'my-config',
+            'backend' => [
+                'type' => 'custom',
+            ],
+        ];
+
+        $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
+
+        self::assertSame(
+            'custom',
+            $jobDefinitions[0]->getConfiguration()['runtime']['backend']['type'] ?? null
+        );
     }
 
     private function createJobDefinitionsWithConfigData(array $jobData, array $configData): array

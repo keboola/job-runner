@@ -7,6 +7,7 @@ parameters:
     ignoreErrors:
         - '#Method App\\UsageFile::setDataDir\(\) has parameter \$dataDir with no typehint specified.#'
         - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
+        - '#Unable to resolve the template type CallbackInput in call to method PHPUnit\\Framework\\Assert\:\:callback\(\)#'
         - '#Unreachable statement \- code above always terminates\.#'
 
 includes:
