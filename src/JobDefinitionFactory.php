@@ -27,13 +27,12 @@ class JobDefinitionFactory
         } else {
             $components = new Components($client);
             $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-
+            $configuration = $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration);
             $configuration['configuration'] = $this->extendComponentConfigWithBackend(
                 $configuration['configuration'] ?? [],
                 $job
             );
 
-            $configuration = $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration);
             $jobDefinitionParser->parseConfig($component, $configuration);
         }
 
