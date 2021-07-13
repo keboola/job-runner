@@ -76,7 +76,7 @@ spec:
             - name: DATABASE_SSL_VERIFY_ENABLED
               value: '0'
             - name: JOB_QUEUE_INTERNAL_API_AUTH_TOKEN
-              value: 'DummyToken'
+              value: 'sampleToken'
           readinessProbe:
             httpGet:
               path: /health-check
