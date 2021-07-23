@@ -1,10 +1,14 @@
-FROM php:7-cli
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV APP_ENV prod
 ARG APP_USER_NAME=app
 ARG APP_USER_UID=1000
 ARG APP_USER_GID=1000
+
+FROM php:7-cli AS base
+ARG APP_USER_NAME
+ARG APP_USER_UID
+ARG APP_USER_GID
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV APP_ENV prod
 
 WORKDIR /code
 
@@ -59,3 +63,22 @@ RUN composer install $COMPOSER_FLAGS \
 USER $APP_USER_NAME
 
 CMD php /code/bin/console app:run
+
+
+FROM base AS dev
+ARG APP_USER_NAME
+USER root
+
+ENV APP_ENV dev
+
+# install extensions
+RUN pecl channel-update pecl.php.net \
+    && pecl config-set php_ini /usr/local/etc/php.ini \
+    && yes | pecl install xdebug-2.9.8 \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+USER $APP_USER_NAME
+
+CMD [/bin/bash]
