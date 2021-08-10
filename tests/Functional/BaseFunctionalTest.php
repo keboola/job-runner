@@ -85,7 +85,8 @@ abstract class BaseFunctionalTest extends TestCase
         $queueClient->expects(self::any())->method('getJobFactory')->willReturn($jobFactory);
         $queueClient->expects(self::any())->method('updateJob')->willReturn([]);
         $queueClient->expects(self::any())->method('patchJob')->willReturn(
-            new JobFactory\Job($this->objectEncryptorFactory,
+            new JobFactory\Job(
+                $this->objectEncryptorFactory,
                 [
                     'status' => 'processing',
                     'projectId' => '123',
