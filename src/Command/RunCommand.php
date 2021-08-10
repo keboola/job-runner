@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\ExceptionConverterHelper;
 use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiFactory;
@@ -19,7 +20,6 @@ use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
-use Keboola\ErrorControl\Message\ExceptionTransformer;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
@@ -27,7 +27,6 @@ use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobResult;
 use Keboola\JobQueueInternalClient\JobPatchData;
-use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
@@ -39,15 +38,29 @@ use Throwable;
 
 class RunCommand extends Command
 {
-    /** @inheritdoc */
+    /** @var string */
     protected static $defaultName = 'app:run';
-    private string $legacyOauthApiUrl;
-    private array $instanceLimits;
-    private QueueClient $queueClient;
-    private Logger $logger;
-    private LogProcessor $logProcessor;
-    private StorageApiFactory $storageApiFactory;
-    private JobDefinitionFactory $jobDefinitionFactory;
+
+    /** @var string */
+    private $legacyOauthApiUrl;
+
+    /** @var array */
+    private $instanceLimits;
+
+    /** @var QueueClient */
+    private $queueClient;
+
+    /** @var Logger */
+    private $logger;
+
+    /** @var LogProcessor */
+    private $logProcessor;
+
+    /** @var StorageApiFactory */
+    private $storageApiFactory;
+
+    /** @var JobDefinitionFactory */
+    private $jobDefinitionFactory;
 
     public function __construct(
         LoggerInterface $logger,
@@ -60,7 +73,6 @@ class RunCommand extends Command
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
@@ -171,37 +183,13 @@ class RunCommand extends Command
             }
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
-        } catch (EncryptionUserException $e) {
-            $this->logger->error(
-                sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $e->getMessage()),
-                ExceptionTransformer::transformException($e)->getFullArray()
-            );
-            $this->postJobResult(
-                $jobId,
-                JobFactory::STATUS_ERROR,
-                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_APPLICATION)
-            );
         } catch (StateTargetEqualsCurrentException $e) {
             $this->logger->info(sprintf('Job "%s" is already running', $jobId));
-        } catch (UserException $e) {
-            $this->logger->error(
-                sprintf('Job "%s" ended with user error: "%s".', $jobId, $e->getMessage()),
-                ExceptionTransformer::transformException($e)->getFullArray()
-            );
-            $this->postJobResult(
-                $jobId,
-                JobFactory::STATUS_ERROR,
-                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_USER)
-            );
         } catch (Throwable $e) {
-            $this->logger->error(
-                sprintf('Job "%s" ended with application error: "%s"', $jobId, $e->getMessage()),
-                ExceptionTransformer::transformException($e)->getFullArray()
-            );
             $this->postJobResult(
                 $jobId,
                 JobFactory::STATUS_ERROR,
-                (new JobResult())->setMessage($e->getMessage())->setErrorType(JobResult::ERROR_TYPE_APPLICATION)
+                ExceptionConverterHelper::convertExceptionToResult($this->logger, $e, $jobId)
             );
         }
         // end with success so that there are no restarts

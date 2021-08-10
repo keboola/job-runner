@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdcbc29fda5d9410fd43d97c81ff082c",
+    "content-hash": "ededd1ae654f31d1075a81901c46042e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.189.0",
+            "version": "3.188.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8"
+                "reference": "7c84f39290067c6e86b3bc4518f211be0f499dc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7c84f39290067c6e86b3bc4518f211be0f499dc8",
+                "reference": "7c84f39290067c6e86b3bc4518f211be0f499dc8",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.189.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.188.1"
             },
-            "time": "2021-08-10T18:17:34+00:00"
+            "time": "2021-08-09T18:29:02+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -906,16 +906,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "4.10.0",
+            "version": "dev-odin-PS-2120",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "a5aceea6abb5965cba5bcc7c0d50125334b229ae"
+                "reference": "cede399c7786277a50545e6911a61583e80b5a8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a5aceea6abb5965cba5bcc7c0d50125334b229ae",
-                "reference": "a5aceea6abb5965cba5bcc7c0d50125334b229ae",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/cede399c7786277a50545e6911a61583e80b5a8c",
+                "reference": "cede399c7786277a50545e6911a61583e80b5a8c",
                 "shasum": ""
             },
             "require": {
@@ -923,14 +923,14 @@
                 "guzzlehttp/guzzle": "^6.3",
                 "keboola/object-encryptor": "^0.3",
                 "keboola/storage-api-client": "^11.3|^12.0",
-                "php": "^7.3",
+                "php": "^7.4",
                 "psr/log": "^1.1",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/validator": "^4.4|^5.0"
             },
             "require-dev": {
                 "infection/infection": "^0.18.2",
-                "keboola/coding-standard": ">=7.0.2",
+                "keboola/coding-standard": ">=7.0.2,<13.0.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/phpstan": "^0.12.51",
                 "phpstan/phpstan-phpunit": "^0.12",
@@ -960,9 +960,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/4.10.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-PS-2120"
             },
-            "time": "2021-07-13T11:41:45+00:00"
+            "time": "2021-08-10T06:57:43+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -9501,12 +9501,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4",
+        "php": "^7.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*"
