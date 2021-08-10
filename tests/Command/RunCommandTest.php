@@ -54,8 +54,7 @@ class RunCommandTest extends KernelTestCase
         $records = $testHandler->getRecords();
         $errorRecord = [];
         foreach ($records as $record) {
-            if ($record['message'] === 'Job "" ended with application error: ' .
-                '"The "JOB_ID" environment variable is missing."'
+            if ($record['message'] === 'Job "" ended with application error: "Internal Server Error occurred."'
             ) {
                 $errorRecord = $record;
             }
