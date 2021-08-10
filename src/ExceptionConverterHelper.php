@@ -14,7 +14,7 @@ class ExceptionConverterHelper
 {
     public static function convertExceptionToResult(LoggerInterface $logger, Throwable $e, string $jobId): JobResult
     {
-        $errorType = is_a($e,UserException::class) ? JobResult::ERROR_TYPE_USER : JobResult::ERROR_TYPE_APPLICATION;
+        $errorType = is_a($e, UserException::class) ? JobResult::ERROR_TYPE_USER : JobResult::ERROR_TYPE_APPLICATION;
         if (is_a($e, UserException::class)) {
             $errorTypeString = 'user';
         } elseif (is_a($e, \Keboola\ObjectEncryptor\Exception\UserException::class)) {
