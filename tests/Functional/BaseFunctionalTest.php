@@ -116,7 +116,17 @@ abstract class BaseFunctionalTest extends TestCase
                 }*/
                 return true;
             })
-        )->willReturn([]);
+        )->willReturn(
+            new JobFactory\Job(
+                $this->objectEncryptorFactory,
+                [
+                    'status' => 'processing',
+                    'projectId' => '123',
+                    'componentId' => 'dummy',
+                    'configId' => '123',
+                ]
+            )
+        );
         /** @var QueueClient $queueClient */
         if ($mockClient) {
             $storageApiFactory = self::getMockBuilder(StorageApiFactory::class)
