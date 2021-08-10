@@ -337,7 +337,7 @@ class RunCommandTest extends KernelTestCase
         ]);
 
         self::assertTrue($testHandler->hasErrorThatContains(
-            'Job "' . $job->getId() . '" ended with encryption error: "Value is not an encrypted value."'
+            'Job "' . $job->getId() . '" ended with encryption error: "Internal Server Error occurred."'
         ));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertEquals(0, $ret);

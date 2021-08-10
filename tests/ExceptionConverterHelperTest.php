@@ -40,7 +40,7 @@ class ExceptionConverterHelperTest extends TestCase
     {
         yield 'encryption exception' => [
             'exception' => new EncryptionUserException('some error'),
-            'expectedErrorType' => JobResult::ERROR_TYPE_APPLICATION,
+            'expectedErrorType' => JobResult::ERROR_TYPE_USER,
             'expectedMessage' => 'Internal Server Error occurred.',
             'expectedLog' => 'Job "123" ended with encryption error: "Internal Server Error occurred."',
         ];
