@@ -62,11 +62,8 @@ class RunCommand extends Command
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
-        if (is_a($logger, Logger::class)) {
-            $this->logger = $logger;
-        } else {
-            $this->logger = new Logger('not-used');
-        }
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
