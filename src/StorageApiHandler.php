@@ -16,7 +16,7 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
     protected string $appName;
     protected Client $storageApiClient;
 
-    /** @var array<int, string> */
+    /** @var array<int|string, string> */
     private array $verbosity;
 
     public function __construct(string $appName, Client $client)
