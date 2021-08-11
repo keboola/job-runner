@@ -38,29 +38,15 @@ use Throwable;
 
 class RunCommand extends Command
 {
-    /** @var string */
+    /** @inheritdoc */
     protected static $defaultName = 'app:run';
-
-    /** @var string */
-    private $legacyOauthApiUrl;
-
-    /** @var array */
-    private $instanceLimits;
-
-    /** @var QueueClient */
-    private $queueClient;
-
-    /** @var Logger */
-    private $logger;
-
-    /** @var LogProcessor */
-    private $logProcessor;
-
-    /** @var StorageApiFactory */
-    private $storageApiFactory;
-
-    /** @var JobDefinitionFactory */
-    private $jobDefinitionFactory;
+    private string $legacyOauthApiUrl;
+    private array $instanceLimits;
+    private QueueClient $queueClient;
+    private Logger $logger;
+    private LogProcessor $logProcessor;
+    private StorageApiFactory $storageApiFactory;
+    private JobDefinitionFactory $jobDefinitionFactory;
 
     public function __construct(
         LoggerInterface $logger,
@@ -73,6 +59,7 @@ class RunCommand extends Command
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
