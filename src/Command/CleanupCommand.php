@@ -15,14 +15,12 @@ use Symfony\Component\Process\Process;
 
 class CleanupCommand extends Command
 {
-    /** @var string */
+    /**
+     * @inheritdoc
+     */
     protected static $defaultName = 'app:cleanup';
-
-    /** @var LoggerInterface */
-    private $logger;
-
-    /** @var LogProcessor */
-    private $logProcessor;
+    private LoggerInterface $logger;
+    private LogProcessor $logProcessor;
 
     public function __construct(LoggerInterface $logger, LogProcessor $logProcessor)
     {

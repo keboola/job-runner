@@ -7,20 +7,17 @@ namespace App;
 use Keboola\DockerBundle\Monolog\Handler\StorageApiHandlerInterface;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Event;
-use function Keboola\Utils\sanitizeUtf8;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
+use function Keboola\Utils\sanitizeUtf8;
 
 class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInterface
 {
-    /** @var string */
-    protected $appName;
+    protected string $appName;
+    protected Client $storageApiClient;
 
-    /** @var Client */
-    protected $storageApiClient;
-
-    /** @var array */
-    private $verbosity;
+    /** @var array<int, string> */
+    private array $verbosity;
 
     public function __construct(string $appName, Client $client)
     {

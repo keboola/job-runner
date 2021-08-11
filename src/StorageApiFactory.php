@@ -8,8 +8,7 @@ use Keboola\StorageApi\Client;
 
 class StorageApiFactory
 {
-    /** @var string */
-    private $storageApiUrl;
+    private string $storageApiUrl;
 
     public function __construct(string $storageApiUrl)
     {

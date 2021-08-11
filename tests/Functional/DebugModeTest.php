@@ -14,6 +14,7 @@ use Keboola\StorageApi\Options\ListFilesOptions;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use ZipArchive;
+use function GuzzleHttp\json_decode;
 
 class DebugModeTest extends BaseFunctionalTest
 {
@@ -102,7 +103,7 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode((string) $config, true);
+        $config = json_decode((string) $config, true);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('in/tables/source.csv');
@@ -125,7 +126,7 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode((string) $config, true);
+        $config = json_decode((string) $config, true);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('out/tables/destination.csv');
@@ -336,7 +337,7 @@ class DebugModeTest extends BaseFunctionalTest
                 $output = $record['message'];
             }
         }
-        $config = \GuzzleHttp\json_decode(strrev((string) base64_decode($output)), true);
+        $config = json_decode(strrev((string) base64_decode($output)), true);
         self::assertEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
 
@@ -356,7 +357,7 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive = new ZipArchive();
         $zipArchive->open($zipFileName);
         $config = $zipArchive->getFromName('config.json');
-        $config = \GuzzleHttp\json_decode((string) $config, true);
+        $config = json_decode((string) $config, true);
         self::assertNotEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('[hidden]', $config['parameters']['#encrypted']);
         self::assertEquals('not-[hidden]', $config['parameters']['plain']);

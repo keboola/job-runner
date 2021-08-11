@@ -8,20 +8,9 @@ use Keboola\ErrorControl\Monolog\LogInfoInterface;
 
 class LogInfo implements LogInfoInterface
 {
-    /**
-     * @var string
-     */
-    private $projectId;
-
-    /**
-     * @var string
-     */
-    private $runId;
-
-    /**
-     * @var string
-     */
-    private $componentId;
+    private string $projectId;
+    private string $runId;
+    private string $componentId;
 
     public function __construct(
         string $runId,
