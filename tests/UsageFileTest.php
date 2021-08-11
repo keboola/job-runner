@@ -14,20 +14,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class UsageFileTest extends TestCase
 {
-    /**
-     * @var Temp
-     */
-    private $temp;
-
-    /**
-     * @var string
-     */
-    private $dataDir;
-
-    /**
-     * @var Filesystem
-     */
-    private $fs;
+    private Temp $temp;
+    private string $dataDir;
+    private Filesystem $fs;
 
     public function setUp(): void
     {
@@ -48,7 +37,7 @@ class UsageFileTest extends TestCase
     public function testStoreUsageWrongDataJson(): void
     {
         // there should be "metric" key instead of "random"
-        $usage = \GuzzleHttp\json_encode([[
+        $usage = (string) json_encode([[
             'random' => 'API calls',
             'value' => 150,
         ]]);
@@ -95,7 +84,7 @@ YAML;
 
     public function testStoreUsageOk(): void
     {
-        $usage = \GuzzleHttp\json_encode([[
+        $usage = (string) json_encode([[
             'metric' => 'kiloBytes',
             'value' => 150,
         ]]);
@@ -125,7 +114,7 @@ YAML;
 
     public function testStoreUsageUnknownJob(): void
     {
-        $usage = \GuzzleHttp\json_encode([[
+        $usage = (string) json_encode([[
             'metric' => 'kiloBytes',
             'value' => 150,
         ]]);
@@ -153,7 +142,7 @@ YAML;
 
     public function testDoNotStoreEmptyUsage(): void
     {
-        $usage = \GuzzleHttp\json_encode([]);
+        $usage = (string) json_encode([]);
         $this->fs->dumpFile($this->dataDir . '/out/usage.json', $usage);
 
         $client = self::getMockBuilder(Client::class)

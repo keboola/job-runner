@@ -13,6 +13,6 @@ $requiredEnvs = ['CPU_COUNT', 'LEGACY_OAUTH_API_URL', 'LEGACY_ENCRYPTION_KEY', '
 ];
 foreach ($requiredEnvs as $env) {
     if (empty(getenv($env))) {
-        throw new \Exception(sprintf('The "%s" environment variable is empty.', $env));
+        throw new Exception(sprintf('The "%s" environment variable is empty.', $env));
     }
 }

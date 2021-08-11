@@ -25,20 +25,11 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseFunctionalTest extends TestCase
 {
-    /** @var StorageClient */
-    private $storageClient;
-
-    /** @var Logger */
-    private $logger;
-
-    /** @var TestHandler */
-    private $handler;
-
-    /** @var Temp */
-    private $temp;
-
-    /** @var ObjectEncryptorFactory */
-    private $objectEncryptorFactory;
+    private StorageClient $storageClient;
+    private Logger $logger;
+    private TestHandler $handler;
+    private Temp $temp;
+    private ObjectEncryptorFactory $objectEncryptorFactory;
 
     public function setUp(): void
     {

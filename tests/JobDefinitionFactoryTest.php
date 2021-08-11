@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use App\JobDefinitionFactory;
 use Keboola\DockerBundle\Docker\Component;
+use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
@@ -134,6 +135,9 @@ class JobDefinitionFactoryTest extends TestCase
         );
     }
 
+    /**
+     * @return array<JobDefinition>
+     */
     private function createJobDefinitionsWithConfigData(array $jobData, array $configData): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);

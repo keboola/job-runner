@@ -27,6 +27,7 @@ use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobResult;
 use Keboola\JobQueueInternalClient\JobPatchData;
+use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
@@ -38,29 +39,15 @@ use Throwable;
 
 class RunCommand extends Command
 {
-    /** @var string */
+    /** @inheritdoc */
     protected static $defaultName = 'app:run';
-
-    /** @var string */
-    private $legacyOauthApiUrl;
-
-    /** @var array */
-    private $instanceLimits;
-
-    /** @var QueueClient */
-    private $queueClient;
-
-    /** @var Logger */
-    private $logger;
-
-    /** @var LogProcessor */
-    private $logProcessor;
-
-    /** @var StorageApiFactory */
-    private $storageApiFactory;
-
-    /** @var JobDefinitionFactory */
-    private $jobDefinitionFactory;
+    private string $legacyOauthApiUrl;
+    private array $instanceLimits;
+    private QueueClient $queueClient;
+    private Logger $logger;
+    private LogProcessor $logProcessor;
+    private StorageApiFactory $storageApiFactory;
+    private JobDefinitionFactory $jobDefinitionFactory;
 
     public function __construct(
         LoggerInterface $logger,
@@ -73,6 +60,7 @@ class RunCommand extends Command
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->logger = $logger;
         $this->storageApiFactory = $storageApiFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
@@ -183,7 +171,7 @@ class RunCommand extends Command
             }
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
-        } catch (\Keboola\ObjectEncryptor\Exception\UserException $e) {
+        } catch (EncryptionUserException $e) {
             $this->logger->error(
                 sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $e->getMessage()),
                 ExceptionTransformer::transformException($e)->getFullArray()

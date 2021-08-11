@@ -13,20 +13,11 @@ use Throwable;
 
 class UsageFile implements UsageFileInterface
 {
-    /** @var string */
-    private $dataDir = null;
-
-    /** @var string */
-    private $format = null;
-
-    /** @var Adapter */
-    private $adapter;
-
-    /** @var string */
-    private $jobId = null;
-
-    /** @var Client */
-    private $queueClient;
+    private ?string $dataDir = null;
+    private ?string $format = null;
+    private Adapter $adapter;
+    private ?string $jobId = null;
+    private Client $queueClient;
 
     public function __construct()
     {
