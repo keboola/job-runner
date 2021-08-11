@@ -39,9 +39,7 @@ use Throwable;
 
 class RunCommand extends Command
 {
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected static $defaultName = 'app:run';
     private string $legacyOauthApiUrl;
     private array $instanceLimits;

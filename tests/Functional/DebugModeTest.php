@@ -14,7 +14,6 @@ use Keboola\StorageApi\Options\ListFilesOptions;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use ZipArchive;
-use function GuzzleHttp\json_decode;
 
 class DebugModeTest extends BaseFunctionalTest
 {

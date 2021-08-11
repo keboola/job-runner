@@ -11,7 +11,6 @@ use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\Temp\Temp;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use function GuzzleHttp\json_encode;
 
 class UsageFileTest extends TestCase
 {
@@ -38,7 +37,7 @@ class UsageFileTest extends TestCase
     public function testStoreUsageWrongDataJson(): void
     {
         // there should be "metric" key instead of "random"
-        $usage = json_encode([[
+        $usage = (string) json_encode([[
             'random' => 'API calls',
             'value' => 150,
         ]]);
@@ -85,7 +84,7 @@ YAML;
 
     public function testStoreUsageOk(): void
     {
-        $usage = json_encode([[
+        $usage = (string) json_encode([[
             'metric' => 'kiloBytes',
             'value' => 150,
         ]]);
@@ -115,7 +114,7 @@ YAML;
 
     public function testStoreUsageUnknownJob(): void
     {
-        $usage = json_encode([[
+        $usage = (string) json_encode([[
             'metric' => 'kiloBytes',
             'value' => 150,
         ]]);
@@ -143,7 +142,7 @@ YAML;
 
     public function testDoNotStoreEmptyUsage(): void
     {
-        $usage = json_encode([]);
+        $usage = (string) json_encode([]);
         $this->fs->dumpFile($this->dataDir . '/out/usage.json', $usage);
 
         $client = self::getMockBuilder(Client::class)

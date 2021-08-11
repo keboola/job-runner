@@ -15,9 +15,7 @@ use Symfony\Component\Process\Process;
 
 class CleanupCommand extends Command
 {
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected static $defaultName = 'app:cleanup';
     private LoggerInterface $logger;
     private LogProcessor $logProcessor;
