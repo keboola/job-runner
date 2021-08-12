@@ -20,14 +20,15 @@ class ExceptionConverterHelper
         string $jobId,
         array $outputs
     ): JobResult {
-        $errorType = is_a($e, UserException::class) || is_a($e, EncryptionUserException::class)
-            ? JobResult::ERROR_TYPE_USER : JobResult::ERROR_TYPE_APPLICATION;
         if (is_a($e, UserException::class)) {
             $errorTypeString = 'user';
+            $errorType = JobResult::ERROR_TYPE_USER;
         } elseif (is_a($e, EncryptionUserException::class)) {
             $errorTypeString = 'encryption';
+            $errorType = JobResult::ERROR_TYPE_USER;
         } else {
             $errorTypeString = 'application';
+            $errorType = JobResult::ERROR_TYPE_APPLICATION;
         }
         $transformedException = ExceptionTransformer::transformException($e);
         $logger->error(
