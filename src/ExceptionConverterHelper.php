@@ -41,14 +41,7 @@ class ExceptionConverterHelper
         if ($outputs) {
             $result
                 ->setConfigVersion((string) $outputs[0]->getConfigVersion())
-                ->setImages(
-                    array_map(
-                        function (Output $output) {
-                            return $output->getImages();
-                        },
-                        $outputs
-                    )
-                );
+                ->setImages(array_map(fn(Output $output) => $output->getImages(), $outputs));
         }
         return $result;
     }
