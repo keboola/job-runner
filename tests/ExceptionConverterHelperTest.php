@@ -7,6 +7,7 @@ namespace App\Tests;
 use App\ExceptionConverterHelper;
 use Exception;
 use Generator;
+use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobResult;
@@ -27,7 +28,7 @@ class ExceptionConverterHelperTest extends TestCase
         string $expectedLog
     ): void {
         $logger = new TestLogger();
-        $result = ExceptionConverterHelper::convertExceptionToResult($logger, $exception, '123');
+        $result = ExceptionConverterHelper::convertExceptionToResult($logger, $exception, '123', []);
         self::assertEquals($expectedMessage, $result->getMessage());
         self::assertEquals($expectedErrorType, $result->getErrorType());
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
@@ -62,5 +63,28 @@ class ExceptionConverterHelperTest extends TestCase
             'expectedMessage' => 'Internal Server Error occurred.',
             'expectedLog' => 'Job "123" ended with application error: "Internal Server Error occurred."',
         ];
+    }
+
+    public function testExceptionConversionOutputs(): void
+    {
+        $logger = new TestLogger();
+        $output = new Output();
+        $output->setImages(['a' => 'b']);
+        $output->setConfigVersion('123');
+
+        $result = ExceptionConverterHelper::convertExceptionToResult(
+            $logger,
+            new UserException('some error'),
+            '123',
+            [
+                $output
+            ]
+        );
+        self::assertEquals('some error', $result->getMessage());
+        self::assertSame('123', $result->getConfigVersion());
+        self::assertSame(
+            [['a' => 'b']],
+            $result->getImages()
+        );
     }
 }

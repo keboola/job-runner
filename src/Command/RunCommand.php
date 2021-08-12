@@ -77,6 +77,7 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobId = (string) getenv('JOB_ID');
+        $outputs = [];
         try {
             // get job
             if (empty($jobId)) {
@@ -144,13 +145,14 @@ class RunCommand extends Command
             );
 
             // run job
-            $outputs = $runner->run(
+            $runner->run(
                 $jobDefinitions,
                 'run',
                 $job->getMode(),
                 $job->getId(),
                 $usageFile,
-                $job->getConfigRowIds()
+                $job->getConfigRowIds(),
+                $outputs
             );
             $result = new JobResult();
             if (count($outputs) === 0) {
@@ -176,7 +178,7 @@ class RunCommand extends Command
             $this->postJobResult(
                 $jobId,
                 JobFactory::STATUS_ERROR,
-                ExceptionConverterHelper::convertExceptionToResult($this->logger, $e, $jobId)
+                ExceptionConverterHelper::convertExceptionToResult($this->logger, $e, $jobId, $outputs)
             );
         }
         // end with success so that there are no restarts

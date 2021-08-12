@@ -21,7 +21,7 @@
         "ext-json": "*",
         "keboola/api-error-control": "^3.4.0",
         "keboola/configuration-variables-resolver": "^1.0.0",
-        "keboola/dockerbundle": "dev-odin-library-3@dev",
+        "keboola/dockerbundle": "dev-odin-library-4@dev",
         "keboola/job-queue-internal-api-php-client": "dev-odin-PS-2120",
         "keboola/object-encryptor": "^0.3",
         "symfony/console": "4.4.*",

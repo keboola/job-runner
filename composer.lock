@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29107317646c3c873e1b9e2a681b423b",
+    "content-hash": "e667d7c17cabef382dee8ba4438f083d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.189.0",
+            "version": "3.190.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8"
+                "reference": "4700c27227649ed7e2ea09028cca1c884ab2c41b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4700c27227649ed7e2ea09028cca1c884ab2c41b",
+                "reference": "4700c27227649ed7e2ea09028cca1c884ab2c41b",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.189.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.190.0"
             },
-            "time": "2021-08-10T18:17:34+00:00"
+            "time": "2021-08-11T18:16:23+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -759,11 +759,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-odin-library-4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c38151cbcdbc0e17da91404d81060c331bd5c309"
+                "reference": "0ffd518319cd1fbed656de6da6abc8f49335040b"
             },
             "require": {
                 "ext-json": "*",
@@ -803,7 +803,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2021-08-09T21:26:13+00:00"
+            "time": "2021-08-12T07:46:16+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -9515,5 +9515,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }
