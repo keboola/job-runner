@@ -40,7 +40,7 @@ class ExceptionConverterHelper
             ->setExceptionId($transformedException->getExceptionId());
         if ($outputs) {
             $result
-                ->setConfigVersion((string)$outputs[0]->getConfigVersion())
+                ->setConfigVersion((string) $outputs[0]->getConfigVersion())
                 ->setImages(
                     array_map(
                         function (Output $output) {

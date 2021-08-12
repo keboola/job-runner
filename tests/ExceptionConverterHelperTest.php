@@ -77,7 +77,7 @@ class ExceptionConverterHelperTest extends TestCase
             new UserException('some error'),
             '123',
             [
-                $output
+                $output,
             ]
         );
         self::assertEquals('some error', $result->getMessage());
