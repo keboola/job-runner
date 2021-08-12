@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e667d7c17cabef382dee8ba4438f083d",
+    "content-hash": "a54fba58317f0d030362114cb9cc38d4",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -759,11 +759,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-4",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "0ffd518319cd1fbed656de6da6abc8f49335040b"
+                "reference": "6e923d0416b792b9311d1091365749589790c867"
             },
             "require": {
                 "ext-json": "*",
@@ -803,7 +803,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2021-08-12T07:46:16+00:00"
+            "time": "2021-08-12T12:12:35+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -906,16 +906,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-odin-PS-2120",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "cede399c7786277a50545e6911a61583e80b5a8c"
+                "reference": "0fea980496bbe3e5840f50d61ad6e0e8dada0fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/cede399c7786277a50545e6911a61583e80b5a8c",
-                "reference": "cede399c7786277a50545e6911a61583e80b5a8c",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0fea980496bbe3e5840f50d61ad6e0e8dada0fe2",
+                "reference": "0fea980496bbe3e5840f50d61ad6e0e8dada0fe2",
                 "shasum": ""
             },
             "require": {
@@ -960,9 +960,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-PS-2120"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/5.2.0"
             },
-            "time": "2021-08-10T06:57:43+00:00"
+            "time": "2021-08-12T08:44:58+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -7173,21 +7173,21 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.21",
+            "version": "0.12.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7"
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/6aaff1196c4f808769774b49a94a60e5fdf18de7",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "phpstan/phpstan": "^0.12.86"
+                "phpstan/phpstan": "^0.12.92"
             },
             "conflict": {
                 "phpunit/phpunit": "<7.0"
@@ -7221,9 +7221,9 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.21"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.22"
             },
-            "time": "2021-07-14T10:48:30+00:00"
+            "time": "2021-08-12T10:53:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9501,8 +9501,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
