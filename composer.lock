@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdcbc29fda5d9410fd43d97c81ff082c",
+    "content-hash": "a54fba58317f0d030362114cb9cc38d4",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.189.0",
+            "version": "3.190.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8"
+                "reference": "4700c27227649ed7e2ea09028cca1c884ab2c41b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4700c27227649ed7e2ea09028cca1c884ab2c41b",
+                "reference": "4700c27227649ed7e2ea09028cca1c884ab2c41b",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.189.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.190.0"
             },
-            "time": "2021-08-10T18:17:34+00:00"
+            "time": "2021-08-11T18:16:23+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -763,7 +763,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c38151cbcdbc0e17da91404d81060c331bd5c309"
+                "reference": "6e923d0416b792b9311d1091365749589790c867"
             },
             "require": {
                 "ext-json": "*",
@@ -803,7 +803,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2021-08-09T21:26:13+00:00"
+            "time": "2021-08-12T12:12:35+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -906,16 +906,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "4.10.0",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "a5aceea6abb5965cba5bcc7c0d50125334b229ae"
+                "reference": "0fea980496bbe3e5840f50d61ad6e0e8dada0fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a5aceea6abb5965cba5bcc7c0d50125334b229ae",
-                "reference": "a5aceea6abb5965cba5bcc7c0d50125334b229ae",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0fea980496bbe3e5840f50d61ad6e0e8dada0fe2",
+                "reference": "0fea980496bbe3e5840f50d61ad6e0e8dada0fe2",
                 "shasum": ""
             },
             "require": {
@@ -923,14 +923,14 @@
                 "guzzlehttp/guzzle": "^6.3",
                 "keboola/object-encryptor": "^0.3",
                 "keboola/storage-api-client": "^11.3|^12.0",
-                "php": "^7.3",
+                "php": "^7.4",
                 "psr/log": "^1.1",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/validator": "^4.4|^5.0"
             },
             "require-dev": {
                 "infection/infection": "^0.18.2",
-                "keboola/coding-standard": ">=7.0.2",
+                "keboola/coding-standard": ">=7.0.2,<13.0.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/phpstan": "^0.12.51",
                 "phpstan/phpstan-phpunit": "^0.12",
@@ -960,9 +960,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/4.10.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/5.2.0"
             },
-            "time": "2021-07-13T11:41:45+00:00"
+            "time": "2021-08-12T08:44:58+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -7173,21 +7173,21 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.21",
+            "version": "0.12.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7"
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/6aaff1196c4f808769774b49a94a60e5fdf18de7",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "phpstan/phpstan": "^0.12.86"
+                "phpstan/phpstan": "^0.12.92"
             },
             "conflict": {
                 "phpunit/phpunit": "<7.0"
@@ -7221,9 +7221,9 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.21"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.22"
             },
-            "time": "2021-07-14T10:48:30+00:00"
+            "time": "2021-08-12T10:53:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9514,5 +9514,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

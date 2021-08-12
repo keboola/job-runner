@@ -19,6 +19,14 @@ Create a service principal to download Internal Queue API image and Job Runner I
 	SP_APP_ID=$(az ad sp show --id http://$SERVICE_PRINCIPAL_NAME --query appId --output tsv)	
     ```
 
+
+Add the repository credentials to the k8s cluster:
+
+    ```bash
+    kubectl create secret docker-registry regcred --docker-server="https://keboolapes.azurecr.io" --docker-username="$SP_APP_ID" --docker-password="$SP_PASSWORD" --namespace dev-job-runner
+    kubectl patch serviceaccount default -p "{\"imagePullSecrets\":[{\"name\":\"regcred\"}]}" --namespace dev-job-runner
+    ```
+
 Login and pull the image:
 
     ```bash
