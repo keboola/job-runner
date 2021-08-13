@@ -70,6 +70,7 @@ ARG APP_USER_NAME
 USER root
 
 ENV APP_ENV dev
+ENV PHPUNIT_RESULT_CACHE /tmp/
 
 # install extensions
 RUN pecl channel-update pecl.php.net \
