@@ -45,13 +45,13 @@ RUN wget https://download.docker.com/linux/debian/gpg \
 # create app user
 RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
     && useradd -m -u $APP_USER_UID -g $APP_USER_GID $APP_USER_NAME \
-    && usermod -a -G root $APP_USER_NAME \
+    && usermod -a -G docker $APP_USER_NAME \
     && printf "%s ALL=(ALL:ALL) NOPASSWD: ALL" "$APP_USER_NAME" >> /etc/sudoers.d/$APP_USER_NAME
 
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install zip \
-	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 COPY composer.* symfony.lock ./
 RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
