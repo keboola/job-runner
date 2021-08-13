@@ -70,7 +70,7 @@ ARG APP_USER_NAME
 USER root
 
 ENV APP_ENV dev
-ENV PHPUNIT_RESULT_CACHE /tmp/
+ENV PHPUNIT_RESULT_CACHE /tmp/ #does not work, but should https://github.com/sebastianbergmann/phpunit/issues/3714
 
 # install extensions
 RUN pecl channel-update pecl.php.net \
