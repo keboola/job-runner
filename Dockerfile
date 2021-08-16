@@ -62,7 +62,7 @@ RUN composer install $COMPOSER_FLAGS \
 
 USER $APP_USER_NAME
 
-CMD php /code/bin/console app:run
+CMD ["php", "/code/bin/console", "app:run"]
 
 
 FROM base AS dev
@@ -82,4 +82,4 @@ RUN pecl channel-update pecl.php.net \
 
 USER $APP_USER_NAME
 
-CMD [/bin/bash]
+CMD ["/bin/bash"]
