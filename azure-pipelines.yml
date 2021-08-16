@@ -98,9 +98,6 @@ stages:
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(tag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):latest
-
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
 
           # Push test image to test AWS ECR
@@ -188,6 +185,7 @@ stages:
               docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
+              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
 
           - task: ECRPushImage@1
