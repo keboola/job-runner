@@ -8,7 +8,7 @@ parameters:
         - '#Method App\\UsageFile::setDataDir\(\) has parameter \$dataDir with no typehint specified.#'
         - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
         - '#Unreachable statement \- code above always terminates\.#'
-    tmpDir: /tmp/
+    tmpDir: /var/cache/
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
