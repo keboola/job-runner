@@ -31,12 +31,14 @@ stages:
               containerRegistry: 'Keboola PS Test ACR'
 
           - script: |
+              set -e
               docker-compose down
               docker-compose build
               docker-compose pull internal-api
             displayName: 'Build Tests'
 
           - script: |
+              set -e
               docker-compose up -d internal-api
               docker-compose logs internal-api
 

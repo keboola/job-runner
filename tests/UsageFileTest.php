@@ -20,7 +20,7 @@ class UsageFileTest extends TestCase
 
     public function setUp(): void
     {
-        $this->temp = new Temp('runner-usage-file-test');
+        $this->temp = new Temp();
         $this->fs = new Filesystem;
         $this->dataDir = $this->temp->getTmpFolder();
         $this->fs->mkdir($this->dataDir . '/out');

@@ -54,7 +54,7 @@ abstract class BaseFunctionalTest extends TestCase
         ]);
         $this->handler = new TestHandler();
         $this->logger = new Logger('test-runner', [$this->handler]);
-        $this->temp = new Temp('docker');
+        $this->temp = new Temp();
         $this->temp->initRunFolder();
         $this->objectEncryptorFactory = new ObjectEncryptorFactory(
             (string) getenv('AWS_KMS_KEY_ID'),

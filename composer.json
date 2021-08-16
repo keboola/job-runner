@@ -83,8 +83,8 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "tests": "phpunit",
-        "phpstan": "phpstan analyse --no-progress --level=max src tests -c phpstan.neon",
+        "tests": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
+        "phpstan": "phpstan analyse --no-progress -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "phpcbf": "phpcbf --extensions=php src tests",
         "phplint": "parallel-lint -j 10 --exclude vendor --exclude bin .",
