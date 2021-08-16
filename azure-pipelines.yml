@@ -68,7 +68,6 @@ stages:
           - script: |
               set -Eeuo pipefail
 
-              docker tag keboola/$(imageName):latest keboola/$(imageName):latest
               docker image save keboola/$(imageName):latest -o $(Build.ArtifactStagingDirectory)/build-image.tar
             displayName: 'Save image'
 
