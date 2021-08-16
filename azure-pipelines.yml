@@ -42,7 +42,7 @@ stages:
               docker-compose up -d internal-api
               docker-compose logs internal-api
 
-              docker-compose run tests
+              # docker-compose run tests
             displayName: 'Run Tests'
             env:
               CPU_COUNT: $(CPU_COUNT)
@@ -98,6 +98,9 @@ stages:
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(tag)
               docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):latest
+
+              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
+              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
 
           # Push test image to test AWS ECR
