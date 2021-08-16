@@ -213,7 +213,7 @@ stages:
           - task: Docker@2
             displayName: 'Push to ACR [$(productionTag), latest]'
             inputs:
-              command: buildAndPush
+              command: push
               containerRegistry: 'Keboola ACR'
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
               repository: $(imageName)
