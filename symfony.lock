@@ -496,9 +496,6 @@
     "symfony/service-contracts": {
         "version": "v2.2.0"
     },
-    "symfony/test-pack": {
-        "version": "v1.0.5"
-    },
     "symfony/translation-contracts": {
         "version": "v2.3.0"
     },
