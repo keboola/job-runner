@@ -63,7 +63,10 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                 'parameters' => [
                     'script' => [
                         'from shutil import copyfile',
+                        'import json',
                         'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
+                        'with open("/data/out/tables/result.csv.manifest", "w") as out_file:',
+                        '   json.dump({"destination": "result"}, out_file)',
                     ],
                 ],
             ],
