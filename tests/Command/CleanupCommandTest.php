@@ -187,14 +187,13 @@ class CleanupCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=<>!$@%#^$');
+        putenv('JOB_ID=111111111111');
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
         ]);
 
-        self::assertTrue($testHandler->hasInfoThatContains('Terminating containers for job "<>!$@%#^$".'));
-        self::assertTrue($testHandler->hasInfoThatContains('Finished container cleanup for job "<>!$@%#^$".'));
+        self::assertTrue($testHandler->hasErrorThatContains('Failed to get job "111111111111" for cleanup:'));
         self::assertEquals(0, $ret);
     }
 
