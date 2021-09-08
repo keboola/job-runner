@@ -62,7 +62,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteSuccess(): void
     {
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -166,7 +166,7 @@ class RunCommandTest extends AbstractCommandTest
             ]
         );
         $configurationId = $componentsApi->addConfiguration($configurationApi)['id'];
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         try {
             $job = $jobFactory->createNewJob([
                 'componentId' => 'keboola.runner-config-test',
@@ -243,7 +243,7 @@ class RunCommandTest extends AbstractCommandTest
     public function testExecuteUnEncryptedJobData(): void
     {
         $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $storageClient = $storageClientFactory->getClient((string) getenv('TEST_STORAGE_API_TOKEN'));
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
@@ -300,7 +300,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteDoubleFailure(): void
     {
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -349,7 +349,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteSkip(): void
     {
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -393,7 +393,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteCustomBackendConfig(): void
     {
-        list($jobFactory, $client) = $this->getJobFactoryAndClient();
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),

@@ -170,7 +170,7 @@ class CleanupCommandTest extends AbstractCommandTest
         $process->mustRun();
         $containers = explode("\n", $process->getOutput());
         // all containers are preserved (no cleanup occurred)
-        self::assertCount(1, array_intersect($nonJobContainers, $containers));
+        self::assertGreaterThan(1, array_intersect($nonJobContainers, $containers));
         self::assertCount(2, array_intersect($jobContainers, $containers));
         putenv('JOB_ID=');
     }
