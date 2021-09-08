@@ -49,7 +49,9 @@ class CleanupCommand extends Command
         try {
             $jobStatus = $this->queueClient->getJob($jobId)->getStatus();
             if ($jobStatus !== JobFactory::STATUS_TERMINATING) {
-                $this->logger->info(sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus));
+                $this->logger->info(
+                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus)
+                );
                 return 0;
             }
         } catch (ClientException $e) {
