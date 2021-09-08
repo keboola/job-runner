@@ -6,6 +6,8 @@ namespace App\Command;
 
 use App\LogInfo;
 use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\JobQueueInternalClient\Client as QueueClient;
+use Keboola\JobQueueInternalClient\JobFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,12 +21,14 @@ class CleanupCommand extends Command
     protected static $defaultName = 'app:cleanup';
     private LoggerInterface $logger;
     private LogProcessor $logProcessor;
+    private QueueClient $queueClient;
 
-    public function __construct(LoggerInterface $logger, LogProcessor $logProcessor)
+    public function __construct(LoggerInterface $logger, LogProcessor $logProcessor, QueueClient $queueClient)
     {
         parent::__construct(self::$defaultName);
         $this->logger = $logger;
         $this->logProcessor = $logProcessor;
+        $this->queueClient = $queueClient;
     }
 
     protected function configure(): void
@@ -41,6 +45,11 @@ class CleanupCommand extends Command
             return 0;
         }
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
+        $jobStatus = $this->queueClient->getJob($jobId)->getStatus();
+        if ($jobStatus !== JobFactory::STATUS_TERMINATING) {
+            $this->logger->info(sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus));
+            return 0;
+        }
         $this->logger->info(sprintf('Terminating containers for job "%s".', $jobId));
         $process = Process::fromShellCommandline(
             sprintf(

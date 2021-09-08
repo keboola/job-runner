@@ -103,6 +103,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  namespace: dev-job-runner
   labels:
     app: dev-job-queue-internal-api
   name: dev-job-queue-internal-api

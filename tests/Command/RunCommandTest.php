@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
-use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
-use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use Psr\Log\NullLogger;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class RunCommandTest extends KernelTestCase
+class RunCommandTest extends AbstractCommandTest
 {
     public function setUp(): void
     {
@@ -67,21 +62,7 @@ class RunCommandTest extends KernelTestCase
 
     public function testExecuteSuccess(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -97,8 +78,8 @@ class RunCommandTest extends KernelTestCase
                 ],
             ],
         ]);
-        self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
         $job = $client->createJob($job);
+        self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -150,20 +131,6 @@ class RunCommandTest extends KernelTestCase
     public function testExecuteVariablesSharedCode(): void
     {
         $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
         $componentsApi = new Components($storageClientFactory->getClient(
             (string) getenv('TEST_STORAGE_API_TOKEN')
         ));
@@ -199,6 +166,7 @@ class RunCommandTest extends KernelTestCase
             ]
         );
         $configurationId = $componentsApi->addConfiguration($configurationApi)['id'];
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         try {
             $job = $jobFactory->createNewJob([
                 'componentId' => 'keboola.runner-config-test',
@@ -275,20 +243,7 @@ class RunCommandTest extends KernelTestCase
     public function testExecuteUnEncryptedJobData(): void
     {
         $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         $storageClient = $storageClientFactory->getClient((string) getenv('TEST_STORAGE_API_TOKEN'));
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
@@ -345,21 +300,7 @@ class RunCommandTest extends KernelTestCase
 
     public function testExecuteDoubleFailure(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -408,21 +349,7 @@ class RunCommandTest extends KernelTestCase
 
     public function testExecuteSkip(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -466,21 +393,7 @@ class RunCommandTest extends KernelTestCase
 
     public function testExecuteCustomBackendConfig(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
-            (string) getenv('AWS_REGION'),
-            '',
-            '',
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
-        $client = new Client(
-            new NullLogger(),
-            $jobFactory,
-            (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
-        );
+        list($jobFactory, $client) = $this->getJobFactoryAndClient();
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
