@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use Keboola\Csv\CsvFile;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\StorageApi\Client as StorageClient;
+use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
@@ -63,6 +65,23 @@ class RunCommandTest extends AbstractCommandTest
     public function testExecuteSuccess(): void
     {
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+        try {
+            $storageClient->dropBucket('in.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+        $storageClient->createBucket('main', 'in');
+        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
+        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
+        $storageClient->createTable('in.c-main', 'someTable', $csv);
+
         $job = $jobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -74,6 +93,16 @@ class RunCommandTest extends AbstractCommandTest
                     'operation' => 'unsafe-dump-config',
                     'arbitrary' => [
                         '#foo' => 'bar',
+                    ],
+                ],
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-main.someTable',
+                                'destination' => 'someTable.csv',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -108,7 +137,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
         self::assertTrue($testHandler->hasInfoThatContains(
-            'Config: { " p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
+            '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
         ));
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
@@ -120,12 +149,11 @@ class RunCommandTest extends AbstractCommandTest
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
         $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
-        $event = end($events);
-        self::assertStringContainsString(
-            'Running component keboola.runner-config-test (row 1 of 1)',
-            $event['message']
-        );
-        self::assertEquals($job->getRunId(), $event['runId']);
+        $messages = array_column($events, 'message');
+        // event from storage
+        self::assertContains('Downloaded file in.c-main.someTable.csv', $messages);
+        // event from runner
+        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
     }
 
     public function testExecuteVariablesSharedCode(): void
