@@ -111,7 +111,7 @@ class RunCommand extends Command
             $containerLogger = new ContainerLogger('container-logger');
             $options['logger'] = $this->logger;
             $clientWithLogger = $this->storageApiFactory->getClient($options);
-            $clientWithLogger->setRunId($jobId);
+            $clientWithLogger->setRunId($job->getRunId());
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             $component = $this->getComponentClass($clientWithoutLogger, $job);
