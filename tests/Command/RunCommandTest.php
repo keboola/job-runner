@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\StorageApiFactory;
+use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
+use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -28,6 +31,7 @@ class RunCommandTest extends AbstractCommandTest
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
         putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
+        putenv('JOB_ID=');
     }
 
     public function testExecuteFailure(): void
@@ -465,5 +469,79 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
+    }
+
+    public function testExecuteCreditsCheck(): void
+    {
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+        $tokenInfo = $storageClient->verifyToken();
+        $tokenInfo['owner']['features'] = 'pay-as-you-go';
+
+        $creditsCheckerMock = self::createMock(CreditsChecker::class);
+        $creditsCheckerMock->method('hasCredits')->willReturn(false);
+
+        $storageClientMock = self::getMockBuilder(StorageClient::class)
+            ->setConstructorArgs([[
+                'url' => getenv('STORAGE_API_URL'),
+                'token' => getenv('TEST_STORAGE_API_TOKEN'),
+            ]])
+            ->onlyMethods(['verifyToken'])
+            ->getMock();
+        $storageClientMock->method('verifyToken')->willReturn($tokenInfo);
+        $storageApiFactoryMock = self::createMock(StorageApiFactory::class);
+        $storageApiFactoryMock->method('getClient')->willReturn($storageClientMock);
+        $storageApiFactoryMock->method('getCreditsChecker')->willReturn($creditsCheckerMock);
+
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        /** @var Client $client */
+        /** @var JobFactory $jobFactory */
+        $job = $jobFactory->createNewJob([
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [],
+        ]);
+        $job = $client->createJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+        $reflection = new ReflectionProperty($command, 'storageApiFactory');
+        $reflection->setAccessible(true);
+        $reflection->setValue($command, $storageApiFactoryMock);
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertEquals(0, $ret);
+        $failedJob = $client->getJob($job->getId());
+        $result = $failedJob->getResult();
+        unset($result['error']['exceptionId']);
+        self::assertSame(
+            [
+                'error' => [
+                    'type' => 'user',
+                ],
+                'images' => null,
+                'message' => 'You do not have credits to run a job',
+                'configVersion' => null,
+            ],
+            $result
+        );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use Keboola\BillingApi\CreditsChecker;
 use Keboola\StorageApi\Client;
 
 class StorageApiFactory
@@ -20,6 +21,11 @@ class StorageApiFactory
         $options['jobPollRetryDelay'] = self::getStepPollDelayFunction();
         $options['url'] = $this->getUrl();
         return new Client($options);
+    }
+
+    public function getCreditsChecker(Client $client): CreditsChecker
+    {
+        return new CreditsChecker($client);
     }
 
     public function getUrl(): string

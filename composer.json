@@ -20,6 +20,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "keboola/api-error-control": "^3.4.0",
+        "keboola/billing-api-php-client": "^0.1",
         "keboola/configuration-variables-resolver": "^1.0.0",
         "keboola/dockerbundle": "dev-odin-library-3@dev",
         "keboola/job-queue-internal-api-php-client": "^6.2",

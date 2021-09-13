@@ -114,6 +114,11 @@ class RunCommand extends Command
             $clientWithLogger->setRunId($job->getRunId());
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
+            $creditsChecker = $this->storageApiFactory->getCreditsChecker($clientWithLogger);
+            if (!$creditsChecker->hasCredits()) {
+                throw new UserException('You do not have credits to run a job');
+            }
+
             $component = $this->getComponentClass($clientWithoutLogger, $job);
             $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWithoutLogger);
 
