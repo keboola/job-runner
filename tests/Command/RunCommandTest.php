@@ -6,8 +6,8 @@ namespace App\Tests\Command;
 
 use App\StorageApiFactory;
 use Keboola\BillingApi\CreditsChecker;
-use Keboola\JobQueueInternalClient\Client;
 use Keboola\Csv\CsvFile;
+use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
