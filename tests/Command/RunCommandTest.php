@@ -105,7 +105,7 @@ class RunCommandTest extends AbstractCommandTest
                             [
                                 'source' => 'in.c-main.someTable',
                                 'destination' => 'someTable.csv',
-            ],
+                            ],
                         ],
                     ],
                 ],
