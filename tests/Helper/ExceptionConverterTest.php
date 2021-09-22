@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
 use Throwable;
 
-class ExceptionConverterHelperTest extends TestCase
+class ExceptionConverterTest extends TestCase
 {
     /**
      * @dataProvider provideExceptions
