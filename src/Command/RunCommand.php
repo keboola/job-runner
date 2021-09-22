@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\ExceptionConverterHelper;
+use App\Helper\ExceptionConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiFactory;
@@ -183,7 +183,7 @@ class RunCommand extends Command
             $this->postJobResult(
                 $jobId,
                 JobFactory::STATUS_ERROR,
-                ExceptionConverterHelper::convertExceptionToResult($this->logger, $e, $jobId, $outputs)
+                ExceptionConverter::convertExceptionToResult($this->logger, $e, $jobId, $outputs)
             );
         }
         // end with success so that there are no restarts

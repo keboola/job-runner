@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\ExceptionConverterHelper;
+use App\Helper\ExceptionConverter;
 use Exception;
 use Generator;
 use Keboola\DockerBundle\Docker\Runner\Output;
@@ -28,7 +28,7 @@ class ExceptionConverterHelperTest extends TestCase
         string $expectedLog
     ): void {
         $logger = new TestLogger();
-        $result = ExceptionConverterHelper::convertExceptionToResult($logger, $exception, '123', []);
+        $result = ExceptionConverter::convertExceptionToResult($logger, $exception, '123', []);
         self::assertEquals($expectedMessage, $result->getMessage());
         self::assertEquals($expectedErrorType, $result->getErrorType());
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
@@ -72,7 +72,7 @@ class ExceptionConverterHelperTest extends TestCase
         $output->setImages(['a' => 'b']);
         $output->setConfigVersion('123');
 
-        $result = ExceptionConverterHelper::convertExceptionToResult(
+        $result = ExceptionConverter::convertExceptionToResult(
             $logger,
             new UserException('some error'),
             '123',

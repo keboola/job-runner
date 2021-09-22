@@ -12,7 +12,7 @@ use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class ExceptionConverterHelper
+class ExceptionConverter
 {
     public static function convertExceptionToResult(
         LoggerInterface $logger,
