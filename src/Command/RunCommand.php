@@ -25,7 +25,7 @@ use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\JobResult;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApiBranch\ClientWrapper;

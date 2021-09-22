@@ -7,7 +7,7 @@ namespace App;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\ErrorControl\Message\ExceptionTransformer;
-use Keboola\JobQueueInternalClient\JobFactory\JobResult;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use Psr\Log\LoggerInterface;
 use Throwable;
