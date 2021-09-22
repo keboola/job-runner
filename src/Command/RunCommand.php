@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Helper\ExceptionConverter;
+use App\Helper\TableResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiFactory;
@@ -25,8 +26,9 @@ use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\JobQueueInternalClient\JobPatchData;
+use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
@@ -77,6 +79,7 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobId = (string) getenv('JOB_ID');
+        /** @var Output[] $outputs */
         $outputs = [];
         try {
             // get job
@@ -159,10 +162,22 @@ class RunCommand extends Command
                 $job->getConfigRowIds(),
                 $outputs
             );
+
             $result = new JobResult();
             if (count($outputs) === 0) {
                 $result->setMessage('No configurations executed.');
             } else {
+                $outputTables = new TableCollection();
+
+                foreach ($outputs as $output) {
+                    $tableQueue = $output->getTableQueue();
+                    if ($tableQueue) {
+                        foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
+                            $outputTables->addTable(TableResultConverter::convertTableInfoToTableResult($tableInfo));
+                        }
+                    }
+                }
+
                 $result
                     ->setMessage('Component processing finished.')
                     ->setConfigVersion((string) $outputs[0]->getConfigVersion())
@@ -173,7 +188,9 @@ class RunCommand extends Command
                             },
                             $outputs
                         )
-                    );
+                    )
+                    ->setOutputTables($outputTables)
+                ;
             }
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
