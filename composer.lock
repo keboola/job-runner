@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30ddd76c71598852e37fad4ba874215e",
+    "content-hash": "ca5d6290c989219f79dcabf08bd89414",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -803,22 +803,23 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-erik-PS-2621",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c28f2aa1fea90cce0cde115363730902d57ff90f"
+                "reference": "0393e7dc232932450fe87c587dbe6453ce994376"
             },
             "require": {
                 "ext-json": "*",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^2.0.0",
-                "keboola/input-mapping": "^12.9.0",
+                "keboola/input-mapping": "dev-odin-PS-2620 as 12.12",
                 "keboola/oauth-v2-php-client": "^2.3.0",
                 "keboola/object-encryptor": "^0.3",
-                "keboola/output-mapping": "^14.9",
+                "keboola/output-mapping": "dev-erik-PS-2619 as 14.8",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/staging-provider": "^2.0",
+                "keboola/storage-api-client": "dev-odin-PS-2620 as 12.4.0",
                 "mustache/mustache": "^2.13",
                 "symfony/http-foundation": "^4.1",
                 "symfony/monolog-bridge": "^4.1",
@@ -847,7 +848,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2021-09-01T14:27:55+00:00"
+            "time": "2021-09-22T15:28:15+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -899,21 +900,21 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "12.11.0",
+            "version": "dev-odin-PS-2620",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "605252b6a0115de22e175383ac2b3c72eb319d66"
+                "reference": "53eb846b0f9c42e334fc93f057c96aacba8a0c64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/605252b6a0115de22e175383ac2b3c72eb319d66",
-                "reference": "605252b6a0115de22e175383ac2b3c72eb319d66",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/53eb846b0f9c42e334fc93f057c96aacba8a0c64",
+                "reference": "53eb846b0f9c42e334fc93f057c96aacba8a0c64",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "keboola/storage-api-client": "^12.3",
+                "keboola/storage-api-client": "dev-odin-PS-2620 as 12.4.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^1.1",
                 "symfony/config": "^2.8.52|^4.1",
                 "symfony/finder": "^2.8.52|^4.1",
@@ -944,22 +945,22 @@
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
                 "issues": "https://github.com/keboola/input-mapping/issues",
-                "source": "https://github.com/keboola/input-mapping/tree/12.11.0"
+                "source": "https://github.com/keboola/input-mapping/tree/odin-PS-2620"
             },
-            "time": "2021-08-24T11:57:22+00:00"
+            "time": "2021-09-21T07:45:02+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "6.2.0",
+            "version": "dev-erik-PS-2630",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "b1639bd55e30d7c7e7e21178d61e9e1e8253402a"
+                "reference": "cde7a903a326dc0854d6c665141783dc4a027b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/b1639bd55e30d7c7e7e21178d61e9e1e8253402a",
-                "reference": "b1639bd55e30d7c7e7e21178d61e9e1e8253402a",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/cde7a903a326dc0854d6c665141783dc4a027b62",
+                "reference": "cde7a903a326dc0854d6c665141783dc4a027b62",
                 "shasum": ""
             },
             "require": {
@@ -1004,9 +1005,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/6.2.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-PS-2630"
             },
-            "time": "2021-09-06T08:30:12+00:00"
+            "time": "2021-09-21T09:42:02+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1110,25 +1111,25 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "14.10.1",
+            "version": "dev-erik-PS-2619",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "2987b210051f1c69b540f580cce1ad94cb395c28"
+                "reference": "a5750a2710233b134eca36205e1573150d470e9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/2987b210051f1c69b540f580cce1ad94cb395c28",
-                "reference": "2987b210051f1c69b540f580cce1ad94cb395c28",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/a5750a2710233b134eca36205e1573150d470e9d",
+                "reference": "a5750a2710233b134eca36205e1573150d470e9d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.5.5",
-                "keboola/input-mapping": "^12.11",
+                "keboola/input-mapping": "dev-odin-PS-2620",
                 "keboola/sanitizer": "^0.1",
-                "keboola/storage-api-client": "^12.4",
-                "keboola/storage-api-php-client-branch-wrapper": "^1.0.0",
+                "keboola/storage-api-client": "dev-odin-PS-2620 as 12.4.0",
+                "keboola/storage-api-php-client-branch-wrapper": "^1.1",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
                 "symfony/config": "^2.8.52|^4.1",
@@ -1161,9 +1162,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/14.10.1"
+                "source": "https://github.com/keboola/output-mapping/tree/erik-PS-2619"
             },
-            "time": "2021-09-14T06:25:25+00:00"
+            "time": "2021-09-22T10:31:29+00:00"
         },
         {
             "name": "keboola/php-encryption",
@@ -1435,16 +1436,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "12.4.0",
+            "version": "dev-odin-PS-2620",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "a8701c9cfd9a4924d107f29d5062f0b795e4ca75"
+                "reference": "0859c48b384274b2c15f09708096dad1a0ddd7df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/a8701c9cfd9a4924d107f29d5062f0b795e4ca75",
-                "reference": "a8701c9cfd9a4924d107f29d5062f0b795e4ca75",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/0859c48b384274b2c15f09708096dad1a0ddd7df",
+                "reference": "0859c48b384274b2c15f09708096dad1a0ddd7df",
                 "shasum": ""
             },
             "require": {
@@ -1464,7 +1465,7 @@
                 "ext-pdo_pgsql": "*",
                 "keboola/php-csv-db-import": "^2.2",
                 "keboola/retry": "^0.5.0",
-                "keboola/table-backend-utils": "^0.14",
+                "keboola/table-backend-utils": "^0.16",
                 "phpcompatibility/php-compatibility": "*",
                 "phpstan/phpstan-shim": "^0.9.2",
                 "phpunit/phpunit": "^7.0",
@@ -1487,9 +1488,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/12.4.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/odin-PS-2620"
             },
-            "time": "2021-08-26T14:02:50+00:00"
+            "time": "2021-09-22T13:15:56+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -9498,10 +9499,33 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-odin-PS-2620",
+            "alias": "12.12",
+            "alias_normalized": "12.12.0.0"
+        },
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-erik-PS-2619",
+            "alias": "14.8",
+            "alias_normalized": "14.8.0.0"
+        },
+        {
+            "package": "keboola/storage-api-client",
+            "version": "dev-odin-PS-2620",
+            "alias": "12.4.0",
+            "alias_normalized": "12.4.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20,
+        "keboola/job-queue-internal-api-php-client": 20,
+        "keboola/output-mapping": 20,
+        "keboola/storage-api-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
