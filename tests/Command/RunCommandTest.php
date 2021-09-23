@@ -158,6 +158,123 @@ class RunCommandTest extends AbstractCommandTest
         self::assertContains('Downloaded file in.c-main.someTable.csv', $messages);
         // event from runner
         self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
+
+        $failedJob = $client->getJob($job->getId());
+        $result = $failedJob->getResult();
+        self::assertArrayHasKey('output', $result);
+        self::assertArrayHasKey('tables', $result['output']);
+        self::assertSame([], $result['output']['tables']);
+    }
+
+    public function testExecuteSuccessWithOutputInResult(): void
+    {
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+        try {
+            $storageClient->dropBucket('in.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+        try {
+            $storageClient->dropBucket('out.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+        $storageClient->createBucket('main', 'in');
+        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
+        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
+        $storageClient->createTable('in.c-main', 'someTable', $csv);
+
+        $job = $jobFactory->createNewJob([
+            'componentId' => 'keboola.runner-workspace-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'copy',
+                ],
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-main.someTable',
+                                'destination' => 'someTable',
+                            ],
+                        ],
+                    ],
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'someTable-copy',
+                                'destination' => 'out.c-main.someTable',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        $job = $client->createJob($job);
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        putenv('JOB_ID=' . $job->getId());
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        $jobRecord = [];
+        foreach ($testHandler->getRecords() as $record) {
+            if ($record['message'] === 'Output mapping done.') {
+                $jobRecord = $record;
+            }
+        }
+        self::assertNotEmpty($jobRecord);
+        self::assertEquals('keboola.runner-workspace-test', $jobRecord['component']);
+        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertEquals(0, $ret);
+
+        $job = $client->getJob($job->getId());
+        self::assertSame('success', $job->getStatus());
+
+        $result = $job->getResult();
+        self::assertArrayHasKey('output', $result);
+        self::assertArrayHasKey('tables', $result['output']);
+
+        $outputTable = reset($result['output']['tables']);
+        self::assertSame([
+            'id' => 'out.c-main.someTable',
+            'name' => 'someTable',
+            'columns' => [
+                [
+                    'name' => 'a',
+                ],
+                [
+                    'name' => 'b',
+                ],
+            ],
+            'displayName' => 'someTable',
+        ], $outputTable);
     }
 
     public function testExecuteVariablesSharedCode(): void
