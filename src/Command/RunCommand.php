@@ -22,6 +22,7 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\JobFactory;
@@ -168,12 +169,20 @@ class RunCommand extends Command
                 $result->setMessage('No configurations executed.');
             } else {
                 $outputTables = new TableCollection();
-
+                $inputTables = new TableCollection();
                 foreach ($outputs as $output) {
                     $tableQueue = $output->getTableQueue();
                     if ($tableQueue) {
                         foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
                             $outputTables->addTable(TableResultConverter::convertTableInfoToTableResult($tableInfo));
+                        }
+                    }
+
+                    $inputTableResult = $output->getInputTableResult();
+                    if ($inputTableResult) {
+                        foreach ($inputTableResult->getTables() as $tableInfo) {
+                            /** @var TableInfo $tableInfo */
+                            $inputTables->addTable(TableResultConverter::convertTableInfoToTableResult($tableInfo));
                         }
                     }
                 }
@@ -190,6 +199,7 @@ class RunCommand extends Command
                         )
                     )
                     ->setOutputTables($outputTables)
+                    ->setInputTables($inputTables)
                 ;
             }
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));

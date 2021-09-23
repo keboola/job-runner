@@ -66,7 +66,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals(0, $ret);
     }
 
-    public function testExecuteSuccess(): void
+    public function testExecuteSuccessWithInputInResult(): void
     {
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
 
@@ -164,9 +164,26 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
         self::assertSame([], $result['output']['tables']);
+
+        self::assertArrayHasKey('input', $result);
+        self::assertArrayHasKey('tables', $result['input']);
+        $inputTable = reset($result['input']['tables']);
+        self::assertSame([
+            'id' => 'in.c-main.someTable',
+            'name' => 'someTable',
+            'columns' => [
+                [
+                    'name' => 'a',
+                ],
+                [
+                    'name' => 'b',
+                ],
+            ],
+            'displayName' => 'someTable',
+        ], $inputTable);
     }
 
-    public function testExecuteSuccessWithOutputInResult(): void
+    public function testExecuteSuccessWithInputOutputInResult(): void
     {
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
 
@@ -260,7 +277,6 @@ class RunCommandTest extends AbstractCommandTest
         $result = $job->getResult();
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
-
         $outputTable = reset($result['output']['tables']);
         self::assertSame([
             'id' => 'out.c-main.someTable',
@@ -275,6 +291,23 @@ class RunCommandTest extends AbstractCommandTest
             ],
             'displayName' => 'someTable',
         ], $outputTable);
+
+        self::assertArrayHasKey('input', $result);
+        self::assertArrayHasKey('tables', $result['input']);
+        $inputTable = reset($result['input']['tables']);
+        self::assertSame([
+            'id' => 'in.c-main.someTable',
+            'name' => 'someTable',
+            'columns' => [
+                [
+                    'name' => 'a',
+                ],
+                [
+                    'name' => 'b',
+                ],
+            ],
+            'displayName' => 'someTable',
+        ], $inputTable);
     }
 
     public function testExecuteVariablesSharedCode(): void
