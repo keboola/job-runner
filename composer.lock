@@ -904,12 +904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "53eb846b0f9c42e334fc93f057c96aacba8a0c64"
+                "reference": "65242d19ea1005dc02b33ec569ac65e04d2add2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/53eb846b0f9c42e334fc93f057c96aacba8a0c64",
-                "reference": "53eb846b0f9c42e334fc93f057c96aacba8a0c64",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/65242d19ea1005dc02b33ec569ac65e04d2add2d",
+                "reference": "65242d19ea1005dc02b33ec569ac65e04d2add2d",
                 "shasum": ""
             },
             "require": {
@@ -947,7 +947,7 @@
                 "issues": "https://github.com/keboola/input-mapping/issues",
                 "source": "https://github.com/keboola/input-mapping/tree/odin-PS-2620"
             },
-            "time": "2021-09-21T07:45:02+00:00"
+            "time": "2021-09-23T12:20:16+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
