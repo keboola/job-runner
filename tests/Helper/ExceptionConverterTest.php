@@ -33,7 +33,7 @@ class ExceptionConverterTest extends TestCase
         self::assertEquals($expectedErrorType, $result->getErrorType());
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
         self::assertNull($result->getConfigVersion());
-        self::assertNull($result->getImages());
+        self::assertSame([], $result->getImages());
         self::assertTrue($logger->hasErrorThatContains($expectedLog));
     }
 

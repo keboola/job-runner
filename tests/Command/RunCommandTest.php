@@ -654,7 +654,13 @@ class RunCommandTest extends AbstractCommandTest
                 'error' => [
                     'type' => 'user',
                 ],
-                'images' => null,
+                'input' => [
+                    'tables' => [],
+                ],
+                'images' => [],
+                'output' => [
+                    'tables' => [],
+                ],
                 'message' => 'You do not have credits to run a job',
                 'configVersion' => null,
             ],
