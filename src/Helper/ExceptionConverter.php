@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Helper;
 
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\ErrorControl\Message\ExceptionTransformer;
-use Keboola\JobQueueInternalClient\JobFactory\JobResult;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class ExceptionConverterHelper
+class ExceptionConverter
 {
     public static function convertExceptionToResult(
         LoggerInterface $logger,

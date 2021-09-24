@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Helper;
 
-use App\ExceptionConverterHelper;
+use App\Helper\ExceptionConverter;
 use Exception;
 use Generator;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
-use Keboola\JobQueueInternalClient\JobFactory\JobResult;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
 use Throwable;
 
-class ExceptionConverterHelperTest extends TestCase
+class ExceptionConverterTest extends TestCase
 {
     /**
      * @dataProvider provideExceptions
@@ -28,12 +28,12 @@ class ExceptionConverterHelperTest extends TestCase
         string $expectedLog
     ): void {
         $logger = new TestLogger();
-        $result = ExceptionConverterHelper::convertExceptionToResult($logger, $exception, '123', []);
+        $result = ExceptionConverter::convertExceptionToResult($logger, $exception, '123', []);
         self::assertEquals($expectedMessage, $result->getMessage());
         self::assertEquals($expectedErrorType, $result->getErrorType());
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
         self::assertNull($result->getConfigVersion());
-        self::assertNull($result->getImages());
+        self::assertSame([], $result->getImages());
         self::assertTrue($logger->hasErrorThatContains($expectedLog));
     }
 
@@ -72,7 +72,7 @@ class ExceptionConverterHelperTest extends TestCase
         $output->setImages(['a' => 'b']);
         $output->setConfigVersion('123');
 
-        $result = ExceptionConverterHelper::convertExceptionToResult(
+        $result = ExceptionConverter::convertExceptionToResult(
             $logger,
             new UserException('some error'),
             '123',
