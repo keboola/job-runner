@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2a5fe1954165bf1ece222743fd0b17d",
+    "content-hash": "88c17a6fd137782207414d500fb1539b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.194.4",
+            "version": "3.194.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "20084e36b549b005fdcd39fa48056670ae9a0829"
+                "reference": "33f755378debdbc7e010157811fc47aebf090c53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/20084e36b549b005fdcd39fa48056670ae9a0829",
-                "reference": "20084e36b549b005fdcd39fa48056670ae9a0829",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/33f755378debdbc7e010157811fc47aebf090c53",
+                "reference": "33f755378debdbc7e010157811fc47aebf090c53",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.194.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.194.5"
             },
-            "time": "2021-09-23T18:16:55+00:00"
+            "time": "2021-09-24T18:25:24+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -1001,16 +1001,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "7.0.0",
+            "version": "dev-odin-PS-2645",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "f7d6b203b3c3b997601034ff9920f8e46d04c736"
+                "reference": "1991a2e667d90c5da021d5dae0e89ed980639f35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/f7d6b203b3c3b997601034ff9920f8e46d04c736",
-                "reference": "f7d6b203b3c3b997601034ff9920f8e46d04c736",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/1991a2e667d90c5da021d5dae0e89ed980639f35",
+                "reference": "1991a2e667d90c5da021d5dae0e89ed980639f35",
                 "shasum": ""
             },
             "require": {
@@ -1055,9 +1055,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/7.0.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-PS-2645"
             },
-            "time": "2021-09-24T08:46:05+00:00"
+            "time": "2021-09-24T15:33:22+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -3935,16 +3935,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.16.1",
+            "version": "v1.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "701891891209e70fb60e5ff3a5cd62216d66d7ab"
+                "reference": "f1e77e62bcb068bf094f4781eca1436ef818ff72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/701891891209e70fb60e5ff3a5cd62216d66d7ab",
-                "reference": "701891891209e70fb60e5ff3a5cd62216d66d7ab",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/f1e77e62bcb068bf094f4781eca1436ef818ff72",
+                "reference": "f1e77e62bcb068bf094f4781eca1436ef818ff72",
                 "shasum": ""
             },
             "require": {
@@ -3983,7 +3983,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.16.1"
+                "source": "https://github.com/symfony/flex/tree/v1.16.2"
             },
             "funding": [
                 {
@@ -3999,7 +3999,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-23T14:52:29+00:00"
+            "time": "2021-09-24T08:45:18+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -9553,7 +9553,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
