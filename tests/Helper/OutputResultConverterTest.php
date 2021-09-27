@@ -19,7 +19,7 @@ class OutputResultConverterTest extends TestCase
         $jobResult = OutputResultConverter::convertOutputsToResult([]);
         self::assertSame(
             [
-                'message' => null,
+                'message' => 'No configurations executed.',
                 'configVersion' => null,
                 'images' => [],
                 'input' => [

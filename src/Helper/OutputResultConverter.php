@@ -25,9 +25,9 @@ class OutputResultConverter
         $jobResult = new JobResult();
         if (count($outputs) === 0) {
             $jobResult->setMessage('No configurations executed.');
-        } else {
-            $jobResult->setMessage('Component processing finished.');
+            return $jobResult;
         }
+        $jobResult->setMessage('Component processing finished.');
 
         $outputTables = new TableCollection();
         $inputTables = new TableCollection();
