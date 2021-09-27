@@ -186,7 +186,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => '123',
+                    'inputTablesBytesSum' => 0,
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
