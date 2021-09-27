@@ -328,7 +328,7 @@ class OutputResultConverterTest extends TestCase
                             'provider' => 'user',
                             'timestamp' => '2020-09-14T16:55:34+0200',
                         ],
-                    ]
+                    ],
                 ],
             ]),
             'fourth' => new TableInfo([

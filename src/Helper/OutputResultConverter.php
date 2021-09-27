@@ -19,11 +19,10 @@ class OutputResultConverter
 {
     /**
      * @param Output[] $outputs
-     * @param JobResult $jobResult
      */
     public static function convertOutputsToResult(array $outputs, JobResult $jobResult): void
     {
-         if (!$outputs) {
+        if (!$outputs) {
             return;
         }
 
@@ -46,7 +45,7 @@ class OutputResultConverter
             }
         }
         $jobResult
-            ->setConfigVersion((string) $outputs[0]->getConfigVersion())
+            ->setConfigVersion((string)$outputs[0]->getConfigVersion())
             ->setImages(self::getImages($outputs))
             ->setOutputTables($outputTables)
             ->setInputTables($inputTables);
@@ -54,7 +53,6 @@ class OutputResultConverter
 
     /**
      * @param Output[] $outputs
-     * @param JobMetrics $jobMetrics
      */
     public static function convertOutputsToMetrics(array $outputs, JobMetrics $jobMetrics): void
     {
