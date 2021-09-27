@@ -20,10 +20,13 @@ class OutputResultConverter
     /**
      * @param Output[] $outputs
      */
-    public static function convertOutputsToResult(array $outputs, JobResult $jobResult): void
+    public static function convertOutputsToResult(array $outputs): JobResult
     {
-        if (!$outputs) {
-            return;
+        $jobResult = new JobResult();
+        if (count($outputs) === 0) {
+            $jobResult->setMessage('No configurations executed.');
+        } else {
+            $jobResult->setMessage('Component processing finished.');
         }
 
         $outputTables = new TableCollection();
@@ -49,15 +52,17 @@ class OutputResultConverter
             ->setImages(self::getImages($outputs))
             ->setOutputTables($outputTables)
             ->setInputTables($inputTables);
+        return $jobResult;
     }
 
     /**
      * @param Output[] $outputs
      */
-    public static function convertOutputsToMetrics(array $outputs, JobMetrics $jobMetrics): void
+    public static function convertOutputsToMetrics(array $outputs): JobMetrics
     {
+        $jobMetrics = new JobMetrics();
         if (!$outputs) {
-            return;
+            return $jobMetrics;
         }
 
         $sum = 0;
@@ -73,6 +78,7 @@ class OutputResultConverter
             }
         }
         $jobMetrics->setInputTablesBytesSum($sum);
+        return $jobMetrics;
     }
 
     private static function getImages(array $outputs): array

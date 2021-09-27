@@ -8,8 +8,6 @@ use App\Helper\OutputResultConverter;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
-use Keboola\JobQueueInternalClient\Result\JobMetrics;
-use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\OutputMapping\DeferredTasks\LoadTableQueue;
 use Keboola\OutputMapping\Table\Result as OutputResult;
 use PHPUnit\Framework\TestCase;
@@ -18,8 +16,7 @@ class OutputResultConverterTest extends TestCase
 {
     public function testEmptyResult(): void
     {
-        $jobResult = new JobResult();
-        OutputResultConverter::convertOutputsToResult([], $jobResult);
+        $jobResult = OutputResultConverter::convertOutputsToResult([]);
         self::assertSame(
             [
                 'message' => null,
@@ -38,8 +35,7 @@ class OutputResultConverterTest extends TestCase
 
     public function testNoMetrics(): void
     {
-        $jobMetrics = new JobMetrics();
-        OutputResultConverter::convertOutputsToMetrics([], $jobMetrics);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([]);
         self::assertSame(
             [
                 'storage' => [
@@ -52,11 +48,10 @@ class OutputResultConverterTest extends TestCase
 
     public function testEmptyMetrics(): void
     {
-        $jobMetrics = new JobMetrics();
         $output = new Output();
         $inputTableResult = new InputResult();
         $output->setInputTableResult($inputTableResult);
-        OutputResultConverter::convertOutputsToMetrics([$output], $jobMetrics);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([$output]);
         self::assertSame(
             [
                 'storage' => [
@@ -69,8 +64,6 @@ class OutputResultConverterTest extends TestCase
 
     public function testFull(): void
     {
-        $jobResult = new JobResult();
-
         $inputTableResult1 = new InputResult();
         $inputTableResult1->addTable($this->getTableInfo()['first']);
         $inputTableResult1->addTable($this->getTableInfo()['second']);
@@ -134,9 +127,8 @@ class OutputResultConverterTest extends TestCase
         $output2->setTableQueue($loadQueueMock2);
 
         $outputs = [$output1, $output2];
-        OutputResultConverter::convertOutputsToResult($outputs, $jobResult);
-        $jobMetrics = new JobMetrics();
-        OutputResultConverter::convertOutputsToMetrics($outputs, $jobMetrics);
+        $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs);
         self::assertSame(
             [
                 'message' => null,

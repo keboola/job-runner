@@ -166,15 +166,8 @@ class RunCommand extends Command
                 $outputs
             );
 
-            $result = new JobResult();
-            $metrics = new JobMetrics();
-            if (count($outputs) === 0) {
-                $result->setMessage('No configurations executed.');
-            } else {
-                $result->setMessage('Component processing finished.');
-                OutputResultConverter::convertOutputsToResult($outputs, $result);
-                OutputResultConverter::convertOutputsToMetrics($outputs, $metrics);
-            }
+            $result = OutputResultConverter::convertOutputsToResult($outputs);
+            $metrics = OutputResultConverter::convertOutputsToMetrics($outputs);
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
