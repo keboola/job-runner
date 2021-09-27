@@ -131,7 +131,7 @@ class OutputResultConverterTest extends TestCase
         $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs);
         self::assertSame(
             [
-                'message' => null,
+                'message' => 'Component processing finished.',
                 'configVersion' => '123',
                 'images' => [
                     ['a' => 'b'],
