@@ -190,10 +190,10 @@ class RunCommand extends Command
         return 0;
     }
 
-    private function postJobResult(string $jobId, string $status, JobResult $result): void
+    private function postJobResult(string $jobId, string $status, JobResult $result, ?JobMetrics $metrics = null): void
     {
         try {
-            $this->queueClient->postJobResult($jobId, $status, $result);
+            $this->queueClient->postJobResult($jobId, $status, $result, $metrics);
         } catch (Throwable $e) {
             $this->logger->error(
                 sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage())
