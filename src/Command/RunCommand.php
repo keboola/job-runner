@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Helper\ExceptionConverter;
+use App\Helper\OutputResultConverter;
 use App\Helper\TableResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
@@ -29,6 +30,7 @@ use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
+use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApiBranch\ClientWrapper;
@@ -164,46 +166,10 @@ class RunCommand extends Command
                 $outputs
             );
 
-            $result = new JobResult();
-            if (count($outputs) === 0) {
-                $result->setMessage('No configurations executed.');
-            } else {
-                $outputTables = new TableCollection();
-                $inputTables = new TableCollection();
-                foreach ($outputs as $output) {
-                    $tableQueue = $output->getTableQueue();
-                    if ($tableQueue) {
-                        foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
-                            $outputTables->addTable(TableResultConverter::convertTableInfoToTableResult($tableInfo));
-                        }
-                    }
-
-                    $inputTableResult = $output->getInputTableResult();
-                    if ($inputTableResult) {
-                        foreach ($inputTableResult->getTables() as $tableInfo) {
-                            /** @var TableInfo $tableInfo */
-                            $inputTables->addTable(TableResultConverter::convertTableInfoToTableResult($tableInfo));
-                        }
-                    }
-                }
-
-                $result
-                    ->setMessage('Component processing finished.')
-                    ->setConfigVersion((string) $outputs[0]->getConfigVersion())
-                    ->setImages(
-                        array_map(
-                            function (Output $output) {
-                                return $output->getImages();
-                            },
-                            $outputs
-                        )
-                    )
-                    ->setOutputTables($outputTables)
-                    ->setInputTables($inputTables)
-                ;
-            }
+            $result = OutputResultConverter::convertOutputsToResult($outputs);
+            $metrics = OutputResultConverter::convertOutputsToMetrics($outputs);
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
-            $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result);
+            $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
             $this->logger->info(sprintf('Job "%s" is already running', $jobId));
         } catch (Throwable $e) {
@@ -217,10 +183,10 @@ class RunCommand extends Command
         return 0;
     }
 
-    private function postJobResult(string $jobId, string $status, JobResult $result): void
+    private function postJobResult(string $jobId, string $status, JobResult $result, ?JobMetrics $metrics = null): void
     {
         try {
-            $this->queueClient->postJobResult($jobId, $status, $result);
+            $this->queueClient->postJobResult($jobId, $status, $result, $metrics);
         } catch (Throwable $e) {
             $this->logger->error(
                 sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage())

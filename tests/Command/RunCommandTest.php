@@ -9,6 +9,7 @@ use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
@@ -159,8 +160,9 @@ class RunCommandTest extends AbstractCommandTest
         // event from runner
         self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
 
-        $failedJob = $client->getJob($job->getId());
-        $result = $failedJob->getResult();
+        /** @var Job $finishedJob */
+        $finishedJob = $client->getJob($job->getId());
+        $result = $finishedJob->getResult();
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
         self::assertSame([], $result['output']['tables']);
@@ -181,6 +183,14 @@ class RunCommandTest extends AbstractCommandTest
             ],
             'displayName' => 'someTable',
         ], $inputTable);
+        self::assertSame(
+            [
+                'storage' => [
+                    'inputTablesBytesSum' => 0,
+                ],
+            ],
+            $finishedJob->getMetrics()->jsonSerialize()
+        );
     }
 
     public function testExecuteSuccessWithInputOutputInResult(): void
