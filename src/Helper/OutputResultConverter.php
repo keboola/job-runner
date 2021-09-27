@@ -45,7 +45,7 @@ class OutputResultConverter
             }
         }
         $jobResult
-            ->setConfigVersion((string)$outputs[0]->getConfigVersion())
+            ->setConfigVersion((string) $outputs[0]->getConfigVersion())
             ->setImages(self::getImages($outputs))
             ->setOutputTables($outputTables)
             ->setInputTables($inputTables);
