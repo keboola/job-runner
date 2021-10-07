@@ -48,7 +48,7 @@ spec:
               cpu: "250m"
               memory: "256Mi"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           command:
             - "/bin/sh"
           args:
@@ -77,10 +77,12 @@ spec:
               value: '0'
             - name: JOB_QUEUE_INTERNAL_API_AUTH_TOKEN
               value: 'sampleToken'
+            - name: APP_ENV
+              value: 'dev'
           readinessProbe:
             httpGet:
               path: /health-check
-              port: 80
+              port: 8080
               httpHeaders:
                 - name: Host
                   value: KubernetesReadinessProbe
@@ -90,7 +92,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              port: 80
+              port: 8080
               path: /health-check
               httpHeaders:
                 - name: Host
@@ -115,6 +117,6 @@ spec:
     app: dev-job-queue-internal-api
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
       protocol: TCP
       name: http
