@@ -188,6 +188,9 @@ class RunCommandTest extends AbstractCommandTest
                 'storage' => [
                     'inputTablesBytesSum' => 0,
                 ],
+                'backend' => [
+                    'size' => 'small',
+                ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
         );
