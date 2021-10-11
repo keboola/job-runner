@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
+use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoaderInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
@@ -76,7 +77,19 @@ class OutputResultConverter
                     }
                 }
             }
+
+            /** @var ?DataLoaderInterface $dataLoader */
+            $dataLoader = $output->getDataLoader();
+            if (!$dataLoader) {
+                continue;
+            }
+
+            $workspaceBackendSize = $dataLoader->getWorkspaceBackendSize();
+            if ($workspaceBackendSize) {
+                $jobMetrics->setBackendSize($workspaceBackendSize);
+            }
         }
+
         $jobMetrics->setInputTablesBytesSum($sum);
         return $jobMetrics;
     }

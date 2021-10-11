@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Helper;
 
 use App\Helper\OutputResultConverter;
+use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoader;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
@@ -41,6 +42,9 @@ class OutputResultConverterTest extends TestCase
                 'storage' => [
                     'inputTablesBytesSum' => null,
                 ],
+                'backend' => [
+                    'size' => null,
+                ],
             ],
             $jobMetrics->jsonSerialize()
         );
@@ -56,6 +60,9 @@ class OutputResultConverterTest extends TestCase
             [
                 'storage' => [
                     'inputTablesBytesSum' => 0,
+                ],
+                'backend' => [
+                    'size' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -125,6 +132,20 @@ class OutputResultConverterTest extends TestCase
         $output2->setOutput('some other output');
         $output2->setInputTableResult($inputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
+
+        $dataLoaderMock = self::createMock(DataLoader::class);
+        $dataLoaderMock->expects(self::once())
+            ->method('getWorkspaceBackendSize')
+            ->willReturn('large')
+        ;
+        $output1->setDataLoader($dataLoaderMock);
+
+        $dataLoaderMock = self::createMock(DataLoader::class);
+        $dataLoaderMock->expects(self::once())
+            ->method('getWorkspaceBackendSize')
+            ->willReturn(null)
+        ;
+        $output2->setDataLoader($dataLoaderMock);
 
         $outputs = [$output1, $output2];
         $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
@@ -230,6 +251,9 @@ class OutputResultConverterTest extends TestCase
             [
                 'storage' => [
                     'inputTablesBytesSum' => 3500,
+                ],
+                'backend' => [
+                    'size' => 'large',
                 ],
             ],
             $jobMetrics->jsonSerialize()
