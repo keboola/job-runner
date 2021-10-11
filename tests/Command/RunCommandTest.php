@@ -189,7 +189,7 @@ class RunCommandTest extends AbstractCommandTest
                     'inputTablesBytesSum' => 0,
                 ],
                 'backend' => [
-                    'size' => 'small',
+                    'size' => null,
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -284,6 +284,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
+        /** @var Job $job */
         $job = $client->getJob($job->getId());
         self::assertSame('success', $job->getStatus());
 
@@ -321,6 +322,8 @@ class RunCommandTest extends AbstractCommandTest
             ],
             'displayName' => 'someTable',
         ], $inputTable);
+
+        self::assertSame('small', $job->getMetrics()->getBackendSize());
     }
 
     public function testExecuteVariablesSharedCode(): void
