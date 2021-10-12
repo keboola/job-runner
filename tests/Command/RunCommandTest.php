@@ -156,7 +156,7 @@ class RunCommandTest extends AbstractCommandTest
         $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv', $messages);
+        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from runner
         self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
 
@@ -186,7 +186,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 0,
+                    'inputTablesBytesSum' => 14,
                 ],
                 'backend' => [
                     'size' => null,
