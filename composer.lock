@@ -1225,16 +1225,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "15.1.0",
+            "version": "15.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "b34ce32fb7b14ec94376e583c2bc78550a957667"
+                "reference": "08d500838abc34a857d3d6bcf3e125f30c5240a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b34ce32fb7b14ec94376e583c2bc78550a957667",
-                "reference": "b34ce32fb7b14ec94376e583c2bc78550a957667",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/08d500838abc34a857d3d6bcf3e125f30c5240a2",
+                "reference": "08d500838abc34a857d3d6bcf3e125f30c5240a2",
                 "shasum": ""
             },
             "require": {
@@ -1276,9 +1276,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/15.1.0"
+                "source": "https://github.com/keboola/output-mapping/tree/15.2.0"
             },
-            "time": "2021-10-11T18:34:02+00:00"
+            "time": "2021-10-20T12:15:46+00:00"
         },
         {
             "name": "keboola/php-encryption",
