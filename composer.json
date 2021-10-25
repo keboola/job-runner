@@ -23,7 +23,7 @@
         "keboola/billing-api-php-client": "^0.1",
         "keboola/configuration-variables-resolver": "^1.0.0",
         "keboola/dockerbundle": "dev-odin-library-3@dev",
-        "keboola/job-queue-internal-api-php-client": "^7.3",
+        "keboola/job-queue-internal-api-php-client": "dev-miro-ps-2399",
         "keboola/object-encryptor": "^0.3",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
@@ -36,6 +36,10 @@
         {
             "type": "git",
             "url": "https://github.com/keboola/docker-bundle"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/keboola/job-queue-internal-api-php-client"
         }
     ],
     "require-dev": {

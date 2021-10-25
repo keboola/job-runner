@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5ccaa31b97d8e10e319053a87d016b4",
+    "content-hash": "c0e6fa84e5547154b2da675f5676498c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1065,17 +1065,11 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "7.3.0",
+            "version": "dev-miro-ps-2399",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "4befdd14d550ab9bf3935c42bee762c0a51d5d62"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/4befdd14d550ab9bf3935c42bee762c0a51d5d62",
-                "reference": "4befdd14d550ab9bf3935c42bee762c0a51d5d62",
-                "shasum": ""
+                "url": "https://github.com/keboola/job-queue-internal-api-php-client",
+                "reference": "0ef951da91825b3d5c09223d3066811426c4d02f"
             },
             "require": {
                 "ext-json": "*",
@@ -1101,7 +1095,42 @@
                     "Keboola\\JobQueueInternalClient\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Keboola\\JobQueueInternalClient\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "phpunit --coverage-clover /tmp/build-logs/clover.xml --coverage-xml=/tmp/build-logs/coverage-xml --log-junit=/tmp/build-logs/phpunit.junit.xml"
+                ],
+                "phpstan": [
+                    "phpstan analyse --no-progress -c phpstan.neon"
+                ],
+                "phpcs": [
+                    "phpcs --extensions=php src tests"
+                ],
+                "phpcbf": [
+                    "phpcbf --extensions=php src tests"
+                ],
+                "phplint": [
+                    "parallel-lint -j 10 --exclude vendor ."
+                ],
+                "infection": [
+                    "infection --threads=4 --min-covered-msi=90 --coverage=/tmp/build-logs"
+                ],
+                "build": [
+                    "@phplint",
+                    "@phpcs",
+                    "@phpstan",
+                    "@tests",
+                    "@infection"
+                ],
+                "ci": [
+                    "@composer validate --no-check-all --strict",
+                    "@build"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1118,10 +1147,7 @@
                 "keboola",
                 "queue"
             ],
-            "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/7.3.0"
-            },
-            "time": "2021-10-08T11:06:31+00:00"
+            "time": "2021-10-25T10:40:17+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -9618,7 +9644,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -9631,5 +9658,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

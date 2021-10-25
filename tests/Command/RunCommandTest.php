@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Command\RunCommand;
+use App\JobDefinitionFactory;
 use App\StorageApiFactory;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
+use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
+use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\StorageApi\Client as StorageClient;
@@ -15,8 +20,10 @@ use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
+use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Psr\Log\Test\TestLogger;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -715,5 +722,90 @@ class RunCommandTest extends AbstractCommandTest
             ],
             $result
         );
+    }
+
+    public function testExecuteStateTransitionError(): void
+    {
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+
+        $jobData = [
+            'id' => '123',
+            'status' => 'created',
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
+                ],
+            ],
+        ];
+
+        $mockQueueClient = self::createMock(Client::class);
+        $mockQueueClient
+            ->method('getJob')
+            ->willReturn($jobFactory->loadFromExistingJobData($jobData));
+        $mockQueueClient
+            ->method('getJobFactory')
+            ->willReturn($jobFactory);
+        $mockQueueClient
+            ->method('patchJob')
+            ->willReturn($jobFactory->loadFromExistingJobData(array_merge($jobData, ['status' => 'processing'])));
+        $mockQueueClient
+            ->method('postJobResult')
+            ->willThrowException(new StateTransitionForbiddenException(
+                'Invalid status transition of job "123" from ' .
+                '"terminated (desired: terminating)" to "error desired: processing"'
+            ));
+
+        $logger = new TestLogger();
+        $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
+        $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
+        $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
+        $jobDefinitionFactory = new JobDefinitionFactory();
+
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+        $application->add(new RunCommand(
+            $logger,
+            $logProcessor,
+            $mockQueueClient,
+            $storageApiFactory,
+            $jobDefinitionFactory,
+            '',
+            []
+        ));
+
+        $command = $application->find('app:run');
+
+        putenv('JOB_ID=123');
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertTrue($logger->hasInfoThatContains(
+            '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
+        ));
+        self::assertFalse($logger->hasInfoThatContains('Job is already running'));
+        self::assertTrue($logger->hasInfoThatContains('Running job "123".'));
+        self::assertTrue($logger->hasInfoThatContains('Job "123" execution finished.'));
+        self::assertEquals(0, $ret);
+
+        $events = $storageClient->listEvents(['runId' => '123.123']);
+        $messages = array_column($events, 'message');
+        // event from storage
+        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
+        // event from runner
+        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
     }
 }
