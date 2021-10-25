@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
 use App\StorageApiFactory;
+use App\StorageApiHandler;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -735,7 +736,11 @@ class RunCommandTest extends AbstractCommandTest
 
         $jobData = [
             'id' => '123',
+            'runId' => '124',
+            'projectId' => '219',
+            'tokenId' => '567',
             'status' => 'created',
+            'desiredStatus' => 'processing',
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -750,6 +755,7 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ];
 
+        /** @var JobFactory $jobFactory */
         $mockQueueClient = self::createMock(Client::class);
         $mockQueueClient
             ->method('getJob')
@@ -767,7 +773,12 @@ class RunCommandTest extends AbstractCommandTest
                 '"terminated (desired: terminating)" to "error desired: processing"'
             ));
 
-        $logger = new TestLogger();
+        $logger = new Logger('job-runner-test');
+        $storageClient->setRunId('124');
+        $logger->pushHandler(new StorageApiHandler('job-runner-test', $storageClient));
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
         $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
         $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
@@ -793,19 +804,16 @@ class RunCommandTest extends AbstractCommandTest
             'command' => $command->getName(),
         ]);
 
-        self::assertTrue($logger->hasInfoThatContains(
-            '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
+        self::assertTrue($testHandler->hasDebugThatContains(
+            'Failed to save result for job "123". State transition forbidden:'
         ));
-        self::assertFalse($logger->hasInfoThatContains('Job is already running'));
-        self::assertTrue($logger->hasInfoThatContains('Running job "123".'));
-        self::assertTrue($logger->hasInfoThatContains('Job "123" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $events = $storageClient->listEvents(['runId' => '123.123']);
+        $events = $storageClient->listEvents(['runId' => '124']);
         $messages = array_column($events, 'message');
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
-        // event from runner
-        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
+
+        self::assertNotEmpty($messages);
+        self::assertContains('Running job "123".', $messages);
+        self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
     }
 }
