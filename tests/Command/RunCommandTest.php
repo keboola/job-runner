@@ -802,7 +802,7 @@ class RunCommandTest extends AbstractCommandTest
             'command' => $command->getName(),
         ]);
 
-        self::assertTrue($testHandler->hasDebugThatContains(
+        self::assertTrue($testHandler->hasNoticeThatContains(
             'Failed to save result for job "123". State transition forbidden:'
         ));
         self::assertEquals(0, $ret);

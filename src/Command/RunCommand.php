@@ -187,7 +187,7 @@ class RunCommand extends Command
         try {
             $this->queueClient->postJobResult($jobId, $status, $result, $metrics);
         } catch (StateTerminalException $e) {
-            $this->logger->debug(
+            $this->logger->notice(
                 sprintf(
                     'Failed to save result for job "%s". Job has already reached terminal state: "%s"',
                     $jobId,
@@ -195,7 +195,7 @@ class RunCommand extends Command
                 )
             );
         } catch (StateTransitionForbiddenException $e) {
-            $this->logger->debug(
+            $this->logger->notice(
                 sprintf(
                     'Failed to save result for job "%s". State transition forbidden: "%s"',
                     $jobId,
