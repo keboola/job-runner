@@ -70,7 +70,12 @@ class CleanupCommand extends Command
         try {
             $process->mustRun();
         } catch (ProcessFailedException $e) {
-            $this->logger->error(sprintf('Failed to list containers for job "%s".', $jobId));
+            $this->logger->error(sprintf('Failed to list containers for job "%s".', $jobId), [
+                'error' => $e->getMessage(),
+                'stdout' => $process->getOutput(),
+                'stderr' => $process->getErrorOutput(),
+            ]);
+            return 1;
         }
         $containerIds = explode("\n", $process->getOutput());
         foreach ($containerIds as $containerId) {
@@ -83,7 +88,12 @@ class CleanupCommand extends Command
                 $process->mustRun();
             } catch (ProcessFailedException $e) {
                 $this->logger->error(
-                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage())
+                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage()),
+                    [
+                        'error' => $e->getMessage(),
+                        'stdout' => $process->getOutput(),
+                        'stderr' => $process->getErrorOutput(),
+                    ]
                 );
             }
         }
