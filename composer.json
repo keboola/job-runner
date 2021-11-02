@@ -30,6 +30,7 @@
         "symfony/flex": "^1.10",
         "symfony/framework-bundle": "4.4.*",
         "symfony/monolog-bundle": "^3.6",
+        "symfony/validator": "4.4.31",
         "symfony/yaml": "4.4.*"
     },
     "repositories": [
