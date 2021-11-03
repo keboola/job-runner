@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Command\RunCommand;
+use App\JobDefinitionFactory;
 use App\StorageApiFactory;
+use App\StorageApiHandler;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
+use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
+use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\StorageApi\Client as StorageClient;
@@ -276,6 +282,7 @@ class RunCommandTest extends AbstractCommandTest
                 $jobRecord = $record;
             }
         }
+
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-workspace-test', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
@@ -715,5 +722,97 @@ class RunCommandTest extends AbstractCommandTest
             ],
             $result
         );
+    }
+
+    public function testExecuteStateTransitionError(): void
+    {
+        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+
+        $storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
+
+        $jobData = [
+            'id' => '123',
+            'runId' => '124',
+            'projectId' => '219',
+            'tokenId' => '567',
+            'status' => 'created',
+            'desiredStatus' => 'processing',
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
+                ],
+            ],
+        ];
+
+        /** @var JobFactory $jobFactory */
+        $mockQueueClient = self::createMock(Client::class);
+        $mockQueueClient
+            ->method('getJob')
+            ->willReturn($jobFactory->loadFromExistingJobData($jobData));
+        $mockQueueClient
+            ->method('getJobFactory')
+            ->willReturn($jobFactory);
+        $mockQueueClient
+            ->method('patchJob')
+            ->willReturn($jobFactory->loadFromExistingJobData(array_merge($jobData, ['status' => 'processing'])));
+        $mockQueueClient
+            ->method('postJobResult')
+            ->willThrowException(new StateTransitionForbiddenException(
+                'Invalid status transition of job "123" from ' .
+                '"terminated (desired: terminating)" to "error desired: processing"'
+            ));
+
+        $logger = new Logger('job-runner-test');
+        $storageClient->setRunId('124');
+        $logger->pushHandler(new StorageApiHandler('job-runner-test', $storageClient));
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
+        $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
+        $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
+        $jobDefinitionFactory = new JobDefinitionFactory();
+
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+        $application->add(new RunCommand(
+            $logger,
+            $logProcessor,
+            $mockQueueClient,
+            $storageApiFactory,
+            $jobDefinitionFactory,
+            '',
+            []
+        ));
+
+        $command = $application->find('app:run');
+
+        putenv('JOB_ID=123');
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertTrue($testHandler->hasNoticeThatContains(
+            'Failed to save result for job "123". State transition forbidden:'
+        ));
+        self::assertEquals(0, $ret);
+
+        $events = $storageClient->listEvents(['runId' => '124']);
+        $messages = array_column($events, 'message');
+
+        self::assertNotEmpty($messages);
+        self::assertContains('Running job "123".', $messages);
+        self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
     }
 }

@@ -24,6 +24,8 @@ use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
+use Keboola\JobQueueInternalClient\Exception\StateTerminalException;
+use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
@@ -184,6 +186,22 @@ class RunCommand extends Command
     {
         try {
             $this->queueClient->postJobResult($jobId, $status, $result, $metrics);
+        } catch (StateTerminalException $e) {
+            $this->logger->notice(
+                sprintf(
+                    'Failed to save result for job "%s". Job has already reached terminal state: "%s"',
+                    $jobId,
+                    $e->getMessage()
+                )
+            );
+        } catch (StateTransitionForbiddenException $e) {
+            $this->logger->notice(
+                sprintf(
+                    'Failed to save result for job "%s". State transition forbidden: "%s"',
+                    $jobId,
+                    $e->getMessage()
+                )
+            );
         } catch (Throwable $e) {
             $this->logger->error(
                 sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage())
