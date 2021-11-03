@@ -62,7 +62,7 @@ class CleanupCommand extends Command
         $this->logger->info(sprintf('Terminating containers for job "%s".', $jobId));
         $process = Process::fromShellCommandline(
             sprintf(
-                'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+                'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
                 escapeshellcmd($jobId)
                 // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
             )
@@ -83,7 +83,7 @@ class CleanupCommand extends Command
                 continue;
             }
             $this->logger->info(sprintf('Terminating container "%s".', $containerId));
-            $process = new Process(['docker', 'stop', $containerId]);
+            $process = new Process(['sudo', 'docker', 'stop', $containerId]);
             try {
                 $process->mustRun();
             } catch (ProcessFailedException $e) {
