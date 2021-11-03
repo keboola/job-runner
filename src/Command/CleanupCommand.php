@@ -62,7 +62,7 @@ class CleanupCommand extends Command
         $this->logger->info(sprintf('Terminating containers for job "%s".', $jobId));
         $process = Process::fromShellCommandline(
             sprintf(
-                'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+                'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
                 escapeshellcmd($jobId)
                 // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
             )
@@ -70,7 +70,12 @@ class CleanupCommand extends Command
         try {
             $process->mustRun();
         } catch (ProcessFailedException $e) {
-            $this->logger->error(sprintf('Failed to list containers for job "%s".', $jobId));
+            $this->logger->error(sprintf('Failed to list containers for job "%s".', $jobId), [
+                'error' => $e->getMessage(),
+                'stdout' => $process->getOutput(),
+                'stderr' => $process->getErrorOutput(),
+            ]);
+            return 1;
         }
         $containerIds = explode("\n", $process->getOutput());
         foreach ($containerIds as $containerId) {
@@ -78,12 +83,17 @@ class CleanupCommand extends Command
                 continue;
             }
             $this->logger->info(sprintf('Terminating container "%s".', $containerId));
-            $process = new Process(['docker', 'stop', $containerId]);
+            $process = new Process(['sudo', 'docker', 'stop', $containerId]);
             try {
                 $process->mustRun();
             } catch (ProcessFailedException $e) {
                 $this->logger->error(
-                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage())
+                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage()),
+                    [
+                        'error' => $e->getMessage(),
+                        'stdout' => $process->getOutput(),
+                        'stderr' => $process->getErrorOutput(),
+                    ]
                 );
             }
         }
