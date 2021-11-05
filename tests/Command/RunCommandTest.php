@@ -362,7 +362,7 @@ class RunCommandTest extends AbstractCommandTest
                     'operation' => 'dump-config',
                     'arbitrary' => [
                         'variable' => 'bar {{fooVar}}',
-                        'sharedCode' => '{{code-id}}',
+                        'sharedCode' => ['{{code-id}}'],
                     ],
                 ],
                 'variables_id' => $variablesId,
@@ -420,7 +420,7 @@ class RunCommandTest extends AbstractCommandTest
                     'parameters' => [
                         'arbitrary' => [
                             'variable' => 'bar Kochba',
-                            'sharedCode' => 'my-shared-code',
+                            'sharedCode' => ['my-shared-code'],
                         ],
                         'operation' => 'dump-config',
                     ],
