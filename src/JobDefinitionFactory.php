@@ -7,8 +7,10 @@ namespace App;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
+use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\StorageApi\Client as StorageClient;
+use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 
 class JobDefinitionFactory
@@ -26,7 +28,12 @@ class JobDefinitionFactory
             $jobDefinitionParser->parseConfigData($component, $configData, $job->getConfigId());
         } else {
             $components = new Components($client);
-            $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+            try {
+                $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+            } catch (ClientException $e) {
+                throw new UserException($e->getMessage(), $e);
+            }
+
             $configuration = $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration);
             $configuration['configuration'] = $this->extendComponentConfigWithBackend(
                 $configuration['configuration'] ?? [],

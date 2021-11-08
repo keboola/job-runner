@@ -7,11 +7,14 @@ namespace App\Tests;
 use App\JobDefinitionFactory;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
+use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client;
+use Keboola\StorageApi\ClientException;
+use Keboola\StorageApi\Components;
 use PHPUnit\Framework\TestCase;
 
 class JobDefinitionFactoryTest extends TestCase
@@ -133,6 +136,61 @@ class JobDefinitionFactoryTest extends TestCase
             'custom',
             $jobDefinitions[0]->getConfiguration()['runtime']['backend']['type'] ?? null
         );
+    }
+
+    public function testCreateJobDefinitionWithConfigNotFound(): void
+    {
+        $configuration = [
+            'id' => 'my-config',
+            'version' => '1',
+            'state' => [],
+            'rows' => [],
+            'configuration' => [
+                'runtime' => [
+                    'foo' => 'bar',
+                ],
+            ],
+        ];
+
+        $jobData = [
+            'status' => JobFactory::STATUS_CREATED,
+            'projectId' => 'my-project',
+            'componentId' => 'my-component',
+            'configId' => 'my-config',
+        ];
+
+        $encryptor = $this->createMock(ObjectEncryptor::class);
+        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
+
+        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
+        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+
+        $job = new Job($encryptorFactory, $jobData);
+        $storageApiClient = $this->createMock(Client::class);
+        $storageApiClient->method('apiGet')
+            ->with('components/my-component/configs/my-config')
+            ->willThrowException(new ClientException(
+                'Configuration my-config not found',
+                404,
+                null,
+                'notFound'
+            ))
+        ;
+
+        $component = new Component([
+            'id' => 'my-component',
+            'data' => [
+                'definition' => [
+                    'type' => 'dockerhub',
+                    'uri' => 'keboola/docker-demo',
+                ],
+            ],
+        ]);
+        $factory = new JobDefinitionFactory();
+
+        self::expectException(UserException::class);
+        self::expectExceptionMessage('Configuration my-config not found');
+        $factory->createFromJob($component, $job, $storageApiClient);
     }
 
     /**
