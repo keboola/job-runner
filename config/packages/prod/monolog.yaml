@@ -2,7 +2,7 @@ monolog:
     handlers:
         main:
             type: stream
-            path: php://stderr
+            path: php://stdout
             formatter: Monolog\Formatter\JsonFormatter
             level: info
-            channels: ["!event", "!request"]
+            channels: ["!event", "!request", "!php"]
