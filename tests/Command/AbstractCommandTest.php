@@ -18,14 +18,14 @@ abstract class AbstractCommandTest extends KernelTestCase
     protected function getJobFactoryAndClient(): array
     {
         $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $objectEncryptor = new ObjectEncryptorFactory(
+        $objectEncryptorFactory = new ObjectEncryptorFactory(
             (string) getenv('AWS_KMS_KEY'),
             (string) getenv('AWS_REGION'),
             '',
             '',
             (string) getenv('AZURE_KEY_VAULT_URL'),
         );
-        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptor);
+        $jobFactory = new JobFactory($storageClientFactory, $objectEncryptorFactory);
         $client = new Client(
             new NullLogger(),
             $jobFactory,

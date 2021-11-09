@@ -50,7 +50,7 @@ RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
 
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
-RUN docker-php-ext-install zip \
+RUN docker-php-ext-install pcntl zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 COPY composer.* symfony.lock ./

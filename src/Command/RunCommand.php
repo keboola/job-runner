@@ -23,6 +23,7 @@ use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
+use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTerminalException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
@@ -38,6 +39,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use Throwable;
 
 class RunCommand extends Command
@@ -70,6 +73,81 @@ class RunCommand extends Command
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
+
+        pcntl_signal(SIGTERM, [$this, 'sigHandler']);
+        pcntl_signal_dispatch();
+        pcntl_async_signals(true);
+    }
+
+    public function sigHandler(int $signalNumber): void
+    {
+        $this->logger->notice(sprintf('Received signal "%s"', $signalNumber));
+        if ($signalNumber !== SIGTERM) {
+            return;
+        }
+        $jobId = (string) getenv('JOB_ID');
+        if (empty($jobId)) {
+            $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
+            return;
+        }
+        $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
+        try {
+            $jobStatus = $this->queueClient->getJob($jobId)->getStatus();
+            if ($jobStatus !== JobFactory::STATUS_TERMINATING) {
+                $this->logger->info(
+                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus)
+                );
+                return;
+            }
+        } catch (ClientException $e) {
+            $this->logger->error(sprintf('Failed to get job "%s" for cleanup: ' . $e->getMessage(), $jobId));
+            // we don't want the handler to crash
+            return;
+        }
+        $this->logger->info(sprintf('Terminating containers for job "%s".', $jobId));
+        $process = Process::fromShellCommandline(
+            sprintf(
+                'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+                escapeshellcmd($jobId)
+                // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
+            )
+        );
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            $this->logger->error(sprintf('Failed to list containers for job "%s".' . json_encode([
+                    'error' => $e->getMessage(),
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                ]), $jobId), [
+                'error' => $e->getMessage(),
+                'stdout' => $process->getOutput(),
+                'stderr' => $process->getErrorOutput(),
+            ]);
+            return;
+        }
+        $containerIds = explode("\n", $process->getOutput());
+        foreach ($containerIds as $containerId) {
+            if (empty(trim($containerId))) {
+                continue;
+            }
+            $this->logger->info(sprintf('Terminating container "%s".', $containerId));
+            $process = new Process(['sudo', 'docker', 'stop', $containerId]);
+            try {
+                $process->mustRun();
+            } catch (ProcessFailedException $e) {
+                $this->logger->error(
+                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage()),
+                    [
+                        'error' => $e->getMessage(),
+                        'stdout' => $process->getOutput(),
+                        'stderr' => $process->getErrorOutput(),
+                    ]
+                );
+            }
+        }
+        $this->logger->info(sprintf('Finished container cleanup for job "%s".', $jobId));
+        exit;
     }
 
     protected function configure(): void

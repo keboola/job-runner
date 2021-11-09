@@ -52,6 +52,7 @@
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12.17",
         "phpunit/phpunit": "^9.5.2",
+        "sempro/phpunit-pretty-print": "^1.4",
         "symfony/browser-kit": "^4.4",
         "symfony/css-selector": "^4.4",
         "symfony/phpunit-bridge": "^5.3"

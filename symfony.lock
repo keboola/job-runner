@@ -307,6 +307,9 @@
     "seld/jsonlint": {
         "version": "1.7.1"
     },
+    "sempro/phpunit-pretty-print": {
+        "version": "1.4.0"
+    },
     "slevomat/coding-standard": {
         "version": "4.8.7"
     },
@@ -351,7 +354,7 @@
         "version": "v4.2.8"
     },
     "symfony/debug": {
-        "version": "v4.2.8"
+        "version": "v4.4.31"
     },
     "symfony/dependency-injection": {
         "version": "v4.2.8"
@@ -421,7 +424,7 @@
         "version": "v4.2.8"
     },
     "symfony/mime": {
-        "version": "v4.4.13"
+        "version": "v4.4.34"
     },
     "symfony/monolog-bridge": {
         "version": "v4.2.8"
