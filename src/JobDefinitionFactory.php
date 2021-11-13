@@ -9,17 +9,21 @@ use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApiBranch\ClientWrapper;
 
 class JobDefinitionFactory
 {
     /**
      * @return array<JobDefinition>
      */
-    public function createFromJob(Component $component, JobInterface $job, StorageClient $client): array
+    public function createFromJob(Component $component, JobInterface $job, ClientWrapper $clientWrapper): array
     {
+        if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
+            throw new UserException('This component cannot be run in a development branch.');
+        }
+
         $jobDefinitionParser = new JobDefinitionParser();
 
         if ($job->getConfigData()) {
@@ -27,9 +31,20 @@ class JobDefinitionFactory
             $configData = $this->extendComponentConfigWithBackend($configData, $job);
             $jobDefinitionParser->parseConfigData($component, $configData, $job->getConfigId());
         } else {
-            $components = new Components($client);
             try {
-                $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+                if ($clientWrapper->hasBranch()) {
+                    $components = new Components($clientWrapper->getBranchClient());
+                    $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+                } else {
+                    $components = new Components($clientWrapper->getBasicClient());
+                    $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+                }
+
+                $this->checkUnsafeConfiguration(
+                    $component,
+                    $configuration,
+                    (string) $clientWrapper->getBranchId()
+                );
             } catch (ClientException $e) {
                 throw new UserException($e->getMessage(), $e);
             }
@@ -58,5 +73,16 @@ class JobDefinitionFactory
         ];
 
         return $config;
+    }
+
+    private function checkUnsafeConfiguration(Component $component, array $configuration, string $branchId): void
+    {
+        if ($component->branchConfigurationsAreUnsafe() && $branchId) {
+            if (empty($configuration['configuration']['runtime']['safe'])) {
+                throw new UserException(
+                    'It is not safe to run this configuration in a development branch. Please review the configuration.'
+                );
+            }
+        }
     }
 }
