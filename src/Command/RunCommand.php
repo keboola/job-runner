@@ -124,9 +124,6 @@ class RunCommand extends Command
                 throw new UserException('You do not have credits to run a job');
             }
 
-            $component = $this->getComponentClass($clientWithoutLogger, $job);
-            $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWithoutLogger);
-
             // set up runner
             $clientWrapper = new ClientWrapper(
                 $clientWithLogger,
@@ -134,6 +131,9 @@ class RunCommand extends Command
                 $this->logger,
                 $job->getBranchId() ?? ''
             );
+            $component = $this->getComponentClass($clientWrapper, $job);
+            $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
+
             $runner = new Runner(
                 $job->getEncryptorFactory(),
                 $clientWrapper,
@@ -209,9 +209,9 @@ class RunCommand extends Command
         }
     }
 
-    private function getComponentClass(StorageClient $client, JobInterface $job): Component
+    private function getComponentClass(ClientWrapper $clientWrapper, JobInterface $job): Component
     {
-        $component = $this->getComponent($client, $job->getComponentId());
+        $component = $this->getComponent($clientWrapper, $job->getComponentId());
         if (!empty($job->getTag())) {
             $this->logger->warn(sprintf('Overriding component tag with: "%s"', $job->getTag()));
             $component['data']['definition']['tag'] = $job->getTag();
@@ -219,10 +219,10 @@ class RunCommand extends Command
         return new Component($component);
     }
 
-    private function getComponent(StorageClient $client, string $id): array
+    private function getComponent(ClientWrapper $clientWrapper, string $id): array
     {
         // Check list of components
-        $components = $client->indexAction();
+        $components = $clientWrapper->getBasicClient()->indexAction();
         foreach ($components['components'] as $component) {
             if ($component['id'] === $id) {
                 return $component;
