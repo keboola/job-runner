@@ -80,7 +80,7 @@ class JobDefinitionFactory
         if ($component->branchConfigurationsAreUnsafe() && $branchId) {
             if (empty($configuration['configuration']['runtime']['safe'])) {
                 throw new UserException(
-                    'Is is not safe to run this configuration in a development branch. Please review the configuration.'
+                    'It is not safe to run this configuration in a development branch. Please review the configuration.'
                 );
             }
         }

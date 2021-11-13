@@ -332,7 +332,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
         self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
-        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
+        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo']);
     }
 
     public function testCreateJobDefinitionBranchUnsafe(): void
@@ -389,7 +389,7 @@ class JobDefinitionFactoryTest extends TestCase
         $factory = new JobDefinitionFactory();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Is is not safe to run this configuration in a development branch. Please review the configuration.'
+            'It is not safe to run this configuration in a development branch. Please review the configuration.'
         );
         $factory->createFromJob($component, $job, $this->getStorageApiClientBranchMock($storageApiClient));
     }
