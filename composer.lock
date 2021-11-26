@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec1d9a9dbb65f8b03f251795ed968664",
+    "content-hash": "49f68f12f3a6d83be6d8fac265b67327",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -629,16 +629,16 @@
         },
         {
             "name": "keboola/api-error-control",
-            "version": "3.6.0",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/api-error-control.git",
-                "reference": "e215b9ebb80063e62f2f37e1df17cf0d4acab092"
+                "reference": "66fe447c9d07dac068b9cb126b8f4dda698daafc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/e215b9ebb80063e62f2f37e1df17cf0d4acab092",
-                "reference": "e215b9ebb80063e62f2f37e1df17cf0d4acab092",
+                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/66fe447c9d07dac068b9cb126b8f4dda698daafc",
+                "reference": "66fe447c9d07dac068b9cb126b8f4dda698daafc",
                 "shasum": ""
             },
             "require": {
@@ -656,6 +656,7 @@
                 "keboola/coding-standard": "^13.0",
                 "php-parallel-lint/php-parallel-lint": "^1.0",
                 "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpunit": "^8.0|^9.0"
             },
             "type": "library",
@@ -676,9 +677,9 @@
             ],
             "description": "API Error control library - Utility classes for implementing logging in a KBC API",
             "support": {
-                "source": "https://github.com/keboola/api-error-control/tree/3.6.0"
+                "source": "https://github.com/keboola/api-error-control/tree/3.7.0"
             },
-            "time": "2021-07-27T20:21:02+00:00"
+            "time": "2021-11-26T11:27:05+00:00"
         },
         {
             "name": "keboola/azure-key-vault-client",
@@ -1014,16 +1015,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "13.2.0",
+            "version": "13.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "157a80b6688dc135f5f0e9b72837c0ebc354e191"
+                "reference": "d33fb463a25a57bc1519b4307344242330fe1352"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/157a80b6688dc135f5f0e9b72837c0ebc354e191",
-                "reference": "157a80b6688dc135f5f0e9b72837c0ebc354e191",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/d33fb463a25a57bc1519b4307344242330fe1352",
+                "reference": "d33fb463a25a57bc1519b4307344242330fe1352",
                 "shasum": ""
             },
             "require": {
@@ -1059,9 +1060,9 @@
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
                 "issues": "https://github.com/keboola/input-mapping/issues",
-                "source": "https://github.com/keboola/input-mapping/tree/13.2.0"
+                "source": "https://github.com/keboola/input-mapping/tree/13.2.2"
             },
-            "time": "2021-10-25T10:57:10+00:00"
+            "time": "2021-11-04T13:58:27+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
