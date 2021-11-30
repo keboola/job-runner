@@ -74,17 +74,14 @@ class RunCommand extends Command
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
 
-        pcntl_signal(SIGTERM, [$this, 'sigHandler']);
-        pcntl_signal_dispatch();
+        pcntl_signal(SIGTERM, [$this, 'terminationHandler']);
+        pcntl_signal(SIGINT, [$this, 'terminationHandler']);
         pcntl_async_signals(true);
     }
 
-    public function sigHandler(int $signalNumber): void
+    public function terminationHandler(int $signalNumber): void
     {
         $this->logger->notice(sprintf('Received signal "%s"', $signalNumber));
-        if ($signalNumber !== SIGTERM) {
-            return;
-        }
         $jobId = (string) getenv('JOB_ID');
         if (empty($jobId)) {
             $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
