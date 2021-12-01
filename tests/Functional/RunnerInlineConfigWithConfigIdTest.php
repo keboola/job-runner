@@ -29,7 +29,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         ];
         $clientMock = self::getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
-            ->setMethods(['indexAction'])
+            ->setMethods(['indexAction', 'getServiceUrl'])
             ->getMock();
         $clientMock->expects(self::any())
             ->method('indexAction')
@@ -44,6 +44,10 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                     'components' => [$componentData],
                 ]
             ));
+        $clientMock->expects(self::any())
+            ->method('getServiceUrl')
+            ->with('sandboxes')
+            ->willReturn('https://sandboxes.someurl');
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
