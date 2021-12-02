@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.204.6",
+            "version": "3.207.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c"
+                "reference": "3120e8adc7b2b060a7eb4c3c5e2a8c25c0f95a94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c",
-                "reference": "59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3120e8adc7b2b060a7eb4c3c5e2a8c25c0f95a94",
+                "reference": "3120e8adc7b2b060a7eb4c3c5e2a8c25c0f95a94",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.204.6"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.207.1"
             },
-            "time": "2021-11-26T19:18:52+00:00"
+            "time": "2021-12-01T23:44:02+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -923,7 +923,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "191e26e9ac46ccacb96a4b72202834ac5aa0971e"
+                "reference": "48b2334665421cce781dee19a3c08114317f0468"
             },
             "require": {
                 "ext-json": "*",
@@ -934,6 +934,7 @@
                 "keboola/object-encryptor": "^0.3",
                 "keboola/output-mapping": "^15.1",
                 "keboola/php-utils": "^2.3.1",
+                "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^2.4",
                 "mustache/mustache": "^2.13",
                 "symfony/http-foundation": "^4.1",
@@ -963,7 +964,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2021-10-18T07:51:15+00:00"
+            "time": "2021-12-02T12:04:37+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1482,6 +1483,62 @@
             "time": "2018-04-11T14:40:53+00:00"
         },
         {
+            "name": "keboola/sandboxes-api-php-client",
+            "version": "6.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/sandboxes-api-php-client.git",
+                "reference": "79445bb4bddf1fef534a04d5d778467c5edb3353"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/sandboxes-api-php-client/zipball/79445bb4bddf1fef534a04d5d778467c5edb3353",
+                "reference": "79445bb4bddf1fef534a04d5d778467c5edb3353",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=7.4",
+                "psr/log": "^1.1",
+                "symfony/validator": "^4.2 !=4.4.33"
+            },
+            "require-dev": {
+                "keboola/coding-standard": "^8.0",
+                "keboola/storage-api-client": "^10.6.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan": "^0.12.25",
+                "phpunit/phpunit": "^9.0",
+                "squizlabs/php_codesniffer": "^3.0",
+                "vlucas/phpdotenv": "^4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Sandboxes\\Api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Matějka",
+                    "email": "jakub@keboola.com"
+                }
+            ],
+            "description": "PHP Client for Keboola Sandboxes API",
+            "keywords": [
+                "keboola",
+                "sandboxes"
+            ],
+            "support": {
+                "source": "https://github.com/keboola/sandboxes-api-php-client/tree/6.7.0"
+            },
+            "time": "2021-12-02T08:52:24+00:00"
+        },
+        {
             "name": "keboola/sanitizer",
             "version": "0.1.0",
             "source": {
@@ -1577,16 +1634,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "12.7.1",
+            "version": "v12.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "9286aadb76d4789ae7ac729a383e2426d7759af9"
+                "reference": "a531e78d9498cd941bd66d2b7cca729befbbcc21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/9286aadb76d4789ae7ac729a383e2426d7759af9",
-                "reference": "9286aadb76d4789ae7ac729a383e2426d7759af9",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/a531e78d9498cd941bd66d2b7cca729befbbcc21",
+                "reference": "a531e78d9498cd941bd66d2b7cca729befbbcc21",
                 "shasum": ""
             },
             "require": {
@@ -1629,9 +1686,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/12.7.1"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v12.8.0"
             },
-            "time": "2021-11-19T07:43:59+00:00"
+            "time": "2021-12-02T10:34:35+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -2104,16 +2161,16 @@
         },
         {
             "name": "phpseclib/mcrypt_compat",
-            "version": "1.0.11",
+            "version": "1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/mcrypt_compat.git",
-                "reference": "4570bd80edb410179af3b243a568ff366b528558"
+                "reference": "1fab24bc53edf9b49268162e7bfb4ce5c16ed4e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/4570bd80edb410179af3b243a568ff366b528558",
-                "reference": "4570bd80edb410179af3b243a568ff366b528558",
+                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/1fab24bc53edf9b49268162e7bfb4ce5c16ed4e3",
+                "reference": "1fab24bc53edf9b49268162e7bfb4ce5c16ed4e3",
                 "shasum": ""
             },
             "require": {
@@ -2124,7 +2181,7 @@
                 "ext-mcrypt": "5.6.40"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0"
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4"
             },
             "suggest": {
                 "ext-openssl": "Will enable faster cryptographic operations"
@@ -2157,20 +2214,30 @@
                 "issues": "https://github.com/phpseclib/mcrypt_compat/issues",
                 "source": "https://github.com/phpseclib/mcrypt_compat"
             },
-            "time": "2019-05-26T13:54:43+00:00"
+            "funding": [
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/mcrypt_compat",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-11-29T01:15:33+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.34",
+            "version": "2.0.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "98a6fe587f3481aea319eef7e656d02cfe1675ec"
+                "reference": "4e16cf3f5f927a7d3f5317820af795c0366c0420"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/98a6fe587f3481aea319eef7e656d02cfe1675ec",
-                "reference": "98a6fe587f3481aea319eef7e656d02cfe1675ec",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/4e16cf3f5f927a7d3f5317820af795c0366c0420",
+                "reference": "4e16cf3f5f927a7d3f5317820af795c0366c0420",
                 "shasum": ""
             },
             "require": {
@@ -2250,7 +2317,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.34"
+                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.35"
             },
             "funding": [
                 {
@@ -2266,7 +2333,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-27T02:46:30+00:00"
+            "time": "2021-11-28T23:30:39+00:00"
         },
         {
             "name": "psr/cache",
