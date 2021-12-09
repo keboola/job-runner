@@ -542,7 +542,7 @@ class RunCommandTest extends AbstractCommandTest
 
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue(
-            $testHandler->hasErrorThatContains('Job "' . $job->getId() . '" ended with application error: "')
+            $testHandler->hasCriticalThatContains('Job "' . $job->getId() . '" ended with application error: "')
         );
         self::assertTrue(
             $testHandler->hasErrorThatContains('Failed to save result for job "' . $job->getId() . '". Error: "')
