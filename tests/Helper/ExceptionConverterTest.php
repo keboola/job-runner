@@ -25,7 +25,8 @@ class ExceptionConverterTest extends TestCase
         Throwable $exception,
         string $expectedErrorType,
         string $expectedMessage,
-        string $expectedLog
+        string $expectedLog,
+        string $method
     ): void {
         $logger = new TestLogger();
         $result = ExceptionConverter::convertExceptionToResult($logger, $exception, '123', []);
@@ -34,7 +35,7 @@ class ExceptionConverterTest extends TestCase
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
         self::assertNull($result->getConfigVersion());
         self::assertSame([], $result->getImages());
-        self::assertTrue($logger->hasErrorThatContains($expectedLog));
+        self::assertTrue($logger->$method($expectedLog));
     }
 
     public function provideExceptions(): Generator
@@ -44,24 +45,28 @@ class ExceptionConverterTest extends TestCase
             'expectedErrorType' => JobResult::ERROR_TYPE_USER,
             'expectedMessage' => 'Internal Server Error occurred.',
             'expectedLog' => 'Job "123" ended with encryption error: "Internal Server Error occurred."',
+            'method' => 'hasErrorThatContains',
         ];
         yield 'user exception' => [
             'exception' => new UserException('some error'),
             'expectedErrorType' => JobResult::ERROR_TYPE_USER,
             'expectedMessage' => 'some error',
             'expectedLog' => 'Job "123" ended with user error: "some error"',
+            'method' => 'hasErrorThatContains',
         ];
         yield 'application exception' => [
             'exception' => new ApplicationException('some error'),
             'expectedErrorType' => JobResult::ERROR_TYPE_APPLICATION,
             'expectedMessage' => 'Internal Server Error occurred.',
             'expectedLog' => 'Job "123" ended with application error: "Internal Server Error occurred."',
+            'method' => 'hasCriticalThatContains',
         ];
         yield 'unknown exception' => [
             'exception' => new Exception('some error'),
             'expectedErrorType' => JobResult::ERROR_TYPE_APPLICATION,
             'expectedMessage' => 'Internal Server Error occurred.',
             'expectedLog' => 'Job "123" ended with application error: "Internal Server Error occurred."',
+            'method' => 'hasCriticalThatContains',
         ];
     }
 

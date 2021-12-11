@@ -20,21 +20,26 @@ class ExceptionConverter
         string $jobId,
         array $outputs
     ): JobResult {
-        if (is_a($e, UserException::class)) {
-            $errorTypeString = 'user';
-            $errorType = JobResult::ERROR_TYPE_USER;
-        } elseif (is_a($e, EncryptionUserException::class)) {
-            $errorTypeString = 'encryption';
-            $errorType = JobResult::ERROR_TYPE_USER;
-        } else {
-            $errorTypeString = 'application';
-            $errorType = JobResult::ERROR_TYPE_APPLICATION;
-        }
         $transformedException = ExceptionTransformer::transformException($e);
-        $logger->error(
-            sprintf('Job "%s" ended with %s error: "%s"', $jobId, $errorTypeString, $transformedException->getError()),
-            $transformedException->getFullArray()
-        );
+        if (is_a($e, UserException::class)) {
+            $errorType = JobResult::ERROR_TYPE_USER;
+            $logger->error(
+                sprintf('Job "%s" ended with user error: "%s"', $jobId, $transformedException->getError()),
+                $transformedException->getFullArray()
+            );
+        } elseif (is_a($e, EncryptionUserException::class)) {
+            $errorType = JobResult::ERROR_TYPE_USER;
+            $logger->error(
+                sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $transformedException->getError()),
+                $transformedException->getFullArray()
+            );
+        } else {
+            $errorType = JobResult::ERROR_TYPE_APPLICATION;
+            $logger->critical(
+                sprintf('Job "%s" ended with application error: "%s"', $jobId, $transformedException->getError()),
+                $transformedException->getFullArray()
+            );
+        }
         $result = new JobResult();
         $result->setMessage($transformedException->getError())
             ->setErrorType($errorType)
