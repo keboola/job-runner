@@ -234,7 +234,7 @@ class RunCommand extends Command
             $runner->run(
                 $jobDefinitions,
                 'run',
-                $job->getMode(),
+                $job->isInRunMode() ? Job::MODE_RUN : Job::MODE_DEBUG,
                 $job->getId(),
                 $usageFile,
                 $job->getConfigRowIds(),
