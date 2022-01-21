@@ -22,6 +22,7 @@ use Keboola\Temp\Temp;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 abstract class BaseFunctionalTest extends TestCase
 {
@@ -74,7 +75,10 @@ abstract class BaseFunctionalTest extends TestCase
         ?array $expectedJobResult = null
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
-        $storageApiFactory = new JobFactory\StorageClientFactory($this->storageClient->getApiUrl());
+        $storageApiFactory = new JobFactory\StorageClientFactory(
+            $this->storageClient->getApiUrl(),
+            new NullLogger()
+        );
         $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
         $job = $jobFactory->createNewJob($jobData);
         $queueClient = self::getMockBuilder(QueueClient::class)
@@ -88,6 +92,7 @@ abstract class BaseFunctionalTest extends TestCase
             new JobFactory\Job(
                 $this->objectEncryptorFactory,
                 [
+                    'runId' => '1234',
                     'status' => 'processing',
                     'projectId' => '123',
                     'componentId' => 'dummy',
@@ -120,6 +125,7 @@ abstract class BaseFunctionalTest extends TestCase
             new JobFactory\Job(
                 $this->objectEncryptorFactory,
                 [
+                    'runId' => '1234',
                     'status' => 'processing',
                     'projectId' => '123',
                     'componentId' => 'dummy',

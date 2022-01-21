@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use Keboola\StorageApi\Client;
+use Keboola\StorageApi\ClientException;
+use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Options\Components\Configuration;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -14,6 +17,25 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
     {
         $this->createBuckets();
         $this->createTable('in.c-executor-test', 'source');
+        $client = new Client(
+            [
+                'token' => (string) getenv('TEST_STORAGE_API_TOKEN'),
+                'url' => (string) getenv('STORAGE_API_URL'),
+            ]
+        );
+        $componentsApi = new Components($client);
+        $configuration = new Configuration();
+        $configuration->setConfigurationId('executor-test');
+        $configuration->setComponentId('keboola.python-transformation');
+        $configuration->setName('RunnerInlineConfigWithConfigIdTest');
+        try {
+            $componentsApi->deleteConfiguration('keboola.python-transformation', 'executor-test');
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+        $componentsApi->addConfiguration($configuration);
 
         $componentData = [
             'id' => 'keboola.python-transformation',
