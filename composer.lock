@@ -1067,16 +1067,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "9.4.0",
+            "version": "9.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "356379db625500f69b5bff5270d43f6ad011ed40"
+                "reference": "9ea9d77cfb3b91947ee36e09bb86c747377c0873"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/356379db625500f69b5bff5270d43f6ad011ed40",
-                "reference": "356379db625500f69b5bff5270d43f6ad011ed40",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/9ea9d77cfb3b91947ee36e09bb86c747377c0873",
+                "reference": "9ea9d77cfb3b91947ee36e09bb86c747377c0873",
                 "shasum": ""
             },
             "require": {
@@ -1122,9 +1122,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/9.4.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/9.4.1"
             },
-            "time": "2022-01-18T07:59:20+00:00"
+            "time": "2022-01-21T10:54:30+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",

@@ -382,7 +382,7 @@ class RunCommandTest extends AbstractCommandTest
             $job = $jobFactory->createNewJob([
                 'componentId' => 'keboola.runner-config-test',
                 '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
-                'mode' => 'run',
+                'mode' => 'forceRun',
                 'configId' => $configurationId,
                 'variableValuesData' => [
                     'values' => [
