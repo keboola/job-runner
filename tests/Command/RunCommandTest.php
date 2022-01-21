@@ -21,8 +21,10 @@ use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
+use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Psr\Log\NullLogger;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -97,7 +99,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'parentRunId' => '123',
             'configData' => [
                 'parameters' => [
@@ -335,10 +336,15 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteVariablesSharedCode(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
-        $componentsApi = new Components($storageClientFactory->getClient(
-            (string) getenv('TEST_STORAGE_API_TOKEN')
-        ));
+        $storageClientFactory = new JobFactory\StorageClientFactory(
+            (string) getenv('STORAGE_API_URL'),
+            new NullLogger()
+        );
+        $storageClient = $storageClientFactory->getClientWrapper(
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ClientWrapper::BRANCH_MAIN
+        )->getBasicClient();
+        $componentsApi = new Components($storageClient);
         $configurationApi = new Configuration();
         $configurationApi->setComponentId('keboola.shared-code');
         $configurationApi->setName('test-code');
@@ -447,9 +453,15 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteUnEncryptedJobData(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory((string) getenv('STORAGE_API_URL'));
+        $storageClientFactory = new JobFactory\StorageClientFactory(
+            (string) getenv('STORAGE_API_URL'),
+            new NullLogger()
+        );
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        $storageClient = $storageClientFactory->getClient((string) getenv('TEST_STORAGE_API_TOKEN'));
+        $storageClient = $storageClientFactory->getClientWrapper(
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ClientWrapper::BRANCH_MAIN
+        )->getBasicClient();
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
         $id = $storageClient->generateId();
@@ -510,7 +522,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [
                 'storage' => [],
                 'parameters' => [
@@ -559,7 +570,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [
                 'storage' => [],
                 'parameters' => [
@@ -603,7 +613,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [
                 'parameters' => [
                     'operation' => 'unsafe-dump-config',
@@ -675,7 +684,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [],
         ]);
         $job = $client->createJob($job);

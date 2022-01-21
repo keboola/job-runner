@@ -77,7 +77,6 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             ],
             $data
         );
-        self::assertFalse($this->getTestHandler()->hasWarningThatContains('Overriding component tag'));
     }
 
     public function testRunInvalidRowIds(): void
@@ -86,6 +85,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobData = [
             'id' => $jobId,
             'componentId' => 'keboola.python-transformation',
+            'runId' => '1234',
             'mode' => 'run',
             'configData' => [
                 'storage' => [],
@@ -137,6 +137,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobData = [
             'id' => $jobId,
             'component' => 'keboola.python-transformation',
+            'runId' => '1234',
             'mode' => 'run',
             'configData' => [
                 'storage' => [],
@@ -248,6 +249,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
         $jobData = [
             'id' => $jobId,
             'component' => 'keboola.python-transformation',
+            'runId' => '1234',
             'mode' => 'run',
             'configData' => [
                 'storage' => [],

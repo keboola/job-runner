@@ -31,6 +31,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
@@ -60,6 +61,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
@@ -92,6 +94,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
@@ -124,6 +127,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
@@ -156,6 +160,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
@@ -319,6 +324,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
@@ -351,6 +357,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
@@ -411,6 +418,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
@@ -478,6 +486,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $jobData = [
             'status' => JobFactory::STATUS_CREATED,
+            'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
