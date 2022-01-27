@@ -7,6 +7,7 @@ namespace App\Tests\Helper;
 use App\Helper\ExceptionConverter;
 use Exception;
 use Generator;
+use Keboola\ConfigurationVariablesResolver\Exception\UserException as OutsideUserException;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
@@ -49,6 +50,13 @@ class ExceptionConverterTest extends TestCase
         ];
         yield 'user exception' => [
             'exception' => new UserException('some error'),
+            'expectedErrorType' => JobResult::ERROR_TYPE_USER,
+            'expectedMessage' => 'some error',
+            'expectedLog' => 'Job "123" ended with user error: "some error"',
+            'method' => 'hasErrorThatContains',
+        ];
+        yield 'user exception interface' => [
+            'exception' => new OutsideUserException('some error'),
             'expectedErrorType' => JobResult::ERROR_TYPE_USER,
             'expectedMessage' => 'some error',
             'expectedLog' => 'Job "123" ended with user error: "some error"',

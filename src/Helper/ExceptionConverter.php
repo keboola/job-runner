@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
+use Keboola\CommonExceptions\UserExceptionInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
-use Keboola\DockerBundle\Exception\UserException;
 use Keboola\ErrorControl\Message\ExceptionTransformer;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
@@ -21,7 +21,7 @@ class ExceptionConverter
         array $outputs
     ): JobResult {
         $transformedException = ExceptionTransformer::transformException($e);
-        if (is_a($e, UserException::class)) {
+        if (is_a($e, UserExceptionInterface::class)) {
             $errorType = JobResult::ERROR_TYPE_USER;
             $logger->error(
                 sprintf('Job "%s" ended with user error: "%s"', $jobId, $transformedException->getError()),
