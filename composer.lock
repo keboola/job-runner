@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1f347a9f32e0360796fd66317a1c666",
+    "content-hash": "35d231de1ec4f6aedd936eeb42bb01be",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1230,16 +1230,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "16.0.0",
+            "version": "16.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "0e1298e18e2e8c339ffbbd99f97c1263fadb3105"
+                "reference": "c63bcf2650a912a198f9108782b88cb1dd64f295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/0e1298e18e2e8c339ffbbd99f97c1263fadb3105",
-                "reference": "0e1298e18e2e8c339ffbbd99f97c1263fadb3105",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/c63bcf2650a912a198f9108782b88cb1dd64f295",
+                "reference": "c63bcf2650a912a198f9108782b88cb1dd64f295",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                 "keboola/input-mapping": "^14.0",
                 "keboola/php-file-storage-utils": "^0.2.2",
                 "keboola/sanitizer": "^0.1",
-                "keboola/storage-api-client": "^12.6",
+                "keboola/storage-api-client": "^12.9.3",
                 "keboola/storage-api-php-client-branch-wrapper": "^1.1",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
@@ -1283,9 +1283,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/16.0.0"
+                "source": "https://github.com/keboola/output-mapping/tree/16.0.1"
             },
-            "time": "2022-02-14T20:28:15+00:00"
+            "time": "2022-02-18T07:39:57+00:00"
         },
         {
             "name": "keboola/php-encryption",
