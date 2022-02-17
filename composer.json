@@ -23,7 +23,7 @@
         "keboola/billing-api-php-client": "^0.1",
         "keboola/configuration-variables-resolver": "^1.0.0",
         "keboola/dockerbundle": "dev-odin-library-3@dev",
-        "keboola/input-mapping": "^13.2",
+        "keboola/input-mapping": "^14.0",
         "keboola/job-queue-internal-api-php-client": "^9.4",
         "keboola/object-encryptor": "^0.3.2",
         "symfony/console": "4.4.*",
