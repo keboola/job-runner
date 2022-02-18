@@ -98,6 +98,9 @@
     "keboola/php-encryption": {
         "version": "0.2.3"
     },
+    "keboola/php-file-storage-utils": {
+        "version": "v0.2.2"
+    },
     "keboola/php-temp": {
         "version": "1.0.0"
     },
