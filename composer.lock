@@ -1070,16 +1070,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "9.5.2",
+            "version": "9.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "76d60eeb7a1597b7704d9d2d84b7eefe51d548d4"
+                "reference": "e738e3d4b3e12fbb042e8a602ade91f03e45466d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/76d60eeb7a1597b7704d9d2d84b7eefe51d548d4",
-                "reference": "76d60eeb7a1597b7704d9d2d84b7eefe51d548d4",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/e738e3d4b3e12fbb042e8a602ade91f03e45466d",
+                "reference": "e738e3d4b3e12fbb042e8a602ade91f03e45466d",
                 "shasum": ""
             },
             "require": {
@@ -1125,9 +1125,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/9.5.2"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/9.6.0"
             },
-            "time": "2022-02-01T09:19:34+00:00"
+            "time": "2022-02-17T12:05:41+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1230,16 +1230,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "16.0.1",
+            "version": "16.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "c63bcf2650a912a198f9108782b88cb1dd64f295"
+                "reference": "16604b01c4f6a4f20072bf5e1b997a97b4840334"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/c63bcf2650a912a198f9108782b88cb1dd64f295",
-                "reference": "c63bcf2650a912a198f9108782b88cb1dd64f295",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/16604b01c4f6a4f20072bf5e1b997a97b4840334",
+                "reference": "16604b01c4f6a4f20072bf5e1b997a97b4840334",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                 "keboola/input-mapping": "^14.0",
                 "keboola/php-file-storage-utils": "^0.2.2",
                 "keboola/sanitizer": "^0.1",
-                "keboola/storage-api-client": "^12.9.3",
+                "keboola/storage-api-client": "^12.6",
                 "keboola/storage-api-php-client-branch-wrapper": "^1.1",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
@@ -1283,9 +1283,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/16.0.1"
+                "source": "https://github.com/keboola/output-mapping/tree/16.0.2"
             },
-            "time": "2022-02-18T07:39:57+00:00"
+            "time": "2022-02-18T16:05:46+00:00"
         },
         {
             "name": "keboola/php-encryption",
@@ -4228,16 +4228,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.18.3",
+            "version": "v1.18.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "d40a6b176b70ea323af2b08507319d1c417520fd"
+                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/d40a6b176b70ea323af2b08507319d1c417520fd",
-                "reference": "d40a6b176b70ea323af2b08507319d1c417520fd",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/10e438f53a972439675dc720706f0cd5c0ed94f1",
+                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1",
                 "shasum": ""
             },
             "require": {
@@ -4273,7 +4273,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.18.3"
+                "source": "https://github.com/symfony/flex/tree/v1.18.5"
             },
             "funding": [
                 {
@@ -4289,7 +4289,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-27T10:24:58+00:00"
+            "time": "2022-02-16T17:26:46+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -7638,16 +7638,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.10",
+            "version": "9.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687"
+                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d5850aaf931743067f4bfc1ae4cbd06468400687",
-                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/665a1ac0a763c51afc30d6d130dac0813092b17f",
+                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f",
                 "shasum": ""
             },
             "require": {
@@ -7703,7 +7703,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.10"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.11"
             },
             "funding": [
                 {
@@ -7711,7 +7711,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-05T09:12:13+00:00"
+            "time": "2022-02-18T12:46:09+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -7956,16 +7956,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.13",
+            "version": "9.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "597cb647654ede35e43b137926dfdfef0fb11743"
+                "reference": "1883687169c017d6ae37c58883ca3994cfc34189"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/597cb647654ede35e43b137926dfdfef0fb11743",
-                "reference": "597cb647654ede35e43b137926dfdfef0fb11743",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1883687169c017d6ae37c58883ca3994cfc34189",
+                "reference": "1883687169c017d6ae37c58883ca3994cfc34189",
                 "shasum": ""
             },
             "require": {
@@ -8043,7 +8043,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.13"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.14"
             },
             "funding": [
                 {
@@ -8055,7 +8055,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-24T07:33:35+00:00"
+            "time": "2022-02-18T12:54:07+00:00"
         },
         {
             "name": "sanmai/pipeline",
@@ -9851,5 +9851,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }
