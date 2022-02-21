@@ -51,25 +51,24 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         ];
         $clientMock = self::getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
-            ->setMethods(['indexAction', 'getServiceUrl'])
+            ->setMethods(['apiGet', 'getServiceUrl'])
             ->getMock();
-        $clientMock->expects(self::any())
-            ->method('indexAction')
-            ->will(self::returnValue(
-                [
-                    'services' => [
-                        [
-                            'id' => 'oauth',
-                            'url' => getenv('LEGACY_OAUTH_API_URL'),
-                        ],
-                    ],
-                    'components' => [$componentData],
-                ]
-            ));
-        $clientMock->expects(self::any())
+        $clientMock
             ->method('getServiceUrl')
-            ->with('sandboxes')
-            ->willReturn('https://sandboxes.someurl');
+            ->withConsecutive(['sandboxes'], ['oauth'])
+            ->willReturnOnConsecutiveCalls(
+                'https://sandboxes.someurl',
+                getenv('LEGACY_OAUTH_API_URL'),
+            );
+        $clientMock
+            ->method('apiGet')
+            ->willReturnCallback(function ($url, $filename) use ($componentData, $client) {
+                if ($url === 'components/keboola.python-transformation') {
+                    return $componentData;
+                } else {
+                    return $client->apiGet($url, $filename);
+                }
+            });
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
