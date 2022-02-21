@@ -34,6 +34,7 @@ use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Client as StorageClient;
+use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -297,14 +298,12 @@ class RunCommand extends Command
 
     private function getComponent(ClientWrapper $clientWrapper, string $id): array
     {
-        // Check list of components
-        $components = $clientWrapper->getBasicClient()->indexAction();
-        foreach ($components['components'] as $component) {
-            if ($component['id'] === $id) {
-                return $component;
-            }
+        $componentsApi = new Components($clientWrapper->getBasicClient());
+        try {
+            return $componentsApi->getComponent($id);
+        } catch (ClientException $e) {
+            throw new UserException(sprintf('Cannot get component "%s": %s.', $id, $e->getMessage()), $e);
         }
-        throw new UserException(sprintf('Component "%s" was not found.', $id));
     }
 
     /**
