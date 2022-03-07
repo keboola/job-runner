@@ -1230,16 +1230,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "16.0.2",
+            "version": "16.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "16604b01c4f6a4f20072bf5e1b997a97b4840334"
+                "reference": "64c6c3b7f1485ebee466f8e2d488fbb2f1e39b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/16604b01c4f6a4f20072bf5e1b997a97b4840334",
-                "reference": "16604b01c4f6a4f20072bf5e1b997a97b4840334",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/64c6c3b7f1485ebee466f8e2d488fbb2f1e39b6e",
+                "reference": "64c6c3b7f1485ebee466f8e2d488fbb2f1e39b6e",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                 "keboola/input-mapping": "^14.0",
                 "keboola/php-file-storage-utils": "^0.2.2",
                 "keboola/sanitizer": "^0.1",
-                "keboola/storage-api-client": "^12.6",
+                "keboola/storage-api-client": "^12.9.3",
                 "keboola/storage-api-php-client-branch-wrapper": "^1.1",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
@@ -1283,9 +1283,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/16.0.2"
+                "source": "https://github.com/keboola/output-mapping/tree/16.0.3"
             },
-            "time": "2022-02-18T16:05:46+00:00"
+            "time": "2022-03-03T12:38:06+00:00"
         },
         {
             "name": "keboola/php-encryption",
