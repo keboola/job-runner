@@ -14,10 +14,10 @@ class StorageApiFactoryTest extends TestCase
     public function testClient(): void
     {
         $factory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
-        $client = $factory->getClient([]);
+        $client = $factory->getClient(['token' => 'dummy']);
         self::assertInstanceOf(Client::class, $client);
 
-        $client = $factory->getBranchClient('1234', []);
+        $client = $factory->getBranchClient('1234', ['token' => 'dummy']);
         self::assertInstanceOf(BranchAwareClient::class, $client);
     }
 }
