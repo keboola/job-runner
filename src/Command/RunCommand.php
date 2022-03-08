@@ -188,7 +188,10 @@ class RunCommand extends Command
             ];
             $clientWithoutLogger = $this->storageApiFactory->getClient($options);
             if ($job->getBranchId()) {
-                $clientWithoutLogger = $this->storageApiFactory->getBranchClient($job->getBranchId(), $options);
+                $clientWithoutLogger = $this->storageApiFactory->getBranchClient(
+                    (string) $job->getBranchId(),
+                    $options
+                );
             }
             $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
             $clientWithoutLogger->setRunId($job->getRunId());
