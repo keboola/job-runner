@@ -61,6 +61,7 @@ RUN composer install $COMPOSER_FLAGS \
     && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/
 
 USER $APP_USER_NAME
+USER root
 
 CMD ["php", "/code/bin/console", "app:run"]
 
