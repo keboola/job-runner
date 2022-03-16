@@ -103,8 +103,7 @@
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
         "build": [
             "@phplint",
-            "@phpstan",
-            "@tests"
+            "@phpstan"
         ],
         "ci": [
             "@composer validate --no-check-all --strict",
