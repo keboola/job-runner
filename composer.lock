@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.213.1",
+            "version": "3.214.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7d361a532ccb7c6a640fdfd4be23980c0fa60fd1"
+                "reference": "a2eacf8c1b55de4733f4cfc315da38f1d4c66501"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7d361a532ccb7c6a640fdfd4be23980c0fa60fd1",
-                "reference": "7d361a532ccb7c6a640fdfd4be23980c0fa60fd1",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a2eacf8c1b55de4733f4cfc315da38f1d4c66501",
+                "reference": "a2eacf8c1b55de4733f4cfc315da38f1d4c66501",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.213.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.214.0"
             },
-            "time": "2022-03-15T20:28:59+00:00"
+            "time": "2022-03-16T19:00:00+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -923,7 +923,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "5f48d3c82bb2fefbbe0c1a9b14ab48af75073fde"
+                "reference": "7f7fc2854ecd522926074ed04ad5731c183ebf53"
             },
             "require": {
                 "ext-json": "*",
@@ -966,7 +966,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-03-16T17:31:29+00:00"
+            "time": "2022-03-16T23:05:25+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1075,12 +1075,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "a4773b764d4fb408edc36f0ce7c87ad30499ebff"
+                "reference": "3093e3fc06e5f89445805613e6eefaeeada876fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a4773b764d4fb408edc36f0ce7c87ad30499ebff",
-                "reference": "a4773b764d4fb408edc36f0ce7c87ad30499ebff",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/3093e3fc06e5f89445805613e6eefaeeada876fc",
+                "reference": "3093e3fc06e5f89445805613e6eefaeeada876fc",
                 "shasum": ""
             },
             "require": {
@@ -1163,7 +1163,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-hackaton"
             },
-            "time": "2022-03-16T15:56:25+00:00"
+            "time": "2022-03-16T19:15:21+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
