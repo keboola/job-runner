@@ -80,6 +80,7 @@ RUN pecl channel-update pecl.php.net \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-USER $APP_USER_NAME
+#USER $APP_USER_NAME
+USER root
 
 CMD ["/bin/bash"]
