@@ -61,15 +61,7 @@ services:
             - { name: monolog.processor, method: processRecord }
 
     Keboola\ObjectEncryptor\ObjectEncryptorFactory:
-        arguments:
-            $kmsKeyId: '%env(AWS_KMS_KEY_ID)%'
-            $kmsRegion: '%env(AWS_REGION)%'
-            # keyVersion1 needs to be present so that legacy ciphers are not re-encrypted
-            # https://keboola.slack.com/archives/CMTBFNLF8/p1592484324017900?thread_ts=1592483550.014000&cid=CMTBFNLF8
-            $keyVersion1: '%env(LEGACY_ENCRYPTION_KEY)%'
-            # intentionally empty, legacy AES ciphers are not supported by this app
-            $keyVersion0:
-            $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
+        class: App\FakeEncryptorFactory
 
     Keboola\JobQueueInternalClient\Client:
         arguments:
