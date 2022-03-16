@@ -169,7 +169,7 @@ class RunCommand extends Command
 
             $this->logger->info(sprintf('Running job "%s".', $jobId));
             $job = $this->queueClient->getJob($jobId);
-            $token = $job->getTokenDecrypted();
+//            $token = $job->getTokenDecrypted();
             $job = $this->queueClient->getJobFactory()->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
             $this->queueClient->patchJob(
                 $job->getId(),
@@ -182,26 +182,26 @@ class RunCommand extends Command
                 $job->getComponentId(),
                 $job->getProjectId()
             ));
-            $options = [
-                'token' => $token,
-                'userAgent' => $job->getComponentId(),
-            ];
-            $clientWithoutLogger = $this->storageApiFactory->getClient($options);
-            if ($job->getBranchId()) {
-                $clientWithoutLogger = $this->storageApiFactory->getBranchClient(
-                    (string) $job->getBranchId(),
-                    $options
-                );
-            }
-            $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
-            $clientWithoutLogger->setRunId($job->getRunId());
-            $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
-            $this->logger->pushHandler($handler);
+//            $options = [
+//                'token' => $token,
+//                'userAgent' => $job->getComponentId(),
+//            ];
+//            $clientWithoutLogger = $this->storageApiFactory->getClient($options);
+//            if ($job->getBranchId()) {
+//                $clientWithoutLogger = $this->storageApiFactory->getBranchClient(
+//                    (string) $job->getBranchId(),
+//                    $options
+//                );
+//            }
+//            $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
+//            $clientWithoutLogger->setRunId($job->getRunId());
+//            $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
+//            $this->logger->pushHandler($handler);
             $containerLogger = new ContainerLogger('container-logger');
             $options['logger'] = $this->logger;
             $clientWithLogger = $this->storageApiFactory->getClient($options);
             $clientWithLogger->setRunId($job->getRunId());
-            $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
+            $loggerService = new LoggersService($this->logger, $containerLogger, null);
 
             $creditsChecker = $this->storageApiFactory->getCreditsChecker($clientWithLogger);
             if (!$creditsChecker->hasCredits()) {
