@@ -78,6 +78,8 @@ stages:
   # Push test image to test ACR
   - stage: deploy_test
     displayName: Deploy Test
+    dependsOn: [prepare]
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -92,57 +94,8 @@ stages:
               set -Eeuo pipefail
               docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
 
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(tag)
-
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(tag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):latest
+              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
             displayName: 'Load image'
-
-          # Push test image to test AWS ECR
-          - task: ECRPushImage@1
-            displayName: 'Push ECR [$(productionTag)]'
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: $(tag)
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-
-          - task: ECRPushImage@1
-            displayName: 'Push ECR [$(tag)]'
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: $(tag)
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-
-          - task: ECRPushImage@1
-            displayName: 'Push ECR latest'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: 'latest'
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: 'latest'
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
 
           - task: Docker@2
             displayName: 'Push ACR [$(productionTag), $(tag)]'
@@ -151,81 +104,4 @@ stages:
               containerRegistry: 'Keboola PS Test ACR'
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
               repository: $(imageName)
-              tags: |
-                $(productionTag)
-                $(tag)
-
-          - task: Docker@2
-            displayName: 'Push ACR [latest]'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-            inputs:
-              command: push
-              containerRegistry: 'Keboola PS Test ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                latest
-
-  # Push image to production ACR
-  - stage: deploy_prod
-    displayName: Deploy Production
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    pool:
-      vmImage: ubuntu-latest
-    jobs:
-      - job: deploy
-        displayName: 'Deploy'
-        steps:
-          - download: current
-            artifact: docker-images
-            displayName: 'Download artifacts'
-
-          - script: |
-              set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
-            displayName: 'Load image'
-
-          - task: ECRPushImage@1
-            displayName: 'Push to ECR [$(productionTag)]'
-            inputs:
-              awsCredentials: 'Production - ECR Distribution'
-              regionName: 'us-east-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: latest
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-
-          - task: ECRPushImage@1
-            displayName: 'Push to ECR [latest]'
-            inputs:
-              awsCredentials: 'Production - ECR Distribution'
-              regionName: 'us-east-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: latest
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: latest
-
-          - task: Docker@2
-            displayName: 'Push to ACR [$(productionTag), latest]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                $(productionTag)
-                latest
-
-          - script: |
-              printf "%s" "$(productionTag)" > artifact
-            displayName: Create artifact
-
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: 'artifact'
-              artifact: 'keboola.job-runner.latest-build'
+              tags: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
