@@ -104,7 +104,6 @@
         "build": [
             "@phplint",
             "@phpstan",
-            "@phpcs",
             "@tests"
         ],
         "ci": [
