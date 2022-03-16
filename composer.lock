@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35d231de1ec4f6aedd936eeb42bb01be",
+    "content-hash": "781763bb4246167c374e305d683d5e48",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.212.7",
+            "version": "3.213.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7f4c976df8a0fbe8d786e4b479d44e22478ce8af"
+                "reference": "7d361a532ccb7c6a640fdfd4be23980c0fa60fd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7f4c976df8a0fbe8d786e4b479d44e22478ce8af",
-                "reference": "7f4c976df8a0fbe8d786e4b479d44e22478ce8af",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7d361a532ccb7c6a640fdfd4be23980c0fa60fd1",
+                "reference": "7d361a532ccb7c6a640fdfd4be23980c0fa60fd1",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.212.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.213.1"
             },
-            "time": "2022-03-11T19:14:33+00:00"
+            "time": "2022-03-15T20:28:59+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -919,11 +919,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-odin-hackaton",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "fa6753d659a84a25d55efa33c01ed919d7df1fb5"
+                "reference": "b5dcb1bebcf74ea64222daf952dd50fe5d83027a"
             },
             "require": {
                 "ext-json": "*",
@@ -966,7 +966,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-03-14T11:51:21+00:00"
+            "time": "2022-03-16T16:52:29+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1071,16 +1071,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "9.6.0",
+            "version": "dev-odin-hackaton",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "e738e3d4b3e12fbb042e8a602ade91f03e45466d"
+                "reference": "a4773b764d4fb408edc36f0ce7c87ad30499ebff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/e738e3d4b3e12fbb042e8a602ade91f03e45466d",
-                "reference": "e738e3d4b3e12fbb042e8a602ade91f03e45466d",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a4773b764d4fb408edc36f0ce7c87ad30499ebff",
+                "reference": "a4773b764d4fb408edc36f0ce7c87ad30499ebff",
                 "shasum": ""
             },
             "require": {
@@ -1108,7 +1108,42 @@
                     "Keboola\\JobQueueInternalClient\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Keboola\\JobQueueInternalClient\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "phpunit --coverage-clover /tmp/build-logs/clover.xml --coverage-xml=/tmp/build-logs/coverage-xml --log-junit=/tmp/build-logs/phpunit.junit.xml"
+                ],
+                "phpstan": [
+                    "phpstan analyse --no-progress -c phpstan.neon"
+                ],
+                "phpcs": [
+                    "phpcs --extensions=php src tests"
+                ],
+                "phpcbf": [
+                    "phpcbf --extensions=php src tests"
+                ],
+                "phplint": [
+                    "parallel-lint -j 10 --exclude vendor ."
+                ],
+                "infection": [
+                    "infection --threads=4 --min-covered-msi=90 --coverage=/tmp/build-logs"
+                ],
+                "build": [
+                    "@phplint",
+                    "@phpcs",
+                    "@phpstan",
+                    "@tests",
+                    "@infection"
+                ],
+                "ci": [
+                    "@composer validate --no-check-all --strict",
+                    "@build"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1126,9 +1161,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/9.6.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-hackaton"
             },
-            "time": "2022-02-17T12:05:41+00:00"
+            "time": "2022-03-16T15:56:25+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -7961,16 +7996,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.18",
+            "version": "9.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1b5856028273bfd855e60a887278857d872ec67a"
+                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b5856028273bfd855e60a887278857d872ec67a",
-                "reference": "1b5856028273bfd855e60a887278857d872ec67a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/35ea4b7f3acabb26f4bb640f8c30866c401da807",
+                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807",
                 "shasum": ""
             },
             "require": {
@@ -8000,7 +8035,7 @@
                 "sebastian/global-state": "^5.0.1",
                 "sebastian/object-enumerator": "^4.0.3",
                 "sebastian/resource-operations": "^3.0.3",
-                "sebastian/type": "^2.3.4",
+                "sebastian/type": "^3.0",
                 "sebastian/version": "^3.0.2"
             },
             "require-dev": {
@@ -8048,7 +8083,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.18"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.19"
             },
             "funding": [
                 {
@@ -8060,7 +8095,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-08T06:52:28+00:00"
+            "time": "2022-03-15T09:57:31+00:00"
         },
         {
             "name": "sanmai/pipeline",
@@ -8984,28 +9019,28 @@
         },
         {
             "name": "sebastian/type",
-            "version": "2.3.4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "b8cd8a1c753c90bc1a0f5372170e3e489136f914"
+                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b8cd8a1c753c90bc1a0f5372170e3e489136f914",
-                "reference": "b8cd8a1c753c90bc1a0f5372170e3e489136f914",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
+                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.3"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -9028,7 +9063,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/2.3.4"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.0.0"
             },
             "funding": [
                 {
@@ -9036,7 +9071,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-15T12:49:02+00:00"
+            "time": "2022-03-15T09:54:48+00:00"
         },
         {
             "name": "sebastian/version",
@@ -9843,7 +9878,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -9856,5 +9892,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }
