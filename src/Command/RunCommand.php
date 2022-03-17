@@ -246,7 +246,8 @@ class RunCommand extends Command
                 $job->getId(),
                 $usageFile,
                 $job->getConfigRowIds(),
-                $outputs
+                $outputs,
+                $job->getBackend()->toDataArray()['workspace']['id'] ?? null
             );
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
