@@ -39,10 +39,6 @@ services:
 
     App\Command\CleanupCommand:
 
-    App\StorageApiFactory:
-        arguments:
-            $storageApiUrl: "%env(STORAGE_API_URL)%"
-
     Keboola\ErrorControl\Uploader\UploaderFactory:
         arguments:
             $storageApiUrl: "%env(STORAGE_API_URL)%"
@@ -76,9 +72,12 @@ services:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
             $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
 
-    Keboola\JobQueueInternalClient\JobFactory\StorageClientFactory:
-        arguments:
-            $storageApiUrl: '%env(STORAGE_API_URL)%'
+    Keboola\StorageApiBranch\Factory\ClientOptions:
+        $url: '%env(STORAGE_API_URL)%'
+        $userAgent: 'QueueRunner'
+        $logger: ~ # mustn't be autowired, will be configured at runtime
+
+    Keboola\StorageApiBranch\Factory\StorageClientPlainFactory:
 
     Keboola\JobQueueInternalClient\JobFactory:
         arguments:

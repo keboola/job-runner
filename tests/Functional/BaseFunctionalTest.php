@@ -6,7 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
-use App\StorageApiFactory;
+use App\CreditsCheckerFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -18,6 +18,9 @@ use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Options\ListFilesOptions;
+use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\Temp\Temp;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
@@ -75,11 +78,10 @@ abstract class BaseFunctionalTest extends TestCase
         ?array $expectedJobResult = null
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
-        $storageApiFactory = new JobFactory\StorageClientFactory(
-            $this->storageClient->getApiUrl(),
-            new NullLogger()
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions($this->storageClient->getApiUrl())
         );
-        $jobFactory = new JobFactory($storageApiFactory, $this->objectEncryptorFactory);
+        $jobFactory = new JobFactory($storageClientFactory, $this->objectEncryptorFactory);
         $job = $jobFactory->createNewJob($jobData);
         $queueClient = self::getMockBuilder(QueueClient::class)
             ->setMethods(['getJob', 'postJobResult', 'getJobFactory', 'updateJob', 'patchJob'])
@@ -135,20 +137,19 @@ abstract class BaseFunctionalTest extends TestCase
         );
         /** @var QueueClient $queueClient */
         if ($mockClient) {
-            $storageApiFactory = self::getMockBuilder(StorageApiFactory::class)
-                ->setConstructorArgs([getenv('STORAGE_API_URL')])
-                ->setMethods(['getClient'])
-                ->getMock();
-            $storageApiFactory->expects(self::any())->method('getClient')->willReturn($mockClient);
-        } else {
-            $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
+            $mockClientWrapper = $this->createMock(ClientWrapper::class);
+            $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
+            $mockClientWrapper->method('getBranchClientIfAvailable')->willReturn($mockClient);
+            $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
+            $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
-        /** @var StorageApiFactory $storageApiFactory */
+        $creditsCheckerFactory = new CreditsCheckerFactory();
         $command = new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $queueClient,
-            $storageApiFactory,
+            $creditsCheckerFactory,
+            $storageClientFactory,
             new JobDefinitionFactory(),
             (string) getenv('LEGACY_OAUTH_API_URL'),
             ['cpu_count' => 1]
