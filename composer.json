@@ -21,7 +21,7 @@
         "ext-json": "*",
         "keboola/api-error-control": "^3.8",
         "keboola/billing-api-php-client": "^0.1",
-        "keboola/configuration-variables-resolver": "dev-odin-PS-3098 as 1.1.1",
+        "keboola/configuration-variables-resolver": "^2.0",
         "keboola/dockerbundle": "dev-odin-library-3@dev",
         "keboola/input-mapping": "^15.0",
         "keboola/job-queue-internal-api-php-client": "^10.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1b6c5f58476771a2c3def54b93c2e58",
+    "content-hash": "217cbce96d08b45c01380cdd2889feaf",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.217.0",
+            "version": "3.218.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "a8cca383b13fe6cde479a4745b4d3dfe893fdc69"
+                "reference": "714ed40bc2e60d4af907eb2d41fbfb75f980d2e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a8cca383b13fe6cde479a4745b4d3dfe893fdc69",
-                "reference": "a8cca383b13fe6cde479a4745b4d3dfe893fdc69",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/714ed40bc2e60d4af907eb2d41fbfb75f980d2e2",
+                "reference": "714ed40bc2e60d4af907eb2d41fbfb75f980d2e2",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.217.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.218.0"
             },
-            "time": "2022-03-30T18:18:30+00:00"
+            "time": "2022-03-31T18:20:58+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -822,16 +822,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "dev-odin-PS-3098",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "ac87c1d1b6b3a78c80f4722ac066aadc063640cd"
+                "reference": "75bc0b1ff2ea94e05f06ea145baac6ada33aaacc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/ac87c1d1b6b3a78c80f4722ac066aadc063640cd",
-                "reference": "ac87c1d1b6b3a78c80f4722ac066aadc063640cd",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/75bc0b1ff2ea94e05f06ea145baac6ada33aaacc",
+                "reference": "75bc0b1ff2ea94e05f06ea145baac6ada33aaacc",
                 "shasum": ""
             },
             "require": {
@@ -878,9 +878,9 @@
                 "variables"
             ],
             "support": {
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/odin-PS-3098"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/2.0.0"
             },
-            "time": "2022-03-31T16:59:31+00:00"
+            "time": "2022-04-01T07:33:08+00:00"
         },
         {
             "name": "keboola/csv",
@@ -9844,17 +9844,9 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/configuration-variables-resolver",
-            "version": "dev-odin-PS-3098",
-            "alias": "1.1.1",
-            "alias_normalized": "1.1.1.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/configuration-variables-resolver": 20,
         "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
