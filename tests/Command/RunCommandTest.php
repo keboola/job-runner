@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\RunCommand;
+use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
-use App\StorageApiFactory;
 use App\StorageApiHandler;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
@@ -22,6 +22,8 @@ use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Psr\Log\NullLogger;
@@ -336,14 +338,11 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteVariablesSharedCode(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(
+        $storageClientFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
-            new NullLogger()
-        );
-        $storageClient = $storageClientFactory->getClientWrapper(
-            (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ClientWrapper::BRANCH_MAIN
-        )->getBasicClient();
+            (string) getenv('TEST_STORAGE_API_TOKEN')
+        ));
+        $storageClient = $storageClientFactory->createClientWrapper(new ClientOptions())->getBasicClient();
         $componentsApi = new Components($storageClient);
         $configurationApi = new Configuration();
         $configurationApi->setComponentId('keboola.shared-code');
@@ -453,14 +452,15 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteUnEncryptedJobData(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(
-            (string) getenv('STORAGE_API_URL'),
-            new NullLogger()
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions((string) getenv('STORAGE_API_URL'))
         );
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        $storageClient = $storageClientFactory->getClientWrapper(
-            (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ClientWrapper::BRANCH_MAIN
+        $storageClient = $storageClientFactory->createClientWrapper(
+            new ClientOptions(
+                null,
+                (string) getenv('TEST_STORAGE_API_TOKEN')
+            )
         )->getBasicClient();
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
@@ -673,9 +673,13 @@ class RunCommandTest extends AbstractCommandTest
             ->onlyMethods(['verifyToken'])
             ->getMock();
         $storageClientMock->method('verifyToken')->willReturn($tokenInfo);
-        $storageApiFactoryMock = self::createMock(StorageApiFactory::class);
-        $storageApiFactoryMock->method('getClient')->willReturn($storageClientMock);
-        $storageApiFactoryMock->method('getCreditsChecker')->willReturn($creditsCheckerMock);
+        $creditsCheckerFactoryMock = self::createMock(CreditsCheckerFactory::class);
+        $creditsCheckerFactoryMock->method('getCreditsChecker')->willReturn($creditsCheckerMock);
+        $clientWrapperMock = $this->createMock(ClientWrapper::class);
+        $clientWrapperMock->method('getBasicClient')->willReturn($storageClientMock);
+        $clientWrapperMock->method('getBranchClientIfAvailable')->willReturn($storageClientMock);
+        $storageClientFactoryMock = $this->createMock(StorageClientPlainFactory::class);
+        $storageClientFactoryMock->method('createClientWrapper')->willReturn($clientWrapperMock);
 
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         /** @var Client $client */
@@ -691,9 +695,12 @@ class RunCommandTest extends AbstractCommandTest
         $application = new Application($kernel);
 
         $command = $application->find('app:run');
-        $reflection = new ReflectionProperty($command, 'storageApiFactory');
+        $reflection = new ReflectionProperty($command, 'creditsCheckerFactory');
         $reflection->setAccessible(true);
-        $reflection->setValue($command, $storageApiFactoryMock);
+        $reflection->setValue($command, $creditsCheckerFactoryMock);
+        $reflection = new ReflectionProperty($command, 'storageClientFactory');
+        $reflection->setAccessible(true);
+        $reflection->setValue($command, $storageClientFactoryMock);
 
         $property = new ReflectionProperty($command, 'logger');
         $property->setAccessible(true);
@@ -788,8 +795,12 @@ class RunCommandTest extends AbstractCommandTest
 
         $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
-        $storageApiFactory = new StorageApiFactory((string) getenv('STORAGE_API_URL'));
+        $creditsCheckerFactory = new CreditsCheckerFactory();
         $jobDefinitionFactory = new JobDefinitionFactory();
+        $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
+            (string) getenv('STORAGE_API_URL'),
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
+        ));
 
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -797,6 +808,7 @@ class RunCommandTest extends AbstractCommandTest
             $logger,
             $logProcessor,
             $mockQueueClient,
+            $creditsCheckerFactory,
             $storageApiFactory,
             $jobDefinitionFactory,
             '',

@@ -8,6 +8,8 @@ use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Process\Process;
@@ -79,13 +81,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
 
     public function testExecuteSuccessTerminatingJob(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(
-            (string) getenv('STORAGE_API_URL'),
-            new NullLogger()
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions((string) getenv('STORAGE_API_URL'))
         );
-        $storageClient = $storageClientFactory->getClientWrapper(
-            (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ClientWrapper::BRANCH_MAIN
+        $storageClient = $storageClientFactory->createClientWrapper(
+            new ClientOptions(
+                null,
+                (string) getenv('TEST_STORAGE_API_TOKEN')
+            )
         )->getBasicClient();
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         /** @var Client $client */
@@ -196,13 +199,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
 
     public function testExecuteSuccessNonTerminatingJob(): void
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(
-            (string) getenv('STORAGE_API_URL'),
-            new NullLogger()
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions((string) getenv('STORAGE_API_URL'))
         );
-        $storageClient = $storageClientFactory->getClientWrapper(
-            (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ClientWrapper::BRANCH_MAIN
+        $storageClient = $storageClientFactory->createClientWrapper(
+            new ClientOptions(
+                null,
+                (string) getenv('TEST_STORAGE_API_TOKEN')
+            )
         )->getBasicClient();
         list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
         $tokenInfo = $storageClient->verifytoken();

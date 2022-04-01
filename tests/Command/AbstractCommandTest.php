@@ -7,6 +7,8 @@ namespace App\Tests\Command;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -17,9 +19,8 @@ abstract class AbstractCommandTest extends KernelTestCase
      */
     protected function getJobFactoryAndClient(): array
     {
-        $storageClientFactory = new JobFactory\StorageClientFactory(
-            (string) getenv('STORAGE_API_URL'),
-            new NullLogger()
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions((string) getenv('STORAGE_API_URL'))
         );
         $objectEncryptorFactory = new ObjectEncryptorFactory(
             (string) getenv('AWS_KMS_KEY'),

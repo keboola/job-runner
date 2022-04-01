@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\CreditsCheckerFactory;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
-use App\StorageApiFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
+use Closure;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -33,10 +34,10 @@ use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
-use Keboola\StorageApi\BranchAwareClient;
-use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -55,14 +56,16 @@ class RunCommand extends Command
     private QueueClient $queueClient;
     private Logger $logger;
     private LogProcessor $logProcessor;
-    private StorageApiFactory $storageApiFactory;
+    private CreditsCheckerFactory $creditsCheckerFactory;
     private JobDefinitionFactory $jobDefinitionFactory;
+    private StorageClientPlainFactory $storageClientFactory;
 
     public function __construct(
         LoggerInterface $logger,
         LogProcessor $logProcessor,
         QueueClient $queueClient,
-        StorageApiFactory $storageApiFactory,
+        CreditsCheckerFactory $creditsCheckerFactory,
+        StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         string $legacyOauthApiUrl,
         array $instanceLimits
@@ -71,7 +74,8 @@ class RunCommand extends Command
         $this->queueClient = $queueClient;
         /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->logger = $logger;
-        $this->storageApiFactory = $storageApiFactory;
+        $this->creditsCheckerFactory = $creditsCheckerFactory;
+        $this->storageClientFactory = $storageClientFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
         $this->legacyOauthApiUrl = $legacyOauthApiUrl;
         $this->instanceLimits = $instanceLimits;
@@ -156,6 +160,20 @@ class RunCommand extends Command
             ->setHelp('Run job identified by JOB_ID environment variable.');
     }
 
+    private static function getStepPollDelayFunction(): Closure
+    {
+        return function ($tries) {
+            switch ($tries) {
+                case ($tries < 15):
+                    return 1;
+                case ($tries < 30):
+                    return 2;
+                default:
+                    return 5;
+            }
+        };
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobId = (string) getenv('JOB_ID');
@@ -182,39 +200,28 @@ class RunCommand extends Command
                 $job->getComponentId(),
                 $job->getProjectId()
             ));
-            $options = [
-                'token' => $token,
-                'userAgent' => $job->getComponentId(),
-            ];
-            $clientWithoutLogger = $this->storageApiFactory->getClient($options);
-            if ($job->getBranchId()) {
-                $clientWithoutLogger = $this->storageApiFactory->getBranchClient(
-                    (string) $job->getBranchId(),
-                    $options
-                );
-            }
-            $this->logger->info('Decrypted token ' . $clientWithoutLogger->verifyToken()['description']);
-            $clientWithoutLogger->setRunId($job->getRunId());
+            $options = (new ClientOptions())
+                ->setToken($token)
+                ->setUserAgent($job->getComponentId())
+                ->setBranchId($job->getBranchId())
+                ->setRunId($job->getRunId())
+                ->setJobPollRetryDelay(self::getStepPollDelayFunction());
+            $clientWithoutLogger = $this->storageClientFactory
+                ->createClientWrapper($options)->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
             $containerLogger = new ContainerLogger('container-logger');
-            $options['logger'] = $this->logger;
-            $clientWithLogger = $this->storageApiFactory->getClient($options);
-            $clientWithLogger->setRunId($job->getRunId());
+            $options = clone $options;
+            $options->setLogger($this->logger);
+            $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
-            $creditsChecker = $this->storageApiFactory->getCreditsChecker($clientWithLogger);
+            $creditsChecker = $this->creditsCheckerFactory->getCreditsChecker($clientWrapper->getBasicClient());
             if (!$creditsChecker->hasCredits()) {
                 throw new UserException('You do not have credits to run a job');
             }
 
             // set up runner
-            $clientWrapper = new ClientWrapper(
-                $clientWithLogger,
-                null,
-                $this->logger,
-                $job->getBranchId() ?? ''
-            );
             $component = $this->getComponentClass($clientWrapper, $job);
             $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
 
