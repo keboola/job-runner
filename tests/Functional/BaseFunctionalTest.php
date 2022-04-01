@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
-use App\JobDefinitionFactory;
 use App\CreditsCheckerFactory;
+use App\JobDefinitionFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;

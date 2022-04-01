@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\RunCommand;
-use App\JobDefinitionFactory;
 use App\CreditsCheckerFactory;
+use App\JobDefinitionFactory;
 use App\StorageApiHandler;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;

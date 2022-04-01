@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\CreditsCheckerFactory;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
-use App\CreditsCheckerFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
 use Closure;
