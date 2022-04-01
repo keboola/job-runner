@@ -11,6 +11,7 @@ use App\LogInfo;
 use App\CreditsCheckerFactory;
 use App\StorageApiHandler;
 use App\UsageFile;
+use Closure;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -60,14 +61,14 @@ class RunCommand extends Command
     private StorageClientPlainFactory $storageClientFactory;
 
     public function __construct(
-        LoggerInterface           $logger,
-        LogProcessor              $logProcessor,
-        QueueClient               $queueClient,
-        CreditsCheckerFactory     $creditsCheckerFactory,
+        LoggerInterface $logger,
+        LogProcessor $logProcessor,
+        QueueClient $queueClient,
+        CreditsCheckerFactory $creditsCheckerFactory,
         StorageClientPlainFactory $storageClientFactory,
-        JobDefinitionFactory      $jobDefinitionFactory,
-        string                    $legacyOauthApiUrl,
-        array                     $instanceLimits
+        JobDefinitionFactory $jobDefinitionFactory,
+        string $legacyOauthApiUrl,
+        array $instanceLimits
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
@@ -159,7 +160,7 @@ class RunCommand extends Command
             ->setHelp('Run job identified by JOB_ID environment variable.');
     }
 
-    private static function getStepPollDelayFunction(): callable
+    private static function getStepPollDelayFunction(): Closure
     {
         return function ($tries) {
             switch ($tries) {
