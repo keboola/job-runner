@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a64912a86fef85d49855b11427bfe880",
+    "content-hash": "217cbce96d08b45c01380cdd2889feaf",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1683,16 +1683,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v12.10.0",
+            "version": "12.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "354cd17ad92e44740868e16f6f5fca06f80ddf60"
+                "reference": "b83e0772f57b91c6c4b5727353dc36e13c3eb05f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/354cd17ad92e44740868e16f6f5fca06f80ddf60",
-                "reference": "354cd17ad92e44740868e16f6f5fca06f80ddf60",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/b83e0772f57b91c6c4b5727353dc36e13c3eb05f",
+                "reference": "b83e0772f57b91c6c4b5727353dc36e13c3eb05f",
                 "shasum": ""
             },
             "require": {
@@ -1737,9 +1737,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v12.10.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/12.11.1"
             },
-            "time": "2022-02-26T20:17:42+00:00"
+            "time": "2022-04-13T08:50:09+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
