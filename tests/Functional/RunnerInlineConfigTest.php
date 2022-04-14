@@ -386,7 +386,6 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             ],
             $data
         );
-        self::assertTrue($this->getTestHandler()->hasWarning('Overriding component tag with: "1.1.12"'));
     }
 
     public function testIncrementalTags(): void

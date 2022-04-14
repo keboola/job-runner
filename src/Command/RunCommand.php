@@ -304,7 +304,6 @@ class RunCommand extends Command
     {
         $component = $this->getComponent($clientWrapper, $job->getComponentId());
         if (!empty($job->getTag())) {
-            $this->logger->warn(sprintf('Overriding component tag with: "%s"', $job->getTag()));
             $component['data']['definition']['tag'] = $job->getTag();
         }
         return new Component($component);
