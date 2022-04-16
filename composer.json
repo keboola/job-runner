@@ -22,19 +22,19 @@
         "keboola/api-error-control": "^3.8",
         "keboola/billing-api-php-client": "^0.1",
         "keboola/configuration-variables-resolver": "^2.0",
-        "keboola/dockerbundle": "dev-odin-library-3@dev",
+        "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^15.0",
         "keboola/job-queue-internal-api-php-client": "^10.0",
         "keboola/object-encryptor": "^0.3.2",
         "keboola/output-mapping": "^17.0",
         "keboola/storage-api-php-client-branch-wrapper": "^2.0",
-        "symfony/console": "4.4.*",
-        "symfony/dotenv": "4.4.*",
+        "symfony/console": "^5.4",
+        "symfony/dotenv": "^5.4",
         "symfony/flex": "^1.10",
-        "symfony/framework-bundle": "4.4.*",
+        "symfony/framework-bundle": "^5.4",
         "symfony/monolog-bundle": "^3.7",
-        "symfony/validator": "4.4.31",
-        "symfony/yaml": "4.4.*"
+        "symfony/validator": "^5.4",
+        "symfony/yaml": "^5.4"
     },
     "repositories": [
         {
@@ -46,14 +46,12 @@
         "ext-zip": "*",
         "infection/infection": "^0.20",
         "keboola/coding-standard": ">=13.0.0",
-        "php-parallel-lint/php-parallel-lint": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12.17",
         "phpunit/phpunit": "^9.5.2",
         "sempro/phpunit-pretty-print": "^1.4",
-        "symfony/browser-kit": "^4.4",
-        "symfony/css-selector": "^4.4",
-        "symfony/phpunit-bridge": "^5.3"
+        "symfony/browser-kit": "^5.4",
+        "symfony/phpunit-bridge": "^5.4"
     },
     "config": {
         "preferred-install": {
@@ -99,11 +97,8 @@
         "tests": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
         "phpstan": "phpstan analyse --no-progress -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
-        "phpcbf": "phpcbf --extensions=php src tests",
-        "phplint": "parallel-lint -j 10 --exclude vendor --exclude bin .",
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
         "build": [
-            "@phplint",
             "@phpstan",
             "@phpcs",
             "@tests"
@@ -119,7 +114,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.4.*"
+            "require": "5.4.*"
         }
     }
 }
