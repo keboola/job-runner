@@ -229,6 +229,7 @@ class RunCommand extends Command
                 $job->getEncryptorFactory(),
                 $clientWrapper,
                 $loggerService,
+                new OutputFilter(60000),
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
             );
