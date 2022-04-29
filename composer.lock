@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "adf698f622623a86f1aec4e88bf13dbb",
+    "content-hash": "65aa7de12f7d46a3a103a1c596986a81",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.222.0",
+            "version": "3.222.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "0074bca70bf023f049532b177bf90d3a75e425cd"
+                "reference": "632621d97180e82d3adc1245a7b272774c30dbf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0074bca70bf023f049532b177bf90d3a75e425cd",
-                "reference": "0074bca70bf023f049532b177bf90d3a75e425cd",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/632621d97180e82d3adc1245a7b272774c30dbf5",
+                "reference": "632621d97180e82d3adc1245a7b272774c30dbf5",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.1"
             },
-            "time": "2022-04-27T18:36:42+00:00"
+            "time": "2022-04-28T18:17:24+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -919,11 +919,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-PS-640-c",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "bf9e3b3828fb4693f6c963001772c55959c0af0e"
+                "reference": "b1ba100dcce5b6025191dbdeca8e48f27d374ff4"
             },
             "require": {
                 "ext-json": "*",
@@ -968,7 +968,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-04-28T07:52:14+00:00"
+            "time": "2022-04-28T22:13:05+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1532,16 +1532,16 @@
         },
         {
             "name": "keboola/sandboxes-api-php-client",
-            "version": "6.16.0",
+            "version": "6.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/sandboxes-api-php-client.git",
-                "reference": "894e1b124ad7658ecbd999c61db4d35756207fd7"
+                "reference": "17a2e95cb2a5667f5475724a30a8759a14ec829a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/sandboxes-api-php-client/zipball/894e1b124ad7658ecbd999c61db4d35756207fd7",
-                "reference": "894e1b124ad7658ecbd999c61db4d35756207fd7",
+                "url": "https://api.github.com/repos/keboola/sandboxes-api-php-client/zipball/17a2e95cb2a5667f5475724a30a8759a14ec829a",
+                "reference": "17a2e95cb2a5667f5475724a30a8759a14ec829a",
                 "shasum": ""
             },
             "require": {
@@ -1583,9 +1583,9 @@
                 "sandboxes"
             ],
             "support": {
-                "source": "https://github.com/keboola/sandboxes-api-php-client/tree/6.16.0"
+                "source": "https://github.com/keboola/sandboxes-api-php-client/tree/6.17.0"
             },
-            "time": "2022-04-12T07:52:31+00:00"
+            "time": "2022-04-28T11:30:05+00:00"
         },
         {
             "name": "keboola/sanitizer",
