@@ -16,6 +16,7 @@ use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
+use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
@@ -229,6 +230,7 @@ class RunCommand extends Command
                 $job->getEncryptorFactory(),
                 $clientWrapper,
                 $loggerService,
+                new OutputFilter(60000),
                 $this->legacyOauthApiUrl,
                 $this->instanceLimits
             );
