@@ -199,6 +199,7 @@ class RunCommandTest extends AbstractCommandTest
                 ],
                 'backend' => [
                     'size' => null,
+                    'containerSize' => null,
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()

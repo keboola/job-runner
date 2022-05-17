@@ -44,6 +44,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => null,
+                    'containerSize' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -63,6 +64,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => null,
+                    'containerSize' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -254,6 +256,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => 'large',
+                    'containerSize' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()

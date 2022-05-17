@@ -255,6 +255,7 @@ class RunCommand extends Command
                 $job->getId(),
                 $usageFile,
                 $job->getConfigRowIds(),
+                $job->getBackend(),
                 $outputs
             );
 
