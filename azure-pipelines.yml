@@ -169,7 +169,7 @@ stages:
   # Push image to production
   - stage: deploy_prod
     displayName: Deploy Production
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -189,7 +189,7 @@ stages:
             displayName: 'Load image'
 
           - task: ECRPushImage@1
-            displayName: 'Push to ECR [$(productionTag)]'
+            displayName: 'Push to ECR $(productionTag)'
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               awsCredentials: 'Production - ECR Distribution'
