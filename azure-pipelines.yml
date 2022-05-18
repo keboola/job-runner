@@ -189,7 +189,7 @@ stages:
             displayName: 'Load image'
 
           - task: ECRPushImage@1
-            displayName: 'Push to ECR $(productionTag)'
+            displayName: 'Push to ECR [$(productionTag)]'
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               awsCredentials: 'Production - ECR Distribution'

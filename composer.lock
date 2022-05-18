@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.222.13",
+            "version": "3.222.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "007ddbbded7b753c2ceda61f3648774597a2615f"
+                "reference": "d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/007ddbbded7b753c2ceda61f3648774597a2615f",
-                "reference": "007ddbbded7b753c2ceda61f3648774597a2615f",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0",
+                "reference": "d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.13"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.14"
             },
-            "time": "2022-05-16T18:15:06+00:00"
+            "time": "2022-05-17T18:14:21+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -923,7 +923,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "570c8889ce2a76abffa66e678bd4bf018e1da8de"
+                "reference": "dc4fcb6e509f3af8cab1431073915f64517bc632"
             },
             "require": {
                 "ext-json": "*",
@@ -968,7 +968,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-05-17T16:10:05+00:00"
+            "time": "2022-05-18T09:36:48+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1024,16 +1024,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "15.0.0",
+            "version": "15.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "6d4bbfac8e5f9d88af63dc4fc3d511743c0cfad5"
+                "reference": "1af0fb8cff3ae287e6dd94374341dc6e0fc90191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/6d4bbfac8e5f9d88af63dc4fc3d511743c0cfad5",
-                "reference": "6d4bbfac8e5f9d88af63dc4fc3d511743c0cfad5",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/1af0fb8cff3ae287e6dd94374341dc6e0fc90191",
+                "reference": "1af0fb8cff3ae287e6dd94374341dc6e0fc90191",
                 "shasum": ""
             },
             "require": {
@@ -1071,9 +1071,9 @@
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
                 "issues": "https://github.com/keboola/input-mapping/issues",
-                "source": "https://github.com/keboola/input-mapping/tree/15.0.0"
+                "source": "https://github.com/keboola/input-mapping/tree/15.1.0"
             },
-            "time": "2022-03-30T12:04:16+00:00"
+            "time": "2022-05-17T21:11:23+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -1238,22 +1238,22 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "17.0.0",
+            "version": "17.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "0880e7955e1aebc03fe4f2e866b9001737ba0b6f"
+                "reference": "cf341993c5be5fcbf38e7ac55b3aac04bfdfb944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/0880e7955e1aebc03fe4f2e866b9001737ba0b6f",
-                "reference": "0880e7955e1aebc03fe4f2e866b9001737ba0b6f",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/cf341993c5be5fcbf38e7ac55b3aac04bfdfb944",
+                "reference": "cf341993c5be5fcbf38e7ac55b3aac04bfdfb944",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.5.5",
-                "keboola/input-mapping": "^15.0",
+                "keboola/input-mapping": "^15.1",
                 "keboola/php-file-storage-utils": "^0.2.2",
                 "keboola/sanitizer": "^0.1",
                 "keboola/storage-api-client": "^12.9.3",
@@ -1291,9 +1291,9 @@
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
                 "issues": "https://github.com/keboola/output-mapping/issues",
-                "source": "https://github.com/keboola/output-mapping/tree/17.0.0"
+                "source": "https://github.com/keboola/output-mapping/tree/17.1.0"
             },
-            "time": "2022-03-30T14:41:48+00:00"
+            "time": "2022-05-18T07:00:04+00:00"
         },
         {
             "name": "keboola/php-encryption",
