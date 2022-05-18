@@ -169,7 +169,7 @@ stages:
   # Push image to production
   - stage: deploy_prod
     displayName: Deploy Production
-    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     pool:
       vmImage: ubuntu-latest
     jobs:
