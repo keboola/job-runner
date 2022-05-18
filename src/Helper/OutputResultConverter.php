@@ -9,6 +9,7 @@ use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\InputMapping\Table\Result\TableMetrics;
+use Keboola\JobQueueInternalClient\JobFactory\Backend;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
 use Keboola\JobQueueInternalClient\Result\InputOutput\ColumnCollection;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
@@ -59,7 +60,7 @@ class OutputResultConverter
     /**
      * @param Output[] $outputs
      */
-    public static function convertOutputsToMetrics(array $outputs): JobMetrics
+    public static function convertOutputsToMetrics(array $outputs, Backend $backend): JobMetrics
     {
         $jobMetrics = new JobMetrics();
         if (!$outputs) {
@@ -88,6 +89,11 @@ class OutputResultConverter
             if ($workspaceBackendSize) {
                 $jobMetrics->setBackendSize($workspaceBackendSize);
             }
+            // container size is just passed around, the default is small here
+            // https://github.com/keboola/docker-bundle/blob/dc4fcb6e509f3af8cab1431073915f64517bc632/src/Docker/Runner/Limits.php#L80
+            // and here
+            // https://github.com/keboola/job-queue-daemon/blob/7af7d3853cb81f585e9c4d29a5638ff2ad40107a/src/Cluster/ResourceTransformer.php#L26
+            $jobMetrics->setBackendContainerSize($backend->getContainerType() ?? 'small');
         }
 
         $jobMetrics->setInputTablesBytesSum($sum);

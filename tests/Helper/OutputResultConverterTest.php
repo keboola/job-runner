@@ -9,6 +9,7 @@ use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoader;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
+use Keboola\JobQueueInternalClient\JobFactory\Backend;
 use Keboola\OutputMapping\DeferredTasks\LoadTableQueue;
 use Keboola\OutputMapping\Table\Result as OutputResult;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +37,7 @@ class OutputResultConverterTest extends TestCase
 
     public function testNoMetrics(): void
     {
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([]);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([], new Backend(null, null));
         self::assertSame(
             [
                 'storage' => [
@@ -44,7 +45,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => null,
-                    'containerSize' => null,
+                    'containerSize' => 'small',
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -56,7 +57,7 @@ class OutputResultConverterTest extends TestCase
         $output = new Output();
         $inputTableResult = new InputResult();
         $output->setInputTableResult($inputTableResult);
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([$output]);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([$output], new Backend(null, 'medium'));
         self::assertSame(
             [
                 'storage' => [
@@ -64,7 +65,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => null,
-                    'containerSize' => null,
+                    'containerSize' => 'medium',
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -151,7 +152,7 @@ class OutputResultConverterTest extends TestCase
 
         $outputs = [$output1, $output2];
         $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs);
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs, new Backend(null, null));
         self::assertSame(
             [
                 'message' => 'Component processing finished.',
@@ -256,7 +257,7 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'backend' => [
                     'size' => 'large',
-                    'containerSize' => null,
+                    'containerSize' => 'small',
                 ],
             ],
             $jobMetrics->jsonSerialize()

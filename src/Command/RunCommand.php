@@ -260,7 +260,7 @@ class RunCommand extends Command
             );
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
-            $metrics = OutputResultConverter::convertOutputsToMetrics($outputs);
+            $metrics = OutputResultConverter::convertOutputsToMetrics($outputs, $job->getBackend());
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
             $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
