@@ -41,7 +41,7 @@ class OutputResultConverterTest extends TestCase
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => null,
+                    'inputTablesBytesSum' => 0,
                 ],
                 'backend' => [
                     'size' => null,
