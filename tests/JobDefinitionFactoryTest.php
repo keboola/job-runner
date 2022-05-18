@@ -15,8 +15,8 @@ use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
-use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use PHPUnit\Framework\TestCase;
 
 class JobDefinitionFactoryTest extends TestCase
@@ -172,7 +172,7 @@ class JobDefinitionFactoryTest extends TestCase
         $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
         $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->method('apiGet')
             ->with('components/my-component/configs/my-config')
@@ -230,7 +230,7 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->expects(self::never())->method(self::anything());
@@ -257,7 +257,7 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->method('apiGet')
@@ -297,7 +297,7 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->method('apiGet')
@@ -380,7 +380,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-configuration-unsafe'],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(
@@ -441,7 +441,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-configuration-unsafe'],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(
@@ -509,7 +509,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-job-blocked'],
         ]);
 
-        $job = new Job($encryptorFactory, $jobData);
+        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(

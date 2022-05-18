@@ -93,6 +93,7 @@ abstract class BaseFunctionalTest extends TestCase
         $queueClient->expects(self::any())->method('patchJob')->willReturn(
             new JobFactory\Job(
                 $this->objectEncryptorFactory,
+                $storageClientFactory,
                 [
                     'runId' => '1234',
                     'status' => 'processing',
@@ -126,6 +127,7 @@ abstract class BaseFunctionalTest extends TestCase
         )->willReturn(
             new JobFactory\Job(
                 $this->objectEncryptorFactory,
+                $storageClientFactory,
                 [
                     'runId' => '1234',
                     'status' => 'processing',

@@ -166,7 +166,7 @@ stages:
               tags: |
                 latest
 
-  # Push image to production ACR
+  # Push image to production
   - stage: deploy_prod
     displayName: Deploy Production
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
@@ -190,6 +190,7 @@ stages:
 
           - task: ECRPushImage@1
             displayName: 'Push to ECR [$(productionTag)]'
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               awsCredentials: 'Production - ECR Distribution'
               regionName: 'us-east-1'
@@ -211,7 +212,8 @@ stages:
               pushTag: latest
 
           - task: Docker@2
-            displayName: 'Push to ACR [$(productionTag), latest]'
+            displayName: 'Push to ACR $(productionTag)'
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               command: push
               containerRegistry: 'Keboola ACR'
@@ -219,6 +221,15 @@ stages:
               repository: $(imageName)
               tags: |
                 $(productionTag)
+
+          - task: Docker@2
+            displayName: 'Push to ACR latest'
+            inputs:
+              command: push
+              containerRegistry: 'Keboola ACR'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: $(imageName)
+              tags: |
                 latest
 
           - script: |
