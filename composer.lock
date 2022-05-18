@@ -923,7 +923,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "dc4fcb6e509f3af8cab1431073915f64517bc632"
+                "reference": "da5c3a2ee5eaaf6f9925d9421859461904c8fd4f"
             },
             "require": {
                 "ext-json": "*",
@@ -968,7 +968,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-05-18T09:36:48+00:00"
+            "time": "2022-05-18T14:32:24+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1635,21 +1635,21 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "e953befca031f62e14fb478f5cad4b71b4c26a08"
+                "reference": "e3bba1e112609c55f45de0ed5b549cb8dc8cc07c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/e953befca031f62e14fb478f5cad4b71b4c26a08",
-                "reference": "e953befca031f62e14fb478f5cad4b71b4c26a08",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/e3bba1e112609c55f45de0ed5b549cb8dc8cc07c",
+                "reference": "e3bba1e112609c55f45de0ed5b549cb8dc8cc07c",
                 "shasum": ""
             },
             "require": {
-                "keboola/input-mapping": "^15.0",
-                "keboola/output-mapping": "^17.0",
+                "keboola/input-mapping": "^15.1",
+                "keboola/output-mapping": "^17.1",
                 "keboola/storage-api-client": "^12.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^2.0",
                 "php": ">=7.4"
@@ -1679,9 +1679,9 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/4.0.0"
+                "source": "https://github.com/keboola/staging-provider/tree/4.1.0"
             },
-            "time": "2022-03-30T14:59:17+00:00"
+            "time": "2022-05-18T11:38:52+00:00"
         },
         {
             "name": "keboola/storage-api-client",
