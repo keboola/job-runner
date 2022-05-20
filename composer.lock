@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4357f0b417b68717e0a6f8e29499200",
+    "content-hash": "a22933a480d710f73fd066c8e3eb7f7c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -923,20 +923,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c82369682aa4d8f01413a69359367af64e542b47"
+                "reference": "e8edd746f69951a3c1b461be2e79da2f27e35dbe"
             },
             "require": {
                 "ext-json": "*",
                 "ext-zip": "*",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^3.0",
-                "keboola/input-mapping": "^15.0",
+                "keboola/input-mapping": "^15.1",
                 "keboola/oauth-v2-php-client": "^2.3.0",
                 "keboola/object-encryptor": "^0.3",
-                "keboola/output-mapping": "^17.0",
+                "keboola/output-mapping": "^17.1",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
-                "keboola/staging-provider": "^4.0",
+                "keboola/staging-provider": "^4.1",
                 "keboola/storage-api-php-client-branch-wrapper": "^2.0",
                 "monolog/monolog": "^2.5",
                 "mustache/mustache": "^2.13",
@@ -968,7 +968,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-05-18T15:08:39+00:00"
+            "time": "2022-05-20T08:40:38+00:00"
         },
         {
             "name": "keboola/gelf-server",
