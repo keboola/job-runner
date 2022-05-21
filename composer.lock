@@ -1635,16 +1635,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "4.1.0",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "e3bba1e112609c55f45de0ed5b549cb8dc8cc07c"
+                "reference": "10494998e34b5eef1165d50fd50e231cd7d7e6d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/e3bba1e112609c55f45de0ed5b549cb8dc8cc07c",
-                "reference": "e3bba1e112609c55f45de0ed5b549cb8dc8cc07c",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/10494998e34b5eef1165d50fd50e231cd7d7e6d4",
+                "reference": "10494998e34b5eef1165d50fd50e231cd7d7e6d4",
                 "shasum": ""
             },
             "require": {
@@ -1679,9 +1679,9 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/4.1.0"
+                "source": "https://github.com/keboola/staging-provider/tree/4.1.1"
             },
-            "time": "2022-05-18T11:38:52+00:00"
+            "time": "2022-05-21T17:49:34+00:00"
         },
         {
             "name": "keboola/storage-api-client",
