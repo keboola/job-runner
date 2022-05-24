@@ -75,6 +75,7 @@ services:
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
         $userAgent: 'QueueRunner'
+        $awsDebug: true
         $logger: ~ # mustn't be autowired, will be configured at runtime
 
     Keboola\StorageApiBranch\Factory\StorageClientPlainFactory:
