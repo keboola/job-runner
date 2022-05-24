@@ -5,4 +5,4 @@ monolog:
             path: php://stdout
             formatter: Monolog\Formatter\JsonFormatter
             level: debug
-            channels: ["!event", "!request"]
+            channels: ["!event"]
