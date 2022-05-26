@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a22933a480d710f73fd066c8e3eb7f7c",
+    "content-hash": "11c80fb9797fc2a55433c0e73a6f325d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.222.14",
+            "version": "3.222.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0"
+                "reference": "ae742d2ae4caa9410ad4dfe97551c68064c0cc54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0",
-                "reference": "d9f586558a2f3313c34f34f4a01c5ddbbbcfb3c0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ae742d2ae4caa9410ad4dfe97551c68064c0cc54",
+                "reference": "ae742d2ae4caa9410ad4dfe97551c68064c0cc54",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.14"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.222.20"
             },
-            "time": "2022-05-17T18:14:21+00:00"
+            "time": "2022-05-25T18:20:20+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -320,16 +320,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.5.5",
+            "version": "6.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e"
+                "reference": "f092dd734083473658de3ee4bef093ed77d2689c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
-                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f092dd734083473658de3ee4bef093ed77d2689c",
+                "reference": "f092dd734083473658de3ee4bef093ed77d2689c",
                 "shasum": ""
             },
             "require": {
@@ -367,9 +367,39 @@
             ],
             "authors": [
                 {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
                     "name": "Michael Dowling",
                     "email": "mtdowling@gmail.com",
                     "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Jeremy Lindblom",
+                    "email": "jeremeamia@gmail.com",
+                    "homepage": "https://github.com/jeremeamia"
+                },
+                {
+                    "name": "George Mponos",
+                    "email": "gmponos@gmail.com",
+                    "homepage": "https://github.com/gmponos"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://github.com/sagikazarmark"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
                 }
             ],
             "description": "Guzzle is a PHP HTTP client library",
@@ -385,9 +415,23 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/6.5"
+                "source": "https://github.com/guzzle/guzzle/tree/6.5.6"
             },
-            "time": "2020-06-16T21:01:06+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-05-25T13:19:12+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -923,7 +967,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "e8edd746f69951a3c1b461be2e79da2f27e35dbe"
+                "reference": "c59f3cd0a956b64ce5475cb8f6fc3782e4604aa9"
             },
             "require": {
                 "ext-json": "*",
@@ -932,7 +976,7 @@
                 "keboola/gelf-server": "^3.0",
                 "keboola/input-mapping": "^15.1",
                 "keboola/oauth-v2-php-client": "^2.3.0",
-                "keboola/object-encryptor": "^0.3",
+                "keboola/object-encryptor": "^0.4",
                 "keboola/output-mapping": "^17.1",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
@@ -968,7 +1012,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-05-20T08:40:38+00:00"
+            "time": "2022-05-26T13:09:25+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1077,22 +1121,22 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "10.4.0",
+            "version": "10.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "609b7d8e2a728cc4206f4125fd06263b63c03cab"
+                "reference": "4cd38ecb89f3085405c187e196eefb5029b7e34f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/609b7d8e2a728cc4206f4125fd06263b63c03cab",
-                "reference": "609b7d8e2a728cc4206f4125fd06263b63c03cab",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/4cd38ecb89f3085405c187e196eefb5029b7e34f",
+                "reference": "4cd38ecb89f3085405c187e196eefb5029b7e34f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3",
-                "keboola/object-encryptor": "^0.3",
+                "keboola/object-encryptor": "^0.4",
                 "keboola/storage-api-client": "^12.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^2.0",
                 "monolog/monolog": "^2.6",
@@ -1133,9 +1177,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/10.4.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/10.5.1"
             },
-            "time": "2022-05-17T13:02:47+00:00"
+            "time": "2022-05-26T13:19:50+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1182,16 +1226,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "0.3.2",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "06b74afd3e91053f8ad91792327e0c7781bd1e95"
+                "reference": "5ced4bff5f4a7c212716657c40b197de0a8873e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/06b74afd3e91053f8ad91792327e0c7781bd1e95",
-                "reference": "06b74afd3e91053f8ad91792327e0c7781bd1e95",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/5ced4bff5f4a7c212716657c40b197de0a8873e9",
+                "reference": "5ced4bff5f4a7c212716657c40b197de0a8873e9",
                 "shasum": ""
             },
             "require": {
@@ -1232,9 +1276,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/0.4.0"
+                "source": "https://github.com/keboola/object-encryptor/tree/0.4.1"
             },
-            "time": "2022-02-14T13:35:02+00:00"
+            "time": "2022-05-26T11:45:17+00:00"
         },
         {
             "name": "keboola/output-mapping",
@@ -1533,16 +1577,16 @@
         },
         {
             "name": "keboola/sandboxes-api-php-client",
-            "version": "6.19.0",
+            "version": "6.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/sandboxes-api-php-client.git",
-                "reference": "63903c60e9edb0503f370927ca058428fcf3372d"
+                "reference": "000769fb710b43bbfe18773700ca246df6bd1902"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/sandboxes-api-php-client/zipball/63903c60e9edb0503f370927ca058428fcf3372d",
-                "reference": "63903c60e9edb0503f370927ca058428fcf3372d",
+                "url": "https://api.github.com/repos/keboola/sandboxes-api-php-client/zipball/000769fb710b43bbfe18773700ca246df6bd1902",
+                "reference": "000769fb710b43bbfe18773700ca246df6bd1902",
                 "shasum": ""
             },
             "require": {
@@ -1584,9 +1628,9 @@
                 "sandboxes"
             ],
             "support": {
-                "source": "https://github.com/keboola/sandboxes-api-php-client/tree/6.19.0"
+                "source": "https://github.com/keboola/sandboxes-api-php-client/tree/6.21.1"
             },
-            "time": "2022-05-09T11:21:33+00:00"
+            "time": "2022-05-23T13:28:45+00:00"
         },
         {
             "name": "keboola/sanitizer",
