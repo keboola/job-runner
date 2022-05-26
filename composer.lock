@@ -1733,12 +1733,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "629e30be0b3ef4d284257246c1cc1797e26a3c8f"
+                "reference": "83f570dd2851b23a51ecf10c7637e031a95be6f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/629e30be0b3ef4d284257246c1cc1797e26a3c8f",
-                "reference": "629e30be0b3ef4d284257246c1cc1797e26a3c8f",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/83f570dd2851b23a51ecf10c7637e031a95be6f0",
+                "reference": "83f570dd2851b23a51ecf10c7637e031a95be6f0",
                 "shasum": ""
             },
             "require": {
@@ -1786,7 +1786,7 @@
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
                 "source": "https://github.com/keboola/storage-api-php-client/tree/odin-KBC-2651"
             },
-            "time": "2022-05-25T20:50:50+00:00"
+            "time": "2022-05-26T09:06:47+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
