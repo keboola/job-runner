@@ -182,3 +182,7 @@ Init the local environment:
 To run tests locally, set the environment variables and execute:
 
     source ./set-env.sh && docker-compose run --rm tests composer ci
+
+## License
+
+MIT licensed, see [LICENSE](./LICENSE) file.
