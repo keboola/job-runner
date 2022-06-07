@@ -7,6 +7,7 @@ ARG APP_USER_NAME
 ARG APP_USER_UID
 ARG APP_USER_GID
 
+ENV DD_PHP_TRACER_VERSION=0.74.0
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
 
@@ -41,6 +42,11 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && apt-cache policy docker-ce \
     && apt-get -y install docker-ce \
     && rm -rf /var/lib/apt/lists/*
+
+# Datadog
+RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
+ && dpkg -i /tmp/datadog-php-tracer.deb \
+ && rm /tmp/datadog-php-tracer.deb
 
 # create app user
 RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
