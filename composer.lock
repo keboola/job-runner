@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e95af842735c44abc0b46e6a5b3b264",
+    "content-hash": "f7a17063277a65223f80eba91e694c1d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -979,16 +979,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "dev-odin-PS-3491",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "085047c054e76dfb68416cc5441f6790ec759a5f"
+                "reference": "bee1a91574738554f1223ba123347f8ca7aab949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/085047c054e76dfb68416cc5441f6790ec759a5f",
-                "reference": "085047c054e76dfb68416cc5441f6790ec759a5f",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/bee1a91574738554f1223ba123347f8ca7aab949",
+                "reference": "bee1a91574738554f1223ba123347f8ca7aab949",
                 "shasum": ""
             },
             "require": {
@@ -1034,9 +1034,9 @@
                 "variables"
             ],
             "support": {
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/odin-PS-3491"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/3.0.0"
             },
-            "time": "2022-06-08T21:21:26+00:00"
+            "time": "2022-06-09T05:02:53+00:00"
         },
         {
             "name": "keboola/csv",
@@ -1075,11 +1075,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-PS-3491",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "85426ed6844bf28b0f3c8e7355041c29827ac30e"
+                "reference": "8144b46cad50b256ca87e39377f7a24dfbfc8a25"
             },
             "require": {
                 "ext-json": "*",
@@ -1088,7 +1088,7 @@
                 "keboola/gelf-server": "^3.0",
                 "keboola/input-mapping": "^16.0",
                 "keboola/oauth-v2-php-client": "^3.0",
-                "keboola/object-encryptor": "dev-odin-PS-3491 as 0.4.2",
+                "keboola/object-encryptor": "^1.0",
                 "keboola/output-mapping": "^18.0",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
@@ -1124,7 +1124,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-06-08T19:42:03+00:00"
+            "time": "2022-06-09T06:08:45+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1233,22 +1233,22 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-odin-PS-3491",
+            "version": "10.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "0a48db0ba999e6e23c47a2a10cb606eea4d87884"
+                "reference": "9caaf9337392532432ca8fe8035f7d478c33c1b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0a48db0ba999e6e23c47a2a10cb606eea4d87884",
-                "reference": "0a48db0ba999e6e23c47a2a10cb606eea4d87884",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/9caaf9337392532432ca8fe8035f7d478c33c1b3",
+                "reference": "9caaf9337392532432ca8fe8035f7d478c33c1b3",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
-                "keboola/object-encryptor": "dev-odin-PS-3491 as 0.4.2",
+                "keboola/object-encryptor": "^1.0",
                 "keboola/storage-api-client": "^12.0|^13.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^2.0|^3.0",
                 "monolog/monolog": "^2.6",
@@ -1289,9 +1289,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-PS-3491"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/10.6.0"
             },
-            "time": "2022-06-08T22:36:32+00:00"
+            "time": "2022-06-09T07:53:40+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1340,16 +1340,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "dev-odin-PS-3491",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "d37e5edfd586d18fecb4adf6e6a33da8aac4a43d"
+                "reference": "b7abcc18a3be3c310fa36992b6fb232d72b81cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/d37e5edfd586d18fecb4adf6e6a33da8aac4a43d",
-                "reference": "d37e5edfd586d18fecb4adf6e6a33da8aac4a43d",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/b7abcc18a3be3c310fa36992b6fb232d72b81cd9",
+                "reference": "b7abcc18a3be3c310fa36992b6fb232d72b81cd9",
                 "shasum": ""
             },
             "require": {
@@ -1390,9 +1390,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/odin-PS-3491"
+                "source": "https://github.com/keboola/object-encryptor/tree/1.0.0"
             },
-            "time": "2022-06-08T19:24:08+00:00"
+            "time": "2022-06-09T05:05:26+00:00"
         },
         {
             "name": "keboola/output-mapping",
@@ -2058,16 +2058,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "247918972acd74356b0a91dfaa5adcaec069b6c0"
+                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/247918972acd74356b0a91dfaa5adcaec069b6c0",
-                "reference": "247918972acd74356b0a91dfaa5adcaec069b6c0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5579edf28aee1190a798bfa5be8bc16c563bd524",
+                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524",
                 "shasum": ""
             },
             "require": {
@@ -2146,7 +2146,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.6.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.7.0"
             },
             "funding": [
                 {
@@ -2158,7 +2158,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T09:36:00+00:00"
+            "time": "2022-06-09T08:59:12+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -9807,32 +9807,10 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/configuration-variables-resolver",
-            "version": "dev-odin-PS-3491",
-            "alias": "2.0.0",
-            "alias_normalized": "2.0.0.0"
-        },
-        {
-            "package": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-odin-PS-3491",
-            "alias": "10.5.1",
-            "alias_normalized": "10.5.1.0"
-        },
-        {
-            "package": "keboola/object-encryptor",
-            "version": "dev-odin-PS-3491",
-            "alias": "0.4.2",
-            "alias_normalized": "0.4.2.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/configuration-variables-resolver": 20,
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20,
-        "keboola/object-encryptor": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
