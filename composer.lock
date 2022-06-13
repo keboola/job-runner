@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92ee5ba881940d30a1acb47df7db4907",
+    "content-hash": "7e32cea5e0753dccbea91fe3f045cfad",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1079,7 +1079,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "0f5035bb4f125b7f91e34fb05ad52a3b1f0e2e2e"
+                "reference": "de4b6d7b388fc4be26e17e993f584d7c6ca9a1f0"
             },
             "require": {
                 "ext-json": "*",
@@ -1093,6 +1093,7 @@
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^5.0",
+                "keboola/storage-api-client": "13.1.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^3.0",
                 "monolog/monolog": "^2.5",
                 "mustache/mustache": "^2.13",
@@ -1124,7 +1125,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-06-13T12:48:00+00:00"
+            "time": "2022-06-13T14:09:20+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1842,16 +1843,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v13.1.1",
+            "version": "v13.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "dfbc411c2d9d25ecaf9c3a0365cc45935f4424f3"
+                "reference": "59f6cbcd54c97d6fa5f04b17e93ac8b4f667b9d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/dfbc411c2d9d25ecaf9c3a0365cc45935f4424f3",
-                "reference": "dfbc411c2d9d25ecaf9c3a0365cc45935f4424f3",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/59f6cbcd54c97d6fa5f04b17e93ac8b4f667b9d4",
+                "reference": "59f6cbcd54c97d6fa5f04b17e93ac8b4f667b9d4",
                 "shasum": ""
             },
             "require": {
@@ -1875,8 +1876,7 @@
                 "keboola/retry": "^0.5.0",
                 "keboola/table-backend-utils": "^1",
                 "phpcompatibility/php-compatibility": "*",
-                "phpstan/phpdoc-parser": "1.5.*",
-                "phpstan/phpstan": "<1.7.12",
+                "phpstan/phpstan": "^1.7",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^7.0|^8.0|^9.0",
                 "rector/rector": "^0.12.23",
@@ -1899,9 +1899,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v13.1.1"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v13.1.0"
             },
-            "time": "2022-06-13T08:06:59+00:00"
+            "time": "2022-06-08T06:03:48+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
