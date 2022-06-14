@@ -163,7 +163,7 @@ class RunCommandTest extends AbstractCommandTest
             'url' => getenv('STORAGE_API_URL'),
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
-        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $storageClient->listEvents(['runId' => $job->getId()]);
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
