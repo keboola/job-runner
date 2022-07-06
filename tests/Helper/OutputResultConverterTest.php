@@ -146,6 +146,20 @@ class OutputResultConverterTest extends TestCase
         $output2->setOutput('some other output');
         $output2->setInputTableResult($inputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
+        $output2->setArtifactUploaded([
+            'storageFileId' => 23456,
+        ]);
+        $output2->setArtifactsDownloaded([
+            [
+                'storageFileId' => 23467,
+            ],
+            [
+                'storageFileId' => 23478,
+            ],
+            [
+                'storageFileId' => 23479,
+            ],
+        ]);
 
         $dataLoaderMock = self::createMock(DataLoader::class);
         $dataLoaderMock->expects(self::once())
