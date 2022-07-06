@@ -95,7 +95,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "tests": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
+        "tests": "phpunit --cache-result-file=/tmp/.phpunit.result.cache --filter OutputResultConverterTest",
         "phpstan": "phpstan analyse --no-progress -c phpstan.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",

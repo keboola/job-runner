@@ -42,7 +42,7 @@ stages:
               docker-compose up -d internal-api
               docker-compose logs internal-api
 
-              docker-compose run tests --filter OutputResultConverterTest
+              docker-compose run tests
             displayName: 'Run Tests'
             env:
               CPU_COUNT: $(CPU_COUNT)
