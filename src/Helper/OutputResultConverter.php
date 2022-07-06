@@ -10,6 +10,7 @@ use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\InputMapping\Table\Result\TableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Backend;
+use Keboola\JobQueueInternalClient\Result\Artifacts;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
 use Keboola\JobQueueInternalClient\Result\InputOutput\ColumnCollection;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
@@ -33,6 +34,8 @@ class OutputResultConverter
 
         $outputTables = new TableCollection();
         $inputTables = new TableCollection();
+        $artifacts = new Artifacts();
+        $downloadedArtifacts = [];
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
@@ -48,12 +51,22 @@ class OutputResultConverter
                     $inputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
                 }
             }
+            $uploadedArtifactOutput = $output->getArtifactUploaded();
+            if ($uploadedArtifactOutput) {
+                $artifacts->setUploaded($uploadedArtifactOutput);
+            }
+
+            $downloadedArtifactsOutput = $output->getArtifactsDownloaded();
+            if ($downloadedArtifactsOutput) {
+                array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
+            }
         }
         $jobResult
             ->setConfigVersion((string) $outputs[0]->getConfigVersion())
             ->setImages(self::getImages($outputs))
             ->setOutputTables($outputTables)
-            ->setInputTables($inputTables);
+            ->setInputTables($inputTables)
+            ->setArtifacts($artifacts->setDownloaded($downloadedArtifacts));
         return $jobResult;
     }
 

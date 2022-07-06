@@ -121,6 +121,17 @@ class OutputResultConverterTest extends TestCase
         $output1->setOutput('some output');
         $output1->setInputTableResult($inputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
+        $output1->setArtifactUploaded([
+            'storageFileId' => 12345,
+        ]);
+        $output1->setArtifactsDownloaded([
+            [
+                'storageFileId' => 12346,
+            ],
+            [
+                'storageFileId' => 12347,
+            ],
+        ]);
 
         $inputTableResult2 = new InputResult();
         $inputTableResult2->addTable($this->getTableInfo()['fifth']);

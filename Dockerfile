@@ -37,16 +37,16 @@ RUN apt-get update -q \
 # install docker
 RUN wget https://download.docker.com/linux/debian/gpg \
     && sudo apt-key add gpg \
-    && echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
+    && echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-cache policy docker-ce \
     && apt-get -y install docker-ce \
     && rm -rf /var/lib/apt/lists/*
 
 # Datadog
-RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
- && dpkg -i /tmp/datadog-php-tracer.deb \
- && rm /tmp/datadog-php-tracer.deb
+#RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
+# && dpkg -i /tmp/datadog-php-tracer.deb \
+# && rm /tmp/datadog-php-tracer.deb
 
 # create app user
 RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
