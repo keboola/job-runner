@@ -147,6 +147,7 @@ class RunCommandTest extends AbstractCommandTest
                 $jobRecord = $record;
             }
         }
+        var_export($testHandler->getRecords()); die;
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);

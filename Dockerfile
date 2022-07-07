@@ -13,23 +13,19 @@ ENV APP_ENV prod
 
 WORKDIR /code
 
-RUN apt-get update && apt-get install -y \
-        git \
-        unzip \
-        libzip-dev \
-   --no-install-recommends && rm -r /var/lib/apt/lists/*
-
-# install docker
 RUN apt-get update -q \
     && apt-get install -y --no-install-recommends \
         apt-transport-https \
         ca-certificates \
+        git \
         gnupg2 \
         libmcrypt-dev \
         libpq-dev \
+        libzip-dev \
         openssh-server \
         software-properties-common \
         sudo \
+        unzip \
         wget \
         iproute2 \
     && rm -rf /var/lib/apt/lists/*
