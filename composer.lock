@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7770590b590e89db898523bbb4bea10",
+    "content-hash": "da56b7d5210ee7d100a02b7dfa5415d0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1295,16 +1295,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-miro-PS-3465",
+            "version": "10.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "ea93168e98c11adb5514394f52e061aacfbc6bd2"
+                "reference": "a817a84f271094c75c1e7deef03a70b98812016e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ea93168e98c11adb5514394f52e061aacfbc6bd2",
-                "reference": "ea93168e98c11adb5514394f52e061aacfbc6bd2",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a817a84f271094c75c1e7deef03a70b98812016e",
+                "reference": "a817a84f271094c75c1e7deef03a70b98812016e",
                 "shasum": ""
             },
             "require": {
@@ -1351,9 +1351,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/miro-PS-3465"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/10.9.1"
             },
-            "time": "2022-07-06T12:49:15+00:00"
+            "time": "2022-07-07T12:30:53+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -9870,18 +9870,10 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-miro-PS-3465",
-            "alias": "10.7.0",
-            "alias_normalized": "10.7.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
