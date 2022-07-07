@@ -40,9 +40,9 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && rm -rf /var/lib/apt/lists/*
 
 # Datadog
-#RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
-# && dpkg -i /tmp/datadog-php-tracer.deb \
-# && rm /tmp/datadog-php-tracer.deb
+RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
+ && dpkg -i /tmp/datadog-php-tracer.deb \
+ && rm /tmp/datadog-php-tracer.deb
 
 # create app user
 RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
