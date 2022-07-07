@@ -6,7 +6,7 @@ export LEGACY_OAUTH_API_URL=https://syrup.keboola.com/oauth-v2/
 export JOB_QUEUE_URL=http://internal-api:80
 export JOB_QUEUE_TOKEN=dummy
 export STORAGE_API_URL=https://connection.keboola.com/
-export LEGACY_ENCRYPTION_KEY=12345
+export LEGACY_ENCRYPTION_KEY=
 
 # AWS Stuff
 export AWS_REGION=us-east-1
