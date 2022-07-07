@@ -22,7 +22,7 @@
         "keboola/api-error-control": "^3.8",
         "keboola/billing-api-php-client": "^1.0",
         "keboola/configuration-variables-resolver": "^3.0",
-        "keboola/dockerbundle": "dev-miro-PS-3465",
+        "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^16.0",
         "keboola/job-queue-internal-api-php-client": "dev-miro-PS-3465 as 10.7.0",
         "keboola/storage-api-client": "13.1.0",

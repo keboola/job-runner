@@ -1,0 +1,6 @@
+monolog:
+  channels: [deprecation]
+  handlers:
+    deprecation:
+      type: "null"
+      channels: [deprecation]
