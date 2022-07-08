@@ -290,6 +290,39 @@ class OutputResultConverterTest extends TestCase
         );
     }
 
+    public function testEmptyArtifacts(): void
+    {
+        $output = new Output();
+        $output->setConfigVersion('123');
+        $output->setImages(['a' => 'b']);
+        $output->setOutput('some output');
+        $output->setArtifactUploaded(null);
+        $output->setArtifactsDownloaded([]);
+
+        $outputs = [$output];
+        $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
+        self::assertSame(
+            [
+                'message' => 'Component processing finished.',
+                'configVersion' => '123',
+                'images' => [
+                    ['a' => 'b'],
+                ],
+                'input' => [
+                    'tables' => [],
+                ],
+                'output' => [
+                    'tables' => [],
+                ],
+                'artifacts' => [
+                    'uploaded' => null,
+                    'downloaded' => [],
+                ],
+            ],
+            $jobResult->jsonSerialize()
+        );
+    }
+
     private function getTableInfo(): array
     {
         return [
