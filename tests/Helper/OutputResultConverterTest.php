@@ -121,8 +121,17 @@ class OutputResultConverterTest extends TestCase
         $output1->setOutput('some output');
         $output1->setInputTableResult($inputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
-        $output1->setArtifactUploaded(null);
-        $output1->setArtifactsDownloaded([]);
+        $output1->setArtifactUploaded([
+            'storageFileId' => 12344,
+        ]);
+        $output1->setArtifactsDownloaded([
+            [
+                'storageFileId' => 12345,
+            ],
+            [
+                'storageFileId' => 12346,
+            ],
+        ]);
 
         $inputTableResult2 = new InputResult();
         $inputTableResult2->addTable($this->getTableInfo()['fifth']);
@@ -265,9 +274,12 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'artifacts' => [
                     'uploaded' => [
-                        'storageFileId' => 23456,
+                        ['storageFileId' => 12344],
+                        ['storageFileId' => 23456],
                     ],
                     'downloaded' => [
+                        ['storageFileId' => 12345],
+                        ['storageFileId' => 12346],
                         ['storageFileId' => 23467],
                         ['storageFileId' => 23478],
                         ['storageFileId' => 23479],
@@ -299,7 +311,14 @@ class OutputResultConverterTest extends TestCase
         $output->setArtifactUploaded(null);
         $output->setArtifactsDownloaded([]);
 
-        $outputs = [$output];
+        $output2 = new Output();
+        $output2->setConfigVersion('124');
+        $output2->setImages(['c' => 'd']);
+        $output2->setOutput('some output 2');
+        $output2->setArtifactUploaded(null);
+        $output2->setArtifactsDownloaded([]);
+
+        $outputs = [$output, $output2];
         $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
         self::assertSame(
             [
@@ -307,6 +326,7 @@ class OutputResultConverterTest extends TestCase
                 'configVersion' => '123',
                 'images' => [
                     ['a' => 'b'],
+                    ['c' => 'd'],
                 ],
                 'input' => [
                     'tables' => [],
@@ -315,7 +335,7 @@ class OutputResultConverterTest extends TestCase
                     'tables' => [],
                 ],
                 'artifacts' => [
-                    'uploaded' => null,
+                    'uploaded' => [],
                     'downloaded' => [],
                 ],
             ],

@@ -35,6 +35,7 @@ class OutputResultConverter
         $outputTables = new TableCollection();
         $inputTables = new TableCollection();
         $artifacts = new Artifacts();
+        $uploadedArtifacts = [];
         $downloadedArtifacts = [];
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
@@ -53,7 +54,7 @@ class OutputResultConverter
             }
             $uploadedArtifactOutput = $output->getArtifactUploaded();
             if ($uploadedArtifactOutput) {
-                $artifacts->setUploaded($uploadedArtifactOutput);
+                $uploadedArtifacts[] = $uploadedArtifactOutput;
             }
 
             $downloadedArtifactsOutput = $output->getArtifactsDownloaded();
@@ -66,7 +67,11 @@ class OutputResultConverter
             ->setImages(self::getImages($outputs))
             ->setOutputTables($outputTables)
             ->setInputTables($inputTables)
-            ->setArtifacts($artifacts->setDownloaded($downloadedArtifacts));
+            ->setArtifacts(
+                $artifacts
+                    ->setUploaded($uploadedArtifacts)
+                    ->setDownloaded($downloadedArtifacts)
+            );
         return $jobResult;
     }
 
