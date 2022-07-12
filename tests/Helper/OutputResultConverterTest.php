@@ -121,6 +121,17 @@ class OutputResultConverterTest extends TestCase
         $output1->setOutput('some output');
         $output1->setInputTableResult($inputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
+        $output1->setArtifactUploaded([
+            'storageFileId' => 12344,
+        ]);
+        $output1->setArtifactsDownloaded([
+            [
+                'storageFileId' => 12345,
+            ],
+            [
+                'storageFileId' => 12346,
+            ],
+        ]);
 
         $inputTableResult2 = new InputResult();
         $inputTableResult2->addTable($this->getTableInfo()['fifth']);
@@ -135,6 +146,20 @@ class OutputResultConverterTest extends TestCase
         $output2->setOutput('some other output');
         $output2->setInputTableResult($inputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
+        $output2->setArtifactUploaded([
+            'storageFileId' => 23456,
+        ]);
+        $output2->setArtifactsDownloaded([
+            [
+                'storageFileId' => 23467,
+            ],
+            [
+                'storageFileId' => 23478,
+            ],
+            [
+                'storageFileId' => 23479,
+            ],
+        ]);
 
         $dataLoaderMock = self::createMock(DataLoader::class);
         $dataLoaderMock->expects(self::once())
@@ -247,6 +272,19 @@ class OutputResultConverterTest extends TestCase
                         ],
                     ],
                 ],
+                'artifacts' => [
+                    'uploaded' => [
+                        ['storageFileId' => 12344],
+                        ['storageFileId' => 23456],
+                    ],
+                    'downloaded' => [
+                        ['storageFileId' => 12345],
+                        ['storageFileId' => 12346],
+                        ['storageFileId' => 23467],
+                        ['storageFileId' => 23478],
+                        ['storageFileId' => 23479],
+                    ],
+                ],
             ],
             $jobResult->jsonSerialize()
         );
@@ -261,6 +299,47 @@ class OutputResultConverterTest extends TestCase
                 ],
             ],
             $jobMetrics->jsonSerialize()
+        );
+    }
+
+    public function testEmptyArtifacts(): void
+    {
+        $output = new Output();
+        $output->setConfigVersion('123');
+        $output->setImages(['a' => 'b']);
+        $output->setOutput('some output');
+        $output->setArtifactUploaded(null);
+        $output->setArtifactsDownloaded([]);
+
+        $output2 = new Output();
+        $output2->setConfigVersion('124');
+        $output2->setImages(['c' => 'd']);
+        $output2->setOutput('some output 2');
+        $output2->setArtifactUploaded(null);
+        $output2->setArtifactsDownloaded([]);
+
+        $outputs = [$output, $output2];
+        $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
+        self::assertSame(
+            [
+                'message' => 'Component processing finished.',
+                'configVersion' => '123',
+                'images' => [
+                    ['a' => 'b'],
+                    ['c' => 'd'],
+                ],
+                'input' => [
+                    'tables' => [],
+                ],
+                'output' => [
+                    'tables' => [],
+                ],
+                'artifacts' => [
+                    'uploaded' => [],
+                    'downloaded' => [],
+                ],
+            ],
+            $jobResult->jsonSerialize()
         );
     }
 

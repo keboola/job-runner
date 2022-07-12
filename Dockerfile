@@ -13,23 +13,19 @@ ENV APP_ENV prod
 
 WORKDIR /code
 
-RUN apt-get update && apt-get install -y \
-        git \
-        unzip \
-        libzip-dev \
-   --no-install-recommends && rm -r /var/lib/apt/lists/*
-
-# install docker
 RUN apt-get update -q \
     && apt-get install -y --no-install-recommends \
         apt-transport-https \
         ca-certificates \
+        git \
         gnupg2 \
         libmcrypt-dev \
         libpq-dev \
+        libzip-dev \
         openssh-server \
         software-properties-common \
         sudo \
+        unzip \
         wget \
         iproute2 \
     && rm -rf /var/lib/apt/lists/*
@@ -37,7 +33,7 @@ RUN apt-get update -q \
 # install docker
 RUN wget https://download.docker.com/linux/debian/gpg \
     && sudo apt-key add gpg \
-    && echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
+    && echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-cache policy docker-ce \
     && apt-get -y install docker-ce \
