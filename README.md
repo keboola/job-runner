@@ -38,6 +38,7 @@ Login and pull the image:
     - `STORAGE_API_URL` - Keboola Connection URL.
     - `TEST_STORAGE_API_TOKEN` - Token to a test project.
     - `TEST_STORAGE_API_TOKEN_MASTER` - Master token to the same project.  
+    - `TEST_INTERNAL_API_APPLICATION_TOKEN` - Application token used to run Internal API, mush have `projects:read` scope.
     - `LEGACY_ENCRYPTION_KEY` - Arbitrary 16 character string.
 
 ### AWS Setup
