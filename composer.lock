@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a63f448b5d235868aef1019a3857c11c",
+    "content-hash": "63f0bdf5f864b70769c1903f549b1356",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -757,16 +757,16 @@
         },
         {
             "name": "keboola/api-error-control",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/api-error-control.git",
-                "reference": "81f1e7a4d3683d77e752368f7be7af6144199751"
+                "reference": "96b018a7b8d1fd74a3ef1901b4821de98d3c6188"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/81f1e7a4d3683d77e752368f7be7af6144199751",
-                "reference": "81f1e7a4d3683d77e752368f7be7af6144199751",
+                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/96b018a7b8d1fd74a3ef1901b4821de98d3c6188",
+                "reference": "96b018a7b8d1fd74a3ef1901b4821de98d3c6188",
                 "shasum": ""
             },
             "require": {
@@ -805,9 +805,9 @@
             ],
             "description": "API Error control library - Utility classes for implementing logging in a KBC API",
             "support": {
-                "source": "https://github.com/keboola/api-error-control/tree/3.8.0"
+                "source": "https://github.com/keboola/api-error-control/tree/3.9.0"
             },
-            "time": "2022-01-27T09:44:11+00:00"
+            "time": "2022-07-14T09:37:30+00:00"
         },
         {
             "name": "keboola/artifacts",
