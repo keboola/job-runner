@@ -191,7 +191,6 @@ stages:
 
           - task: ECRPushImage@1
             displayName: 'Push to ECR [$(productionTag)]'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               awsCredentials: 'Production - ECR Distribution'
               regionName: 'us-east-1'
@@ -214,7 +213,6 @@ stages:
 
           - task: Docker@2
             displayName: 'Push to ACR $(productionTag)'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
               command: push
               containerRegistry: 'Keboola ACR'
@@ -232,6 +230,15 @@ stages:
               repository: $(imageName)
               tags: |
                 latest
+
+          - task: Docker@2
+            displayName: 'Push to Docker Hub $(productionTag)'
+            inputs:
+              command: push
+              containerRegistry: 'Docker Hub'
+              repository: keboola/$(imageName)
+              tags: |
+                $(productionTag)
 
           - script: |
               printf "%s" "$(productionTag)" > artifact
