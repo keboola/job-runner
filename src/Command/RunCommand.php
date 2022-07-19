@@ -257,7 +257,7 @@ class RunCommand extends Command
                 $job->getConfigRowIds(),
                 $outputs,
                 $job->getBackend()->getContainerType(),
-                // todo: add Orchestration ID
+                $job->getOrchestrationJobId()
             );
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
