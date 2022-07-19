@@ -52,9 +52,9 @@ class OutputResultConverter
                     $inputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
                 }
             }
-            $uploadedArtifactOutput = $output->getArtifactUploaded();
-            if ($uploadedArtifactOutput) {
-                $uploadedArtifacts[] = $uploadedArtifactOutput;
+            $uploadedArtifactsOutput = $output->getArtifactsUploaded();
+            if ($uploadedArtifactsOutput) {
+                array_push($uploadedArtifacts, ...$uploadedArtifactsOutput);
             }
 
             $downloadedArtifactsOutput = $output->getArtifactsDownloaded();

@@ -121,8 +121,13 @@ class OutputResultConverterTest extends TestCase
         $output1->setOutput('some output');
         $output1->setInputTableResult($inputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
-        $output1->setArtifactUploaded([
-            'storageFileId' => 12344,
+        $output1->setArtifactsUploaded([
+            [
+                'storageFileId' => 12344,
+            ],
+            [
+                'storageFileId' => 12347,
+            ],
         ]);
         $output1->setArtifactsDownloaded([
             [
@@ -146,8 +151,13 @@ class OutputResultConverterTest extends TestCase
         $output2->setOutput('some other output');
         $output2->setInputTableResult($inputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
-        $output2->setArtifactUploaded([
-            'storageFileId' => 23456,
+        $output2->setArtifactsUploaded([
+            [
+                'storageFileId' => 23456,
+            ],
+            [
+                'storageFileId' => 23480,
+            ],
         ]);
         $output2->setArtifactsDownloaded([
             [
@@ -275,7 +285,9 @@ class OutputResultConverterTest extends TestCase
                 'artifacts' => [
                     'uploaded' => [
                         ['storageFileId' => 12344],
+                        ['storageFileId' => 12347],
                         ['storageFileId' => 23456],
+                        ['storageFileId' => 23480],
                     ],
                     'downloaded' => [
                         ['storageFileId' => 12345],
@@ -308,14 +320,14 @@ class OutputResultConverterTest extends TestCase
         $output->setConfigVersion('123');
         $output->setImages(['a' => 'b']);
         $output->setOutput('some output');
-        $output->setArtifactUploaded(null);
+        $output->setArtifactsUploaded([]);
         $output->setArtifactsDownloaded([]);
 
         $output2 = new Output();
         $output2->setConfigVersion('124');
         $output2->setImages(['c' => 'd']);
         $output2->setOutput('some output 2');
-        $output2->setArtifactUploaded(null);
+        $output2->setArtifactsUploaded([]);
         $output2->setArtifactsDownloaded([]);
 
         $outputs = [$output, $output2];
