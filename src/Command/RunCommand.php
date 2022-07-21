@@ -256,7 +256,8 @@ class RunCommand extends Command
                 $usageFile,
                 $job->getConfigRowIds(),
                 $outputs,
-                $job->getBackend()->getContainerType()
+                $job->getBackend()->getContainerType(),
+                $job->getOrchestrationJobId()
             );
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
