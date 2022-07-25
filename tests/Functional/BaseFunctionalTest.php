@@ -68,8 +68,8 @@ abstract class BaseFunctionalTest extends TestCase
         $this->temp->initRunFolder();
 
         $this->objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
-            (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST),
-            (string) getenv('AWS_KMS_KEY'),
+            (string) getenv('ENCRYPTOR_STACK_ID'),
+            (string) getenv('AWS_KMS_KEY_ID'),
             (string) getenv('AWS_REGION'),
             null,
             (string) getenv('AZURE_KEY_VAULT_URL'),

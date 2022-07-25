@@ -456,7 +456,13 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactory = new StorageClientPlainFactory(
             new ClientOptions((string) getenv('STORAGE_API_URL'))
         );
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+
+        [
+            'factory' => $jobFactory,
+            'objectEncryptor' => $objectEncryptor,
+            'client' => $client,
+        ] = $this->getJobFactoryAndClient();
+
         $storageClient = $storageClientFactory->createClientWrapper(
             new ClientOptions(
                 null,
@@ -474,7 +480,11 @@ class RunCommandTest extends AbstractCommandTest
             'projectName' => $tokenInfo['owner']['name'],
             'tokenDescription' => $tokenInfo['description'],
             'tokenId' => $tokenInfo['id'],
-            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            '#tokenString' => $objectEncryptor->encryptForProject(
+                getenv('TEST_STORAGE_API_TOKEN'),
+                'keboola.runner-config-test',
+                (string) $tokenInfo['owner']['id'],
+            ),
             'status' => JobFactory::STATUS_CREATED,
             'desiredStatus' => JobFactory::DESIRED_STATUS_PROCESSING,
             'mode' => 'run',
@@ -509,9 +519,11 @@ class RunCommandTest extends AbstractCommandTest
             'command' => $command->getName(),
         ]);
 
-        self::assertTrue($testHandler->hasErrorThatContains(
-            'Job "' . $job->getId() . '" ended with encryption error: "Internal Server Error occurred."'
-        ));
+        self::assertTrue($testHandler->hasErrorThatContains(sprintf(
+            'Job "%s" ended with encryption error: '.
+            '"Invalid cipher text for key #foo Value "bar" is not an encrypted value."',
+            $job->getId(),
+        )));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertEquals(0, $ret);
     }

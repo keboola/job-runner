@@ -8,7 +8,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
     getenv('ENCRYPTOR_STACK_ID'),
-    getenv('AWS_KMS_KEY'),
+    getenv('AWS_KMS_KEY_ID'),
     getenv('AWS_REGION'),
     ((string) getenv('AWS_KMS_ROLE')) ?: null,
     getenv('AZURE_KEY_VAULT_URL')
