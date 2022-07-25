@@ -167,8 +167,9 @@ stages:
                 latest
 
   # Push image to production
-  - stage: deploy_prod
+  - stage:
     displayName: Deploy Production
+    dependsOn: prepare
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     pool:
       vmImage: ubuntu-latest
@@ -247,3 +248,57 @@ stages:
             inputs:
               targetPath: 'artifact'
               artifact: 'keboola.job-runner.latest-build'
+
+
+  # Push image to production (dev-* tags)
+  - stage:
+    displayName: Deploy Production (dev-* tags)
+    dependsOn: prepare
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-'))
+    pool:
+      vmImage: ubuntu-latest
+    jobs:
+      - job:
+        displayName: Publish Production Images (dev tag)
+        variables:
+          - name: dockerTag
+            value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+        steps:
+          - download: current
+            artifact: docker-images
+            displayName: 'Download artifacts'
+
+          - script: |
+              set -Eeuo pipefail
+              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
+              docker tag keboola/$(imageName):latest keboola/$(imageName):$(dockerTag)
+              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(dockerTag)
+            displayName: 'Load image'
+
+          - task: ECRPushImage@1
+            displayName: 'Push to ECR [$(dockerTag)]'
+            inputs:
+              awsCredentials: 'Production - ECR Distribution'
+              regionName: 'us-east-1'
+              imageSource: 'imagename'
+              sourceImageName: keboola/$(imageName)
+              sourceImageTag: latest
+              repositoryName: 'keboola/$(imageName)'
+              pushTag: $(dockerTag)
+
+          - task: Docker@2
+            displayName: 'Push to ACR [$(dockerTag)]'
+            inputs:
+              command: push
+              containerRegistry: 'Keboola ACR'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: $(imageName)
+              tags: $(dockerTag)
+
+          - task: Docker@2
+            displayName: 'Push to Docker Hub [$(dockerTag)]'
+            inputs:
+              command: push
+              containerRegistry: 'Docker Hub'
+              repository: keboola/$(imageName)
+              tags: $(dockerTag)
