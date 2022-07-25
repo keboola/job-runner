@@ -44,8 +44,8 @@ class ExceptionConverterTest extends TestCase
         yield 'encryption exception' => [
             'exception' => new EncryptionUserException('some error'),
             'expectedErrorType' => JobResult::ERROR_TYPE_USER,
-            'expectedMessage' => 'Internal Server Error occurred.',
-            'expectedLog' => 'Job "123" ended with encryption error: "Internal Server Error occurred."',
+            'expectedMessage' => 'some error',
+            'expectedLog' => 'Job "123" ended with encryption error: "some error"',
             'method' => 'hasErrorThatContains',
         ];
         yield 'user exception' => [
