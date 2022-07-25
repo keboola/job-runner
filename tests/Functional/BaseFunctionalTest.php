@@ -12,7 +12,13 @@ use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
+use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
+use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
+use Keboola\JobQueueInternalClient\DataPlane\DataPlaneObjectEncryptorFactory;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\ManageApi\Client as ManageApiClient;
+use Keboola\ObjectEncryptor\EncryptorOptions;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Client as StorageClient;
@@ -25,7 +31,7 @@ use Keboola\Temp\Temp;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
+use Symfony\Component\Validator\Validation;
 
 abstract class BaseFunctionalTest extends TestCase
 {
@@ -33,12 +39,12 @@ abstract class BaseFunctionalTest extends TestCase
     private Logger $logger;
     private TestHandler $handler;
     private Temp $temp;
-    private ObjectEncryptorFactory $objectEncryptorFactory;
+    private ObjectEncryptor $objectEncryptor;
 
     public function setUp(): void
     {
         parent::setUp();
-        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'LEGACY_OAUTH_API_URL', 'STORAGE_API_URL',
+        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'ENCRYPTOR_STACK_ID', 'STORAGE_API_URL',
             'AZURE_KEY_VAULT_URL', 'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY',
             'TEST_AZURE_CLIENT_ID', 'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
         ];
@@ -60,16 +66,14 @@ abstract class BaseFunctionalTest extends TestCase
         $this->logger = new Logger('test-runner', [$this->handler]);
         $this->temp = new Temp();
         $this->temp->initRunFolder();
-        $this->objectEncryptorFactory = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY_ID'),
+
+        $this->objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
+            (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST),
+            (string) getenv('AWS_KMS_KEY'),
             (string) getenv('AWS_REGION'),
-            '',
-            '',
+            null,
             (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $this->objectEncryptorFactory->setStackId(
-            (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST)
-        );
+        ));
     }
 
     protected function getCommand(
@@ -78,12 +82,33 @@ abstract class BaseFunctionalTest extends TestCase
         ?array $expectedJobResult = null
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
+
         $storageClientFactory = new StorageClientPlainFactory(
             new ClientOptions($this->storageClient->getApiUrl())
         );
-        $jobFactory = new JobFactory($storageClientFactory, $this->objectEncryptorFactory);
+
+        $manageApiClient = new ManageApiClient([
+            'url' => (string) getenv('STORAGE_API_URL'),
+            'token' => (string) getenv('MANAGE_API_TOKEN'),
+        ]);
+
+        $jobFactory = new JobFactory(
+            $storageClientFactory,
+            new JobFactory\JobRuntimeResolver($storageClientFactory),
+            $this->objectEncryptor,
+            new DataPlaneObjectEncryptorFactory(
+                (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST),
+                (string) getenv('AWS_REGION'),
+            ),
+            new DataPlaneConfigRepository(
+                $manageApiClient,
+                new DataPlaneConfigValidator(Validation::createValidator())
+            ),
+            false
+        );
+
         $job = $jobFactory->createNewJob($jobData);
-        $queueClient = self::getMockBuilder(QueueClient::class)
+        $queueClient = $this->getMockBuilder(QueueClient::class)
             ->setMethods(['getJob', 'postJobResult', 'getJobFactory', 'updateJob', 'patchJob'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,7 +117,7 @@ abstract class BaseFunctionalTest extends TestCase
         $queueClient->expects(self::any())->method('updateJob')->willReturn([]);
         $queueClient->expects(self::any())->method('patchJob')->willReturn(
             new JobFactory\Job(
-                $this->objectEncryptorFactory,
+                $this->objectEncryptor,
                 $storageClientFactory,
                 [
                     'runId' => '1234',
@@ -126,7 +151,7 @@ abstract class BaseFunctionalTest extends TestCase
             })
         )->willReturn(
             new JobFactory\Job(
-                $this->objectEncryptorFactory,
+                $this->objectEncryptor,
                 $storageClientFactory,
                 [
                     'runId' => '1234',
@@ -146,6 +171,7 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
         $creditsCheckerFactory = new CreditsCheckerFactory();
+
         $command = new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
@@ -153,7 +179,7 @@ abstract class BaseFunctionalTest extends TestCase
             $creditsCheckerFactory,
             $storageClientFactory,
             new JobDefinitionFactory(),
-            (string) getenv('LEGACY_OAUTH_API_URL'),
+            $this->objectEncryptor,
             ['cpu_count' => 1]
         );
         putenv('JOB_ID=' . $job->getId());
@@ -227,8 +253,8 @@ abstract class BaseFunctionalTest extends TestCase
         return $this->temp;
     }
 
-    protected function getEncryptorFactory(): ObjectEncryptorFactory
+    protected function getObjectEncryptor(): ObjectEncryptor
     {
-        return $this->objectEncryptorFactory;
+        return $this->objectEncryptor;
     }
 }

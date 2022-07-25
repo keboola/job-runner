@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63f0bdf5f864b70769c1903f549b1356",
+    "content-hash": "fdaedb61fc5cff54a6106d726960882c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.231.8",
+            "version": "3.231.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "99b3e4585ac82a6e9ab6d1944d90231456fefbea"
+                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/99b3e4585ac82a6e9ab6d1944d90231456fefbea",
-                "reference": "99b3e4585ac82a6e9ab6d1944d90231456fefbea",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8f8742caa42b260950320c98ddc5da4926e2373d",
+                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.8"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.12"
             },
-            "time": "2022-07-18T18:20:47+00:00"
+            "time": "2022-07-22T18:19:47+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -713,50 +713,6 @@
             "time": "2022-06-20T21:43:03+00:00"
         },
         {
-            "name": "keboola-legacy/php-encryption",
-            "version": "0.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/keboola/legacy-php-encryption.git",
-                "reference": "f50136fb904095146309bf67a5bb3fad93d49ea6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/legacy-php-encryption/zipball/f50136fb904095146309bf67a5bb3fad93d49ea6",
-                "reference": "f50136fb904095146309bf67a5bb3fad93d49ea6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-openssl": "*",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "Crypto.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Hornby",
-                    "email": "havoc@defuse.ca"
-                }
-            ],
-            "description": "Secure PHP Encryption Library",
-            "keywords": [
-                "deprecated"
-            ],
-            "support": {
-                "issues": "https://github.com/keboola/legacy-php-encryption/issues",
-                "source": "https://github.com/keboola/legacy-php-encryption/tree/master"
-            },
-            "time": "2018-08-09T09:06:17+00:00"
-        },
-        {
             "name": "keboola/api-error-control",
             "version": "3.9.0",
             "source": {
@@ -812,23 +768,23 @@
         },
         {
             "name": "keboola/artifacts",
-            "version": "0.0.7",
+            "version": "0.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/artifacts.git",
-                "reference": "26fbc525d4226134f29b9b0008a35202a61f1feb"
+                "reference": "f845d53f97578d4dcbd0662e6359ca7f731aacfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/artifacts/zipball/26fbc525d4226134f29b9b0008a35202a61f1feb",
-                "reference": "26fbc525d4226134f29b9b0008a35202a61f1feb",
+                "url": "https://api.github.com/repos/keboola/artifacts/zipball/f845d53f97578d4dcbd0662e6359ca7f731aacfe",
+                "reference": "f845d53f97578d4dcbd0662e6359ca7f731aacfe",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "keboola/job-queue-internal-api-php-client": "^10.7",
                 "keboola/php-temp": ">=1.0",
                 "keboola/storage-api-client": "^13.1",
+                "keboola/storage-api-php-client-branch-wrapper": "^3.0",
                 "php": ">=7.4",
                 "symfony/filesystem": "^5.4",
                 "symfony/finder": "^5.4"
@@ -836,6 +792,7 @@
             "require-dev": {
                 "keboola/coding-standard": "^13.0.0",
                 "keboola/common-exceptions": "^1.2",
+                "monolog/monolog": "^2.7",
                 "phpstan/phpstan": "^1.5.0",
                 "phpstan/phpstan-phpunit": "^1.0.0",
                 "phpunit/phpunit": "^9.0",
@@ -866,9 +823,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/artifacts/issues",
-                "source": "https://github.com/keboola/artifacts/tree/0.0.7"
+                "source": "https://github.com/keboola/artifacts/tree/0.0.8"
             },
-            "time": "2022-07-19T10:31:36+00:00"
+            "time": "2022-07-21T11:35:01+00:00"
         },
         {
             "name": "keboola/azure-key-vault-client",
@@ -1140,17 +1097,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "f947ed46acfd7b3c8b0e48415b9ae5612d5d547e"
+                "reference": "c2644aac8a07224e271cf15945b35c170ac2e2f6"
             },
             "require": {
                 "ext-json": "*",
                 "ext-zip": "*",
-                "keboola/artifacts": "^0.0.7",
+                "keboola/artifacts": "^0.0.8",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^3.0",
                 "keboola/input-mapping": "^16.0",
                 "keboola/oauth-v2-php-client": "^3.0",
-                "keboola/object-encryptor": "^1.0",
+                "keboola/object-encryptor": "^2.0",
                 "keboola/output-mapping": "^18.0",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
@@ -1166,6 +1123,9 @@
                 "vkartaviy/retry": "^0.2"
             },
             "require-dev": {
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-symfony": "^1.2",
                 "phpunit/phpunit": "^8.5",
                 "squizlabs/php_codesniffer": "^3.3.2"
             },
@@ -1187,7 +1147,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-07-19T12:07:18+00:00"
+            "time": "2022-07-25T07:27:35+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1295,22 +1255,23 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "10.10.0",
+            "version": "dev-pepa_PS-3651_newEncryption",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "b6e839d37c5194e5711dc07ffa5a0f85e7bdc18a"
+                "reference": "398a8a18f56358f4c880e7d0cf59fd60788a3958"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/b6e839d37c5194e5711dc07ffa5a0f85e7bdc18a",
-                "reference": "b6e839d37c5194e5711dc07ffa5a0f85e7bdc18a",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/398a8a18f56358f4c880e7d0cf59fd60788a3958",
+                "reference": "398a8a18f56358f4c880e7d0cf59fd60788a3958",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
-                "keboola/object-encryptor": "^1.0",
+                "keboola/kbc-manage-api-php-client": "^5.2",
+                "keboola/object-encryptor": "^2.0",
                 "keboola/storage-api-client": "^12.0|13.1.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^2.0|^3.0",
                 "monolog/monolog": "^2.6",
@@ -1351,9 +1312,56 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/10.10.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/pepa_PS-3651_newEncryption"
             },
-            "time": "2022-07-12T12:27:38+00:00"
+            "time": "2022-07-25T07:00:26+00:00"
+        },
+        {
+            "name": "keboola/kbc-manage-api-php-client",
+            "version": "5.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/kbc-manage-api-php-client.git",
+                "reference": "8b7dcafeed5368988202593c5eef28a197bb7981"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/kbc-manage-api-php-client/zipball/8b7dcafeed5368988202593c5eef28a197bb7981",
+                "reference": "8b7dcafeed5368988202593c5eef28a197bb7981",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0|^6.1",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "keboola/coding-standard": "^13.0",
+                "keboola/phpunit-retry-annotations": "^0.3.0",
+                "keboola/storage-api-client": "^12.0",
+                "phpstan/phpdoc-parser": "1.5.1",
+                "phpstan/phpstan": "^0.12.94",
+                "phpstan/phpstan-phpunit": "^0.12.22",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\ManageApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Martin Halamicek",
+                    "email": "martin@keboola.com"
+                }
+            ],
+            "description": "Keboola Management API Client",
+            "support": {
+                "issues": "https://github.com/keboola/kbc-manage-api-php-client/issues",
+                "source": "https://github.com/keboola/kbc-manage-api-php-client/tree/5.2.0"
+            },
+            "time": "2022-07-14T19:21:09+00:00"
         },
         {
             "name": "keboola/oauth-v2-php-client",
@@ -1402,38 +1410,41 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "1.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "b7abcc18a3be3c310fa36992b6fb232d72b81cd9"
+                "reference": "af1a46a9875e2ee8c6b35e6dc711c6d3b4452dec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/b7abcc18a3be3c310fa36992b6fb232d72b81cd9",
-                "reference": "b7abcc18a3be3c310fa36992b6fb232d72b81cd9",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/af1a46a9875e2ee8c6b35e6dc711c6d3b4452dec",
+                "reference": "af1a46a9875e2ee8c6b35e6dc711c6d3b4452dec",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "^3.209",
                 "defuse/php-encryption": "^2.3",
+                "ext-json": "*",
                 "ext-zlib": "*",
-                "keboola-legacy/php-encryption": "^0.2",
                 "keboola/azure-key-vault-client": "^2.0",
-                "keboola/php-encryption": "^0.2",
-                "php": ">=7",
+                "keboola/common-exceptions": "^1.2",
+                "php": ">=7.4",
                 "phpseclib/mcrypt_compat": "^1.0",
                 "vkartaviy/retry": "^0.2.2"
             },
             "require-dev": {
-                "php-parallel-lint/php-parallel-lint": "^1.3",
-                "phpunit/phpunit": "^5.7|^6.5|^7.3"
+                "infection/infection": "^0.18.2",
+                "keboola/coding-standard": "^13.0",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.0.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/dotenv": "^5.4"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Keboola\\ObjectEncryptor\\": "src",
-                    "Keboola\\ObjectEncryptor\\Tests\\": "tests"
+                    "Keboola\\ObjectEncryptor\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1452,9 +1463,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/1.0.0"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.0.0"
             },
-            "time": "2022-06-09T05:05:26+00:00"
+            "time": "2022-07-21T07:39:40+00:00"
         },
         {
             "name": "keboola/output-mapping",
@@ -1515,68 +1526,17 @@
             "time": "2022-06-22T15:02:00+00:00"
         },
         {
-            "name": "keboola/php-encryption",
-            "version": "0.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/keboola/php-encryption.git",
-                "reference": "534ca82755fe3c02f6f747e19425acebbc35c54a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-encryption/zipball/534ca82755fe3c02f6f747e19425acebbc35c54a",
-                "reference": "534ca82755fe3c02f6f747e19425acebbc35c54a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Keboola\\Encryption": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Martin Halamicek",
-                    "email": "martin@halamicek.cz"
-                }
-            ],
-            "description": "Mcrypt wrapper - AES encryption support",
-            "keywords": [
-                "aes",
-                "cipher",
-                "encryption",
-                "mcrypt",
-                "security"
-            ],
-            "support": {
-                "issues": "https://github.com/keboola/php-encryption/issues",
-                "source": "https://github.com/keboola/php-encryption/tree/Branch_0.2.3"
-            },
-            "abandoned": "defuse/php-encryption",
-            "time": "2018-08-09T08:26:20+00:00"
-        },
-        {
             "name": "keboola/php-file-storage-utils",
-            "version": "v0.2.3",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-file-storage-utils.git",
-                "reference": "e45bbc89fbaa0bdcd322acf0590dcf9c0ea4dc44"
+                "reference": "936a6fa09f70dda9cdd601fa4c1d7faac60e4f2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-file-storage-utils/zipball/e45bbc89fbaa0bdcd322acf0590dcf9c0ea4dc44",
-                "reference": "e45bbc89fbaa0bdcd322acf0590dcf9c0ea4dc44",
+                "url": "https://api.github.com/repos/keboola/php-file-storage-utils/zipball/936a6fa09f70dda9cdd601fa4c1d7faac60e4f2b",
+                "reference": "936a6fa09f70dda9cdd601fa4c1d7faac60e4f2b",
                 "shasum": ""
             },
             "require": {
@@ -1623,9 +1583,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/php-file-storage-utils/issues",
-                "source": "https://github.com/keboola/php-file-storage-utils/tree/v0.2.3"
+                "source": "https://github.com/keboola/php-file-storage-utils/tree/v0.2.4"
             },
-            "time": "2022-07-14T11:01:31+00:00"
+            "time": "2022-07-22T09:53:14+00:00"
         },
         {
             "name": "keboola/php-temp",
@@ -2120,16 +2080,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524"
+                "reference": "720488632c590286b88b80e62aa3d3d551ad4a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5579edf28aee1190a798bfa5be8bc16c563bd524",
-                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/720488632c590286b88b80e62aa3d3d551ad4a50",
+                "reference": "720488632c590286b88b80e62aa3d3d551ad4a50",
                 "shasum": ""
             },
             "require": {
@@ -2149,11 +2109,10 @@
                 "guzzlehttp/psr7": "^2.2",
                 "mongodb/mongodb": "^1.8",
                 "php-amqplib/php-amqplib": "~2.4 || ^3",
-                "php-console/php-console": "^3.1.3",
                 "phpspec/prophecy": "^1.15",
                 "phpstan/phpstan": "^0.12.91",
                 "phpunit/phpunit": "^8.5.14",
-                "predis/predis": "^1.1",
+                "predis/predis": "^1.1 || ^2.0",
                 "rollbar/rollbar": "^1.3 || ^2 || ^3",
                 "ruflin/elastica": "^7",
                 "swiftmailer/swiftmailer": "^5.3|^6.0",
@@ -2173,7 +2132,6 @@
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
                 "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-                "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
@@ -2208,7 +2166,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.7.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.8.0"
             },
             "funding": [
                 {
@@ -2220,7 +2178,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-09T08:59:12+00:00"
+            "time": "2022-07-24T11:55:47+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -9873,7 +9831,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

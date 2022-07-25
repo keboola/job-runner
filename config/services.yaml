@@ -16,9 +16,8 @@ parameters:
     'env(AZURE_LOG_ABS_CONTAINER)': ''
     'env(JOB_QUEUE_TOKEN)': ''
     'env(JOB_QUEUE_URL)': ''
-    'env(LEGACY_ENCRYPTION_KEY)': ''
-    'env(LEGACY_OAUTH_API_URL)': ''
     'env(STORAGE_API_URL)': ''
+    'env(ENCRYPTOR_STACK_ID)': ''
 
 services:
     # default configuration for services in *this* file
@@ -34,7 +33,6 @@ services:
 
     App\Command\RunCommand:
         arguments:
-            $legacyOauthApiUrl: '%env(LEGACY_OAUTH_API_URL)%'
             $instanceLimits: '%instance_limits%'
 
     App\Command\CleanupCommand:
@@ -56,21 +54,30 @@ services:
         tags:
             - { name: monolog.processor, method: processRecord }
 
-    Keboola\ObjectEncryptor\ObjectEncryptorFactory:
-        arguments:
-            $kmsKeyId: '%env(AWS_KMS_KEY_ID)%'
-            $kmsRegion: '%env(AWS_REGION)%'
-            # keyVersion1 needs to be present so that legacy ciphers are not re-encrypted
-            # https://keboola.slack.com/archives/CMTBFNLF8/p1592484324017900?thread_ts=1592483550.014000&cid=CMTBFNLF8
-            $keyVersion1: '%env(LEGACY_ENCRYPTION_KEY)%'
-            # intentionally empty, legacy AES ciphers are not supported by this app
-            $keyVersion0:
-            $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
+    Keboola\ObjectEncryptor\EncryptorOptions:
+        $stackId: '%env(ENCRYPTOR_STACK_ID)%'
+        $kmsKeyId: '%env(AWS_KMS_KEY_ID)%'
+        $kmsRegion: '%env(AWS_REGION)%'
+        $kmsRole: '%env(default::AWS_KMS_ROLE)%'
+        $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
+
+    Keboola\ObjectEncryptor\ObjectEncryptor:
+        class: Keboola\ObjectEncryptor\ObjectEncryptor
+        factory: ['Keboola\ObjectEncryptor\ObjectEncryptorFactory', 'getEncryptor']
 
     Keboola\JobQueueInternalClient\Client:
         arguments:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
             $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
+
+    Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver:
+
+    Keboola\JobQueueInternalClient\DataPlane\DataPlaneObjectEncryptorFactory:
+        $stackId: '%env(ENCRYPTOR_STACK_ID)%'
+        $kmsRegion: '%env(AWS_REGION)%'
+
+    Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository:
+    Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator:
 
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
@@ -80,5 +87,8 @@ services:
 
     Keboola\StorageApiBranch\Factory\StorageClientPlainFactory:
 
+    Keboola\ManageApi\Client:
+        arguments: [{ url: "%env(STORAGE_API_URL)%", token: "invalid" }] # the client should be never used
+
     Keboola\JobQueueInternalClient\JobFactory:
-        arguments:
+        $supportsDataPlanes: false

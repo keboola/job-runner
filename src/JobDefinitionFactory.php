@@ -9,6 +9,7 @@ use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
@@ -18,8 +19,12 @@ class JobDefinitionFactory
     /**
      * @return array<JobDefinition>
      */
-    public function createFromJob(Component $component, JobInterface $job, ClientWrapper $clientWrapper): array
-    {
+    public function createFromJob(
+        Component $component,
+        JobInterface $job,
+        ObjectEncryptor $objectEncryptor,
+        ClientWrapper $clientWrapper
+    ): array {
         if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
             throw new UserException('This component cannot be run in a development branch.');
         }
@@ -40,6 +45,8 @@ class JobDefinitionFactory
                     $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
                 }
 
+                /** @var array $configuration */
+
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
@@ -49,7 +56,12 @@ class JobDefinitionFactory
                 throw new UserException($e->getMessage(), $e);
             }
 
-            $configuration = $job->getEncryptorFactory()->getEncryptor()->decrypt($configuration);
+            $configuration = $objectEncryptor->decryptForConfiguration(
+                $configuration,
+                $job->getComponentId(),
+                $job->getProjectId(),
+                (string) $job->getConfigId(),
+            );
             $configuration['configuration'] = $this->extendComponentConfigWithBackend(
                 $configuration['configuration'] ?? [],
                 $job

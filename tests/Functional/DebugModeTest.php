@@ -253,8 +253,7 @@ class DebugModeTest extends BaseFunctionalTest
         $this->getClient()->createTableAsync('in.c-executor-test', 'source', $csv);
         // need to set this before hand so that the encryption wrappers are available
         $tokenInfo = $this->getClient()->verifyToken();
-        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
-        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
+
         $configuration = new Configuration();
         $configuration->setComponentId('keboola.python-transformation');
         $configuration->setName('test-config');
@@ -279,9 +278,10 @@ class DebugModeTest extends BaseFunctionalTest
             ],
             'parameters' => [
                 'plain' => 'not-secret',
-                '#encrypted' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#encrypted' => $this->getObjectEncryptor()->encryptForProject(
                     'secret',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id']
                 ),
                 'script' => [
                     'from pathlib import Path',

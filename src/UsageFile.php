@@ -42,7 +42,7 @@ class UsageFile implements UsageFileInterface
         if ($fs->exists($usageFileName)) {
             try {
                 $usage = $this->adapter->readFromFile($usageFileName);
-                $this->queueClient->addJobUsage($this->jobId, $usage);
+                $this->queueClient->addJobUsage($this->jobId, (array) $usage);
             } catch (Throwable $e) {
                 throw new ApplicationException('Failed to store Job usage: ' . $e->getMessage(), $e);
             }

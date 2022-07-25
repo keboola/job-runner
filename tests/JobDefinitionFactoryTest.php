@@ -167,12 +167,9 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
-
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->method('apiGet')
             ->with('components/my-component/configs/my-config')
@@ -195,9 +192,14 @@ class JobDefinitionFactoryTest extends TestCase
         ]);
         $factory = new JobDefinitionFactory();
 
-        self::expectException(UserException::class);
-        self::expectExceptionMessage('Configuration my-config not found');
-        $factory->createFromJob($component, $job, $this->getStorageApiClientMock($storageApiClient));
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage('Configuration my-config not found');
+        $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientMock($storageApiClient),
+        );
     }
 
     private function getStorageApiClientMock(Client $basicClient): ClientWrapper
@@ -215,10 +217,7 @@ class JobDefinitionFactoryTest extends TestCase
     private function createJobDefinitionsWithConfigData(array $jobData, array $configData): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configData)->willReturn($configData);
-
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configData)->willReturn($configData);
 
         $component = new Component([
             'id' => 'my-component',
@@ -230,22 +229,24 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->expects(self::never())->method(self::anything());
 
         $factory = new JobDefinitionFactory();
-        return $factory->createFromJob($component, $job, $this->getStorageApiClientMock($storageApiClient));
+        return $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientMock($storageApiClient),
+        );
     }
 
     private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
-
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -257,7 +258,7 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->method('apiGet')
@@ -266,7 +267,12 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $factory = new JobDefinitionFactory();
-        return $factory->createFromJob($component, $job, $this->getStorageApiClientMock($storageApiClient));
+        return $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientMock($storageApiClient),
+        );
     }
 
     private function getStorageApiClientBranchMock(Client $branchClient): ClientWrapper
@@ -282,10 +288,7 @@ class JobDefinitionFactoryTest extends TestCase
     private function createJobDefinitionsWithBranchConfiguration(array $jobData, array $configuration): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
-
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -297,7 +300,7 @@ class JobDefinitionFactoryTest extends TestCase
             ],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->method('apiGet')
@@ -305,7 +308,13 @@ class JobDefinitionFactoryTest extends TestCase
             ->willReturn($configuration);
 
         $factory = new JobDefinitionFactory();
-        return $factory->createFromJob($component, $job, $this->getStorageApiClientBranchMock($storageApiClient));
+
+        return $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientBranchMock($storageApiClient)
+        );
     }
 
     public function testCreateJobDefinitionWithBranchConfigId(): void
@@ -365,9 +374,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -380,7 +387,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-configuration-unsafe'],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(
@@ -398,7 +405,12 @@ class JobDefinitionFactoryTest extends TestCase
         $this->expectExceptionMessage(
             'It is not safe to run this configuration in a development branch. Please review the configuration.'
         );
-        $factory->createFromJob($component, $job, $this->getStorageApiClientBranchMock($storageApiClient));
+        $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientBranchMock($storageApiClient),
+        );
     }
 
     public function testCreateJobDefinitionBranchUnsafeSafe(): void
@@ -426,9 +438,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -441,7 +451,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-configuration-unsafe'],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(
@@ -458,7 +468,8 @@ class JobDefinitionFactoryTest extends TestCase
         $jobDefinitions = $factory->createFromJob(
             $component,
             $job,
-            $this->getStorageApiClientBranchMock($storageApiClient)
+            $encryptor,
+            $this->getStorageApiClientBranchMock($storageApiClient),
         );
 
         self::assertCount(1, $jobDefinitions);
@@ -494,9 +505,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decrypt')->with($configuration)->willReturn($configuration);
-        $encryptorFactory = $this->createMock(ObjectEncryptorFactory::class);
-        $encryptorFactory->method('getEncryptor')->willReturn($encryptor);
+        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -509,7 +518,7 @@ class JobDefinitionFactoryTest extends TestCase
             'features' => ['dev-branch-job-blocked'],
         ]);
 
-        $job = new Job($encryptorFactory, $this->createMock(StorageClientPlainFactory::class), $jobData);
+        $job = new Job($encryptor, $this->createMock(StorageClientPlainFactory::class), $jobData);
 
         $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
             ->setConstructorArgs(
@@ -522,6 +531,11 @@ class JobDefinitionFactoryTest extends TestCase
         $factory = new JobDefinitionFactory();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('This component cannot be run in a development branch.');
-        $factory->createFromJob($component, $job, $this->getStorageApiClientBranchMock($storageApiClient));
+        $factory->createFromJob(
+            $component,
+            $job,
+            $encryptor,
+            $this->getStorageApiClientBranchMock($storageApiClient),
+        );
     }
 }

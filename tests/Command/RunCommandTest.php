@@ -663,10 +663,10 @@ class RunCommandTest extends AbstractCommandTest
         $tokenInfo = $storageClient->verifyToken();
         $tokenInfo['owner']['features'] = 'pay-as-you-go';
 
-        $creditsCheckerMock = self::createMock(CreditsChecker::class);
+        $creditsCheckerMock = $this->createMock(CreditsChecker::class);
         $creditsCheckerMock->method('hasCredits')->willReturn(false);
 
-        $storageClientMock = self::getMockBuilder(StorageClient::class)
+        $storageClientMock = $this->getMockBuilder(StorageClient::class)
             ->setConstructorArgs([[
                 'url' => getenv('STORAGE_API_URL'),
                 'token' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -674,7 +674,7 @@ class RunCommandTest extends AbstractCommandTest
             ->onlyMethods(['verifyToken'])
             ->getMock();
         $storageClientMock->method('verifyToken')->willReturn($tokenInfo);
-        $creditsCheckerFactoryMock = self::createMock(CreditsCheckerFactory::class);
+        $creditsCheckerFactoryMock = $this->createMock(CreditsCheckerFactory::class);
         $creditsCheckerFactoryMock->method('getCreditsChecker')->willReturn($creditsCheckerMock);
         $clientWrapperMock = $this->createMock(ClientWrapper::class);
         $clientWrapperMock->method('getBasicClient')->willReturn($storageClientMock);
@@ -742,7 +742,11 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteStateTransitionError(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        [
+            'factory' => $jobFactory,
+            'objectEncryptor' => $objectEncryptor,
+            'client' => $client,
+        ] = $this->getJobFactoryAndClient();
 
         $storageClient = new StorageClient([
             'url' => getenv('STORAGE_API_URL'),
@@ -771,7 +775,7 @@ class RunCommandTest extends AbstractCommandTest
         ];
 
         /** @var JobFactory $jobFactory */
-        $mockQueueClient = self::createMock(Client::class);
+        $mockQueueClient = $this->createMock(Client::class);
         $mockQueueClient
             ->method('getJob')
             ->willReturn($jobFactory->loadFromExistingJobData($jobData));
@@ -812,7 +816,7 @@ class RunCommandTest extends AbstractCommandTest
             $creditsCheckerFactory,
             $storageApiFactory,
             $jobDefinitionFactory,
-            '',
+            $objectEncryptor,
             []
         ));
 
