@@ -49,7 +49,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                 'default_bucket_stage' => 'out',
             ],
         ];
-        $clientMock = self::getMockBuilder(Client::class)
+        $clientMock = $this->getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['apiGet', 'getServiceUrl'])
             ->getMock();
@@ -58,7 +58,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             ->withConsecutive(['sandboxes'], ['oauth'])
             ->willReturnOnConsecutiveCalls(
                 'https://sandboxes.someurl',
-                getenv('LEGACY_OAUTH_API_URL'),
+                'https://oauth.someurl',
             );
         $clientMock
             ->method('apiGet')

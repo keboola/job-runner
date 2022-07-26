@@ -17,8 +17,6 @@ services:
       - /tmp/:/tmp/
     environment:
       - CPU_COUNT
-      - LEGACY_OAUTH_API_URL
-      - LEGACY_ENCRYPTION_KEY
       - JOB_QUEUE_URL
       - JOB_QUEUE_TOKEN
       - STORAGE_API_URL
@@ -28,6 +26,7 @@ services:
       - AZURE_KEY_VAULT_URL
       - AZURE_LOG_ABS_CONNECTION_STRING
       - AZURE_LOG_ABS_CONTAINER
+      - ENCRYPTOR_STACK_ID
       - TEST_STORAGE_API_TOKEN
       - TEST_STORAGE_API_TOKEN_MASTER
       - TEST_AWS_ACCESS_KEY_ID

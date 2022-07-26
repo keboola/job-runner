@@ -35,11 +35,11 @@ spec:
                 configMapKeyRef:
                   name: dev-environments
                   key: AWS_REGION
-            - name: AWS_KMS_KEY
+            - name: AWS_KMS_KEY_ID
               valueFrom:
                 configMapKeyRef:
                   name: dev-environments
-                  key: AWS_KMS_KEY
+                  key: AWS_KMS_KEY_ID
             - name: AZURE_KEY_VAULT_URL
               valueFrom:
                 configMapKeyRef:

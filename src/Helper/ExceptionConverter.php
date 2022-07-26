@@ -21,16 +21,16 @@ class ExceptionConverter
         array $outputs
     ): JobResult {
         $transformedException = ExceptionTransformer::transformException($e);
-        if (is_a($e, UserExceptionInterface::class)) {
-            $errorType = JobResult::ERROR_TYPE_USER;
-            $logger->error(
-                sprintf('Job "%s" ended with user error: "%s"', $jobId, $transformedException->getError()),
-                $transformedException->getFullArray()
-            );
-        } elseif (is_a($e, EncryptionUserException::class)) {
+        if (is_a($e, EncryptionUserException::class)) {
             $errorType = JobResult::ERROR_TYPE_USER;
             $logger->error(
                 sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $transformedException->getError()),
+                $transformedException->getFullArray()
+            );
+        } elseif (is_a($e, UserExceptionInterface::class)) {
+            $errorType = JobResult::ERROR_TYPE_USER;
+            $logger->error(
+                sprintf('Job "%s" ended with user error: "%s"', $jobId, $transformedException->getError()),
                 $transformedException->getFullArray()
             );
         } else {

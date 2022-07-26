@@ -6,11 +6,10 @@ namespace App\Tests\Command;
 
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
-use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
-use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Process\Process;
 
@@ -53,21 +52,17 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
 
-        $objectEncryptorFactory = new ObjectEncryptorFactory(
-            (string) getenv('AWS_KMS_KEY'),
+        $objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
+            (string) getenv('ENCRYPTOR_STACK_ID'),
+            (string) getenv('AWS_KMS_KEY_ID'),
             (string) getenv('AWS_REGION'),
-            '',
-            '',
+            null,
             (string) getenv('AZURE_KEY_VAULT_URL'),
-        );
-        $objectEncryptorFactory->setComponentId('keboola.runner-config-test');
-        $objectEncryptorFactory->setStackId((string) parse_url(
-            (string) getenv('STORAGE_API_URL'),
-            PHP_URL_HOST
         ));
-        $result = $objectEncryptorFactory->getEncryptor()->encrypt(
+
+        $result = $objectEncryptor->encryptForComponent(
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            $objectEncryptorFactory->getEncryptor()->getRegisteredComponentWrapperClass()
+            'keboola.runner-config-test'
         );
 
         putenv('AWS_ACCESS_KEY_ID=');

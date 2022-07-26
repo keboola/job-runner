@@ -17,8 +17,6 @@ class EncryptionTest extends BaseFunctionalTest
     {
         // need to set this before hand so that the encryption wrappers are available
         $tokenInfo = $this->getClient()->verifyToken();
-        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
-        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
         $configData = [
             'parameters' => [
                 'script' => [
@@ -30,13 +28,14 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#key3' => $this->getObjectEncryptor()->encryptForComponent(
                     'third',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                    'keboola.python-transformation',
                 ),
-                '#key4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#key4' => $this->getObjectEncryptor()->encryptForProject(
                     'fourth',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id']
                 ),
             ],
         ];
@@ -72,8 +71,6 @@ class EncryptionTest extends BaseFunctionalTest
     {
         // need to set this before hand so that the encryption wrappers are available
         $tokenInfo = $this->getClient()->verifyToken();
-        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
-        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
         $configData = [
             'parameters' => [
                 'script' => [
@@ -85,13 +82,14 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'configKey1' => 'first',
-                '#configKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#configKey3' => $this->getObjectEncryptor()->encryptForComponent(
                     'third',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                    'keboola.python-transformation',
                 ),
-                '#configKey4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#configKey4' => $this->getObjectEncryptor()->encryptForProject(
                     'fourth',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id'],
                 ),
             ],
         ];
@@ -106,13 +104,14 @@ class EncryptionTest extends BaseFunctionalTest
         $configRow->setConfiguration([
             'parameters' => [
                 'rowKey1' => 'value1',
-                '#rowKey3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#rowKey3' => $this->getObjectEncryptor()->encryptForComponent(
                     'value3',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                    'keboola.python-transformation',
                 ),
-                '#rowKey4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#rowKey4' => $this->getObjectEncryptor()->encryptForProject(
                     'value4',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id'],
                 ),
             ],
         ]);
@@ -146,8 +145,6 @@ class EncryptionTest extends BaseFunctionalTest
     {
         // need to set this before hand so that the encryption wrappers are available
         $tokenInfo = $this->getClient()->verifyToken();
-        $this->getEncryptorFactory()->setComponentId('keboola.python-transformation');
-        $this->getEncryptorFactory()->setProjectId($tokenInfo['owner']['id']);
         $configData = [
             'parameters' => [
                 'script' => [
@@ -159,13 +156,14 @@ class EncryptionTest extends BaseFunctionalTest
                     'print(base64.standard_b64encode(contents.encode("utf-8")).decode("utf-8"), file=sys.stderr)',
                 ],
                 'key1' => 'first',
-                '#key3' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#key3' => $this->getObjectEncryptor()->encryptForComponent(
                     'third',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredComponentWrapperClass()
+                    'keboola.python-transformation',
                 ),
-                '#key4' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#key4' => $this->getObjectEncryptor()->encryptForProject(
                     'fourth',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id']
                 ),
             ],
         ];
@@ -176,9 +174,10 @@ class EncryptionTest extends BaseFunctionalTest
         $configuration->setConfiguration($configData);
         $configuration->setState([
             'component' => [
-                '#key5' => $this->getEncryptorFactory()->getEncryptor()->encrypt(
+                '#key5' => $this->getObjectEncryptor()->encryptForProject(
                     'fifth',
-                    $this->getEncryptorFactory()->getEncryptor()->getRegisteredProjectWrapperClass()
+                    'keboola.python-transformation',
+                    (string) $tokenInfo['owner']['id'],
                 ),
                 'key6' => 'sixth',
             ],

@@ -6,7 +6,6 @@ namespace App\Tests\Functional;
 
 use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\OAuthV2Api\Credentials;
-use Keboola\ObjectEncryptor\Legacy\Wrapper\ComponentProjectWrapper;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Options\FileUploadOptions;
 use Keboola\StorageApi\Options\ListFilesOptions;
@@ -95,8 +94,8 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
             'status' => 'waiting',
         ];
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('Invalid type for path "job.configRowIds');
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('Invalid type for path "job.configRowIds');
         $this->getCommand($jobData);
     }
 
@@ -115,7 +114,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 'default_bucket_stage' => 'out',
             ],
         ];
-        $clientMock = self::getMockBuilder(Client::class)
+        $clientMock = $this->getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
@@ -165,12 +164,12 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 '#sixth' => 'anotherTopSecret',
             ],
         ];
-        $credentialsEncrypted = $this->getEncryptorFactory()->getEncryptor()->encrypt(
+        $credentialsEncrypted = $this->getObjectEncryptor()->encryptForComponent(
             $credentials,
-            ComponentProjectWrapper::class
+            'keboola.python-transformation',
         );
 
-        $oauthStub = self::getMockBuilder(Credentials::class)
+        $oauthStub = $this->getMockBuilder(Credentials::class)
             ->setMethods(['getDetail'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -227,7 +226,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 'default_bucket_stage' => 'out',
             ],
         ];
-        $clientMock = self::getMockBuilder(Client::class)
+        $clientMock = $this->getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->setMethods(['indexAction'])
             ->getMock();
@@ -280,12 +279,12 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                 '#sixth' => 'anotherTopSecret',
             ],
         ];
-        $credentialsEncrypted = $this->getEncryptorFactory()->getEncryptor()->encrypt(
+        $credentialsEncrypted = $this->getObjectEncryptor()->encryptForComponent(
             $credentials,
-            ComponentProjectWrapper::class
+            'keboola.python-transformation',
         );
 
-        $oauthStub = self::getMockBuilder(Credentials::class)
+        $oauthStub = $this->getMockBuilder(Credentials::class)
             ->setMethods(['getDetail'])
             ->disableOriginalConstructor()
             ->getMock();

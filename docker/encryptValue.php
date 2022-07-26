@@ -1,14 +1,17 @@
 <?php
 
 // helper script to encrypt a value so that it can be decrypted by the runner
+use Keboola\ObjectEncryptor\EncryptorOptions;
+use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+
 require __DIR__ . '/../vendor/autoload.php';
 
-$of = new \Keboola\ObjectEncryptor\ObjectEncryptorFactory(
-    getenv('AWS_KMS_KEY'),
+$objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
+    getenv('ENCRYPTOR_STACK_ID'),
+    getenv('AWS_KMS_KEY_ID'),
     getenv('AWS_REGION'),
-    '',
-    '',
+    ((string) getenv('AWS_KMS_ROLE')) ?: null,
     getenv('AZURE_KEY_VAULT_URL')
-);
-$of->setStackId((string) parse_url(getenv('STORAGE_API_URL'), PHP_URL_HOST));
-echo $of->getEncryptor()->encrypt($argv[1], \Keboola\ObjectEncryptor\Wrapper\GenericKMSWrapper::class);
+));
+
+echo $objectEncryptor->encryptGeneric($argv[1]);

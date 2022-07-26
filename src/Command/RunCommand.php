@@ -35,6 +35,7 @@ use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
@@ -52,13 +53,13 @@ class RunCommand extends Command
 {
     /** @inheritdoc */
     protected static $defaultName = 'app:run';
-    private string $legacyOauthApiUrl;
     private array $instanceLimits;
     private QueueClient $queueClient;
     private Logger $logger;
     private LogProcessor $logProcessor;
     private CreditsCheckerFactory $creditsCheckerFactory;
     private JobDefinitionFactory $jobDefinitionFactory;
+    private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
 
     public function __construct(
@@ -68,7 +69,7 @@ class RunCommand extends Command
         CreditsCheckerFactory $creditsCheckerFactory,
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
-        string $legacyOauthApiUrl,
+        ObjectEncryptor $objectEncryptor,
         array $instanceLimits
     ) {
         parent::__construct(self::$defaultName);
@@ -78,7 +79,7 @@ class RunCommand extends Command
         $this->creditsCheckerFactory = $creditsCheckerFactory;
         $this->storageClientFactory = $storageClientFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
-        $this->legacyOauthApiUrl = $legacyOauthApiUrl;
+        $this->objectEncryptor = $objectEncryptor;
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
 
@@ -224,14 +225,18 @@ class RunCommand extends Command
 
             // set up runner
             $component = $this->getComponentClass($clientWrapper, $job);
-            $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
+            $jobDefinitions = $this->jobDefinitionFactory->createFromJob(
+                $component,
+                $job,
+                $this->objectEncryptor,
+                $clientWrapper
+            );
 
             $runner = new Runner(
-                $job->getEncryptorFactory(),
+                $this->objectEncryptor,
                 $clientWrapper,
                 $loggerService,
                 new OutputFilter(60000),
-                $this->legacyOauthApiUrl,
                 $this->instanceLimits
             );
             $usageFile = new UsageFile();
