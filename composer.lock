@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.231.12",
+            "version": "3.231.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d"
+                "reference": "7bff685fea578276c28d5476197f6c3fa7cff116"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8f8742caa42b260950320c98ddc5da4926e2373d",
-                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7bff685fea578276c28d5476197f6c3fa7cff116",
+                "reference": "7bff685fea578276c28d5476197f6c3fa7cff116",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.12"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.13"
             },
-            "time": "2022-07-22T18:19:47+00:00"
+            "time": "2022-07-25T18:21:23+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -768,16 +768,16 @@
         },
         {
             "name": "keboola/artifacts",
-            "version": "0.0.8",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/artifacts.git",
-                "reference": "f845d53f97578d4dcbd0662e6359ca7f731aacfe"
+                "reference": "98d79e405cfd290196a8192e32773e8f0e2cf249"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/artifacts/zipball/f845d53f97578d4dcbd0662e6359ca7f731aacfe",
-                "reference": "f845d53f97578d4dcbd0662e6359ca7f731aacfe",
+                "url": "https://api.github.com/repos/keboola/artifacts/zipball/98d79e405cfd290196a8192e32773e8f0e2cf249",
+                "reference": "98d79e405cfd290196a8192e32773e8f0e2cf249",
                 "shasum": ""
             },
             "require": {
@@ -823,9 +823,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/artifacts/issues",
-                "source": "https://github.com/keboola/artifacts/tree/0.0.8"
+                "source": "https://github.com/keboola/artifacts/tree/0.1.0"
             },
-            "time": "2022-07-21T11:35:01+00:00"
+            "time": "2022-07-26T09:12:40+00:00"
         },
         {
             "name": "keboola/azure-key-vault-client",
@@ -1097,12 +1097,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c2644aac8a07224e271cf15945b35c170ac2e2f6"
+                "reference": "e3f6940672f7656a29be77b299cda2c1041f7ecf"
             },
             "require": {
                 "ext-json": "*",
                 "ext-zip": "*",
-                "keboola/artifacts": "^0.0.8",
+                "keboola/artifacts": "^0.1.0",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^3.0",
                 "keboola/input-mapping": "^16.0",
@@ -1147,7 +1147,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-07-25T07:27:35+00:00"
+            "time": "2022-07-26T11:56:38+00:00"
         },
         {
             "name": "keboola/gelf-server",
