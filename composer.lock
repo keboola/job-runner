@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdaedb61fc5cff54a6106d726960882c",
+    "content-hash": "dad2f20b99ba97546a507f74e164f9ca",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.231.13",
+            "version": "3.231.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7bff685fea578276c28d5476197f6c3fa7cff116"
+                "reference": "6b79b9c8204813d9674ffa7badcd567d7f608165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7bff685fea578276c28d5476197f6c3fa7cff116",
-                "reference": "7bff685fea578276c28d5476197f6c3fa7cff116",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6b79b9c8204813d9674ffa7badcd567d7f608165",
+                "reference": "6b79b9c8204813d9674ffa7badcd567d7f608165",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.13"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.14"
             },
-            "time": "2022-07-25T18:21:23+00:00"
+            "time": "2022-07-26T18:20:14+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -1255,16 +1255,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-pepa_PS-3651_newEncryption",
+            "version": "11.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "398a8a18f56358f4c880e7d0cf59fd60788a3958"
+                "reference": "bc0e0f5fd4b462979dd1a5a1ea22ab3e34f72fb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/398a8a18f56358f4c880e7d0cf59fd60788a3958",
-                "reference": "398a8a18f56358f4c880e7d0cf59fd60788a3958",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/bc0e0f5fd4b462979dd1a5a1ea22ab3e34f72fb2",
+                "reference": "bc0e0f5fd4b462979dd1a5a1ea22ab3e34f72fb2",
                 "shasum": ""
             },
             "require": {
@@ -1312,9 +1312,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/pepa_PS-3651_newEncryption"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/11.0.2"
             },
-            "time": "2022-07-25T07:00:26+00:00"
+            "time": "2022-07-26T19:48:55+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -9831,8 +9831,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
