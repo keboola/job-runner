@@ -1001,12 +1001,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "bee1a91574738554f1223ba123347f8ca7aab949"
+                "reference": "099ececac792b8b6e7506c8b5027cab162bcc84e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/bee1a91574738554f1223ba123347f8ca7aab949",
-                "reference": "bee1a91574738554f1223ba123347f8ca7aab949",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/099ececac792b8b6e7506c8b5027cab162bcc84e",
+                "reference": "099ececac792b8b6e7506c8b5027cab162bcc84e",
                 "shasum": ""
             },
             "require": {
@@ -1052,6 +1052,7 @@
                 "variables"
             ],
             "support": {
+                "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
                 "source": "https://github.com/keboola/configuration-variables-resolver/tree/3.0.0"
             },
             "time": "2022-06-09T05:02:53+00:00"
