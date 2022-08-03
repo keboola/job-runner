@@ -82,7 +82,6 @@ services:
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
         $userAgent: 'QueueRunner'
-        $logger: ~ # mustn't be autowired, will be configured at runtime
         $backoffMaxTries: 20
 
     Keboola\StorageApiBranch\Factory\StorageClientPlainFactory:
