@@ -20,6 +20,15 @@
     "evenement/evenement": {
         "version": "v3.0.1"
     },
+    "google/apiclient": {
+        "version": "2.12",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "49c5d7a66d863d28513979bf0666dc77599100c0"
+        }
+    },
     "graylog2/gelf-php": {
         "version": "1.6.2"
     },

@@ -63,7 +63,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         $clientMock
             ->method('apiGet')
             ->willReturnCallback(function ($url, $filename) use ($componentData, $client) {
-                if ($url === 'components/keboola.python-transformation') {
+                if ($url === 'branch/default/components/keboola.python-transformation') {
                     return $componentData;
                 } else {
                     return $client->apiGet($url, $filename);
