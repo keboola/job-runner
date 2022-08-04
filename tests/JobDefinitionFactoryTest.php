@@ -320,7 +320,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
+            ->with('components/my-component/configs/my-config')
             ->willReturn($configuration);
 
         $factory = new JobDefinitionFactory();
@@ -417,7 +417,7 @@ class JobDefinitionFactoryTest extends TestCase
                 ]
             )->getMock();
         $storageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
+            ->with('components/my-component/configs/my-config')
             ->willReturn($configuration);
 
         $factory = new JobDefinitionFactory();
@@ -485,7 +485,7 @@ class JobDefinitionFactoryTest extends TestCase
                 ]
             )->getMock();
         $storageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
+            ->with('components/my-component/configs/my-config')
             ->willReturn($configuration);
 
         $factory = new JobDefinitionFactory();
