@@ -190,10 +190,10 @@ class RunCommand extends Command
             $this->logger->info(sprintf('Running job "%s".', $jobId));
             $job = $this->queueClient->getJob($jobId);
             $token = $job->getTokenDecrypted();
-            $job = $this->queueClient->getJobFactory()->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
-            $this->queueClient->patchJob(
+
+            $job = $this->queueClient->patchJob(
                 $job->getId(),
-                (new JobPatchData())->setStatus($job->getStatus())
+                (new JobPatchData())->setStatus(JobFactory::STATUS_PROCESSING)
             );
 
             // set up logging to storage API

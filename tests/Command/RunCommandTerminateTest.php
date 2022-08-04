@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
@@ -85,14 +85,12 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 (string) getenv('TEST_STORAGE_API_TOKEN')
             )
         )->getBasicClient();
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        /** @var Client $client */
-        /** @var JobFactory $jobFactory */
+        ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
         $tokenInfo = $storageClient->verifytoken();
         $id = $storageClient->generateId();
 
-        $job = $jobFactory->loadFromExistingJobData([
+        $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
             'componentId' => 'keboola.runner-config-test',
@@ -161,9 +159,9 @@ class RunCommandTerminateTest extends AbstractCommandTest
             }
         );
 
-        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_TERMINATING,
-            'desiredStatus' => JobFactory::DESIRED_STATUS_TERMINATING]);
-        $client->updateJob($job);
+        $job = $client->patchJob($job->getId(), (new JobPatchData())
+            ->setStatus(JobFactory::STATUS_TERMINATING)
+            ->setDesiredStatus(JobFactory::DESIRED_STATUS_TERMINATING));
 
         $pid = $mainProcess->getPid();
         $tmpProcess = Process::fromShellCommandline('kill -15 ' . $pid);
@@ -203,10 +201,10 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 (string) getenv('TEST_STORAGE_API_TOKEN')
             )
         )->getBasicClient();
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
         $tokenInfo = $storageClient->verifytoken();
         $id = $storageClient->generateId();
-        $job = $jobFactory->loadFromExistingJobData([
+        $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
             'componentId' => 'keboola.runner-config-test',

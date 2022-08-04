@@ -65,19 +65,16 @@ services:
         class: Keboola\ObjectEncryptor\ObjectEncryptor
         factory: ['Keboola\ObjectEncryptor\ObjectEncryptorFactory', 'getEncryptor']
 
+    Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider:
+
+    Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\ObjectEncryptorProviderInterface: '@Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider'
+
+    Keboola\JobQueueInternalClient\ExistingJobFactory:
+
     Keboola\JobQueueInternalClient\Client:
         arguments:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
             $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
-
-    Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver:
-
-    Keboola\JobQueueInternalClient\DataPlane\DataPlaneObjectEncryptorFactory:
-        $stackId: '%env(ENCRYPTOR_STACK_ID)%'
-        $kmsRegion: '%env(AWS_REGION)%'
-
-    Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository:
-    Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator:
 
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
@@ -86,9 +83,3 @@ services:
         $backoffMaxTries: 20
 
     Keboola\StorageApiBranch\Factory\StorageClientPlainFactory:
-
-    Keboola\ManageApi\Client:
-        arguments: [{ url: "%env(STORAGE_API_URL)%", token: "invalid" }] # the client should be never used
-
-    Keboola\JobQueueInternalClient\JobFactory:
-        $supportsDataPlanes: false
