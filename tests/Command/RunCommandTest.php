@@ -16,6 +16,7 @@ use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
@@ -26,7 +27,6 @@ use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use Psr\Log\NullLogger;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -79,7 +79,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteSuccessWithInputInResult(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
         $storageClient = new StorageClient([
             'url' => getenv('STORAGE_API_URL'),
@@ -97,7 +97,7 @@ class RunCommandTest extends AbstractCommandTest
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
         $storageClient->createTable('in.c-main', 'someTable', $csv);
 
-        $job = $jobFactory->createNewJob([
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -208,7 +208,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteSuccessWithInputOutputInResult(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
         $storageClient = new StorageClient([
             'url' => getenv('STORAGE_API_URL'),
@@ -233,7 +233,7 @@ class RunCommandTest extends AbstractCommandTest
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
         $storageClient->createTable('in.c-main', 'someTable', $csv);
 
-        $job = $jobFactory->createNewJob([
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-workspace-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -377,9 +377,10 @@ class RunCommandTest extends AbstractCommandTest
             ]
         );
         $configurationId = $componentsApi->addConfiguration($configurationApi)['id'];
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
         try {
-            $job = $jobFactory->createNewJob([
+            $job = $newJobFactory->createNewJob([
                 'componentId' => 'keboola.runner-config-test',
                 '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
                 'mode' => 'forceRun',
@@ -458,7 +459,7 @@ class RunCommandTest extends AbstractCommandTest
         );
 
         [
-            'factory' => $jobFactory,
+            'existingJobFactory' => $existingJobFactory,
             'objectEncryptor' => $objectEncryptor,
             'client' => $client,
         ] = $this->getJobFactoryAndClient();
@@ -472,7 +473,7 @@ class RunCommandTest extends AbstractCommandTest
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
         $id = $storageClient->generateId();
-        $job = $jobFactory->loadFromExistingJobData([
+        $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
             'componentId' => 'keboola.runner-config-test',
@@ -481,7 +482,7 @@ class RunCommandTest extends AbstractCommandTest
             'tokenDescription' => $tokenInfo['description'],
             'tokenId' => $tokenInfo['id'],
             '#tokenString' => $objectEncryptor->encryptForProject(
-                getenv('TEST_STORAGE_API_TOKEN'),
+                (string) getenv('TEST_STORAGE_API_TOKEN'),
                 'keboola.runner-config-test',
                 (string) $tokenInfo['owner']['id'],
             ),
@@ -530,8 +531,9 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteDoubleFailure(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        $job = $jobFactory->createNewJob([
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -543,9 +545,10 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
         ]);
+
         $job = $client->createJob($job);
-        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_ERROR]);
-        $client->updateJob($job);
+        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobFactory::STATUS_ERROR));
+
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -578,8 +581,9 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteSkip(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        $job = $jobFactory->createNewJob([
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.ex-http',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -591,10 +595,11 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
         ]);
-        $job = $client->createJob($job);
+
         // set the job to processing, the job will succeed but do nothing
-        $job = $jobFactory->modifyJob($job, ['status' => JobFactory::STATUS_PROCESSING]);
-        $client->updateJob($job);
+        $job = $client->createJob($job);
+        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobFactory::STATUS_PROCESSING));
+
         $kernel = static::createKernel();
         $application = new Application($kernel);
         $command = $application->find('app:run');
@@ -621,8 +626,9 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteCustomBackendConfig(): void
     {
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        $job = $jobFactory->createNewJob([
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -694,10 +700,9 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactoryMock = $this->createMock(StorageClientPlainFactory::class);
         $storageClientFactoryMock->method('createClientWrapper')->willReturn($clientWrapperMock);
 
-        list('factory' => $jobFactory, 'client' => $client) = $this->getJobFactoryAndClient();
-        /** @var Client $client */
-        /** @var JobFactory $jobFactory */
-        $job = $jobFactory->createNewJob([
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
@@ -755,9 +760,8 @@ class RunCommandTest extends AbstractCommandTest
     public function testExecuteStateTransitionError(): void
     {
         [
-            'factory' => $jobFactory,
+            'existingJobFactory' => $existingJobFactory,
             'objectEncryptor' => $objectEncryptor,
-            'client' => $client,
         ] = $this->getJobFactoryAndClient();
 
         $storageClient = new StorageClient([
@@ -786,17 +790,16 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ];
 
-        /** @var JobFactory $jobFactory */
         $mockQueueClient = $this->createMock(Client::class);
         $mockQueueClient
             ->method('getJob')
-            ->willReturn($jobFactory->loadFromExistingJobData($jobData));
-        $mockQueueClient
-            ->method('getJobFactory')
-            ->willReturn($jobFactory);
+            ->willReturn($existingJobFactory->loadFromExistingJobData($jobData));
         $mockQueueClient
             ->method('patchJob')
-            ->willReturn($jobFactory->loadFromExistingJobData(array_merge($jobData, ['status' => 'processing'])));
+            ->willReturn($existingJobFactory->loadFromExistingJobData(array_merge(
+                $jobData,
+                ['status' => 'processing']
+            )));
         $mockQueueClient
             ->method('postJobResult')
             ->willThrowException(new StateTransitionForbiddenException(

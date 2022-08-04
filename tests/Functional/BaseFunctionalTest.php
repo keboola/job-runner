@@ -14,8 +14,11 @@ use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
-use Keboola\JobQueueInternalClient\DataPlane\DataPlaneObjectEncryptorFactory;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
+use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
+use Keboola\JobQueueInternalClient\NewJobFactory;
 use Keboola\ManageApi\Client as ManageApiClient;
 use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
@@ -72,7 +75,7 @@ abstract class BaseFunctionalTest extends TestCase
             (string) getenv('AWS_KMS_KEY_ID'),
             (string) getenv('AWS_REGION'),
             null,
-            (string) getenv('AZURE_KEY_VAULT_URL'),
+            '',
         ));
     }
 
@@ -92,40 +95,33 @@ abstract class BaseFunctionalTest extends TestCase
             'token' => (string) getenv('MANAGE_API_TOKEN'),
         ]);
 
-        $jobFactory = new JobFactory(
+        $newJobFactory = new NewJobFactory(
             $storageClientFactory,
-            new JobFactory\JobRuntimeResolver($storageClientFactory),
-            $this->objectEncryptor,
-            new DataPlaneObjectEncryptorFactory(
-                (string) parse_url((string) getenv('STORAGE_API_URL'), PHP_URL_HOST),
-                (string) getenv('AWS_REGION'),
+            new JobRuntimeResolver($storageClientFactory),
+            new DataPlaneObjectEncryptorProvider(
+                $this->objectEncryptor,
+                new DataPlaneConfigRepository(
+                    $manageApiClient,
+                    new DataPlaneConfigValidator(Validation::createValidator()),
+                    (string) getenv('ENCRYPTOR_STACK_ID'),
+                    (string) getenv('AWS_REGION'),
+                ),
+                false
             ),
-            new DataPlaneConfigRepository(
-                $manageApiClient,
-                new DataPlaneConfigValidator(Validation::createValidator())
-            ),
-            false
         );
 
-        $job = $jobFactory->createNewJob($jobData);
+        $job = $newJobFactory->createNewJob($jobData);
         $queueClient = $this->getMockBuilder(QueueClient::class)
-            ->setMethods(['getJob', 'postJobResult', 'getJobFactory', 'updateJob', 'patchJob'])
+            ->setMethods(['getJob', 'postJobResult', 'updateJob', 'patchJob'])
             ->disableOriginalConstructor()
             ->getMock();
         $queueClient->expects(self::once())->method('getJob')->willReturn($job);
-        $queueClient->expects(self::any())->method('getJobFactory')->willReturn($jobFactory);
         $queueClient->expects(self::any())->method('updateJob')->willReturn([]);
         $queueClient->expects(self::any())->method('patchJob')->willReturn(
             new JobFactory\Job(
-                $this->objectEncryptor,
+                new JobObjectEncryptor($this->objectEncryptor),
                 $storageClientFactory,
-                [
-                    'runId' => '1234',
-                    'status' => 'processing',
-                    'projectId' => '123',
-                    'componentId' => 'dummy',
-                    'configId' => '123',
-                ]
+                array_merge($job->jsonSerialize(), ['status' => 'processing'])
             )
         );
         $queueClient->expects(self::once())->method('postJobResult')->with(
@@ -151,15 +147,9 @@ abstract class BaseFunctionalTest extends TestCase
             })
         )->willReturn(
             new JobFactory\Job(
-                $this->objectEncryptor,
+                new JobObjectEncryptor($this->objectEncryptor),
                 $storageClientFactory,
-                [
-                    'runId' => '1234',
-                    'status' => 'processing',
-                    'projectId' => '123',
-                    'componentId' => 'dummy',
-                    'configId' => '123',
-                ]
+                array_merge($job->jsonSerialize(), ['status' => 'processing'])
             )
         );
         /** @var QueueClient $queueClient */
