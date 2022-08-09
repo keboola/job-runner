@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
@@ -99,8 +99,8 @@ class RunCommandTerminateTest extends AbstractCommandTest
             'tokenDescription' => $tokenInfo['description'],
             'tokenId' => $tokenInfo['id'],
             '#tokenString' => $this->getEncryptedToken(),
-            'status' => JobFactory::STATUS_CREATED,
-            'desiredStatus' => JobFactory::DESIRED_STATUS_PROCESSING,
+            'status' => JobInterface::STATUS_CREATED,
+            'desiredStatus' => JobInterface::DESIRED_STATUS_PROCESSING,
             'mode' => 'run',
             'configData' => [
                 'parameters' => [
@@ -151,7 +151,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         $mainProcess->start();
         $this->settle(
-            JobFactory::STATUS_PROCESSING,
+            JobInterface::STATUS_PROCESSING,
             function () use ($mainProcess, $client, $job): string {
                 echo $mainProcess->getOutput();
                 echo $mainProcess->getErrorOutput();
@@ -160,8 +160,8 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
 
         $job = $client->patchJob($job->getId(), (new JobPatchData())
-            ->setStatus(JobFactory::STATUS_TERMINATING)
-            ->setDesiredStatus(JobFactory::DESIRED_STATUS_TERMINATING));
+            ->setStatus(JobInterface::STATUS_TERMINATING)
+            ->setDesiredStatus(JobInterface::DESIRED_STATUS_TERMINATING));
 
         $pid = $mainProcess->getPid();
         $tmpProcess = Process::fromShellCommandline('kill -15 ' . $pid);
@@ -213,8 +213,8 @@ class RunCommandTerminateTest extends AbstractCommandTest
             'tokenDescription' => $tokenInfo['description'],
             'tokenId' => $tokenInfo['id'],
             '#tokenString' => $this->getEncryptedToken(),
-            'status' => JobFactory::STATUS_CREATED,
-            'desiredStatus' => JobFactory::DESIRED_STATUS_PROCESSING,
+            'status' => JobInterface::STATUS_CREATED,
+            'desiredStatus' => JobInterface::DESIRED_STATUS_PROCESSING,
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [
@@ -260,7 +260,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         $mainProcess->start();
         $this->settle(
-            JobFactory::STATUS_PROCESSING,
+            JobInterface::STATUS_PROCESSING,
             function () use ($mainProcess, $client, $job): string {
                 echo $mainProcess->getOutput();
                 echo $mainProcess->getErrorOutput();

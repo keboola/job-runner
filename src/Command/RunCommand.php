@@ -29,7 +29,6 @@ use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTerminalException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
-use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
@@ -99,7 +98,7 @@ class RunCommand extends Command
         $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
         try {
             $jobStatus = $this->queueClient->getJob($jobId)->getStatus();
-            if ($jobStatus !== JobFactory::STATUS_TERMINATING) {
+            if ($jobStatus !== JobInterface::STATUS_TERMINATING) {
                 $this->logger->info(
                     sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus)
                 );
@@ -193,7 +192,7 @@ class RunCommand extends Command
 
             $job = $this->queueClient->patchJob(
                 $job->getId(),
-                (new JobPatchData())->setStatus(JobFactory::STATUS_PROCESSING)
+                (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING)
             );
 
             // set up logging to storage API
@@ -268,13 +267,13 @@ class RunCommand extends Command
             $result = OutputResultConverter::convertOutputsToResult($outputs);
             $metrics = OutputResultConverter::convertOutputsToMetrics($outputs, $job->getBackend());
             $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
-            $this->postJobResult($jobId, JobFactory::STATUS_SUCCESS, $result, $metrics);
+            $this->postJobResult($jobId, JobInterface::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
             $this->logger->info(sprintf('Job "%s" is already running', $jobId));
         } catch (Throwable $e) {
             $this->postJobResult(
                 $jobId,
-                JobFactory::STATUS_ERROR,
+                JobInterface::STATUS_ERROR,
                 ExceptionConverter::convertExceptionToResult($this->logger, $e, $jobId, $outputs)
             );
         }

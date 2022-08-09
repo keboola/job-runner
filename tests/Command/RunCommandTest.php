@@ -14,8 +14,8 @@ use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
-use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -486,8 +486,8 @@ class RunCommandTest extends AbstractCommandTest
                 'keboola.runner-config-test',
                 (string) $tokenInfo['owner']['id'],
             ),
-            'status' => JobFactory::STATUS_CREATED,
-            'desiredStatus' => JobFactory::DESIRED_STATUS_PROCESSING,
+            'status' => JobInterface::STATUS_CREATED,
+            'desiredStatus' => JobInterface::DESIRED_STATUS_PROCESSING,
             'mode' => 'run',
             'configId' => 'dummy',
             'configData' => [
@@ -547,7 +547,7 @@ class RunCommandTest extends AbstractCommandTest
         ]);
 
         $job = $client->createJob($job);
-        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobFactory::STATUS_ERROR));
+        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_ERROR));
 
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -598,7 +598,7 @@ class RunCommandTest extends AbstractCommandTest
 
         // set the job to processing, the job will succeed but do nothing
         $job = $client->createJob($job);
-        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobFactory::STATUS_PROCESSING));
+        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING));
 
         $kernel = static::createKernel();
         $application = new Application($kernel);

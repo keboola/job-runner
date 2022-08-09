@@ -8,8 +8,8 @@ use App\JobDefinitionFactory;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
-use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\BranchAwareClient;
@@ -30,7 +30,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -60,7 +60,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -93,7 +93,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -126,7 +126,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -159,7 +159,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -348,7 +348,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -381,7 +381,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -449,7 +449,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
@@ -520,7 +520,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $jobData = [
-            'status' => JobFactory::STATUS_CREATED,
+            'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
