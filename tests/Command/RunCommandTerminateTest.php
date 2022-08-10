@@ -147,6 +147,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
                 'JOB_ID' => $job->getId(),
+                'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]
         );
         $mainProcess->start();
@@ -256,6 +257,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
                 'JOB_ID' => $job->getId(),
+                'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]
         );
         $mainProcess->start();
