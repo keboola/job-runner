@@ -65,7 +65,8 @@ abstract class AbstractCommandTest extends KernelTestCase
             new NullLogger(),
             $existingJobFactory,
             (string) getenv('JOB_QUEUE_URL'),
-            (string) getenv('JOB_QUEUE_TOKEN')
+            (string) getenv('JOB_QUEUE_TOKEN'),
+            null
         );
 
         return [

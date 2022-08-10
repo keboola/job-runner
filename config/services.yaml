@@ -18,6 +18,7 @@ parameters:
     'env(JOB_QUEUE_URL)': ''
     'env(STORAGE_API_URL)': ''
     'env(ENCRYPTOR_STACK_ID)': ''
+    'env(STORAGE_API_TOKEN)': ''
 
 services:
     # default configuration for services in *this* file
@@ -74,7 +75,8 @@ services:
     Keboola\JobQueueInternalClient\Client:
         arguments:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
-            $internalQueueToken: '%env(JOB_QUEUE_TOKEN)%'
+            $internalQueueToken: ~
+            $storageApiToken: '%env(STORAGE_API_TOKEN)%'
 
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'

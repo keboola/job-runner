@@ -43,6 +43,7 @@ class RunCommandTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('JOB_ID=');
+        putenv('STORAGE_API_TOKEN=' . getenv('TEST_STORAGE_API_TOKEN'));
     }
 
     public function testExecuteFailure(): void
