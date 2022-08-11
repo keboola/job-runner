@@ -178,6 +178,7 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobId = (string) getenv('JOB_ID');
+        $storageApiToken = (string) getenv('STORAGE_API_TOKEN');
         /** @var Output[] $outputs */
         $outputs = [];
         try {
@@ -188,8 +189,6 @@ class RunCommand extends Command
 
             $this->logger->info(sprintf('Running job "%s".', $jobId));
             $job = $this->queueClient->getJob($jobId);
-            $token = $job->getTokenDecrypted();
-
             $job = $this->queueClient->patchJob(
                 $job->getId(),
                 (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING)
@@ -202,7 +201,7 @@ class RunCommand extends Command
                 $job->getProjectId()
             ));
             $options = (new ClientOptions())
-                ->setToken($token)
+                ->setToken($storageApiToken)
                 ->setUserAgent($job->getComponentId())
                 ->setBranchId($job->getBranchId())
                 ->setRunId($job->getRunId())
