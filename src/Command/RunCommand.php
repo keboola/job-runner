@@ -19,7 +19,6 @@ use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
-use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
@@ -29,7 +28,6 @@ use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTerminalException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
-use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
@@ -60,6 +58,8 @@ class RunCommand extends Command
     private JobDefinitionFactory $jobDefinitionFactory;
     private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
+    private string $jobId;
+    private string $storageApiToken;
 
     public function __construct(
         LoggerInterface $logger,
@@ -69,6 +69,8 @@ class RunCommand extends Command
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         ObjectEncryptor $objectEncryptor,
+        string $jobId,
+        string $storageApiToken,
         array $instanceLimits
     ) {
         parent::__construct(self::$defaultName);
@@ -85,35 +87,32 @@ class RunCommand extends Command
         pcntl_signal(SIGTERM, [$this, 'terminationHandler']);
         pcntl_signal(SIGINT, [$this, 'terminationHandler']);
         pcntl_async_signals(true);
+        $this->jobId = $jobId;
+        $this->storageApiToken = $storageApiToken;
     }
 
     public function terminationHandler(int $signalNumber): void
     {
         $this->logger->notice(sprintf('Received signal "%s"', $signalNumber));
-        $jobId = (string) getenv('JOB_ID');
-        if (empty($jobId)) {
-            $this->logger->error('The "JOB_ID" environment variable is missing in cleanup command.');
-            return;
-        }
-        $this->logProcessor->setLogInfo(new LogInfo($jobId, '', ''));
+        $this->logProcessor->setLogInfo(new LogInfo($this->jobId, '', ''));
         try {
-            $jobStatus = $this->queueClient->getJob($jobId)->getStatus();
+            $jobStatus = $this->queueClient->getJob($this->jobId)->getStatus();
             if ($jobStatus !== JobInterface::STATUS_TERMINATING) {
                 $this->logger->info(
-                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $jobId, $jobStatus)
+                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus)
                 );
                 return;
             }
         } catch (ClientException $e) {
-            $this->logger->error(sprintf('Failed to get job "%s" for cleanup: ' . $e->getMessage(), $jobId));
+            $this->logger->error(sprintf('Failed to get job "%s" for cleanup: ' . $e->getMessage(), $this->jobId));
             // we don't want the handler to crash
             return;
         }
-        $this->logger->info(sprintf('Terminating containers for job "%s".', $jobId));
+        $this->logger->info(sprintf('Terminating containers for job "%s".', $this->jobId));
         $process = Process::fromShellCommandline(
             sprintf(
                 'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
-                escapeshellcmd($jobId)
+                escapeshellcmd($this->jobId)
                 // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
             )
         );
@@ -124,7 +123,7 @@ class RunCommand extends Command
                     'error' => $e->getMessage(),
                     'stdout' => $process->getOutput(),
                     'stderr' => $process->getErrorOutput(),
-                ]), $jobId), [
+                ]), $this->jobId), [
                 'error' => $e->getMessage(),
                 'stdout' => $process->getOutput(),
                 'stderr' => $process->getErrorOutput(),
@@ -151,7 +150,7 @@ class RunCommand extends Command
                 );
             }
         }
-        $this->logger->info(sprintf('Finished container cleanup for job "%s".', $jobId));
+        $this->logger->info(sprintf('Finished container cleanup for job "%s".', $this->jobId));
         exit;
     }
 
@@ -177,18 +176,11 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jobId = (string) getenv('JOB_ID');
-        $storageApiToken = (string) getenv('STORAGE_API_TOKEN');
         /** @var Output[] $outputs */
         $outputs = [];
         try {
-            // get job
-            if (empty($jobId)) {
-                throw new ApplicationException('The "JOB_ID" environment variable is missing.');
-            }
-
-            $this->logger->info(sprintf('Running job "%s".', $jobId));
-            $job = $this->queueClient->getJob($jobId);
+            $this->logger->info(sprintf('Running job "%s".', $this->jobId));
+            $job = $this->queueClient->getJob($this->jobId);
             $job = $this->queueClient->patchJob(
                 $job->getId(),
                 (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING)
@@ -201,7 +193,7 @@ class RunCommand extends Command
                 $job->getProjectId()
             ));
             $options = (new ClientOptions())
-                ->setToken($storageApiToken)
+                ->setToken($this->storageApiToken)
                 ->setUserAgent($job->getComponentId())
                 ->setBranchId($job->getBranchId())
                 ->setRunId($job->getRunId())
@@ -254,7 +246,7 @@ class RunCommand extends Command
             $runner->run(
                 $jobDefinitions,
                 'run',
-                $job->isInRunMode() ? Job::MODE_RUN : Job::MODE_DEBUG,
+                $job->isInRunMode() ? JobInterface::MODE_RUN : JobInterface::MODE_DEBUG,
                 $job->getId(),
                 $usageFile,
                 $job->getConfigRowIds(),
@@ -265,15 +257,15 @@ class RunCommand extends Command
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
             $metrics = OutputResultConverter::convertOutputsToMetrics($outputs, $job->getBackend());
-            $this->logger->info(sprintf('Job "%s" execution finished.', $jobId));
-            $this->postJobResult($jobId, JobInterface::STATUS_SUCCESS, $result, $metrics);
+            $this->logger->info(sprintf('Job "%s" execution finished.', $this->jobId));
+            $this->postJobResult($this->jobId, JobInterface::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
-            $this->logger->info(sprintf('Job "%s" is already running', $jobId));
+            $this->logger->info(sprintf('Job "%s" is already running', $this->jobId));
         } catch (Throwable $e) {
             $this->postJobResult(
-                $jobId,
+                $this->jobId,
                 JobInterface::STATUS_ERROR,
-                ExceptionConverter::convertExceptionToResult($this->logger, $e, $jobId, $outputs)
+                ExceptionConverter::convertExceptionToResult($this->logger, $e, $this->jobId, $outputs)
             );
         }
         // end with success so that there are no restarts

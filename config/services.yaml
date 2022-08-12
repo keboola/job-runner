@@ -19,6 +19,7 @@ parameters:
     'env(STORAGE_API_URL)': ''
     'env(ENCRYPTOR_STACK_ID)': ''
     'env(STORAGE_API_TOKEN)': ''
+    'env(JOB_ID)': ''
 
 services:
     # default configuration for services in *this* file
@@ -35,8 +36,8 @@ services:
     App\Command\RunCommand:
         arguments:
             $instanceLimits: '%instance_limits%'
-
-    App\Command\CleanupCommand:
+            $storageApiToken: '%env(STORAGE_API_TOKEN)%'
+            $jobId: '%env(JOB_ID)%'
 
     Keboola\ErrorControl\Uploader\UploaderFactory:
         arguments:
