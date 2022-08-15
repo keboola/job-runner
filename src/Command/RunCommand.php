@@ -197,7 +197,7 @@ class RunCommand extends Command
                 ->setToken($this->storageApiToken)
                 ->setUserAgent($job->getComponentId())
                 ->setBranchId($job->getBranchId())
-                ->setRunId($job->getRunId())
+                ->setRunId($job->getId())
                 ->setJobPollRetryDelay(self::getStepPollDelayFunction());
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();
