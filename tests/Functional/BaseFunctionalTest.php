@@ -160,20 +160,18 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
-        $creditsCheckerFactory = new CreditsCheckerFactory();
-
-        $command = new RunCommand(
+        return new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $queueClient,
-            $creditsCheckerFactory,
+            new CreditsCheckerFactory(),
             $storageClientFactory,
             new JobDefinitionFactory(),
             $this->objectEncryptor,
+            $job->getId(),
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1]
         );
-        putenv('JOB_ID=' . $job->getId());
-        return $command;
     }
 
     protected function hasEvent(string $type, string $message, array $events): bool

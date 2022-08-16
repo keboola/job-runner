@@ -123,6 +123,7 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ]);
         $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
         self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -136,7 +137,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
@@ -263,6 +263,7 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ]);
         $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -275,7 +276,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
@@ -396,6 +396,7 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ]);
             $job = $client->createJob($job);
+            putenv('JOB_ID=' . $job->getId());
             $kernel = static::createKernel();
             $application = new Application($kernel);
 
@@ -408,7 +409,6 @@ class RunCommandTest extends AbstractCommandTest
             $testHandler = new TestHandler();
             $logger->pushHandler($testHandler);
 
-            putenv('JOB_ID=' . $job->getId());
             $commandTester = new CommandTester($command);
             $ret = $commandTester->execute([
                 'command' => $command->getName(),
@@ -503,6 +503,7 @@ class RunCommandTest extends AbstractCommandTest
         // check that the encrypted value was NOT encrypted
         self::assertEquals('bar', $job->getConfigData()['parameters']['arbitrary']['#foo']);
         $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -515,7 +516,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
@@ -549,6 +549,7 @@ class RunCommandTest extends AbstractCommandTest
 
         $job = $client->createJob($job);
         $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_ERROR));
+        putenv('JOB_ID=' . $job->getId());
 
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -562,7 +563,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
@@ -600,6 +600,7 @@ class RunCommandTest extends AbstractCommandTest
         // set the job to processing, the job will succeed but do nothing
         $job = $client->createJob($job);
         $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING));
+        putenv('JOB_ID=' . $job->getId());
 
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -612,7 +613,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute(
             ['command' => $command->getName()],
@@ -648,6 +648,7 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ]);
         $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -660,7 +661,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute(
             ['command' => $command->getName()],
@@ -710,6 +710,7 @@ class RunCommandTest extends AbstractCommandTest
             'configData' => [],
         ]);
         $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
@@ -728,7 +729,6 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        putenv('JOB_ID=' . $job->getId());
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
@@ -833,12 +833,13 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
+            '123',
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
             []
         ));
 
         $command = $application->find('app:run');
 
-        putenv('JOB_ID=123');
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
