@@ -8,7 +8,7 @@ use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoaderInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
-use Keboola\InputMapping\Table\Result\TableMetrics;
+use Keboola\InputMapping\Table\Result\TableMetrics as InputTableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Backend;
 use Keboola\JobQueueInternalClient\Result\Artifacts;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
@@ -17,6 +17,7 @@ use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
 use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
+use Keboola\OutputMapping\Table\Result\TableMetrics as OutputTableMetrics;
 
 class OutputResultConverter
 {
@@ -82,14 +83,25 @@ class OutputResultConverter
     {
         $jobMetrics = new JobMetrics();
 
-        $sum = 0;
+        $inputTablesCompressedBytesSum = 0;
+        $outputTablesCompressedBytesSum = 0;
         foreach ($outputs as $output) {
             $inputTableResult = $output->getInputTableResult();
             if ($inputTableResult) {
                 if ($inputTableResult->getMetrics()) {
                     foreach ($inputTableResult->getMetrics()->getTableMetrics() as $tableMetric) {
-                        /** @var TableMetrics $tableMetric */
-                        $sum += $tableMetric->getCompressedBytes();
+                        /** @var InputTableMetrics $tableMetric */
+                        $inputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
+                    }
+                }
+            }
+
+            $outputTableResult = $output->getOutputTableResult();
+            if ($outputTableResult) {
+                if ($outputTableResult->getMetrics()) {
+                    foreach ($outputTableResult->getMetrics()->getTableMetrics() as $tableMetric) {
+                        /** @var OutputTableMetrics $tableMetric */
+                        $outputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
                     }
                 }
             }
@@ -111,7 +123,8 @@ class OutputResultConverter
         // https://github.com/keboola/job-queue-daemon/blob/7af7d3853cb81f585e9c4d29a5638ff2ad40107a/src/Cluster/ResourceTransformer.php#L26
         $jobMetrics->setBackendContainerSize($backend->getContainerType() ?? 'small');
 
-        $jobMetrics->setInputTablesBytesSum($sum);
+        $jobMetrics->setInputTablesBytesSum($inputTablesCompressedBytesSum);
+        $jobMetrics->setOutputTablesBytesSum($outputTablesCompressedBytesSum);
         return $jobMetrics;
     }
 
