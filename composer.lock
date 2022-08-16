@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.233.0",
+            "version": "3.233.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2aabbc276b61515ae1897f037fc34ad56028d744"
+                "reference": "c804eb974240ae04b4ae5381f45003f25bbed56c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2aabbc276b61515ae1897f037fc34ad56028d744",
-                "reference": "2aabbc276b61515ae1897f037fc34ad56028d744",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c804eb974240ae04b4ae5381f45003f25bbed56c",
+                "reference": "c804eb974240ae04b4ae5381f45003f25bbed56c",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.233.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.233.2"
             },
-            "time": "2022-08-11T18:15:54+00:00"
+            "time": "2022-08-15T18:16:30+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -395,16 +395,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.261.0",
+            "version": "v0.262.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "c91c5a694e3b8bca37136b830072a23f2c1250fa"
+                "reference": "c2e1408ba2b9e31df2d1c0b136f3247e8818874d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c91c5a694e3b8bca37136b830072a23f2c1250fa",
-                "reference": "c91c5a694e3b8bca37136b830072a23f2c1250fa",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c2e1408ba2b9e31df2d1c0b136f3247e8818874d",
+                "reference": "c2e1408ba2b9e31df2d1c0b136f3247e8818874d",
                 "shasum": ""
             },
             "require": {
@@ -433,9 +433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.261.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.262.0"
             },
-            "time": "2022-08-08T01:28:12+00:00"
+            "time": "2022-08-14T01:06:11+00:00"
         },
         {
             "name": "google/auth",
@@ -1767,16 +1767,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "18.2.0",
+            "version": "18.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "72c49d4b2d3c7e3e4e376e912f321d23c22da7d8"
+                "reference": "5c7a515216314c909b99a1424c2879d4aac3ca51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/72c49d4b2d3c7e3e4e376e912f321d23c22da7d8",
-                "reference": "72c49d4b2d3c7e3e4e376e912f321d23c22da7d8",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/5c7a515216314c909b99a1424c2879d4aac3ca51",
+                "reference": "5c7a515216314c909b99a1424c2879d4aac3ca51",
                 "shasum": ""
             },
             "require": {
@@ -1819,22 +1819,22 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/18.2.0"
+                "source": "https://github.com/keboola/output-mapping/tree/18.3.0"
             },
-            "time": "2022-08-08T15:20:15+00:00"
+            "time": "2022-08-16T06:41:08+00:00"
         },
         {
             "name": "keboola/php-datatypes",
-            "version": "6.0.3",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-datatypes.git",
-                "reference": "1c1b3d7bbad1aa3c09d904c7e6f2db729f57bcd7"
+                "reference": "923a8b6b571a554d95cbce6048f6d7d15e62dec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/1c1b3d7bbad1aa3c09d904c7e6f2db729f57bcd7",
-                "reference": "1c1b3d7bbad1aa3c09d904c7e6f2db729f57bcd7",
+                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/923a8b6b571a554d95cbce6048f6d7d15e62dec7",
+                "reference": "923a8b6b571a554d95cbce6048f6d7d15e62dec7",
                 "shasum": ""
             },
             "require": {
@@ -1867,9 +1867,9 @@
             "description": "PHP datatypes for databases",
             "support": {
                 "issues": "https://github.com/keboola/php-datatypes/issues",
-                "source": "https://github.com/keboola/php-datatypes/tree/6.0.3"
+                "source": "https://github.com/keboola/php-datatypes/tree/6.0.4"
             },
-            "time": "2022-07-21T10:48:54+00:00"
+            "time": "2022-08-16T10:03:02+00:00"
         },
         {
             "name": "keboola/php-file-storage-utils",
