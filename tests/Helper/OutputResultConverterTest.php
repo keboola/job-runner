@@ -114,7 +114,7 @@ class OutputResultConverterTest extends TestCase
         $outputTableResult1 = new OutputResult();
         $outputTableResult1->addTable($this->getTableInfo()['third']);
         $outputTableResult1->addTable($this->getTableInfo()['fourth']);
-        $outputTableResult1->setMetrics([
+        $outputTableResult1->setMetrics(new OutputResult\Metrics([
             [
                 'id' => 234567,
                 'status' => 'success',
@@ -150,7 +150,7 @@ class OutputResultConverterTest extends TestCase
                     'outBytesUncompressed' => 300,
                 ],
             ],
-        ]);
+        ]));
         $loadQueueMock1 = self::createMock(LoadTableQueue::class);
         $loadQueueMock1->method('getTableResult')->willReturn($outputTableResult1);
 

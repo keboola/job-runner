@@ -98,8 +98,9 @@ class OutputResultConverter
 
             $outputTableResult = $output->getOutputTableResult();
             if ($outputTableResult) {
-                if ($outputTableResult->getMetrics()) {
-                    foreach ($outputTableResult->getMetrics()->getTableMetrics() as $tableMetric) {
+                $outputMetrics = $outputTableResult->getMetrics();
+                if ($outputMetrics) {
+                    foreach ($outputMetrics->getTableMetrics() as $tableMetric) {
                         /** @var OutputTableMetrics $tableMetric */
                         $outputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
                     }
