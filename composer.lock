@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93c2a7508b8f18131805b9fb35d59eec",
+    "content-hash": "5f4735e458ec7330a81827ec22f6b5a6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1395,7 +1395,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "d5c1b54cc2d8c5948d3b202ba5e7f64c8cd4ae94"
+                "reference": "87fc35199c07a8996c8056526146139866d01696"
             },
             "require": {
                 "ext-json": "*",
@@ -1406,7 +1406,7 @@
                 "keboola/input-mapping": "^16.1",
                 "keboola/oauth-v2-php-client": "^3.0",
                 "keboola/object-encryptor": "^2.0",
-                "keboola/output-mapping": "dev-erik-PS-3495 as 18.2.0",
+                "keboola/output-mapping": "^19.0.0",
                 "keboola/php-utils": "^2.3.1",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^5.1",
@@ -1445,7 +1445,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-08-16T10:14:37+00:00"
+            "time": "2022-08-17T06:10:38+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1767,16 +1767,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-erik-PS-3495",
+            "version": "19.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "8667de1c429c924a5e3a230a81fd23ef3b6eaad4"
+                "reference": "4c523d6c5f5b2bc57f1cfe13948dd7de73d8e844"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/8667de1c429c924a5e3a230a81fd23ef3b6eaad4",
-                "reference": "8667de1c429c924a5e3a230a81fd23ef3b6eaad4",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/4c523d6c5f5b2bc57f1cfe13948dd7de73d8e844",
+                "reference": "4c523d6c5f5b2bc57f1cfe13948dd7de73d8e844",
                 "shasum": ""
             },
             "require": {
@@ -1819,9 +1819,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/erik-PS-3495"
+                "source": "https://github.com/keboola/output-mapping/tree/19.0.0"
             },
-            "time": "2022-08-15T14:55:21+00:00"
+            "time": "2022-08-16T13:15:57+00:00"
         },
         {
             "name": "keboola/php-datatypes",
@@ -10345,19 +10345,12 @@
             "version": "dev-erik-PS-3771",
             "alias": "14.1.0",
             "alias_normalized": "14.1.0.0"
-        },
-        {
-            "package": "keboola/output-mapping",
-            "version": "dev-erik-PS-3495",
-            "alias": "18.2.0",
-            "alias_normalized": "18.2.0.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20,
-        "keboola/output-mapping": 20
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
