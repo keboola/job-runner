@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "375754a4f00987ef159d3fb47cf500e4",
+    "content-hash": "93c2a7508b8f18131805b9fb35d59eec",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1553,16 +1553,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "14.1.0",
+            "version": "dev-erik-PS-3771",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "c9e806c38949eeb9611d2d2029659ffb16d5d3f8"
+                "reference": "2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/c9e806c38949eeb9611d2d2029659ffb16d5d3f8",
-                "reference": "c9e806c38949eeb9611d2d2029659ffb16d5d3f8",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14",
+                "reference": "2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14",
                 "shasum": ""
             },
             "require": {
@@ -1610,9 +1610,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/14.1.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-PS-3771"
             },
-            "time": "2022-08-10T07:07:47+00:00"
+            "time": "2022-08-16T15:52:12+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -10341,6 +10341,12 @@
     ],
     "aliases": [
         {
+            "package": "keboola/job-queue-internal-api-php-client",
+            "version": "dev-erik-PS-3771",
+            "alias": "14.1.0",
+            "alias_normalized": "14.1.0.0"
+        },
+        {
             "package": "keboola/output-mapping",
             "version": "dev-erik-PS-3495",
             "alias": "18.2.0",
@@ -10350,6 +10356,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20,
         "keboola/output-mapping": 20
     },
     "prefer-stable": false,
