@@ -197,6 +197,7 @@ class RunCommandTest extends AbstractCommandTest
             [
                 'storage' => [
                     'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
                     'size' => null,
@@ -336,6 +337,19 @@ class RunCommandTest extends AbstractCommandTest
         ], $inputTable);
 
         self::assertSame('small', $job->getMetrics()->getBackendSize());
+        self::assertSame(
+            [
+                'storage' => [
+                    'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 0,
+                ],
+                'backend' => [
+                    'size' => null,
+                    'containerSize' => 'small',
+                ],
+            ],
+            $job->getMetrics()->jsonSerialize()
+        );
     }
 
     public function testExecuteVariablesSharedCode(): void
