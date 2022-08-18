@@ -42,6 +42,7 @@ class OutputResultConverterTest extends TestCase
             [
                 'storage' => [
                     'inputTablesBytesSum' => 0,
+                    'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
                     'size' => null,
@@ -62,6 +63,7 @@ class OutputResultConverterTest extends TestCase
             [
                 'storage' => [
                     'inputTablesBytesSum' => 0,
+                    'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
                     'size' => null,
@@ -112,6 +114,43 @@ class OutputResultConverterTest extends TestCase
         $outputTableResult1 = new OutputResult();
         $outputTableResult1->addTable($this->getTableInfo()['third']);
         $outputTableResult1->addTable($this->getTableInfo()['fourth']);
+        $outputTableResult1->setMetrics(new OutputResult\Metrics([
+            [
+                'id' => 234567,
+                'status' => 'success',
+                'url' => 'https://connection.keboola.com/v2/storage/jobs/234567',
+                'tableId' => 'in.c-main.my-third-table',
+                'operationName' => 'tableImport',
+                'createdTime' => '2021-03-12T10:36:15+0100',
+                'metrics' => [
+                    'inCompressed' => true,
+                    'inBytes' => 100,
+                    'inBytesUncompressed' => 0,
+                    'outCompressed' => false,
+                    'outBytes' => 0,
+                    'outBytesUncompressed' => 0,
+                ],
+            ],
+            [
+                'id' => 765432,
+                'status' => 'success',
+                'url' => 'https://connection.keboola.com/v2/storage/jobs/765432',
+                'tableId' => null,
+                'operationName' => 'tableCreate',
+                'createdTime' => '2001-03-12T10:36:15+0100',
+                'results' => [
+                    'id' => 'in.c-main.my-fourth-table',
+                ],
+                'metrics' => [
+                    'inCompressed' => true,
+                    'inBytes' => 100,
+                    'inBytesUncompressed' => 1000,
+                    'outCompressed' => false,
+                    'outBytes' => 3000,
+                    'outBytesUncompressed' => 300,
+                ],
+            ],
+        ]));
         $loadQueueMock1 = self::createMock(LoadTableQueue::class);
         $loadQueueMock1->method('getTableResult')->willReturn($outputTableResult1);
 
@@ -120,6 +159,7 @@ class OutputResultConverterTest extends TestCase
         $output1->setImages(['a' => 'b']);
         $output1->setOutput('some output');
         $output1->setInputTableResult($inputTableResult1);
+        $output1->setOutputTableResult($outputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
         $output1->setArtifactsUploaded([
             [
@@ -150,6 +190,7 @@ class OutputResultConverterTest extends TestCase
         $output2->setImages(['c' => 'd']);
         $output2->setOutput('some other output');
         $output2->setInputTableResult($inputTableResult2);
+        $output2->setOutputTableResult($outputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
         $output2->setArtifactsUploaded([
             [
@@ -304,6 +345,7 @@ class OutputResultConverterTest extends TestCase
             [
                 'storage' => [
                     'inputTablesBytesSum' => 3500,
+                    'outputTablesBytesSum' => 200,
                 ],
                 'backend' => [
                     'size' => 'large',
