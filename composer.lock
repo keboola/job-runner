@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f4735e458ec7330a81827ec22f6b5a6",
+    "content-hash": "f43029258a8949389a1fe7777ac74e3e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1553,7 +1553,7 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-erik-PS-3771",
+            "version": "14.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
@@ -1610,7 +1610,7 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-PS-3771"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/14.2.0"
             },
             "time": "2022-08-16T15:52:12+00:00"
         },
@@ -10339,18 +10339,10 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-erik-PS-3771",
-            "alias": "14.1.0",
-            "alias_normalized": "14.1.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

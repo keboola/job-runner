@@ -24,7 +24,7 @@
         "keboola/configuration-variables-resolver": "^3.0",
         "keboola/dockerbundle": "dev-erik-PS-3494",
         "keboola/input-mapping": "^16.0",
-        "keboola/job-queue-internal-api-php-client": "dev-erik-PS-3771 as 14.1.0",
+        "keboola/job-queue-internal-api-php-client": "^14.2",
         "keboola/object-encryptor": "^2.0",
         "keboola/output-mapping": "^19.0.0",
         "keboola/storage-api-client": "^13.4.3",
