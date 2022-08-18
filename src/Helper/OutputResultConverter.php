@@ -49,7 +49,6 @@ class OutputResultConverter
             $inputTableResult = $output->getInputTableResult();
             if ($inputTableResult) {
                 foreach ($inputTableResult->getTables() as $tableInfo) {
-                    /** @var TableInfo $tableInfo */
                     $inputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
                 }
             }
