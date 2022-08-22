@@ -89,17 +89,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        try {
-            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
-        $this->storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
@@ -117,7 +108,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-main.someTable',
+                                'source' => $tableId,
                                 'destination' => 'someTable.csv',
                             ],
                         ],
@@ -180,7 +171,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-main.someTable',
+            'id' => $tableId,
             'name' => 'someTable',
             'columns' => [
                 [
@@ -211,17 +202,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        try {
-            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
-        $this->storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
+        $this->initTestDataTables();
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
@@ -368,13 +349,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        try {
-            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -382,10 +358,6 @@ class RunCommandTest extends AbstractCommandTest
                 throw $e;
             }
         }
-        $this->storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-workspace-test',
@@ -399,7 +371,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-main.someTable',
+                                'source' => $tableId,
                                 'destination' => 'someTable',
                             ],
                         ],
@@ -475,7 +447,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-main.someTable',
+            'id' => $tableId,
             'name' => 'someTable',
             'columns' => [
                 [
@@ -1013,5 +985,23 @@ class RunCommandTest extends AbstractCommandTest
         self::assertNotEmpty($messages);
         self::assertContains('Running job "123".', $messages);
         self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
+    }
+
+    private function initTestDataTables(): array
+    {
+        try {
+            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+
+        $bucketId =  $this->storageClient->createBucket('main', StorageClient::STAGE_IN);
+
+        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
+        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
+        $tableId = $this->storageClient->createTable($bucketId, 'someTable', $csv);
+        return [$tableId];
     }
 }
