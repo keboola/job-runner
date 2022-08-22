@@ -34,6 +34,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class RunCommandTest extends AbstractCommandTest
 {
+    private StorageClient $storageClient;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -44,6 +46,11 @@ class RunCommandTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('JOB_ID=');
         putenv('STORAGE_API_TOKEN=' . getenv('TEST_STORAGE_API_TOKEN'));
+
+        $this->storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
     }
 
     public function testExecuteFailure(): void
@@ -82,21 +89,17 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
         try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
-        $storageClient->createBucket('main', 'in');
+        $this->storageClient->createBucket('main', 'in');
         file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
+        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
@@ -159,11 +162,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
@@ -212,21 +211,17 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
         try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
-        $storageClient->createBucket('main', 'in');
+        $this->storageClient->createBucket('main', 'in');
         file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
+        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
@@ -303,11 +298,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-executor-test.source.csv.gz', $messages);
@@ -377,28 +368,24 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
         try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
         try {
-            $storageClient->dropBucket('out.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
-        $storageClient->createBucket('main', 'in');
+        $this->storageClient->createBucket('main', 'in');
         file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
+        $this->storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-workspace-test',
@@ -854,11 +841,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteCreditsCheck(): void
     {
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $tokenInfo = $storageClient->verifyToken();
+        $tokenInfo = $this->storageClient->verifyToken();
         $tokenInfo['owner']['features'] = 'pay-as-you-go';
 
         $creditsCheckerMock = $this->createMock(CreditsChecker::class);
@@ -944,11 +927,6 @@ class RunCommandTest extends AbstractCommandTest
             'objectEncryptor' => $objectEncryptor,
         ] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-
         $jobData = [
             'id' => '123',
             'runId' => '124',
@@ -988,8 +966,8 @@ class RunCommandTest extends AbstractCommandTest
             ));
 
         $logger = new Logger('job-runner-test');
-        $storageClient->setRunId('124');
-        $logger->pushHandler(new StorageApiHandler('job-runner-test', $storageClient));
+        $this->storageClient->setRunId('124');
+        $logger->pushHandler(new StorageApiHandler('job-runner-test', $this->storageClient));
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
@@ -1029,7 +1007,7 @@ class RunCommandTest extends AbstractCommandTest
         ));
         self::assertEquals(0, $ret);
 
-        $events = $storageClient->listEvents(['runId' => '124']);
+        $events = $this->storageClient->listEvents(['runId' => '124']);
         $messages = array_column($events, 'message');
 
         self::assertNotEmpty($messages);
