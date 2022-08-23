@@ -348,6 +348,127 @@ class RunCommandTest extends AbstractCommandTest
         );
     }
 
+    public function testExecuteFailureWithLocalInputOutputInMetrics(): void
+    {
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
+        try {
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+
+        $jobData = [
+            'componentId' => 'keboola.python-transformation',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => $tableId,
+                                'destination' => 'source.csv',
+                            ],
+                        ],
+                    ],
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'destination-does-not-exists.csv',
+                                'destination' => 'out.c-main.modified',
+                            ],
+                        ],
+                    ],
+                ],
+                'parameters' => [
+                    'plain' => 'not-secret',
+                    'script' => [
+                        'import csv',
+                        'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
+                        'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
+                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
+                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
+                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
+                        '   writer.writeheader()',
+                        '   for row in reader:',
+                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
+                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                    ],
+                ],
+            ],
+        ];
+
+        $job = $newJobFactory->createNewJob($jobData);
+        $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasErrorThatContains('Job "' . $job->getId() . '" ended with user error'));
+        self::assertEquals(0, $ret);
+
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
+        $messages = array_column($events, 'message');
+
+        // event from storage
+        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
+        // event from runner
+        self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
+        self::assertContains(
+            'Job "' .
+                $job->getId() .
+                '" ended with user error: "Table sources not found: "destination-does-not-exists.csv""',
+            $messages
+        );
+
+        /** @var Job $finishedJob */
+        $finishedJob = $client->getJob($job->getId());
+        self::assertSame('error', $finishedJob->getStatus());
+        $result = $finishedJob->getResult();
+
+        self::assertArrayHasKey('output', $result);
+        self::assertArrayHasKey('tables', $result['output']);
+        self::assertSame([], $result['output']['tables']);
+        self::assertArrayHasKey('input', $result);
+        self::assertArrayHasKey('tables', $result['input']);
+        self::assertSame([], $result['input']['tables']);
+
+        self::assertSame(
+            [
+                'storage' => [
+                    'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 0,
+                ],
+                'backend' => [
+                    'size' => null,
+                    'containerSize' => 'small',
+                ],
+            ],
+            $finishedJob->getMetrics()->jsonSerialize()
+        );
+    }
+
     public function testExecuteSuccessWithCopyInputOutputInResult(): void
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
