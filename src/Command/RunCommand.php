@@ -178,6 +178,7 @@ class RunCommand extends Command
     {
         /** @var Output[] $outputs */
         $outputs = [];
+        $job = null;
         try {
             $this->logger->info(sprintf('Running job "%s".', $this->jobId));
             $job = $this->queueClient->getJob($this->jobId);
@@ -262,10 +263,12 @@ class RunCommand extends Command
         } catch (StateTargetEqualsCurrentException $e) {
             $this->logger->info(sprintf('Job "%s" is already running', $this->jobId));
         } catch (Throwable $e) {
+            $metrics = $job ? OutputResultConverter::convertOutputsToMetrics($outputs, $job->getBackend()) : null;
             $this->postJobResult(
                 $this->jobId,
                 JobInterface::STATUS_ERROR,
-                ExceptionConverter::convertExceptionToResult($this->logger, $e, $this->jobId, $outputs)
+                ExceptionConverter::convertExceptionToResult($this->logger, $e, $this->jobId, $outputs),
+                $metrics
             );
         }
         // end with success so that there are no restarts
