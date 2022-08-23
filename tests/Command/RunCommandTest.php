@@ -202,7 +202,15 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $this->initTestDataTables();
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
+        try {
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
@@ -213,7 +221,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-executor-test.source',
+                                'source' => $tableId,
                                 'destination' => 'source.csv',
                             ],
                         ],
@@ -222,7 +230,7 @@ class RunCommandTest extends AbstractCommandTest
                         'tables' => [
                             [
                                 'source' => 'destination.csv',
-                                'destination' => 'out.c-executor-test.modified',
+                                'destination' => 'out.c-main.modified',
                             ],
                         ],
                     ],
@@ -271,6 +279,7 @@ class RunCommandTest extends AbstractCommandTest
                 $jobRecord = $record;
             }
         }
+
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.python-transformation', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
@@ -282,11 +291,11 @@ class RunCommandTest extends AbstractCommandTest
         $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
-        self::assertContains('Downloaded file in.c-executor-test.source.csv.gz', $messages);
+        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from runner
         self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
         // event from storage
-        self::assertContains('Imported table out.c-executor-test.modified', $messages);
+        self::assertContains('Imported table out.c-main.modified', $messages);
 
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
@@ -295,17 +304,14 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['output']);
         $outputTable = reset($result['output']['tables']);
         self::assertSame([
-            'id' => 'out.c-executor-test.modified',
+            'id' => 'out.c-main.modified',
             'name' => 'modified',
             'columns' => [
                 [
-                    'name' => 'name',
+                    'name' => 'a',
                 ],
                 [
-                    'name' => 'oldValue',
-                ],
-                [
-                    'name' => 'newValue',
+                    'name' => 'b',
                 ],
             ],
             'displayName' => 'modified',
@@ -315,26 +321,23 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-executor-test.source',
-            'name' => 'source',
+            'id' => $tableId,
+            'name' => 'someTable',
             'columns' => [
                 [
-                    'name' => 'name',
+                    'name' => 'a',
                 ],
                 [
-                    'name' => 'oldValue',
-                ],
-                [
-                    'name' => 'newValue',
+                    'name' => 'b',
                 ],
             ],
-            'displayName' => 'source',
+            'displayName' => 'someTable',
         ], $inputTable);
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 205,
-                    'outputTablesBytesSum' => 93,
+                    'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 40,
                 ],
                 'backend' => [
                     'size' => null,
