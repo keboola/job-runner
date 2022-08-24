@@ -431,21 +431,13 @@ class RunCommandTest extends AbstractCommandTest
         $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
 
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
-        // event from runner
-        self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
-        self::assertContains(
-            'Job "' .
-                $job->getId() .
-                '" ended with user error: "Table sources not found: "destination-does-not-exists.csv""',
-            $messages
-        );
-
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
         self::assertSame('error', $finishedJob->getStatus());
         $result = $finishedJob->getResult();
+
+        self::assertArrayHasKey('message', $result);
+        self::assertSame('Table sources not found: "destination-does-not-exists.csv"', $result['message']);
 
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
