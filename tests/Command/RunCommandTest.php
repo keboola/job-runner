@@ -89,8 +89,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
@@ -202,8 +201,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
+
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -352,8 +351,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
+
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -431,10 +430,7 @@ class RunCommandTest extends AbstractCommandTest
         $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
 
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from runner
-        self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
         self::assertContains(
             'Job "' .
                 $job->getId() .
@@ -473,8 +469,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
+
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -1111,7 +1107,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
     }
 
-    private function initTestDataTables(): array
+    private function initTestDataTable(): string
     {
         try {
             $this->storageClient->dropBucket('in.c-main', ['force' => true]);
@@ -1125,7 +1121,6 @@ class RunCommandTest extends AbstractCommandTest
 
         file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
         $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $tableId = $this->storageClient->createTable($bucketId, 'someTable', $csv);
-        return [$tableId];
+        return $this->storageClient->createTable($bucketId, 'someTable', $csv);
     }
 }
