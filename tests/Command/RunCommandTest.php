@@ -34,6 +34,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class RunCommandTest extends AbstractCommandTest
 {
+    private StorageClient $storageClient;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -44,6 +46,11 @@ class RunCommandTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('JOB_ID=');
         putenv('STORAGE_API_TOKEN=' . getenv('TEST_STORAGE_API_TOKEN'));
+
+        $this->storageClient = new StorageClient([
+            'url' => getenv('STORAGE_API_URL'),
+            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+        ]);
     }
 
     public function testExecuteFailure(): void
@@ -82,21 +89,8 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
-        $storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
@@ -114,7 +108,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-main.someTable',
+                                'source' => $tableId,
                                 'destination' => 'someTable.csv',
                             ],
                         ],
@@ -159,11 +153,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
@@ -181,7 +171,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-main.someTable',
+            'id' => $tableId,
             'name' => 'someTable',
             'columns' => [
                 [
@@ -212,21 +202,15 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
         try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
-        $storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
@@ -237,7 +221,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-executor-test.source',
+                                'source' => $tableId,
                                 'destination' => 'source.csv',
                             ],
                         ],
@@ -246,7 +230,7 @@ class RunCommandTest extends AbstractCommandTest
                         'tables' => [
                             [
                                 'source' => 'destination.csv',
-                                'destination' => 'out.c-executor-test.modified',
+                                'destination' => 'out.c-main.modified',
                             ],
                         ],
                     ],
@@ -295,6 +279,7 @@ class RunCommandTest extends AbstractCommandTest
                 $jobRecord = $record;
             }
         }
+
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.python-transformation', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
@@ -303,18 +288,14 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $events = $storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
         // event from storage
-        self::assertContains('Downloaded file in.c-executor-test.source.csv.gz', $messages);
+        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from runner
         self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
         // event from storage
-        self::assertContains('Imported table out.c-executor-test.modified', $messages);
+        self::assertContains('Imported table out.c-main.modified', $messages);
 
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
@@ -323,17 +304,14 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['output']);
         $outputTable = reset($result['output']['tables']);
         self::assertSame([
-            'id' => 'out.c-executor-test.modified',
+            'id' => 'out.c-main.modified',
             'name' => 'modified',
             'columns' => [
                 [
-                    'name' => 'name',
+                    'name' => 'a',
                 ],
                 [
-                    'name' => 'oldValue',
-                ],
-                [
-                    'name' => 'newValue',
+                    'name' => 'b',
                 ],
             ],
             'displayName' => 'modified',
@@ -343,26 +321,136 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-executor-test.source',
-            'name' => 'source',
+            'id' => $tableId,
+            'name' => 'someTable',
             'columns' => [
                 [
-                    'name' => 'name',
+                    'name' => 'a',
                 ],
                 [
-                    'name' => 'oldValue',
-                ],
-                [
-                    'name' => 'newValue',
+                    'name' => 'b',
                 ],
             ],
-            'displayName' => 'source',
+            'displayName' => 'someTable',
         ], $inputTable);
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 205,
-                    'outputTablesBytesSum' => 93,
+                    'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 40,
+                ],
+                'backend' => [
+                    'size' => null,
+                    'containerSize' => 'small',
+                ],
+            ],
+            $finishedJob->getMetrics()->jsonSerialize()
+        );
+    }
+
+    public function testExecuteFailureWithLocalInputOutputInMetrics(): void
+    {
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
+        try {
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+
+        $jobData = [
+            'componentId' => 'keboola.python-transformation',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configData' => [
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => $tableId,
+                                'destination' => 'source.csv',
+                            ],
+                        ],
+                    ],
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'destination-does-not-exists.csv',
+                                'destination' => 'out.c-main.modified',
+                            ],
+                        ],
+                    ],
+                ],
+                'parameters' => [
+                    'plain' => 'not-secret',
+                    'script' => [
+                        'import csv',
+                        'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
+                        'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
+                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
+                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
+                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
+                        '   writer.writeheader()',
+                        '   for row in reader:',
+                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
+                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                    ],
+                ],
+            ],
+        ];
+
+        $job = $newJobFactory->createNewJob($jobData);
+        $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $property = new ReflectionProperty($command, 'logger');
+        $property->setAccessible(true);
+        /** @var Logger $logger */
+        $logger = $property->getValue($command);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasErrorThatContains('Job "' . $job->getId() . '" ended with user error'));
+        self::assertEquals(0, $ret);
+
+        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
+        $messages = array_column($events, 'message');
+
+        /** @var Job $finishedJob */
+        $finishedJob = $client->getJob($job->getId());
+        self::assertSame('error', $finishedJob->getStatus());
+        $result = $finishedJob->getResult();
+
+        self::assertArrayHasKey('message', $result);
+        self::assertSame('Table sources not found: "destination-does-not-exists.csv"', $result['message']);
+
+        self::assertArrayHasKey('output', $result);
+        self::assertArrayHasKey('tables', $result['output']);
+        self::assertSame([], $result['output']['tables']);
+        self::assertArrayHasKey('input', $result);
+        self::assertArrayHasKey('tables', $result['input']);
+        self::assertSame([], $result['input']['tables']);
+
+        self::assertSame(
+            [
+                'storage' => [
+                    'inputTablesBytesSum' => 14,
+                    'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
                     'size' => null,
@@ -377,28 +465,15 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
+        $tableIds = $this->initTestDataTables();
+        $tableId = reset($tableIds);
         try {
-            $storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
-        try {
-            $storageClient->dropBucket('out.c-main', ['force' => true]);
-        } catch (ClientException $e) {
-            if ($e->getCode() !== 404) {
-                throw $e;
-            }
-        }
-        $storageClient->createBucket('main', 'in');
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $storageClient->createTable('in.c-main', 'someTable', $csv);
 
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-workspace-test',
@@ -412,7 +487,7 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => 'in.c-main.someTable',
+                                'source' => $tableId,
                                 'destination' => 'someTable',
                             ],
                         ],
@@ -488,7 +563,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['input']);
         $inputTable = reset($result['input']['tables']);
         self::assertSame([
-            'id' => 'in.c-main.someTable',
+            'id' => $tableId,
             'name' => 'someTable',
             'columns' => [
                 [
@@ -854,11 +929,7 @@ class RunCommandTest extends AbstractCommandTest
 
     public function testExecuteCreditsCheck(): void
     {
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-        $tokenInfo = $storageClient->verifyToken();
+        $tokenInfo = $this->storageClient->verifyToken();
         $tokenInfo['owner']['features'] = 'pay-as-you-go';
 
         $creditsCheckerMock = $this->createMock(CreditsChecker::class);
@@ -944,11 +1015,6 @@ class RunCommandTest extends AbstractCommandTest
             'objectEncryptor' => $objectEncryptor,
         ] = $this->getJobFactoryAndClient();
 
-        $storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
-        ]);
-
         $jobData = [
             'id' => '123',
             'runId' => '124',
@@ -988,8 +1054,8 @@ class RunCommandTest extends AbstractCommandTest
             ));
 
         $logger = new Logger('job-runner-test');
-        $storageClient->setRunId('124');
-        $logger->pushHandler(new StorageApiHandler('job-runner-test', $storageClient));
+        $this->storageClient->setRunId('124');
+        $logger->pushHandler(new StorageApiHandler('job-runner-test', $this->storageClient));
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
@@ -1029,11 +1095,29 @@ class RunCommandTest extends AbstractCommandTest
         ));
         self::assertEquals(0, $ret);
 
-        $events = $storageClient->listEvents(['runId' => '124']);
+        $events = $this->storageClient->listEvents(['runId' => '124']);
         $messages = array_column($events, 'message');
 
         self::assertNotEmpty($messages);
         self::assertContains('Running job "123".', $messages);
         self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
+    }
+
+    private function initTestDataTables(): array
+    {
+        try {
+            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+
+        $bucketId =  $this->storageClient->createBucket('main', StorageClient::STAGE_IN);
+
+        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
+        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
+        $tableId = $this->storageClient->createTable($bucketId, 'someTable', $csv);
+        return [$tableId];
     }
 }
