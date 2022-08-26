@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.233.2",
+            "version": "3.234.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c804eb974240ae04b4ae5381f45003f25bbed56c"
+                "reference": "21ee9e4181c1e676b43018bd3743dd4c9f8bafc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c804eb974240ae04b4ae5381f45003f25bbed56c",
-                "reference": "c804eb974240ae04b4ae5381f45003f25bbed56c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/21ee9e4181c1e676b43018bd3743dd4c9f8bafc2",
+                "reference": "21ee9e4181c1e676b43018bd3743dd4c9f8bafc2",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.233.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.234.3"
             },
-            "time": "2022-08-15T18:16:30+00:00"
+            "time": "2022-08-25T18:30:13+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -395,16 +395,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.262.0",
+            "version": "v0.263.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "c2e1408ba2b9e31df2d1c0b136f3247e8818874d"
+                "reference": "9264fe481e87d9f203ebb97933a71e09e66d93ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c2e1408ba2b9e31df2d1c0b136f3247e8818874d",
-                "reference": "c2e1408ba2b9e31df2d1c0b136f3247e8818874d",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/9264fe481e87d9f203ebb97933a71e09e66d93ed",
+                "reference": "9264fe481e87d9f203ebb97933a71e09e66d93ed",
                 "shasum": ""
             },
             "require": {
@@ -433,9 +433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.262.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.263.0"
             },
-            "time": "2022-08-14T01:06:11+00:00"
+            "time": "2022-08-21T01:28:13+00:00"
         },
         {
             "name": "google/auth",
@@ -497,16 +497,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.47.1",
+            "version": "v1.47.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "14d856517d18b14754b364896b28210df2738df0"
+                "reference": "f30823d6ff2bf3d7d3a4b089804f8dc5a1680501"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/14d856517d18b14754b364896b28210df2738df0",
-                "reference": "14d856517d18b14754b364896b28210df2738df0",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/f30823d6ff2bf3d7d3a4b089804f8dc5a1680501",
+                "reference": "f30823d6ff2bf3d7d3a4b089804f8dc5a1680501",
                 "shasum": ""
             },
             "require": {
@@ -521,10 +521,10 @@
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
-                "google/common-protos": "^1.0||^2.0",
                 "google/gax": "^1.9",
                 "opis/closure": "^3",
                 "phpdocumentor/reflection": "^3.0||^4.0",
+                "phpspec/prophecy": "^1.10.3",
                 "phpunit/phpunit": "^4.8|^5.0|^8.0",
                 "squizlabs/php_codesniffer": "2.*",
                 "yoast/phpunit-polyfills": "^1.0"
@@ -556,22 +556,22 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.47.1"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.47.2"
             },
-            "time": "2022-08-05T00:41:21+00:00"
+            "time": "2022-08-23T20:22:22+00:00"
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.28.0",
+            "version": "v1.28.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "017c14eeb2a3717a1ce9c27a39c66a779e6914cf"
+                "reference": "83e8beac404f38d2e869da4c3fbb7bdf96193f77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/017c14eeb2a3717a1ce9c27a39c66a779e6914cf",
-                "reference": "017c14eeb2a3717a1ce9c27a39c66a779e6914cf",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/83e8beac404f38d2e869da4c3fbb7bdf96193f77",
+                "reference": "83e8beac404f38d2e869da4c3fbb7bdf96193f77",
                 "shasum": ""
             },
             "require": {
@@ -583,6 +583,7 @@
                 "google/cloud-pubsub": "^1.0",
                 "phpdocumentor/reflection": "^3.0||^4.0",
                 "phpseclib/phpseclib": "^2.0||^3.0",
+                "phpspec/prophecy": "^1.10.3",
                 "phpunit/phpunit": "^4.8|^5.0|^8.0",
                 "squizlabs/php_codesniffer": "2.*",
                 "yoast/phpunit-polyfills": "^1.0"
@@ -611,9 +612,9 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.28.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.28.1"
             },
-            "time": "2022-07-29T00:07:49+00:00"
+            "time": "2022-08-23T20:22:22+00:00"
         },
         {
             "name": "google/crc32",
@@ -1395,7 +1396,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "720f09b88bd30354e16a32035bfc48c607abc435"
+                "reference": "095ea05a1c3c522ca0906509842b1831d61cefac"
             },
             "require": {
                 "ext-json": "*",
@@ -1445,26 +1446,26 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-08-24T10:07:40+00:00"
+            "time": "2022-08-26T07:03:47+00:00"
         },
         {
             "name": "keboola/gelf-server",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/gelf-server.git",
-                "reference": "64bba678160d58d6bd8347739d9d03aa118302c3"
+                "reference": "3492de7c9c3eb5053f988013e0a9ff0551e678e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/64bba678160d58d6bd8347739d9d03aa118302c3",
-                "reference": "64bba678160d58d6bd8347739d9d03aa118302c3",
+                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/3492de7c9c3eb5053f988013e0a9ff0551e678e3",
+                "reference": "3492de7c9c3eb5053f988013e0a9ff0551e678e3",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "graylog2/gelf-php": "^1.5",
-                "php": "^7.4",
+                "php": "^7.4|^8.0",
                 "react/datagram": "^1.2",
                 "react/socket": "^0.8",
                 "symfony/process": "^4.1|^5.4"
@@ -1495,9 +1496,9 @@
             ],
             "description": "Simple PHP server for GELF logger",
             "support": {
-                "source": "https://github.com/keboola/gelf-server/tree/3.0.2"
+                "source": "https://github.com/keboola/gelf-server/tree/3.0.3"
             },
-            "time": "2022-06-01T17:26:46+00:00"
+            "time": "2022-08-25T07:29:22+00:00"
         },
         {
             "name": "keboola/input-mapping",
@@ -1553,16 +1554,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "14.2.0",
+            "version": "14.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14"
+                "reference": "d96310e57ab3cc6b58e2420a960a40a24514119f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14",
-                "reference": "2d3a13562fb5fa1af5e6ee1b5244a0781c7b5c14",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/d96310e57ab3cc6b58e2420a960a40a24514119f",
+                "reference": "d96310e57ab3cc6b58e2420a960a40a24514119f",
                 "shasum": ""
             },
             "require": {
@@ -1610,9 +1611,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/14.2.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/14.3.0"
             },
-            "time": "2022-08-16T15:52:12+00:00"
+            "time": "2022-08-19T13:24:27+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2592,16 +2593,16 @@
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.14.1",
+            "version": "v2.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "579ffa5c96e1d292c060b3dd62811ff01ad8c24e"
+                "reference": "e62b7c3849d22ec55f3ec425507bf7968193a6cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/579ffa5c96e1d292c060b3dd62811ff01ad8c24e",
-                "reference": "579ffa5c96e1d292c060b3dd62811ff01ad8c24e",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/e62b7c3849d22ec55f3ec425507bf7968193a6cb",
+                "reference": "e62b7c3849d22ec55f3ec425507bf7968193a6cb",
                 "shasum": ""
             },
             "require": {
@@ -2636,9 +2637,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/mustache.php/issues",
-                "source": "https://github.com/bobthecow/mustache.php/tree/v2.14.1"
+                "source": "https://github.com/bobthecow/mustache.php/tree/v2.14.2"
             },
-            "time": "2022-01-21T06:08:36+00:00"
+            "time": "2022-08-23T13:07:01+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -7817,233 +7818,6 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
-            "name": "phpdocumentor/reflection-common",
-            "version": "2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
-                "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/1d01c49d4ed62f25aa84a747ad35d5a16924662b",
-                "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jaap van Otterdijk",
-                    "email": "opensource@ijaap.nl"
-                }
-            ],
-            "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
-            "homepage": "http://www.phpdoc.org",
-            "keywords": [
-                "FQSEN",
-                "phpDocumentor",
-                "phpdoc",
-                "reflection",
-                "static analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/phpDocumentor/ReflectionCommon/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionCommon/tree/2.x"
-            },
-            "time": "2020-06-27T09:03:43+00:00"
-        },
-        {
-            "name": "phpdocumentor/reflection-docblock",
-            "version": "5.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/622548b623e81ca6d78b721c5e029f4ce664f170",
-                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170",
-                "shasum": ""
-            },
-            "require": {
-                "ext-filter": "*",
-                "php": "^7.2 || ^8.0",
-                "phpdocumentor/reflection-common": "^2.2",
-                "phpdocumentor/type-resolver": "^1.3",
-                "webmozart/assert": "^1.9.1"
-            },
-            "require-dev": {
-                "mockery/mockery": "~1.3.2",
-                "psalm/phar": "^4.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike van Riel",
-                    "email": "me@mikevanriel.com"
-                },
-                {
-                    "name": "Jaap van Otterdijk",
-                    "email": "account@ijaap.nl"
-                }
-            ],
-            "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "support": {
-                "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.3.0"
-            },
-            "time": "2021-10-19T17:43:47+00:00"
-        },
-        {
-            "name": "phpdocumentor/type-resolver",
-            "version": "1.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "77a32518733312af16a44300404e945338981de3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/77a32518733312af16a44300404e945338981de3",
-                "reference": "77a32518733312af16a44300404e945338981de3",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0",
-                "phpdocumentor/reflection-common": "^2.0"
-            },
-            "require-dev": {
-                "ext-tokenizer": "*",
-                "psalm/phar": "^4.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Reflection\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike van Riel",
-                    "email": "me@mikevanriel.com"
-                }
-            ],
-            "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
-            "support": {
-                "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.6.1"
-            },
-            "time": "2022-03-15T21:29:03+00:00"
-        },
-        {
-            "name": "phpspec/prophecy",
-            "version": "v1.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "bbcd7380b0ebf3961ee21409db7b38bc31d69a13"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/bbcd7380b0ebf3961ee21409db7b38bc31d69a13",
-                "reference": "bbcd7380b0ebf3961ee21409db7b38bc31d69a13",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/instantiator": "^1.2",
-                "php": "^7.2 || ~8.0, <8.2",
-                "phpdocumentor/reflection-docblock": "^5.2",
-                "sebastian/comparator": "^3.0 || ^4.0",
-                "sebastian/recursion-context": "^3.0 || ^4.0"
-            },
-            "require-dev": {
-                "phpspec/phpspec": "^6.0 || ^7.0",
-                "phpunit/phpunit": "^8.0 || ^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Prophecy\\": "src/Prophecy"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Konstantin Kudryashov",
-                    "email": "ever.zet@gmail.com",
-                    "homepage": "http://everzet.com"
-                },
-                {
-                    "name": "Marcello Duarte",
-                    "email": "marcello.duarte@gmail.com"
-                }
-            ],
-            "description": "Highly opinionated mocking framework for PHP 5.3+",
-            "homepage": "https://github.com/phpspec/prophecy",
-            "keywords": [
-                "Double",
-                "Dummy",
-                "fake",
-                "mock",
-                "spy",
-                "stub"
-            ],
-            "support": {
-                "issues": "https://github.com/phpspec/prophecy/issues",
-                "source": "https://github.com/phpspec/prophecy/tree/v1.15.0"
-            },
-            "time": "2021-12-08T12:19:24+00:00"
-        },
-        {
             "name": "phpstan/phpdoc-parser",
             "version": "1.7.0",
             "source": {
@@ -8208,23 +7982,23 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.15",
+            "version": "9.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2e9da11878c4202f97915c1cb4bb1ca318a63f5f"
+                "reference": "2593003befdcc10db5e213f9f28814f5aa8ac073"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2e9da11878c4202f97915c1cb4bb1ca318a63f5f",
-                "reference": "2e9da11878c4202f97915c1cb4bb1ca318a63f5f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2593003befdcc10db5e213f9f28814f5aa8ac073",
+                "reference": "2593003befdcc10db5e213f9f28814f5aa8ac073",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "ext-xmlwriter": "*",
-                "nikic/php-parser": "^4.13.0",
+                "nikic/php-parser": "^4.14",
                 "php": ">=7.3",
                 "phpunit/php-file-iterator": "^3.0.3",
                 "phpunit/php-text-template": "^2.0.2",
@@ -8273,7 +8047,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.15"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.16"
             },
             "funding": [
                 {
@@ -8281,7 +8055,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-07T09:28:20+00:00"
+            "time": "2022-08-20T05:26:47+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -8526,16 +8300,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.21",
+            "version": "9.5.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1"
+                "reference": "888556852e7e9bbeeedb9656afe46118765ade34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0e32b76be457de00e83213528f6bb37e2a38fcb1",
-                "reference": "0e32b76be457de00e83213528f6bb37e2a38fcb1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/888556852e7e9bbeeedb9656afe46118765ade34",
+                "reference": "888556852e7e9bbeeedb9656afe46118765ade34",
                 "shasum": ""
             },
             "require": {
@@ -8550,7 +8324,6 @@
                 "phar-io/manifest": "^2.0.3",
                 "phar-io/version": "^3.0.2",
                 "php": ">=7.3",
-                "phpspec/prophecy": "^1.12.1",
                 "phpunit/php-code-coverage": "^9.2.13",
                 "phpunit/php-file-iterator": "^3.0.5",
                 "phpunit/php-invoker": "^3.1.1",
@@ -8567,9 +8340,6 @@
                 "sebastian/resource-operations": "^3.0.3",
                 "sebastian/type": "^3.0",
                 "sebastian/version": "^3.0.2"
-            },
-            "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.0.1"
             },
             "suggest": {
                 "ext-soap": "*",
@@ -8612,7 +8382,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.21"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.23"
             },
             "funding": [
                 {
@@ -8624,7 +8394,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-19T12:14:25+00:00"
+            "time": "2022-08-22T14:01:36+00:00"
         },
         {
             "name": "sanmai/pipeline",
