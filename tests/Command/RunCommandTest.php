@@ -153,7 +153,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
+        $events = $this->storageClient->listEvents(['runId' => $job->getId()]);
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
