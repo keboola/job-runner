@@ -13,6 +13,7 @@ use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
+use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
@@ -1101,6 +1102,114 @@ class RunCommandTest extends AbstractCommandTest
         self::assertNotEmpty($messages);
         self::assertContains('Running job "123".', $messages);
         self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
+    }
+
+    public function testExecuteAlreadyRunningJob(): void
+    {
+        [
+            'existingJobFactory' => $existingJobFactory,
+            'objectEncryptor' => $objectEncryptor,
+        ] = $this->getJobFactoryAndClient();
+
+        $jobId = '123';
+
+        $jobData = [
+            'id' => $jobId,
+            'runId' => '321',
+            'projectId' => '219',
+            'tokenId' => '567',
+            'status' => 'processing',
+            'desiredStatus' => 'processing',
+            'componentId' => 'keboola.runner-config-test',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'configId' => 'dummy',
+            'configData' => [
+                'parameters' => [
+                    'operation' => 'unsafe-dump-config',
+                    'arbitrary' => [
+                        '#foo' => 'bar',
+                    ],
+                ],
+            ],
+        ];
+
+        $jobData = $objectEncryptor->encryptGeneric($jobData);
+
+        $mockQueueClient = $this->createMock(Client::class);
+        $mockQueueClient
+            ->expects(self::once())
+            ->method('getJob')
+            ->willReturn($existingJobFactory->loadFromExistingJobData($jobData))
+        ;
+        $mockQueueClient
+            ->expects(self::once())
+            ->method('patchJob')
+            ->with($jobId, (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING))
+            ->willThrowException(new StateTargetEqualsCurrentException(sprintf(
+                'Invalid status transition of job "%s" from "processing '
+                . '(desired: processing)" to "processing (desired processing)".',
+                $jobId
+            )))
+        ;
+        $mockQueueClient
+            ->expects(self::never())
+            ->method('postJobResult')
+        ;
+
+        $logger = new Logger('job-runner-test');
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
+        $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
+        $creditsCheckerFactory = new CreditsCheckerFactory();
+        $jobDefinitionFactory = new JobDefinitionFactory();
+        $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
+            (string) getenv('STORAGE_API_URL'),
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
+        ));
+
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+        $application->add(new RunCommand(
+            $logger,
+            $logProcessor,
+            $mockQueueClient,
+            $creditsCheckerFactory,
+            $storageApiFactory,
+            $jobDefinitionFactory,
+            $objectEncryptor,
+            $jobId,
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
+            []
+        ));
+
+        $command = $application->find('app:run');
+
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertEquals(0, $ret);
+
+        $events = $testHandler->getRecords();
+        self::assertCount(2, $events);
+
+        $event = array_shift($events);
+        self::assertIsArray($event);
+        self::assertArrayHasKey('level', $event);
+        self::assertArrayHasKey('message', $event);
+        self::assertSame(Logger::INFO, $event['level']);
+        self::assertSame(sprintf('Running job "%s".', $jobId), $event['message']);
+
+        $event = array_shift($events);
+        self::assertIsArray($event);
+        self::assertArrayHasKey('level', $event);
+        self::assertArrayHasKey('message', $event);
+        self::assertSame(Logger::INFO, $event['level']);
+        self::assertSame(sprintf('Job "%s" is already running.', $jobId), $event['message']);
     }
 
     private function initTestDataTables(): array
