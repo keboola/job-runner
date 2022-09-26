@@ -261,7 +261,7 @@ class RunCommand extends Command
             $this->logger->info(sprintf('Job "%s" execution finished.', $this->jobId));
             $this->postJobResult($this->jobId, JobInterface::STATUS_SUCCESS, $result, $metrics);
         } catch (StateTargetEqualsCurrentException $e) {
-            $this->logger->info(sprintf('Job "%s" is already running', $this->jobId));
+            $this->logger->info(sprintf('Job "%s" is already running.', $this->jobId));
         } catch (Throwable $e) {
             $metrics = $job ? OutputResultConverter::convertOutputsToMetrics($outputs, $job->getBackend()) : null;
             $this->postJobResult(
