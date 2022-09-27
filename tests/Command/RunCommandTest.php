@@ -119,6 +119,7 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
         ]);
+
         $job = $client->createJob($job);
         putenv('JOB_ID=' . $job->getId());
         self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
@@ -1058,17 +1059,22 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ];
 
+        $jobData = $objectEncryptor->encryptGeneric($jobData);
+
         $mockQueueClient = $this->createMock(Client::class);
         $mockQueueClient
+            ->expects(self::once())
             ->method('getJob')
             ->willReturn($existingJobFactory->loadFromExistingJobData($jobData));
         $mockQueueClient
+            ->expects(self::once())
             ->method('patchJob')
             ->willReturn($existingJobFactory->loadFromExistingJobData(array_merge(
                 $jobData,
                 ['status' => 'processing']
             )));
         $mockQueueClient
+            ->expects(self::once())
             ->method('postJobResult')
             ->willThrowException(new StateTransitionForbiddenException(
                 'Invalid status transition of job "123" from ' .
@@ -1076,8 +1082,6 @@ class RunCommandTest extends AbstractCommandTest
             ));
 
         $logger = new Logger('job-runner-test');
-        $this->storageClient->setRunId('124');
-        $logger->pushHandler(new StorageApiHandler('job-runner-test', $this->storageClient));
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
@@ -1112,17 +1116,17 @@ class RunCommandTest extends AbstractCommandTest
             'command' => $command->getName(),
         ]);
 
+        self::assertFalse($testHandler->hasErrorRecords());
+        self::assertFalse($testHandler->hasCriticalRecords());
+        self::assertFalse($testHandler->hasWarningRecords());
+
+        self::assertTrue($testHandler->hasInfoThatContains(
+            'Running job "123".'
+        ));
         self::assertTrue($testHandler->hasNoticeThatContains(
             'Failed to save result for job "123". State transition forbidden:'
         ));
         self::assertEquals(0, $ret);
-
-        $events = $this->storageClient->listEvents(['runId' => '124']);
-        $messages = array_column($events, 'message');
-
-        self::assertNotEmpty($messages);
-        self::assertContains('Running job "123".', $messages);
-        self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
     }
 
     private function initTestDataTables(): array
