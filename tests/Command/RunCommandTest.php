@@ -7,7 +7,7 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
-use App\StorageApiHandler;
+use Generator;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -116,6 +116,7 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
         ]);
+
         $job = $client->createJob($job);
         putenv('JOB_ID=' . $job->getId());
         self::assertStringStartsWith('KBC::ProjectSecure', $job->getConfigData()['parameters']['arbitrary']['#foo']);
@@ -784,57 +785,26 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals(0, $ret);
     }
 
-    public function testExecuteDoubleFailure(): void
+    public function executeSkipData(): Generator
     {
-        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
-
-        $job = $newJobFactory->createNewJob([
-            'componentId' => 'keboola.ex-http',
-            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
-            'mode' => 'run',
-            'configData' => [
-                'storage' => [],
-                'parameters' => [
-                    'baseUrl' => 'https://help.keboola.com/',
-                    'path' => 'tutorial/opportunity.csv',
-                ],
-            ],
-        ]);
-
-        $job = $client->createJob($job);
-        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_ERROR));
-        putenv('JOB_ID=' . $job->getId());
-
-        $kernel = static::createKernel();
-        $application = new Application($kernel);
-
-        $command = $application->find('app:run');
-
-        $property = new ReflectionProperty($command, 'logger');
-        $property->setAccessible(true);
-        /** @var Logger $logger */
-        $logger = $property->getValue($command);
-        $testHandler = new TestHandler();
-        $logger->pushHandler($testHandler);
-
-        $commandTester = new CommandTester($command);
-        $ret = $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
-        self::assertTrue(
-            $testHandler->hasCriticalThatContains('Job "' . $job->getId() . '" ended with application error: "')
-        );
-        self::assertTrue(
-            $testHandler->hasErrorThatContains('Failed to save result for job "' . $job->getId() . '". Error: "')
-        );
-        self::assertFalse($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
-        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
-        self::assertEquals(0, $ret);
+        yield 'already running job' => [
+            JobInterface::STATUS_PROCESSING,
+            'Job "%s" is already running.',
+        ];
+        yield 'already cancelled job' => [
+            JobInterface::STATUS_CANCELLED,
+            'Job "%s" was already executed or is cancelled.',
+        ];
+        yield 'already errored job' => [
+            JobInterface::STATUS_ERROR,
+            'Job "%s" was already executed or is cancelled.',
+        ];
     }
 
-    public function testExecuteSkip(): void
+    /**
+     * @dataProvider executeSkipData
+     */
+    public function testExecuteSkip(string $initialJobStatus, string $expectedInfoMessage): void
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
@@ -853,7 +823,7 @@ class RunCommandTest extends AbstractCommandTest
 
         // set the job to processing, the job will succeed but do nothing
         $job = $client->createJob($job);
-        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING));
+        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus($initialJobStatus));
         putenv('JOB_ID=' . $job->getId());
 
         $kernel = static::createKernel();
@@ -874,9 +844,13 @@ class RunCommandTest extends AbstractCommandTest
             'capture_stderr_separately' => true]
         );
 
+        self::assertCount(2, $testHandler->getRecords());
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
-        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains(sprintf($expectedInfoMessage, $job->getId())));
         self::assertEquals(0, $ret);
+
+        $job = $client->getJob($job->getId());
+        self::assertSame($initialJobStatus, $job->getStatus());
     }
 
     public function testExecuteCustomBackendConfig(): void
@@ -1036,17 +1010,22 @@ class RunCommandTest extends AbstractCommandTest
             ],
         ];
 
+        $jobData = $objectEncryptor->encryptGeneric($jobData);
+
         $mockQueueClient = $this->createMock(Client::class);
         $mockQueueClient
+            ->expects(self::once())
             ->method('getJob')
             ->willReturn($existingJobFactory->loadFromExistingJobData($jobData));
         $mockQueueClient
+            ->expects(self::once())
             ->method('patchJob')
             ->willReturn($existingJobFactory->loadFromExistingJobData(array_merge(
                 $jobData,
                 ['status' => 'processing']
             )));
         $mockQueueClient
+            ->expects(self::once())
             ->method('postJobResult')
             ->willThrowException(new StateTransitionForbiddenException(
                 'Invalid status transition of job "123" from ' .
@@ -1054,8 +1033,6 @@ class RunCommandTest extends AbstractCommandTest
             ));
 
         $logger = new Logger('job-runner-test');
-        $this->storageClient->setRunId('124');
-        $logger->pushHandler(new StorageApiHandler('job-runner-test', $this->storageClient));
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
@@ -1090,17 +1067,17 @@ class RunCommandTest extends AbstractCommandTest
             'command' => $command->getName(),
         ]);
 
+        self::assertFalse($testHandler->hasErrorRecords());
+        self::assertFalse($testHandler->hasCriticalRecords());
+        self::assertFalse($testHandler->hasWarningRecords());
+
+        self::assertTrue($testHandler->hasInfoThatContains(
+            'Running job "123".'
+        ));
         self::assertTrue($testHandler->hasNoticeThatContains(
             'Failed to save result for job "123". State transition forbidden:'
         ));
         self::assertEquals(0, $ret);
-
-        $events = $this->storageClient->listEvents(['runId' => '124']);
-        $messages = array_column($events, 'message');
-
-        self::assertNotEmpty($messages);
-        self::assertContains('Running job "123".', $messages);
-        self::assertNotContains('Failed to save result for job "123". State transition forbidden:', $messages);
     }
 
     private function initTestDataTables(): array
