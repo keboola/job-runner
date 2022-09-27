@@ -7,18 +7,15 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
-use App\StorageApiHandler;
 use Generator;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
-use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -788,56 +785,6 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals(0, $ret);
     }
 
-    public function testExecuteDoubleFailure(): void
-    {
-        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
-
-        $job = $newJobFactory->createNewJob([
-            'componentId' => 'keboola.ex-http',
-            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
-            'mode' => 'run',
-            'configData' => [
-                'storage' => [],
-                'parameters' => [
-                    'baseUrl' => 'https://help.keboola.com/',
-                    'path' => 'tutorial/opportunity.csv',
-                ],
-            ],
-        ]);
-
-        $job = $client->createJob($job);
-        $job = $client->patchJob($job->getId(), (new JobPatchData())->setStatus(JobInterface::STATUS_ERROR));
-        putenv('JOB_ID=' . $job->getId());
-
-        $kernel = static::createKernel();
-        $application = new Application($kernel);
-
-        $command = $application->find('app:run');
-
-        $property = new ReflectionProperty($command, 'logger');
-        $property->setAccessible(true);
-        /** @var Logger $logger */
-        $logger = $property->getValue($command);
-        $testHandler = new TestHandler();
-        $logger->pushHandler($testHandler);
-
-        $commandTester = new CommandTester($command);
-        $ret = $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
-        self::assertTrue(
-            $testHandler->hasCriticalThatContains('Job "' . $job->getId() . '" ended with application error: "')
-        );
-        self::assertTrue(
-            $testHandler->hasErrorThatContains('Failed to save result for job "' . $job->getId() . '". Error: "')
-        );
-        self::assertFalse($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
-        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
-        self::assertEquals(0, $ret);
-    }
-
     public function executeSkipData(): Generator
     {
         yield 'already running job' => [
@@ -846,6 +793,10 @@ class RunCommandTest extends AbstractCommandTest
         ];
         yield 'already cancelled job' => [
             JobInterface::STATUS_CANCELLED,
+            'Job "%s" was already executed or is cancelled.',
+        ];
+        yield 'already errored job' => [
+            JobInterface::STATUS_ERROR,
             'Job "%s" was already executed or is cancelled.',
         ];
     }
