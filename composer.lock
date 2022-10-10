@@ -1778,16 +1778,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "19.1.0",
+            "version": "19.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "7946efbb6891013c7947a7a515fc0fd9ee065a5f"
+                "reference": "a745616cbeef4aea728cbe9bd1979ed7f7848fc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/7946efbb6891013c7947a7a515fc0fd9ee065a5f",
-                "reference": "7946efbb6891013c7947a7a515fc0fd9ee065a5f",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/a745616cbeef4aea728cbe9bd1979ed7f7848fc3",
+                "reference": "a745616cbeef4aea728cbe9bd1979ed7f7848fc3",
                 "shasum": ""
             },
             "require": {
@@ -1830,9 +1830,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/19.1.0"
+                "source": "https://github.com/keboola/output-mapping/tree/19.1.1"
             },
-            "time": "2022-08-31T11:52:36+00:00"
+            "time": "2022-10-10T15:30:06+00:00"
         },
         {
             "name": "keboola/php-datatypes",
