@@ -12,6 +12,7 @@ use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
 use Closure;
+use DDTrace\GlobalTracer;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -151,6 +152,11 @@ class RunCommand extends Command
             }
         }
         $this->logger->info(sprintf('Finished container cleanup for job "%s".', $this->jobId));
+
+        // collect and send trace to DataDog
+        $tracer = GlobalTracer::get();
+        $tracer->flush();
+
         exit;
     }
 
