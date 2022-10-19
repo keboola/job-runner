@@ -54,7 +54,11 @@ class OutputResultConverter
             }
             $uploadedArtifactsOutput = $output->getArtifactsUploaded();
             if ($uploadedArtifactsOutput) {
-                array_push($uploadedArtifacts, ...$uploadedArtifactsOutput);
+                array_push(
+                    $uploadedArtifacts,
+                    ...$uploadedArtifactsOutput['current'],
+                    ...$uploadedArtifactsOutput['shared']
+                );
             }
 
             $downloadedArtifactsOutput = $output->getArtifactsDownloaded();
