@@ -56,8 +56,8 @@ class OutputResultConverter
             if ($uploadedArtifactsOutput) {
                 array_push(
                     $uploadedArtifacts,
-                    ...$uploadedArtifactsOutput['current'],
-                    ...$uploadedArtifactsOutput['shared']
+                    ...($uploadedArtifactsOutput['current'] ?? []),
+                    ...($uploadedArtifactsOutput['shared'] ?? [])
                 );
             }
 
