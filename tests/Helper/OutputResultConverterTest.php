@@ -163,10 +163,10 @@ class OutputResultConverterTest extends TestCase
         $output1->setTableQueue($loadQueueMock1);
         $output1->setArtifactsUploaded([
             'current' => [
-                ['storageFileId' => 12344]
+                ['storageFileId' => 12344],
             ],
             'shared' => [
-                ['storageFileId' => 12347]
+                ['storageFileId' => 12347],
             ],
         ]);
         $output1->setArtifactsDownloaded([
@@ -194,10 +194,10 @@ class OutputResultConverterTest extends TestCase
         $output2->setTableQueue($loadQueueMock2);
         $output2->setArtifactsUploaded([
             'current' => [
-                ['storageFileId' => 23456]
+                ['storageFileId' => 23456],
             ],
             'shared' => [
-                ['storageFileId' => 23480]
+                ['storageFileId' => 23480],
             ],
         ]);
         $output2->setArtifactsDownloaded([
