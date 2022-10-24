@@ -37,7 +37,7 @@ class OutputResultConverterTest extends TestCase
 
     public function testNoMetrics(): void
     {
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([], new Backend(null, null));
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([], new Backend(null, null, null));
         self::assertSame(
             [
                 'storage' => [
@@ -47,6 +47,7 @@ class OutputResultConverterTest extends TestCase
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
+                    'context' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -58,7 +59,7 @@ class OutputResultConverterTest extends TestCase
         $output = new Output();
         $inputTableResult = new InputResult();
         $output->setInputTableResult($inputTableResult);
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([$output], new Backend(null, 'medium'));
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics([$output], new Backend(null, 'medium', null));
         self::assertSame(
             [
                 'storage' => [
@@ -68,6 +69,7 @@ class OutputResultConverterTest extends TestCase
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'medium',
+                    'context' => null,
                 ],
             ],
             $jobMetrics->jsonSerialize()
@@ -228,7 +230,7 @@ class OutputResultConverterTest extends TestCase
 
         $outputs = [$output1, $output2];
         $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
-        $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs, new Backend(null, null));
+        $jobMetrics = OutputResultConverter::convertOutputsToMetrics($outputs, new Backend(null, null, 'wlm'));
         self::assertSame(
             [
                 'message' => 'Component processing finished.',
@@ -350,6 +352,7 @@ class OutputResultConverterTest extends TestCase
                 'backend' => [
                     'size' => 'large',
                     'containerSize' => 'small',
+                    'context' => 'wlm',
                 ],
             ],
             $jobMetrics->jsonSerialize()
