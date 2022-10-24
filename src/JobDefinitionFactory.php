@@ -62,6 +62,7 @@ class JobDefinitionFactory
                 $job->getProjectId(),
                 (string) $job->getConfigId(),
             );
+
             $configuration['configuration'] = $this->extendComponentConfigWithBackend(
                 $configuration['configuration'] ?? [],
                 $job
@@ -76,13 +77,13 @@ class JobDefinitionFactory
     private function extendComponentConfigWithBackend(array $config, JobInterface $job): array
     {
         $backend = $job->getBackend();
-        if ($backend->getType() === null) {
-            return $config;
-        }
 
-        $config['runtime']['backend'] = [
-            'type' => $backend->getType(),
-        ];
+        if ($backend->getType() !== null) {
+            $config['runtime']['backend']['type'] = $backend->getType();
+        }
+        if ($backend->getContext() !== null) {
+            $config['runtime']['backend']['context'] = $backend->getContext();
+        }
 
         return $config;
     }
