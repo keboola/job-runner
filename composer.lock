@@ -1570,12 +1570,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "159a724c58508042b658fde25c0bf0c6f2cae242"
+                "reference": "ed0c60d077c685d8f8d73501a64d6abd4965e0c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/159a724c58508042b658fde25c0bf0c6f2cae242",
-                "reference": "159a724c58508042b658fde25c0bf0c6f2cae242",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ed0c60d077c685d8f8d73501a64d6abd4965e0c2",
+                "reference": "ed0c60d077c685d8f8d73501a64d6abd4965e0c2",
                 "shasum": ""
             },
             "require": {
@@ -1624,7 +1624,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-PS-3918"
             },
-            "time": "2022-10-24T13:02:14+00:00"
+            "time": "2022-10-24T16:31:12+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
