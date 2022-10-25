@@ -158,9 +158,6 @@
     "phar-io/version": {
         "version": "3.1.0"
     },
-    "php-parallel-lint/php-parallel-lint": {
-        "version": "v1.2.0"
-    },
     "phpseclib/mcrypt_compat": {
         "version": "1.0.9"
     },
