@@ -1408,7 +1408,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "21ec5cf9b9bdebe4222e91db2739aa9533baf3fd"
+                "reference": "ef6360c871b66cd0f48604bc676ebb782d32ae42"
             },
             "require": {
                 "ext-json": "*",
@@ -1458,7 +1458,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-10-17T07:58:51+00:00"
+            "time": "2022-10-27T11:10:11+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -2177,16 +2177,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "5.2.0",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "23a60757ac269561718540bbc687074bb224c43d"
+                "reference": "7a7ead34cd6936751fa25ee2e8cc73ebd0e18973"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/23a60757ac269561718540bbc687074bb224c43d",
-                "reference": "23a60757ac269561718540bbc687074bb224c43d",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/7a7ead34cd6936751fa25ee2e8cc73ebd0e18973",
+                "reference": "7a7ead34cd6936751fa25ee2e8cc73ebd0e18973",
                 "shasum": ""
             },
             "require": {
@@ -2222,9 +2222,9 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/5.2.0"
+                "source": "https://github.com/keboola/staging-provider/tree/5.3.0"
             },
-            "time": "2022-08-31T11:52:36+00:00"
+            "time": "2022-10-24T15:16:28+00:00"
         },
         {
             "name": "keboola/storage-api-client",
