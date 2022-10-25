@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fe3225d54be95fe8352aaee2c951d2e",
+    "content-hash": "3f5a5502ef7bc2e7cbe933e4f84d7cd5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1566,16 +1566,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-erik-PS-3918",
+            "version": "15.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "ed0c60d077c685d8f8d73501a64d6abd4965e0c2"
+                "reference": "0ca2415acdab29e5e54c223417720cc7ce2b8423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ed0c60d077c685d8f8d73501a64d6abd4965e0c2",
-                "reference": "ed0c60d077c685d8f8d73501a64d6abd4965e0c2",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0ca2415acdab29e5e54c223417720cc7ce2b8423",
+                "reference": "0ca2415acdab29e5e54c223417720cc7ce2b8423",
                 "shasum": ""
             },
             "require": {
@@ -1622,9 +1622,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-PS-3918"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/15.0.0"
             },
-            "time": "2022-10-24T16:31:12+00:00"
+            "time": "2022-10-25T10:14:49+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -10086,8 +10086,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
