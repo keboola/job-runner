@@ -22,7 +22,7 @@
         "keboola/api-error-control": "^3.9",
         "keboola/billing-api-php-client": "^1.1",
         "keboola/configuration-variables-resolver": "^3.2",
-        "keboola/dockerbundle": "dev-odin-library-3",
+        "keboola/dockerbundle": "dev-erik-PS-3920",
         "keboola/input-mapping": "^16.2",
         "keboola/job-queue-internal-api-php-client": "dev-erik-PS-3918",
         "keboola/object-encryptor": "^2.0",
