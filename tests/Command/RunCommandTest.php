@@ -588,7 +588,6 @@ class RunCommandTest extends AbstractCommandTest
         ], $inputTable);
 
         self::assertSame('small', $job->getMetrics()->getBackendSize());
-        self::assertSame('small', $job->getMetrics()->getBackendContext());
         self::assertSame(
             [
                 'storage' => [
