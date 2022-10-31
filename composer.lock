@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de1c19971003d03b91b6eca38508393b",
+    "content-hash": "2df080d6cff93fb0b5e0d780580da9cc",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1408,7 +1408,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "ef6360c871b66cd0f48604bc676ebb782d32ae42"
+                "reference": "e69ac064286da098563fe69709d058eab4fc77ca"
             },
             "require": {
                 "ext-json": "*",
@@ -1458,7 +1458,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2022-10-27T11:10:11+00:00"
+            "time": "2022-10-31T10:00:52+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1566,16 +1566,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "14.4.1",
+            "version": "15.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "07502de1a4a945c725e84ae7459d0c6bc2321695"
+                "reference": "0ca2415acdab29e5e54c223417720cc7ce2b8423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/07502de1a4a945c725e84ae7459d0c6bc2321695",
-                "reference": "07502de1a4a945c725e84ae7459d0c6bc2321695",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0ca2415acdab29e5e54c223417720cc7ce2b8423",
+                "reference": "0ca2415acdab29e5e54c223417720cc7ce2b8423",
                 "shasum": ""
             },
             "require": {
@@ -1622,9 +1622,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/14.4.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/15.0.0"
             },
-            "time": "2022-09-29T12:03:19+00:00"
+            "time": "2022-10-25T10:14:49+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",

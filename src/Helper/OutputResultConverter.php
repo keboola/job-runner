@@ -129,6 +129,12 @@ class OutputResultConverter
 
         $jobMetrics->setInputTablesBytesSum($inputTablesCompressedBytesSum);
         $jobMetrics->setOutputTablesBytesSum($outputTablesCompressedBytesSum);
+
+        $backendContext = $backend->getContext();
+        if ($backendContext) {
+            $jobMetrics->setBackendContext($backendContext);
+        }
+
         return $jobMetrics;
     }
 

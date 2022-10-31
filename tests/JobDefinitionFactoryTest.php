@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\JobDefinitionFactory;
+use Generator;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
@@ -48,13 +49,58 @@ class JobDefinitionFactoryTest extends TestCase
         self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
     }
 
-    public function testCreateJobDefinitionWithConfigDataAndBackend(): void
+    public function createJobDefinitionWithConfigDataAndBackendData(): Generator
     {
+        yield 'nothing' => [
+            [],
+            [
+                'type' => 'invalid',
+                'context' => 'wml-invalid',
+            ],
+        ];
+        yield 'type' => [
+            [
+                'type' => 'custom',
+            ],
+            [
+                'type' => 'custom',
+                'context' => 'wml-invalid',
+            ],
+        ];
+        yield 'context' => [
+            [
+                'context' => 'wlm',
+            ],
+            [
+                'type' => 'invalid',
+                'context' => 'wlm',
+            ],
+        ];
+        yield 'type + context' => [
+            [
+                'type' => 'custom',
+                'context' => 'wlm',
+            ],
+            [
+                'type' => 'custom',
+                'context' => 'wlm',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider createJobDefinitionWithConfigDataAndBackendData
+     */
+    public function testCreateJobDefinitionWithConfigDataAndBackend(
+        array $backendData,
+        array $expectedBackendData
+    ): void {
         $configData = [
             'runtime' => [
                 'foo' => 'bar',
                 'backend' => [
                     'type' => 'invalid',
+                    'context' => 'wml-invalid',
                 ],
             ],
         ];
@@ -66,15 +112,13 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'configData' => $configData,
-            'backend' => [
-                'type' => 'custom',
-            ],
+            'backend' => $backendData,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
         self::assertSame(
-            'custom',
-            $jobDefinitions[0]->getConfiguration()['runtime']['backend']['type'] ?? null
+            $expectedBackendData,
+            $jobDefinitions[0]->getConfiguration()['runtime']['backend']
         );
     }
 
@@ -110,8 +154,47 @@ class JobDefinitionFactoryTest extends TestCase
         self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
     }
 
-    public function testCreateJobDefinitionWithConfigIdAndBackend(): void
+    public function createJobDefinitionWithConfigIdAndBackendData(): Generator
     {
+        yield 'nothing' => [
+            [],
+            null,
+        ];
+        yield 'type' => [
+            [
+                'type' => 'custom',
+            ],
+            [
+                'type' => 'custom',
+            ],
+        ];
+        yield 'context' => [
+            [
+                'context' => 'wlm',
+            ],
+            [
+                'context' => 'wlm',
+            ],
+        ];
+        yield 'type + context' => [
+            [
+                'type' => 'custom',
+                'context' => 'wlm',
+            ],
+            [
+                'type' => 'custom',
+                'context' => 'wlm',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider createJobDefinitionWithConfigIdAndBackendData
+     */
+    public function testCreateJobDefinitionWithConfigIdAndBackend(
+        array $backendData,
+        ?array $expectedBackendData
+    ): void {
         $configuration = [
             'id' => 'my-config',
             'version' => '1',
@@ -121,6 +204,7 @@ class JobDefinitionFactoryTest extends TestCase
                 'foo' => 'bar',
                 'backend' => [
                     'type' => 'invalid',
+                    'context' => 'wml-invalid',
                 ],
             ],
         ];
@@ -131,17 +215,22 @@ class JobDefinitionFactoryTest extends TestCase
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
-            'backend' => [
-                'type' => 'custom',
-            ],
+            'backend' => $backendData,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
 
-        self::assertSame(
-            'custom',
-            $jobDefinitions[0]->getConfiguration()['runtime']['backend']['type'] ?? null
-        );
+        if ($expectedBackendData !== null) {
+            self::assertSame(
+                $expectedBackendData,
+                $jobDefinitions[0]->getConfiguration()['runtime']['backend']
+            );
+        } else {
+            self::assertArrayNotHasKey(
+                'runtime',
+                $jobDefinitions[0]->getConfiguration()
+            );
+        }
     }
 
     public function testCreateJobDefinitionWithConfigNotFound(): void

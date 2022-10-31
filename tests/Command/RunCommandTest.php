@@ -193,6 +193,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
+                    'context' => null,
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -217,6 +218,9 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.python-transformation',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
+            'backend' => [
+                'context' => '123_transformation',
+            ],
             'configData' => [
                 'storage' => [
                     'input' => [
@@ -256,6 +260,7 @@ class RunCommandTest extends AbstractCommandTest
 
         $job = $newJobFactory->createNewJob($jobData);
         $job = $client->createJob($job);
+
         putenv('JOB_ID=' . $job->getId());
         $kernel = static::createKernel();
         $application = new Application($kernel);
@@ -343,6 +348,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
+                    'context' => '123_transformation',
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -367,6 +373,9 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.python-transformation',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
+            'backend' => [
+                'context' => '123_transformation',
+            ],
             'configData' => [
                 'storage' => [
                     'input' => [
@@ -456,6 +465,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
+                    'context' => '123_transformation',
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -587,6 +597,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => 'small',
                     'containerSize' => 'small',
+                    'context' => null,
                 ],
             ],
             $job->getMetrics()->jsonSerialize()
