@@ -34,6 +34,7 @@ use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Options\BackendConfiguration;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
@@ -198,7 +199,13 @@ class RunCommand extends Command
                 ->setUserAgent($job->getComponentId())
                 ->setBranchId($job->getBranchId())
                 ->setRunId($job->getRunId())
-                ->setJobPollRetryDelay(self::getStepPollDelayFunction());
+                ->setJobPollRetryDelay(self::getStepPollDelayFunction())
+                ->setBackendConfiguration($job->getBackend()->isEmpty() ? null : new BackendConfiguration(
+                    $job->getBackend()->getContext(),
+                    $job->getBackend()->getType()
+                ))
+            ;
+
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
