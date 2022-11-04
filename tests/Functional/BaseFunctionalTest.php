@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\BranchClientOptionsFactory;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
@@ -15,6 +16,7 @@ use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
 use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
@@ -160,6 +162,15 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
+
+        $branchClientOptionsFactoryMock = $this->createMock(BranchClientOptionsFactory::class);
+        $branchClientOptionsFactoryMock->expects(self::once())
+            ->method('createFromJob')
+            ->willReturnCallback(function (JobInterface $job): ClientOptions {
+                return (new BranchClientOptionsFactory())->createFromJob($job);
+            })
+        ;
+
         return new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
@@ -168,6 +179,7 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory,
             new JobDefinitionFactory(),
             $this->objectEncryptor,
+            $branchClientOptionsFactoryMock,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1]

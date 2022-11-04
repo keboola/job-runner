@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\BranchClientOptionsFactory;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
@@ -1056,6 +1057,14 @@ class RunCommandTest extends AbstractCommandTest
             (string) getenv('TEST_STORAGE_API_TOKEN'),
         ));
 
+        $branchClientOptionsFactoryMock = $this->createMock(BranchClientOptionsFactory::class);
+        $branchClientOptionsFactoryMock->expects(self::once())
+            ->method('createFromJob')
+            ->willReturnCallback(function (JobInterface $job): ClientOptions {
+                return (new BranchClientOptionsFactory())->createFromJob($job);
+            })
+        ;
+
         $kernel = static::createKernel();
         $application = new Application($kernel);
         $application->add(new RunCommand(
@@ -1066,6 +1075,7 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
+            $branchClientOptionsFactoryMock,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             []

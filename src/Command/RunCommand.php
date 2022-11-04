@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\BranchClientOptionsFactory;
 use App\CreditsCheckerFactory;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
@@ -11,7 +12,6 @@ use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
-use Closure;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -34,9 +34,7 @@ use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
-use Keboola\StorageApi\Options\BackendConfiguration;
 use Keboola\StorageApiBranch\ClientWrapper;
-use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -59,6 +57,7 @@ class RunCommand extends Command
     private JobDefinitionFactory $jobDefinitionFactory;
     private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
+    private BranchClientOptionsFactory $branchClientOptionsFactory;
     private string $jobId;
     private string $storageApiToken;
 
@@ -70,6 +69,7 @@ class RunCommand extends Command
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         ObjectEncryptor $objectEncryptor,
+        BranchClientOptionsFactory $branchClientOptionsFactory,
         string $jobId,
         string $storageApiToken,
         array $instanceLimits
@@ -81,6 +81,7 @@ class RunCommand extends Command
         $this->creditsCheckerFactory = $creditsCheckerFactory;
         $this->storageClientFactory = $storageClientFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
+        $this->branchClientOptionsFactory = $branchClientOptionsFactory;
         $this->objectEncryptor = $objectEncryptor;
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
@@ -161,20 +162,6 @@ class RunCommand extends Command
             ->setHelp('Run job identified by JOB_ID environment variable.');
     }
 
-    private static function getStepPollDelayFunction(): Closure
-    {
-        return function ($tries) {
-            switch ($tries) {
-                case ($tries < 15):
-                    return 1;
-                case ($tries < 30):
-                    return 2;
-                default:
-                    return 5;
-            }
-        };
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var Output[] $outputs */
@@ -194,18 +181,8 @@ class RunCommand extends Command
                 $job->getComponentId(),
                 $job->getProjectId()
             ));
-            $options = (new ClientOptions())
-                ->setToken($this->storageApiToken)
-                ->setUserAgent($job->getComponentId())
-                ->setBranchId($job->getBranchId())
-                ->setRunId($job->getRunId())
-                ->setJobPollRetryDelay(self::getStepPollDelayFunction())
-                ->setBackendConfiguration($job->getBackend()->isEmpty() ? null : new BackendConfiguration(
-                    $job->getBackend()->getContext(),
-                    $job->getBackend()->getType()
-                ))
-            ;
 
+            $options = $this->branchClientOptionsFactory->createFromJob($job)->setToken($this->storageApiToken);
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
