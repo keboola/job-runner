@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\BranchClientOptionsFactory;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
+use App\Helper\BuildBranchClientOptionsHelper;
 use App\JobDefinitionFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
@@ -163,11 +163,11 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
 
-        $branchClientOptionsFactoryMock = $this->createMock(BranchClientOptionsFactory::class);
+        $branchClientOptionsFactoryMock = $this->createMock(BuildBranchClientOptionsHelper::class);
         $branchClientOptionsFactoryMock->expects(self::once())
             ->method('createFromJob')
             ->willReturnCallback(function (JobInterface $job): ClientOptions {
-                return (new BranchClientOptionsFactory())->createFromJob($job);
+                return (new BuildBranchClientOptionsHelper())->createFromJob($job);
             })
         ;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\BranchClientOptionsFactory;
 use App\CreditsCheckerFactory;
+use App\Helper\BuildBranchClientOptionsHelper;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
 use App\JobDefinitionFactory;
@@ -57,7 +57,7 @@ class RunCommand extends Command
     private JobDefinitionFactory $jobDefinitionFactory;
     private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
-    private BranchClientOptionsFactory $branchClientOptionsFactory;
+    private BuildBranchClientOptionsHelper $branchClientOptionsFactory;
     private string $jobId;
     private string $storageApiToken;
 
@@ -69,7 +69,7 @@ class RunCommand extends Command
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         ObjectEncryptor $objectEncryptor,
-        BranchClientOptionsFactory $branchClientOptionsFactory,
+        BuildBranchClientOptionsHelper $branchClientOptionsFactory,
         string $jobId,
         string $storageApiToken,
         array $instanceLimits

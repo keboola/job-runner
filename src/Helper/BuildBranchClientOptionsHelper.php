@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Helper;
 
 use Closure;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\StorageApi\Options\BackendConfiguration;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 
-class BranchClientOptionsFactory
+class BuildBranchClientOptionsHelper
 {
     public function createFromJob(JobInterface $job): ClientOptions
     {

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Helper;
 
-use App\BranchClientOptionsFactory;
+use App\Helper\BuildBranchClientOptionsHelper;
 use Closure;
 use Keboola\JobQueueInternalClient\JobFactory\Backend;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use PHPUnit\Framework\TestCase;
 
-class BranchClientOptionsFactoryTest extends TestCase
+class BuildBranchClientOptionsHelperTest extends TestCase
 {
     public function testCreateFromJob(): void
     {
@@ -49,7 +49,7 @@ class BranchClientOptionsFactoryTest extends TestCase
             ->willReturn($backend)
         ;
 
-        $options = (new BranchClientOptionsFactory())->createFromJob($jobMock);
+        $options = (new BuildBranchClientOptionsHelper())->createFromJob($jobMock);
 
         self::assertSame('dummy-component', $options->getUserAgent());
         self::assertSame('dummy-branch', $options->getBranchId());
