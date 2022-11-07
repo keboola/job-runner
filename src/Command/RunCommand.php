@@ -57,7 +57,6 @@ class RunCommand extends Command
     private JobDefinitionFactory $jobDefinitionFactory;
     private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
-    private BuildBranchClientOptionsHelper $branchClientOptionsFactory;
     private string $jobId;
     private string $storageApiToken;
 
@@ -69,7 +68,6 @@ class RunCommand extends Command
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         ObjectEncryptor $objectEncryptor,
-        BuildBranchClientOptionsHelper $branchClientOptionsFactory,
         string $jobId,
         string $storageApiToken,
         array $instanceLimits
@@ -81,7 +79,6 @@ class RunCommand extends Command
         $this->creditsCheckerFactory = $creditsCheckerFactory;
         $this->storageClientFactory = $storageClientFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
-        $this->branchClientOptionsFactory = $branchClientOptionsFactory;
         $this->objectEncryptor = $objectEncryptor;
         $this->instanceLimits = $instanceLimits;
         $this->logProcessor = $logProcessor;
@@ -182,7 +179,7 @@ class RunCommand extends Command
                 $job->getProjectId()
             ));
 
-            $options = $this->branchClientOptionsFactory->createFromJob($job)->setToken($this->storageApiToken);
+            $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);

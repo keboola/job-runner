@@ -6,7 +6,6 @@ namespace App\Tests\Command;
 
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
-use App\Helper\BuildBranchClientOptionsHelper;
 use App\JobDefinitionFactory;
 use Generator;
 use Keboola\BillingApi\CreditsChecker;
@@ -1057,14 +1056,6 @@ class RunCommandTest extends AbstractCommandTest
             (string) getenv('TEST_STORAGE_API_TOKEN'),
         ));
 
-        $branchClientOptionsFactoryMock = $this->createMock(BuildBranchClientOptionsHelper::class);
-        $branchClientOptionsFactoryMock->expects(self::once())
-            ->method('createFromJob')
-            ->willReturnCallback(function (JobInterface $job): ClientOptions {
-                return (new BuildBranchClientOptionsHelper())->createFromJob($job);
-            })
-        ;
-
         $kernel = static::createKernel();
         $application = new Application($kernel);
         $application->add(new RunCommand(
@@ -1075,7 +1066,6 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
-            $branchClientOptionsFactoryMock,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             []

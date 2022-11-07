@@ -11,7 +11,7 @@ use Keboola\StorageApiBranch\Factory\ClientOptions;
 
 class BuildBranchClientOptionsHelper
 {
-    public function createFromJob(JobInterface $job): ClientOptions
+    public static function buildFromJob(JobInterface $job): ClientOptions
     {
         return (new ClientOptions())
             ->setUserAgent($job->getComponentId())

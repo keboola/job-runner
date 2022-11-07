@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class BuildBranchClientOptionsHelperTest extends TestCase
 {
-    public function testCreateFromJob(): void
+    public function testBuildFromJob(): void
     {
         $backend = $this->createMock(Backend::class);
         $backend->expects(self::never())
@@ -49,7 +49,7 @@ class BuildBranchClientOptionsHelperTest extends TestCase
             ->willReturn($backend)
         ;
 
-        $options = (new BuildBranchClientOptionsHelper())->createFromJob($jobMock);
+        $options = BuildBranchClientOptionsHelper::buildFromJob($jobMock);
 
         self::assertSame('dummy-component', $options->getUserAgent());
         self::assertSame('dummy-branch', $options->getBranchId());

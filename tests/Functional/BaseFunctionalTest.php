@@ -6,7 +6,6 @@ namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
-use App\Helper\BuildBranchClientOptionsHelper;
 use App\JobDefinitionFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
@@ -163,14 +162,6 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
 
-        $branchClientOptionsFactoryMock = $this->createMock(BuildBranchClientOptionsHelper::class);
-        $branchClientOptionsFactoryMock->expects(self::once())
-            ->method('createFromJob')
-            ->willReturnCallback(function (JobInterface $job): ClientOptions {
-                return (new BuildBranchClientOptionsHelper())->createFromJob($job);
-            })
-        ;
-
         return new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
@@ -179,7 +170,6 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory,
             new JobDefinitionFactory(),
             $this->objectEncryptor,
-            $branchClientOptionsFactoryMock,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1]
