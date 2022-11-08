@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2df080d6cff93fb0b5e0d780580da9cc",
+    "content-hash": "1d0f4a29349a0c6dd4b96be41a7bee52",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -324,120 +324,6 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
             },
             "time": "2022-07-15T16:48:45+00:00"
-        },
-        {
-            "name": "google/apiclient",
-            "version": "v2.12.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/googleapis/google-api-php-client.git",
-                "reference": "f92aa126903a9e2da5bd41a280d9633cb249e79e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/f92aa126903a9e2da5bd41a280d9633cb249e79e",
-                "reference": "f92aa126903a9e2da5bd41a280d9633cb249e79e",
-                "shasum": ""
-            },
-            "require": {
-                "firebase/php-jwt": "~2.0||~3.0||~4.0||~5.0||~6.0",
-                "google/apiclient-services": "~0.200",
-                "google/auth": "^1.10",
-                "guzzlehttp/guzzle": "~5.3.3||~6.0||~7.0",
-                "guzzlehttp/psr7": "^1.8.4||^2.2.1",
-                "monolog/monolog": "^1.17||^2.0||^3.0",
-                "php": "^5.6|^7.0|^8.0",
-                "phpseclib/phpseclib": "~2.0||^3.0.2"
-            },
-            "require-dev": {
-                "cache/filesystem-adapter": "^0.3.2|^1.1",
-                "composer/composer": "^1.10.22",
-                "phpcompatibility/php-compatibility": "^9.2",
-                "phpspec/prophecy-phpunit": "^1.1||^2.0",
-                "phpunit/phpunit": "^5.7.21 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
-                "squizlabs/php_codesniffer": "^3.0",
-                "symfony/css-selector": "~2.1",
-                "symfony/dom-crawler": "~2.1",
-                "yoast/phpunit-polyfills": "^1.0"
-            },
-            "suggest": {
-                "cache/filesystem-adapter": "For caching certs and tokens (using Google\\Client::setCache)"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/aliases.php"
-                ],
-                "psr-4": {
-                    "Google\\": "src/"
-                },
-                "classmap": [
-                    "src/aliases.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Client library for Google APIs",
-            "homepage": "http://developers.google.com/api-client-library/php",
-            "keywords": [
-                "google"
-            ],
-            "support": {
-                "issues": "https://github.com/googleapis/google-api-php-client/issues",
-                "source": "https://github.com/googleapis/google-api-php-client/tree/v2.12.6"
-            },
-            "time": "2022-06-06T20:00:19+00:00"
-        },
-        {
-            "name": "google/apiclient-services",
-            "version": "v0.272.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "52b494231f6b531983d12aefac057d0eeec2861c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/52b494231f6b531983d12aefac057d0eeec2861c",
-                "reference": "52b494231f6b531983d12aefac057d0eeec2861c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7||^8.5.13"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "autoload.php"
-                ],
-                "psr-4": {
-                    "Google\\Service\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Client library for Google APIs",
-            "homepage": "http://developers.google.com/api-client-library/php",
-            "keywords": [
-                "google"
-            ],
-            "support": {
-                "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.272.0"
-            },
-            "time": "2022-10-21T01:18:13+00:00"
         },
         {
             "name": "google/auth",
@@ -2228,22 +2114,21 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.2.0",
+            "version": "v14.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "a3d0a6a01d21733b7bf38637ff0e458517b6811f"
+                "reference": "218b5ee68dce4cc2e379073e6a4fbf955cb7b81e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/a3d0a6a01d21733b7bf38637ff0e458517b6811f",
-                "reference": "a3d0a6a01d21733b7bf38637ff0e458517b6811f",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/218b5ee68dce4cc2e379073e6a4fbf955cb7b81e",
+                "reference": "218b5ee68dce4cc2e379073e6a4fbf955cb7b81e",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "~3.2",
                 "ext-json": "*",
-                "google/apiclient": "^2.1",
                 "google/cloud-storage": "^1.27",
                 "guzzlehttp/guzzle": "~7.0",
                 "keboola/csv": "~1.1.3",
@@ -2286,27 +2171,27 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.2.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.5.0"
             },
-            "time": "2022-09-19T12:48:47+00:00"
+            "time": "2022-11-04T13:05:59+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client-branch-wrapper.git",
-                "reference": "7382b37766e1d168fa497203b28d203a82bf8924"
+                "reference": "a6b94d43017c12a7e1941f7432f5ad0b480c9cd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client-branch-wrapper/zipball/7382b37766e1d168fa497203b28d203a82bf8924",
-                "reference": "7382b37766e1d168fa497203b28d203a82bf8924",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client-branch-wrapper/zipball/a6b94d43017c12a7e1941f7432f5ad0b480c9cd7",
+                "reference": "a6b94d43017c12a7e1941f7432f5ad0b480c9cd7",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "keboola/storage-api-client": "^13.0|^14.0",
+                "keboola/storage-api-client": "^14.5",
                 "php": ">=7.4",
                 "symfony/http-foundation": "^5.2|^6.0",
                 "symfony/validator": "^5.2|^6.0"
@@ -2343,9 +2228,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client-branch-wrapper/issues",
-                "source": "https://github.com/keboola/storage-api-php-client-branch-wrapper/tree/3.2.0"
+                "source": "https://github.com/keboola/storage-api-php-client-branch-wrapper/tree/3.3.0"
             },
-            "time": "2022-09-21T08:54:06+00:00"
+            "time": "2022-11-07T08:26:57+00:00"
         },
         {
             "name": "microsoft/azure-storage-blob",

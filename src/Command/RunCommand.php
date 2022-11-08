@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\CreditsCheckerFactory;
+use App\Helper\BuildBranchClientOptionsHelper;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
-use Closure;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -35,7 +35,6 @@ use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
-use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -160,20 +159,6 @@ class RunCommand extends Command
             ->setHelp('Run job identified by JOB_ID environment variable.');
     }
 
-    private static function getStepPollDelayFunction(): Closure
-    {
-        return function ($tries) {
-            switch ($tries) {
-                case ($tries < 15):
-                    return 1;
-                case ($tries < 30):
-                    return 2;
-                default:
-                    return 5;
-            }
-        };
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var Output[] $outputs */
@@ -193,12 +178,8 @@ class RunCommand extends Command
                 $job->getComponentId(),
                 $job->getProjectId()
             ));
-            $options = (new ClientOptions())
-                ->setToken($this->storageApiToken)
-                ->setUserAgent($job->getComponentId())
-                ->setBranchId($job->getBranchId())
-                ->setRunId($job->getRunId())
-                ->setJobPollRetryDelay(self::getStepPollDelayFunction());
+
+            $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
