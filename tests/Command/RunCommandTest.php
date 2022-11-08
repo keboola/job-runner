@@ -274,6 +274,28 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
+        $property = new ReflectionProperty($command, 'storageClientFactory');
+        $property->setAccessible(true);
+        /** @var StorageClientPlainFactory $baseFactory */
+        $baseFactory = $property->getValue($command);
+        $baseOptions = $baseFactory->getClientOptionsReadOnly();
+
+        $storageClientFactoryMock = $this->getMockBuilder(StorageClientPlainFactory::class)
+            ->setConstructorArgs([$baseOptions])
+            ->getMock();
+        $storageClientFactoryMock
+            ->expects(self::exactly(2))
+            ->method('createClientWrapper')
+            ->willReturnCallback(function (ClientOptions $options) use ($baseFactory): ClientWrapper {
+                $backendConfiguration = $options->getBackendConfiguration();
+                self::assertNotNull($backendConfiguration);
+                self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
+                return $baseFactory->createClientWrapper($options);
+            })
+        ;
+
+        $property->setValue($command, $storageClientFactoryMock);
+
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
             'command' => $command->getName(),
