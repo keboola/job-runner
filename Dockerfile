@@ -39,6 +39,11 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && apt-get -y install docker-ce \
     && rm -rf /var/lib/apt/lists/*
 
+# Datadog
+RUN curl -LOf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
+ && php /tmp/datadog-setup.php --php-bin=all --enable-appsec --enable-profiling \
+ && rm /tmp/datadog-setup.php
+
 # create app user
 RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
     && useradd -m -u $APP_USER_UID -g $APP_USER_GID $APP_USER_NAME \
@@ -46,11 +51,6 @@ RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
     && printf "%s ALL=(ALL:ALL) NOPASSWD: ALL" "$APP_USER_NAME" >> /etc/sudoers.d/$APP_USER_NAME
 
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
-
-# Datadog
-RUN curl -L -o /tmp/datadog-php-tracer.deb https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-php-tracer_${DD_PHP_TRACER_VERSION}_amd64.deb \
- && dpkg -i /tmp/datadog-php-tracer.deb \
- && rm /tmp/datadog-php-tracer.deb
 
 RUN docker-php-ext-install pcntl zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
