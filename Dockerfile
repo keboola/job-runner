@@ -84,4 +84,4 @@ RUN pecl channel-update pecl.php.net \
 
 USER $APP_USER_NAME
 
-CMD ["/bin/bash"]
+CMD ["/bin/bash", "-c", "sleep 7200"]
