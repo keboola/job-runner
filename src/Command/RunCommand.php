@@ -28,6 +28,7 @@ use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
 use Keboola\JobQueueInternalClient\Exception\StateTerminalException;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
+use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
@@ -164,12 +165,20 @@ class RunCommand extends Command
         /** @var Output[] $outputs */
         $outputs = [];
         $job = null;
+        $runnerId = Job::generateRunnerId();
         try {
-            $this->logger->info(sprintf('Running job "%s".', $this->jobId));
+            $this->logger->info(sprintf(
+                'Runner ID "%s": Running job "%s".',
+                $runnerId,
+                $this->jobId
+            ));
+
             $job = $this->queueClient->getJob($this->jobId);
             $job = $this->queueClient->patchJob(
                 $job->getId(),
-                (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING)
+                (new JobPatchData())
+                    ->setStatus(JobInterface::STATUS_PROCESSING)
+                    ->setRunnerId($runnerId)
             );
 
             // set up logging to storage API
