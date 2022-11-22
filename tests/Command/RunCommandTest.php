@@ -36,6 +36,8 @@ class RunCommandTest extends AbstractCommandTest
 {
     private StorageClient $storageClient;
 
+    private array $tokenData;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -51,6 +53,7 @@ class RunCommandTest extends AbstractCommandTest
             'url' => getenv('STORAGE_API_URL'),
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
+        $this->tokenData = $this->storageClient->verifyToken();
     }
 
     public function testExecuteFailure(): void
@@ -193,7 +196,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
-                    'context' => '6553-application',
+                    'context' => $this->tokenData['owner']['id'] . '-application',
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -619,7 +622,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => 'small',
                     'containerSize' => 'small',
-                    'context' => '6553-other',
+                    'context' => $this->tokenData['owner']['id'] . '-other',
                 ],
             ],
             $job->getMetrics()->jsonSerialize()
@@ -727,7 +730,7 @@ class RunCommandTest extends AbstractCommandTest
                     'action' => 'run',
                     'storage' => [],
                     'authorization' => [
-                        'context' => '6553-application',
+                        'context' => $this->tokenData['owner']['id'] . '-application',
                     ],
                 ],
                 $data
