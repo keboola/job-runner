@@ -193,7 +193,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
-                    'context' => null,
+                    'context' => '6553-application',
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -619,7 +619,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => 'small',
                     'containerSize' => 'small',
-                    'context' => null,
+                    'context' => '6553-other',
                 ],
             ],
             $job->getMetrics()->jsonSerialize()
@@ -726,7 +726,9 @@ class RunCommandTest extends AbstractCommandTest
                     'image_parameters' => [],
                     'action' => 'run',
                     'storage' => [],
-                    'authorization' => [],
+                    'authorization' => [
+                        'context' => '6553-application',
+                    ],
                 ],
                 $data
             );
