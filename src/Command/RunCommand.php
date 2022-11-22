@@ -12,6 +12,7 @@ use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
+use App\UuidGenerator;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariableResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -44,6 +45,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 class RunCommand extends Command
@@ -60,6 +62,7 @@ class RunCommand extends Command
     private StorageClientPlainFactory $storageClientFactory;
     private string $jobId;
     private string $storageApiToken;
+    private UuidGenerator $uuidGenerator;
 
     public function __construct(
         LoggerInterface $logger,
@@ -71,7 +74,8 @@ class RunCommand extends Command
         ObjectEncryptor $objectEncryptor,
         string $jobId,
         string $storageApiToken,
-        array $instanceLimits
+        array $instanceLimits,
+        UuidGenerator $uuidGenerator
     ) {
         parent::__construct(self::$defaultName);
         $this->queueClient = $queueClient;
@@ -89,6 +93,7 @@ class RunCommand extends Command
         pcntl_async_signals(true);
         $this->jobId = $jobId;
         $this->storageApiToken = $storageApiToken;
+        $this->uuidGenerator = $uuidGenerator;
     }
 
     public function terminationHandler(int $signalNumber): void
@@ -165,7 +170,8 @@ class RunCommand extends Command
         /** @var Output[] $outputs */
         $outputs = [];
         $job = null;
-        $runnerId = Job::generateRunnerId();
+        $runnerId = $this->uuidGenerator->generateUuidV4();
+
         try {
             $this->logger->info(sprintf(
                 'Runner ID "%s": Running job "%s".',

@@ -153,6 +153,7 @@ class RunCommandTest extends AbstractCommandTest
             '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
         ));
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Runner ID'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
@@ -201,6 +202,11 @@ class RunCommandTest extends AbstractCommandTest
             ],
             $finishedJob->getMetrics()->jsonSerialize()
         );
+
+        $finishedJobData = $finishedJob->jsonSerialize();
+        var_dump($finishedJobData);
+        var_dump($testHandler->getRecords());
+        self::assertNotEmpty($finishedJobData['runnerId']);
     }
 
     public function testExecuteSuccessWithLocalInputOutputInResult(): void
