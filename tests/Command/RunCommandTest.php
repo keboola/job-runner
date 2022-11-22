@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
+use App\UuidGenerator;
 use Generator;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
@@ -1101,7 +1102,8 @@ class RunCommandTest extends AbstractCommandTest
             $objectEncryptor,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            []
+            [],
+            new UuidGenerator()
         ));
 
         $command = $application->find('app:run');

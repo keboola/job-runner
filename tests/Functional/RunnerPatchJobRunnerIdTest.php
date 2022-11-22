@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Functional;
 
 use Keboola\JobQueueInternalClient\Client as QueueClient;
@@ -9,7 +11,7 @@ use Keboola\JobQueueInternalClient\JobPatchData;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 
-class RunnerRetryJobUpdateTest extends BaseFunctionalTest
+class RunnerPatchJobRunnerIdTest extends BaseFunctionalTest
 {
     public function testRun(): void
     {
@@ -26,7 +28,6 @@ class RunnerRetryJobUpdateTest extends BaseFunctionalTest
             '#tokenString' => (string) getenv('TEST_STORAGE_API_TOKEN'),
         ];
         $job = $this->newJobFactory->createNewJob($jobData);
-
 
         $mockQueueClient = $this->getMockBuilder(QueueClient::class)
             ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
