@@ -16,7 +16,6 @@ use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
 use Keboola\JobQueueInternalClient\JobFactory;
-use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
@@ -117,7 +116,6 @@ abstract class BaseFunctionalTest extends TestCase
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
 
         $job = $this->newJobFactory->createNewJob($jobData);
-
         if ($mockQueueClient === null) {
             $mockQueueClient = $this->getMockBuilder(QueueClient::class)
                 ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
@@ -161,6 +159,7 @@ abstract class BaseFunctionalTest extends TestCase
             );
         }
 
+        $storageClientFactory = $this->storageClientFactory;
         if ($mockClient) {
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
@@ -173,6 +172,7 @@ abstract class BaseFunctionalTest extends TestCase
             ->onlyMethods(['generateUuidV4'])
             ->getMock();
         $mockUuidGenerator
+            ->expects(self::once())
             ->method('generateUuidV4')
             ->willReturn('e6c10d12-14c3-423a-a3bd-b39787fb1629');
 
@@ -183,7 +183,7 @@ abstract class BaseFunctionalTest extends TestCase
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $mockQueueClient,
             new CreditsCheckerFactory(),
-            $this->storageClientFactory,
+            $storageClientFactory,
             new JobDefinitionFactory(),
             $this->objectEncryptor,
             $job->getId(),

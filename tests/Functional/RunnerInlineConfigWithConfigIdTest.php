@@ -100,8 +100,6 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         $command = $this->getCommand($jobData, $clientMock);
         $return = $command->run(new StringInput(''), new NullOutput());
 
-        var_dump($this->getTestHandler()->getRecords());
-
         self::assertEquals(0, $return);
         self::assertTrue($this->getClient()->tableExists('out.c-keboola-python-transformation-executor-test.result'));
         $csvData = $this->getClient()->getTableDataPreview('out.c-keboola-python-transformation-executor-test.result');
