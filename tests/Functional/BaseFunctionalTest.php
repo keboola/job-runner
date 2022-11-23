@@ -14,8 +14,7 @@ use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
-use Keboola\JobQueueInternalClient\JobFactory;
-use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
+use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
@@ -112,48 +111,37 @@ abstract class BaseFunctionalTest extends TestCase
         );
 
         $job = $newJobFactory->createNewJob($jobData);
-        $queueClient = $this->getMockBuilder(QueueClient::class)
-            ->setMethods(['getJob', 'postJobResult', 'updateJob', 'patchJob'])
+
+        $mockQueueClient = $this->getMockBuilder(QueueClient::class)
+            ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
             ->disableOriginalConstructor()
             ->getMock();
-        $queueClient->expects(self::once())->method('getJob')->willReturn($job);
-        $queueClient->expects(self::any())->method('updateJob')->willReturn([]);
-        $queueClient->expects(self::any())->method('patchJob')->willReturn(
-            new JobFactory\Job(
-                new JobObjectEncryptor($this->objectEncryptor),
-                $storageClientFactory,
-                array_merge($job->jsonSerialize(), ['status' => 'processing'])
+        $mockQueueClient->expects(self::once())->method('getJob')->willReturn($job);
+        $mockQueueClient->expects(self::any())
+            ->method('patchJob')
+            ->with(
+                $job->getId(),
+                self::callback(function ($jobPatchData) {
+                    return !empty($jobPatchData->getRunnerId());
+                })
             )
-        );
-        $queueClient->expects(self::once())->method('postJobResult')->with(
-            self::anything(),
-            self::anything(), //todo self::equalTo('success'),
-            $this->callback(function (): bool {
-                // Todo solve this is in a more flexible way - row tests produce more images and digests
-                // also it is very hard to debug this way
-                /*
-                if ($expectedJobResult !== null) {
-                    self::assertEquals($expectedJobResult, $result, var_export($result, true));
-                } else {
-                    self::assertArrayHasKey('message', $result, var_export($result, true));
-                    self::assertArrayHasKey('images', $result, var_export($result, true));
-                    self::assertArrayHasKey('configVersion', $result);
-                    self::assertEquals('Component processing finished.', $result['message']);
-                    self::assertGreaterThan(1, $result['images']);
-                    self::assertGreaterThan(1, $result['images'][0]);
-                    self::assertArrayHasKey('id', $result['images'][0][0]);
-                    self::assertArrayHasKey('digests', $result['images'][0][0]);
-                }*/
-                return true;
-            })
-        )->willReturn(
-            new JobFactory\Job(
-                new JobObjectEncryptor($this->objectEncryptor),
-                $storageClientFactory,
-                array_merge($job->jsonSerialize(), ['status' => 'processing'])
-            )
-        );
-        /** @var QueueClient $queueClient */
+            ->willReturn(
+                new Job(
+                    new JobObjectEncryptor($this->objectEncryptor),
+                    $storageClientFactory,
+                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
+                )
+            );
+        $mockQueueClient->expects(self::once())
+            ->method('postJobResult')
+            ->willReturn(
+                new Job(
+                    new JobObjectEncryptor($this->objectEncryptor),
+                    $storageClientFactory,
+                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
+                )
+            );
+
         if ($mockClient) {
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
@@ -162,10 +150,11 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
 
+        /** @var QueueClient $mockQueueClient */
         return new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
-            $queueClient,
+            $mockQueueClient,
             new CreditsCheckerFactory(),
             $storageClientFactory,
             new JobDefinitionFactory(),

@@ -43,6 +43,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 class RunCommand extends Command
@@ -164,12 +165,21 @@ class RunCommand extends Command
         /** @var Output[] $outputs */
         $outputs = [];
         $job = null;
+        $runnerId = (string) Uuid::v4();
+
         try {
-            $this->logger->info(sprintf('Running job "%s".', $this->jobId));
+            $this->logger->info(sprintf(
+                'Runner ID "%s": Running job "%s".',
+                $runnerId,
+                $this->jobId
+            ));
+
             $job = $this->queueClient->getJob($this->jobId);
             $job = $this->queueClient->patchJob(
                 $job->getId(),
-                (new JobPatchData())->setStatus(JobInterface::STATUS_PROCESSING)
+                (new JobPatchData())
+                    ->setStatus(JobInterface::STATUS_PROCESSING)
+                    ->setRunnerId($runnerId)
             );
 
             // set up logging to storage API

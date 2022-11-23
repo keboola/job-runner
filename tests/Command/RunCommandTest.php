@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
+use App\UuidGenerator;
 use Generator;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
@@ -36,6 +37,8 @@ class RunCommandTest extends AbstractCommandTest
 {
     private StorageClient $storageClient;
 
+    private array $tokenData;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -51,6 +54,7 @@ class RunCommandTest extends AbstractCommandTest
             'url' => getenv('STORAGE_API_URL'),
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
+        $this->tokenData = $this->storageClient->verifyToken();
     }
 
     public function testExecuteFailure(): void
@@ -150,6 +154,7 @@ class RunCommandTest extends AbstractCommandTest
             '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
         ));
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Runner ID'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
@@ -193,7 +198,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => null,
                     'containerSize' => 'small',
-                    'context' => null,
+                    'context' => $this->tokenData['owner']['id'] . '-application',
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
@@ -619,7 +624,7 @@ class RunCommandTest extends AbstractCommandTest
                 'backend' => [
                     'size' => 'small',
                     'containerSize' => 'small',
-                    'context' => null,
+                    'context' => $this->tokenData['owner']['id'] . '-other',
                 ],
             ],
             $job->getMetrics()->jsonSerialize()
@@ -726,7 +731,9 @@ class RunCommandTest extends AbstractCommandTest
                     'image_parameters' => [],
                     'action' => 'run',
                     'storage' => [],
-                    'authorization' => [],
+                    'authorization' => [
+                        'context' => $this->tokenData['owner']['id'] . '-application',
+                    ],
                 ],
                 $data
             );
