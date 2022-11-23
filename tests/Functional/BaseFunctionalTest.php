@@ -42,10 +42,7 @@ abstract class BaseFunctionalTest extends TestCase
     private Logger $logger;
     private TestHandler $handler;
     private Temp $temp;
-    protected ObjectEncryptor $objectEncryptor;
-    protected StorageClientPlainFactory $storageClientFactory;
-    protected NewJobFactory $newJobFactory;
-    protected ManageApiClient $manageApiClient;
+    private ObjectEncryptor $objectEncryptor;
 
     public function setUp(): void
     {
@@ -80,30 +77,6 @@ abstract class BaseFunctionalTest extends TestCase
             null,
             '',
         ));
-
-        $this->storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions($this->storageClient->getApiUrl())
-        );
-
-        $this->manageApiClient = new ManageApiClient([
-            'url' => (string) getenv('STORAGE_API_URL'),
-            'token' => (string) getenv('MANAGE_API_TOKEN'),
-        ]);
-
-        $this->newJobFactory = new NewJobFactory(
-            $this->storageClientFactory,
-            new JobRuntimeResolver($this->storageClientFactory),
-            new DataPlaneObjectEncryptorProvider(
-                $this->objectEncryptor,
-                new DataPlaneConfigRepository(
-                    $this->manageApiClient,
-                    new DataPlaneConfigValidator(Validation::createValidator()),
-                    (string) getenv('ENCRYPTOR_STACK_ID'),
-                    (string) getenv('AWS_REGION'),
-                ),
-                false
-            ),
-        );
     }
 
     protected function getCommand(
@@ -112,7 +85,32 @@ abstract class BaseFunctionalTest extends TestCase
         ?array $expectedJobResult = null
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
-        $job = $this->newJobFactory->createNewJob($jobData);
+
+        $storageClientFactory = new StorageClientPlainFactory(
+            new ClientOptions($this->storageClient->getApiUrl())
+        );
+
+        $manageApiClient = new ManageApiClient([
+            'url' => (string) getenv('STORAGE_API_URL'),
+            'token' => (string) getenv('MANAGE_API_TOKEN'),
+        ]);
+
+        $newJobFactory = new NewJobFactory(
+            $storageClientFactory,
+            new JobRuntimeResolver($storageClientFactory),
+            new DataPlaneObjectEncryptorProvider(
+                $this->objectEncryptor,
+                new DataPlaneConfigRepository(
+                    $manageApiClient,
+                    new DataPlaneConfigValidator(Validation::createValidator()),
+                    (string) getenv('ENCRYPTOR_STACK_ID'),
+                    (string) getenv('AWS_REGION'),
+                ),
+                false
+            ),
+        );
+
+        $job = $newJobFactory->createNewJob($jobData);
 
         $mockQueueClient = $this->getMockBuilder(QueueClient::class)
             ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
@@ -130,7 +128,7 @@ abstract class BaseFunctionalTest extends TestCase
             ->willReturn(
                 new Job(
                     new JobObjectEncryptor($this->objectEncryptor),
-                    $this->storageClientFactory,
+                    $storageClientFactory,
                     array_merge($job->jsonSerialize(), ['status' => 'processing'])
                 )
             );
@@ -139,12 +137,11 @@ abstract class BaseFunctionalTest extends TestCase
             ->willReturn(
                 new Job(
                     new JobObjectEncryptor($this->objectEncryptor),
-                    $this->storageClientFactory,
+                    $storageClientFactory,
                     array_merge($job->jsonSerialize(), ['status' => 'processing'])
                 )
             );
 
-        $storageClientFactory = $this->storageClientFactory;
         if ($mockClient) {
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
