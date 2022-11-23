@@ -203,11 +203,6 @@ class RunCommandTest extends AbstractCommandTest
             ],
             $finishedJob->getMetrics()->jsonSerialize()
         );
-
-        $finishedJobData = $finishedJob->jsonSerialize();
-        var_dump($finishedJobData);
-        var_dump($testHandler->getRecords());
-        self::assertNotEmpty($finishedJobData['runnerId']);
     }
 
     public function testExecuteSuccessWithLocalInputOutputInResult(): void

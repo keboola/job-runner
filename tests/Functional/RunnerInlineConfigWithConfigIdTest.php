@@ -51,7 +51,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         ];
         $clientMock = $this->getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
-            ->setMethods(['apiGet', 'getServiceUrl'])
+            ->onlyMethods(['apiGet', 'getServiceUrl'])
             ->getMock();
         $clientMock
             ->method('getServiceUrl')
@@ -99,6 +99,9 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
         /** @var Client $clientMock */
         $command = $this->getCommand($jobData, $clientMock);
         $return = $command->run(new StringInput(''), new NullOutput());
+
+        var_dump($this->getTestHandler()->getRecords());
+
         self::assertEquals(0, $return);
         self::assertTrue($this->getClient()->tableExists('out.c-keboola-python-transformation-executor-test.result'));
         $csvData = $this->getClient()->getTableDataPreview('out.c-keboola-python-transformation-executor-test.result');

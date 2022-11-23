@@ -1456,12 +1456,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "a0a37e74e035203d499c5e14dd6a50a84e8fc91c"
+                "reference": "f3c9dbe3c6edb77a40ac153aa8ed0889ae86987b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a0a37e74e035203d499c5e14dd6a50a84e8fc91c",
-                "reference": "a0a37e74e035203d499c5e14dd6a50a84e8fc91c",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/f3c9dbe3c6edb77a40ac153aa8ed0889ae86987b",
+                "reference": "f3c9dbe3c6edb77a40ac153aa8ed0889ae86987b",
                 "shasum": ""
             },
             "require": {
@@ -1511,7 +1511,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/miro-PST-3"
             },
-            "time": "2022-11-21T12:28:54+00:00"
+            "time": "2022-11-22T12:15:07+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
