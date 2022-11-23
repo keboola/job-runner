@@ -7,7 +7,6 @@ namespace App\Tests\Functional;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
-use App\UuidGenerator;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -15,7 +14,7 @@ use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
-use Keboola\JobQueueInternalClient\JobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
@@ -110,54 +109,40 @@ abstract class BaseFunctionalTest extends TestCase
     protected function getCommand(
         array $jobData,
         ?Client $mockClient = null,
-        ?array $expectedJobResult = null,
-        ?QueueClient $mockQueueClient = null
+        ?array $expectedJobResult = null
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
-
         $job = $this->newJobFactory->createNewJob($jobData);
-        if ($mockQueueClient === null) {
-            $mockQueueClient = $this->getMockBuilder(QueueClient::class)
-                ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
-                ->disableOriginalConstructor()
-                ->getMock();
-            $mockQueueClient->expects(self::once())->method('getJob')->willReturn($job);
-            $mockQueueClient->expects(self::any())->method('patchJob')->willReturn(
-                new JobFactory\Job(
-                    new JobObjectEncryptor($this->objectEncryptor),
-                    $this->storageClientFactory,
-                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
-                )
-            );
-            $mockQueueClient->expects(self::once())->method('postJobResult')->with(
-                self::anything(),
-                self::anything(), //todo self::equalTo('success'),
-                $this->callback(function (): bool {
-                    // Todo solve this is in a more flexible way - row tests produce more images and digests
-                    // also it is very hard to debug this way
-                    /*
-                    if ($expectedJobResult !== null) {
-                        self::assertEquals($expectedJobResult, $result, var_export($result, true));
-                    } else {
-                        self::assertArrayHasKey('message', $result, var_export($result, true));
-                        self::assertArrayHasKey('images', $result, var_export($result, true));
-                        self::assertArrayHasKey('configVersion', $result);
-                        self::assertEquals('Component processing finished.', $result['message']);
-                        self::assertGreaterThan(1, $result['images']);
-                        self::assertGreaterThan(1, $result['images'][0]);
-                        self::assertArrayHasKey('id', $result['images'][0][0]);
-                        self::assertArrayHasKey('digests', $result['images'][0][0]);
-                    }*/
-                    return true;
+
+        $mockQueueClient = $this->getMockBuilder(QueueClient::class)
+            ->onlyMethods(['getJob', 'postJobResult', 'patchJob'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockQueueClient->expects(self::once())->method('getJob')->willReturn($job);
+        $mockQueueClient->expects(self::any())
+            ->method('patchJob')
+            ->with(
+                $job->getId(),
+                self::callback(function ($jobPatchData) {
+                    return !empty($jobPatchData->getRunnerId());
                 })
-            )->willReturn(
-                new JobFactory\Job(
+            )
+            ->willReturn(
+                new Job(
                     new JobObjectEncryptor($this->objectEncryptor),
                     $this->storageClientFactory,
                     array_merge($job->jsonSerialize(), ['status' => 'processing'])
                 )
             );
-        }
+        $mockQueueClient->expects(self::once())
+            ->method('postJobResult')
+            ->willReturn(
+                new Job(
+                    new JobObjectEncryptor($this->objectEncryptor),
+                    $this->storageClientFactory,
+                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
+                )
+            );
 
         $storageClientFactory = $this->storageClientFactory;
         if ($mockClient) {
@@ -168,16 +153,7 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
 
-        $mockUuidGenerator = $this->getMockBuilder(UuidGenerator::class)
-            ->onlyMethods(['generateUuidV4'])
-            ->getMock();
-        $mockUuidGenerator
-            ->expects(self::once())
-            ->method('generateUuidV4')
-            ->willReturn('e6c10d12-14c3-423a-a3bd-b39787fb1629');
-
         /** @var QueueClient $mockQueueClient */
-        /** @var UuidGenerator $mockUuidGenerator */
         return new RunCommand(
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
@@ -188,8 +164,7 @@ abstract class BaseFunctionalTest extends TestCase
             $this->objectEncryptor,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ['cpu_count' => 1],
-            $mockUuidGenerator
+            ['cpu_count' => 1]
         );
     }
 

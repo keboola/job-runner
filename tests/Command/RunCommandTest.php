@@ -1097,8 +1097,7 @@ class RunCommandTest extends AbstractCommandTest
             $objectEncryptor,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            [],
-            new UuidGenerator()
+            []
         ));
 
         $command = $application->find('app:run');
