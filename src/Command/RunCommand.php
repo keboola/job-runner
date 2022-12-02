@@ -45,6 +45,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
+use function DDTrace\root_span;
 
 class RunCommand extends Command
 {
@@ -162,6 +163,13 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (function_exists('\DDTrace\root_span')) {
+            $span = root_span();
+            if ($span) {
+                $span->meta['job.id'] = $this->jobId;
+            }
+        }
+
         /** @var Output[] $outputs */
         $outputs = [];
         $job = null;
@@ -175,6 +183,14 @@ class RunCommand extends Command
             ));
 
             $job = $this->queueClient->getJob($this->jobId);
+
+            if (function_exists('\DDTrace\root_span')) {
+                $span = root_span();
+                if ($span) {
+                    $span->meta['job.componentId'] = $job->getComponentId();
+                }
+            }
+
             $job = $this->queueClient->patchJob(
                 $job->getId(),
                 (new JobPatchData())
