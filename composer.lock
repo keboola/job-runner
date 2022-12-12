@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31dd3a4888382cb7d44a08e5aa3f6889",
+    "content-hash": "0e6da060f49847d0e1e4cf184d6660b9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1400,22 +1400,22 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "16.2.0",
+            "version": "dev-erik-im-format-option",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "d7fdaf2e94a4c15e67f5e9a8f407d1cc3f0bd721"
+                "reference": "63233b02db242ad8297520e2022261d64fbb6564"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/d7fdaf2e94a4c15e67f5e9a8f407d1cc3f0bd721",
-                "reference": "d7fdaf2e94a4c15e67f5e9a8f407d1cc3f0bd721",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/63233b02db242ad8297520e2022261d64fbb6564",
+                "reference": "63233b02db242ad8297520e2022261d64fbb6564",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/php-file-storage-utils": "^0.2.2",
-                "keboola/storage-api-client": "^14.0",
+                "keboola/storage-api-client": "^14.4",
                 "keboola/storage-api-php-client-branch-wrapper": "^3.1",
                 "php": ">=7.4",
                 "symfony/config": "^4.4|^5.4",
@@ -1446,9 +1446,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/16.2.0"
+                "source": "https://github.com/keboola/input-mapping/tree/build-erik-format.2"
             },
-            "time": "2022-08-31T11:52:36+00:00"
+            "time": "2022-12-12T16:10:14+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -10121,10 +10121,18 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-erik-im-format-option",
+            "alias": "16.2.0",
+            "alias_normalized": "16.2.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -23,7 +23,7 @@
         "keboola/billing-api-php-client": "^1.1",
         "keboola/configuration-variables-resolver": "^3.2",
         "keboola/dockerbundle": "dev-odin-library-3",
-        "keboola/input-mapping": "^16.2",
+        "keboola/input-mapping": "dev-erik-im-format-option as 16.2.0",
         "keboola/job-queue-internal-api-php-client": "^15.2",
         "keboola/object-encryptor": "^2.0",
         "keboola/output-mapping": "^19.1",
