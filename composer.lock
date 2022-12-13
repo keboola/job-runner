@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e6da060f49847d0e1e4cf184d6660b9",
+    "content-hash": "69a99dafffee11f5b6968668369d0294",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2115,16 +2115,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.5.0",
+            "version": "dev-roman-hackathon-export-parquet",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "218b5ee68dce4cc2e379073e6a4fbf955cb7b81e"
+                "reference": "084043b2f48d4965647ac4a832bb6947079b148a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/218b5ee68dce4cc2e379073e6a4fbf955cb7b81e",
-                "reference": "218b5ee68dce4cc2e379073e6a4fbf955cb7b81e",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/084043b2f48d4965647ac4a832bb6947079b148a",
+                "reference": "084043b2f48d4965647ac4a832bb6947079b148a",
                 "shasum": ""
             },
             "require": {
@@ -2172,9 +2172,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.5.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/roman-hackathon-export-parquet"
             },
-            "time": "2022-11-04T13:05:59+00:00"
+            "time": "2022-12-13T10:37:25+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -10127,12 +10127,19 @@
             "version": "dev-erik-im-format-option",
             "alias": "16.2.0",
             "alias_normalized": "16.2.0.0"
+        },
+        {
+            "package": "keboola/storage-api-client",
+            "version": "dev-roman-hackathon-export-parquet",
+            "alias": "14.5",
+            "alias_normalized": "14.5.0.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20
+        "keboola/input-mapping": 20,
+        "keboola/storage-api-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
