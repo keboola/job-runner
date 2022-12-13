@@ -22,7 +22,7 @@
   </php>
   <testsuites>
     <testsuite name="Project Test Suite">
-      <directory>tests</directory>
+      <file>tests/CreditsCheckerFactoryTest.php</file>
     </testsuite>
   </testsuites>
   <listeners>
