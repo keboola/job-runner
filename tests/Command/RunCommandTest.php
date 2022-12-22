@@ -465,16 +465,13 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasErrorThatContains('Job "' . $job->getId() . '" ended with user error'));
         self::assertEquals(0, $ret);
 
-        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
-        $messages = array_column($events, 'message');
-
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
         self::assertSame('error', $finishedJob->getStatus());
         $result = $finishedJob->getResult();
 
         self::assertArrayHasKey('message', $result);
-        self::assertSame('Table sources not found: "destination-does-not-exists.csv"', $result['message']);
+        self::assertSame('Failed to resolve destination for output table "destination.csv".', $result['message']);
 
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
