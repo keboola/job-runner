@@ -471,7 +471,7 @@ class RunCommandTest extends AbstractCommandTest
         $result = $finishedJob->getResult();
 
         self::assertArrayHasKey('message', $result);
-        self::assertSame('Failed to resolve destination for output table "destination.csv".', $result['message']);
+        self::assertSame('Table sources not found: "destination-does-not-exists.csv"', $result['message']);
 
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
