@@ -286,6 +286,13 @@ class RunCommand extends Command
 
     private function postJobResult(string $jobId, string $status, JobResult $result, ?JobMetrics $metrics = null): void
     {
+        if (function_exists('\DDTrace\root_span')) {
+            $span = root_span();
+            if ($span) {
+                $span->meta['job.result'] = $status;
+            }
+        }
+
         try {
             $this->queueClient->postJobResult($jobId, $status, $result, $metrics);
         } catch (StateTerminalException $e) {
