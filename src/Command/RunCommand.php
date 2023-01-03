@@ -290,6 +290,11 @@ class RunCommand extends Command
             $span = root_span();
             if ($span) {
                 $span->meta['job.result'] = $status;
+
+                if ($status === JobInterface::STATUS_ERROR) {
+                    $span->meta['error.msg'] = $result->getMessage();
+                    $span->meta['error.type'] = $result->getErrorType();
+                }
             }
         }
 
