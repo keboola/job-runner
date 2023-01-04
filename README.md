@@ -76,7 +76,8 @@ Login and pull the image:
 
 - Get ID of the service principal:
     ```bash
-    SERVICE_PRINCIPAL_ID=773cb577-d947-48ed-a73e-3be5a941e763$(az ad sp list --display-name <prefix>-job-runner --query "[0].id" --output tsv)
+    SERVICE_PRINCIPAL_ID=$(az ad sp list --display-name <prefix>-job-runner --query "[0].id" --output tsv)
+
     ```
 
 - Get ID of a group to which the current user belongs (e.g. "Developers"):
