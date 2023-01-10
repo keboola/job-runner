@@ -13,6 +13,13 @@ class BuildBranchClientOptionsHelper
 {
     public static function buildFromJob(JobInterface $job): ClientOptions
     {
+        /*
+        Here we intentionally set runId to jobId (setRunId($job->getId())) because it no longer holds that
+        storage-api-run-id is the same as job-queue-run-id. storage-api-run-id now serves as a tracing id
+        attributing storage operations to job. job-queue-run-id describes hierarchical structure of jobs.
+        By using jobId as storage runId we're attributing storage operations to that job (and not its parents).
+        Technically the reason is that storage api run id has a limited length and cannot be easily extended.
+        */
         return (new ClientOptions())
             ->setUserAgent($job->getComponentId())
             ->setBranchId($job->getBranchId())
