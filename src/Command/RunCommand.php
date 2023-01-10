@@ -204,7 +204,6 @@ class RunCommand extends Command
                 $job->getComponentId(),
                 $job->getProjectId()
             ));
-
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
             $clientWithoutLogger = $this->storageClientFactory
                 ->createClientWrapper($options)->getBranchClientIfAvailable();

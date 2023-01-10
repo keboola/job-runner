@@ -37,10 +37,10 @@ class BuildBranchClientOptionsHelperTest extends TestCase
             ->willReturn('dummy-branch')
         ;
         $jobMock->expects(self::once())
-            ->method('getRunId')
+            ->method('getId')
             ->willReturn('124')
         ;
-        $jobMock->expects(self::once())
+        $jobMock->expects(self::never())
             ->method('getRunId')
             ->willReturn('124')
         ;

@@ -16,7 +16,7 @@ class BuildBranchClientOptionsHelper
         return (new ClientOptions())
             ->setUserAgent($job->getComponentId())
             ->setBranchId($job->getBranchId())
-            ->setRunId($job->getRunId())
+            ->setRunId($job->getId())
             ->setJobPollRetryDelay(self::getStepPollDelayFunction())
             ->setBackendConfiguration(new BackendConfiguration(
                 $job->getBackend()->getContext(),
