@@ -3,7 +3,7 @@
 Symfony console application which is used inside an ECS task and wraps Docker runner library.
 
 ## Running locally
-Use `docker-composer run tests-local` to get development environment.
+Use `docker-compose run tests-local` to get development environment.
 To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
 To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
@@ -13,18 +13,18 @@ To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 Create a service principal to download Internal Queue API image and Job Runner Image and login:
 
     ```bash
-	SERVICE_PRINCIPAL_NAME=devel-job-queue-internal-api-pull
+	SERVICE_PRINCIPAL_NAME=<prefix>-job-queue-internal-api-pull
 	ACR_REGISTRY_ID=$(az acr show --name keboolapes --query id --output tsv --subscription c5182964-8dca-42c8-a77a-fa2a3c6946ea)
 	SP_PASSWORD=$(az ad sp create-for-rbac --name http://$SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
-	SP_APP_ID=$(az ad sp show --id http://$SERVICE_PRINCIPAL_NAME --query appId --output tsv)	
+	SP_APP_ID=$(az ad sp list --all --query "[?appDisplayName=='http://$SERVICE_PRINCIPAL_NAME'].appId" --output tsv)	
     ```
 
 
 Add the repository credentials to the k8s cluster:
 
     ```bash
-    kubectl create secret docker-registry regcred --docker-server="https://keboolapes.azurecr.io" --docker-username="$SP_APP_ID" --docker-password="$SP_PASSWORD" --namespace dev-job-runner
-    kubectl patch serviceaccount default -p "{\"imagePullSecrets\":[{\"name\":\"regcred\"}]}" --namespace dev-job-runner
+    kubectl create secret docker-registry regcred --docker-server="https://keboolapes.azurecr.io" --docker-username="$SP_APP_ID" --docker-password="$SP_PASSWORD" --namespace <prefix>-job-runner
+    kubectl patch serviceaccount default -p "{\"imagePullSecrets\":[{\"name\":\"regcred\"}]}" --namespace <prefix>-job-runner
     ```
 
 Login and pull the image:
@@ -55,12 +55,12 @@ Login and pull the image:
 - Create a resource group:
     ```bash
     az account set --subscription "Keboola DEV PS Team CI"
-    az group create --name testing-job-runner --location "East US"
+    az group create --name <prefix>-job-runner --location "East US"
     ```
 
 - Create a service principal:
     ```bash
-    az ad sp create-for-rbac --name testing-job-runner
+    az ad sp create-for-rbac --name <prefix>-job-runner
     ```
 
 - Use the response to set values `TEST_AZURE_CLIENT_ID`, `TEST_AZURE_CLIENT_SECRET` and `TEST_AZURE_TENANT_ID` in the `set-env.sh` file:
@@ -76,22 +76,23 @@ Login and pull the image:
 
 - Get ID of the service principal:
     ```bash
-    SERVICE_PRINCIPAL_ID=$(az ad sp list --display-name testing-job-runner --query "[0].objectId" --output tsv)
+    SERVICE_PRINCIPAL_ID=$(az ad sp list --display-name <prefix>-job-runner --query "[0].id" --output tsv)
+
     ```
 
 - Get ID of a group to which the current user belongs (e.g. "Developers"):
     ```bash
-    GROUP_ID=$(az ad group list --display-name "Developers" --query "[0].objectId" --output tsv)
+    GROUP_ID=$(az ad group list --display-name "Developers" --query "[0].id" --output tsv)
     ```
 
 - Deploy the key vault and log container. Provide tenant ID, service principal ID and group ID from the previous commands:
     ```bash
-    az deployment group create --resource-group testing-job-runner --template-file provisioning/dev/azure.json --parameters vault_name=testing-job-runner tenant_id=9b85ee6f-4fb0-4a46-8cb7-4dcc6b262a89 service_principal_object_id=$SERVICE_PRINCIPAL_ID group_object_id=$GROUP_ID storage_account_name=testingjobrunner container_name=debug-files
-    az keyvault show --name testing-job-runner --query "properties.vaultUri"
+    az deployment group create --resource-group <prefix>-job-runner --template-file provisioning/dev/azure.json --parameters vault_name=<prefix>-job-runner tenant_id=9b85ee6f-4fb0-4a46-8cb7-4dcc6b262a89 service_principal_object_id=$SERVICE_PRINCIPAL_ID group_object_id=$GROUP_ID storage_account_name=<prefix>jobrunner container_name=debug-files
+    az keyvault show --name <prefix>-job-runner --query "properties.vaultUri"
     ```
 
     and use the return value to set the value in `set-env.sh` file:
-    - `AZURE_KEY_VAULT_URL` - https://testing-job-runner.vault.azure.net
+    - `AZURE_KEY_VAULT_URL` - https://<prefix>-job-runner.vault.azure.net
 
     Go to the [Azure Portal](https://portal.azure.com/) - Storage Account - Access Keys and copy connection string. 
     Go to Storage Account - Lifecycle Management - and set a cleanup rule to remove files older than 1 day from the container.
