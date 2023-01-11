@@ -20,13 +20,20 @@ RUN apt-get update -q \
         libmcrypt-dev \
         libpq-dev \
         libzip-dev \
+        locales \
         openssh-server \
         software-properties-common \
         sudo \
         unzip \
         wget \
         iproute2 \
+    && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen \
     && rm -rf /var/lib/apt/lists/*
+
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # install docker
 RUN wget https://download.docker.com/linux/debian/gpg \
