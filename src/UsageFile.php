@@ -50,7 +50,7 @@ class UsageFile implements UsageFileInterface
     }
 
     // phpcs:disable
-    public function setDataDir($dataDir): void
+    public function setDataDir(string $dataDir): void
     {
         $this->dataDir = $dataDir;
     }

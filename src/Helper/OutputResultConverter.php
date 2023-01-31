@@ -89,24 +89,19 @@ class OutputResultConverter
         $inputTablesCompressedBytesSum = 0;
         $outputTablesCompressedBytesSum = 0;
         foreach ($outputs as $output) {
-            $inputTableResult = $output->getInputTableResult();
-            if ($inputTableResult) {
-                if ($inputTableResult->getMetrics()) {
-                    foreach ($inputTableResult->getMetrics()->getTableMetrics() as $tableMetric) {
-                        /** @var InputTableMetrics $tableMetric */
-                        $inputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
-                    }
+            $inputMetrics = $output->getInputTableResult()?->getMetrics();
+            if ($inputMetrics) {
+                foreach ($inputMetrics->getTableMetrics() as $tableMetric) {
+                    /** @var InputTableMetrics $tableMetric */
+                    $inputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
                 }
             }
 
-            $outputTableResult = $output->getOutputTableResult();
-            if ($outputTableResult) {
-                $outputMetrics = $outputTableResult->getMetrics();
-                if ($outputMetrics) {
-                    foreach ($outputMetrics->getTableMetrics() as $tableMetric) {
-                        /** @var OutputTableMetrics $tableMetric */
-                        $outputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
-                    }
+            $outputMetrics = $output->getOutputTableResult()?->getMetrics();
+            if ($outputMetrics) {
+                foreach ($outputMetrics->getTableMetrics() as $tableMetric) {
+                    /** @var OutputTableMetrics $tableMetric */
+                    $outputTablesCompressedBytesSum += $tableMetric->getCompressedBytes();
                 }
             }
 
@@ -157,7 +152,7 @@ class OutputResultConverter
         return new Table(
             $tableInfo->getId(),
             $tableInfo->getName(),
-            $tableInfo->getDisplayName(),
+            (string) $tableInfo->getDisplayName(),
             $columnCollection
         );
     }

@@ -103,6 +103,8 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
         $config = json_decode((string) $config, true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('in/tables/source.csv');
@@ -126,6 +128,8 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive->open($fileName);
         $config = $zipArchive->getFromName('config.json');
         $config = json_decode((string) $config, true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
         self::assertArrayHasKey('script', $config['parameters']);
         $tableData = $zipArchive->getFromName('out/tables/destination.csv');
@@ -333,10 +337,13 @@ class DebugModeTest extends BaseFunctionalTest
         $output = '';
         foreach ($this->getTestHandler()->getRecords() as $record) {
             if ($record['level'] === 400) {
+                self::assertIsArray($record);
                 $output = $record['message'];
             }
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
 
@@ -357,6 +364,8 @@ class DebugModeTest extends BaseFunctionalTest
         $zipArchive->open($zipFileName);
         $config = $zipArchive->getFromName('config.json');
         $config = json_decode((string) $config, true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertNotEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('[hidden]', $config['parameters']['#encrypted']);
         self::assertEquals('not-[hidden]', $config['parameters']['plain']);

@@ -38,6 +38,7 @@ use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,10 +48,9 @@ use Symfony\Component\Uid\Uuid;
 use Throwable;
 use function DDTrace\root_span;
 
+#[AsCommand(name: 'app:run')]
 class RunCommand extends Command
 {
-    /** @inheritdoc */
-    protected static $defaultName = 'app:run';
     private array $instanceLimits;
     private QueueClient $queueClient;
     private Logger $logger;
