@@ -62,6 +62,8 @@ class EncryptionTest extends BaseFunctionalTest
             }
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertEquals('first', $config['parameters']['key1']);
         self::assertEquals('third', $config['parameters']['#key3']);
         self::assertEquals('fourth', $config['parameters']['#key4']);
@@ -133,6 +135,8 @@ class EncryptionTest extends BaseFunctionalTest
             }
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
+        self::assertIsArray($config);
+        self::assertIsArray($config['parameters']);
         self::assertEquals('first', $config['parameters']['configKey1']);
         self::assertEquals('third', $config['parameters']['#configKey3']);
         self::assertEquals('fourth', $config['parameters']['#configKey4']);
@@ -200,6 +204,7 @@ class EncryptionTest extends BaseFunctionalTest
             }
         }
         $state = json_decode(strrev((string) base64_decode($output)), true);
+        self::assertIsArray($state);
         self::assertEquals('fifth', $state['#key5']);
         self::assertEquals('sixth', $state['key6']);
     }

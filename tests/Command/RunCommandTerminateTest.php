@@ -19,10 +19,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
     private const MAX_SETTLE_ATTEMPTS = 50;
     private const MAX_SETTLE_DELAY_SECONDS = 5;
 
-    /**
-     * @param mixed $targetValue
-     */
-    public function settle($targetValue, callable $getActualValue): void
+    public function settle(float|bool|int|string $targetValue, callable $getActualValue): void
     {
         $attempt = 1;
         while (true) {
@@ -31,6 +28,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 break;
             }
 
+            self::assertIsScalar($actualValue);
             if ($attempt > self::MAX_SETTLE_ATTEMPTS) {
                 throw new RuntimeException(sprintf(
                     date('c') . 'Failed to settle condition, actual value "%s" does not match target value "%s".',
@@ -171,12 +169,12 @@ class RunCommandTerminateTest extends AbstractCommandTest
 
         $output = $mainProcess->getOutput();
         self::assertStringContainsString(
-            sprintf('Terminating containers for job \"%s\"', $job->getId()),
+            sprintf('Terminating containers for job "%s"', $job->getId()),
             $output
         );
         self::assertStringContainsString('Terminating container', $output);
         self::assertStringContainsString(
-            sprintf('Finished container cleanup for job \"%s\"', $job->getId()),
+            sprintf('Finished container cleanup for job "%s"', $job->getId()),
             $output
         );
         self::assertEquals(0, $mainProcess->getExitCode());
@@ -277,7 +275,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $output = $mainProcess->getOutput();
 
         self::assertStringNotContainsString(
-            sprintf('Terminating containers for job \"%s\"', $job->getId()),
+            sprintf('Terminating containers for job "%s"', $job->getId()),
             $output
         );
         self::assertStringNotContainsString(
@@ -285,11 +283,11 @@ class RunCommandTerminateTest extends AbstractCommandTest
             $output,
         );
         self::assertStringNotContainsString(
-            sprintf('Finished container cleanup for job \"%s\"', $job->getId()),
+            sprintf('Finished container cleanup for job "%s"', $job->getId()),
             $output
         );
         self::assertStringContainsString(
-            sprintf('Job \"%s\" is in status \"processing\", letting the job to finish.', $job->getId()),
+            sprintf('Job "%s" is in status "processing", letting the job to finish.', $job->getId()),
             $output
         );
         self::assertEquals(0, $mainProcess->getExitCode());

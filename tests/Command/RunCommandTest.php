@@ -84,6 +84,7 @@ class RunCommandTest extends AbstractCommandTest
             }
         }
         self::assertArrayHasKey('context', $errorRecord, print_r($records, true));
+        self::assertIsString($errorRecord['context']['attachment']);
         self::assertStringStartsWith('https://connection', $errorRecord['context']['attachment']);
         self::assertTrue($testHandler->hasErrorThatContains('Failed to save result for job ""'));
         self::assertEquals(0, $ret);

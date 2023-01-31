@@ -2,12 +2,13 @@ ARG APP_USER_NAME=app
 ARG APP_USER_UID=1000
 ARG APP_USER_GID=1000
 
-FROM php:7-cli AS base
+FROM php:8.2-cli AS base
 ARG APP_USER_NAME
 ARG APP_USER_UID
 ARG APP_USER_GID
 
-ENV DD_PHP_TRACER_VERSION=0.74.0
+ENV DD_PHP_TRACER_VERSION=0.83.1
+
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
 
@@ -46,7 +47,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
 
 # Datadog
 RUN curl -Lf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
- && php /tmp/datadog-setup.php --php-bin=all --enable-profiling \
+ && php /tmp/datadog-setup.php --php-bin=all \
  && rm /tmp/datadog-setup.php
 
 # create app user
@@ -81,12 +82,8 @@ ENV APP_ENV dev
 ENV PHPUNIT_RESULT_CACHE /tmp/ #does not work, but should https://github.com/sebastianbergmann/phpunit/issues/3714
 
 # install extensions
-RUN pecl channel-update pecl.php.net \
-    && pecl config-set php_ini /usr/local/etc/php.ini \
-    && yes | pecl install xdebug-2.9.8 \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN pecl install xdebug \
+ && docker-php-ext-enable xdebug
 
 USER $APP_USER_NAME
 
