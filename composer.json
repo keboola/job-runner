@@ -20,6 +20,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
 
+        "aws/aws-sdk-php": "3.258",
         "keboola/artifacts": "dev-odin-PST-598",
         "keboola/gelf-server": "dev-odin-PST-598 as 3.0.0",
         "keboola/php-file-storage-utils": "dev-odin-PST-598 as 0.2.5",
@@ -96,6 +97,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
+        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
         "phpunit": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
         "phpstan": "phpstan analyse --no-progress --configuration phpstan.neon --xdebug",
         "phpcs": "phpcs --extensions=php src tests",
@@ -116,6 +118,12 @@
     "extra": {
         "symfony": {
                "allow-contrib": false
-        }
+        },
+        "aws/aws-sdk-php": [
+            "S3",
+            "Kms",
+            "Sts",
+            "Ecr"
+        ]
     }
 }
