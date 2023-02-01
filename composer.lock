@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc7cd13662a0da370c18b2b06fb5500a",
+    "content-hash": "b341e86e70d46d2fe158b5d5c6d0e71d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.258.0",
+            "version": "3.258.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "96ed88ca45e54f74a158002411966a92891e8ead"
+                "reference": "7d7c4f89d2d0bd77c36cb8f3c8cd20b5aa8c0e6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/96ed88ca45e54f74a158002411966a92891e8ead",
-                "reference": "96ed88ca45e54f74a158002411966a92891e8ead",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7d7c4f89d2d0bd77c36cb8f3c8cd20b5aa8c0e6d",
+                "reference": "7d7c4f89d2d0bd77c36cb8f3c8cd20b5aa8c0e6d",
                 "shasum": ""
             },
             "require": {
@@ -146,9 +146,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.1"
             },
-            "time": "2023-01-31T19:33:16+00:00"
+            "time": "2023-02-01T19:22:26+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -1384,25 +1384,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/gelf-server.git",
-                "reference": "3994dcbd7d56d672a53e572d30029a1eaaed7a6d"
+                "reference": "7f58c7e7c20e121cea9e2a6e1cea8c40f2e3d26d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/3994dcbd7d56d672a53e572d30029a1eaaed7a6d",
-                "reference": "3994dcbd7d56d672a53e572d30029a1eaaed7a6d",
+                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/7f58c7e7c20e121cea9e2a6e1cea8c40f2e3d26d",
+                "reference": "7f58c7e7c20e121cea9e2a6e1cea8c40f2e3d26d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
+                "ext-sockets": "*",
                 "ext-zlib": "*",
-                "graylog2/gelf-php": "^1.5|2.0",
-                "php": "^8.0",
+                "graylog2/gelf-php": "^2.0",
+                "php": "^8.1",
                 "react/datagram": "^1.9",
                 "react/socket": "^1.12",
                 "symfony/process": "^5.4|^6.0"
             },
             "require-dev": {
-                "ext-sockets": "*",
                 "keboola/coding-standard": ">=14.0",
                 "phpstan/phpstan": "^1.9",
                 "phpstan/phpstan-phpunit": "^1.3",
@@ -1431,7 +1431,7 @@
             "support": {
                 "source": "https://github.com/keboola/gelf-server/tree/odin-PST-598"
             },
-            "time": "2023-02-01T14:32:06+00:00"
+            "time": "2023-02-01T19:58:37+00:00"
         },
         {
             "name": "keboola/input-mapping",
