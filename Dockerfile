@@ -51,7 +51,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
 
 # Datadog
 RUN curl -LOf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
- && php /tmp/datadog-setup.php --php-bin=all \
+ && php /tmp/datadog-setup.php --php-bin=all --enable-profiling \
  && rm /tmp/datadog-setup.php
 
 # create app user
