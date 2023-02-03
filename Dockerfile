@@ -7,7 +7,7 @@ ARG APP_USER_NAME
 ARG APP_USER_UID
 ARG APP_USER_GID
 
-ENV DD_PHP_TRACER_VERSION=0.74.0
+ENV DD_PHP_TRACER_VERSION=0.83.1
 ENV DD_TRACE_DEBUG=0
 ENV DD_TRACE_CLI_ENABLED=1
 ENV DD_TRACE_GENERATE_ROOT_SPAN=0
@@ -50,8 +50,8 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && rm -rf /var/lib/apt/lists/*
 
 # Datadog
-RUN curl -LOf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
- && php /tmp/datadog-setup.php --php-bin=all --enable-profiling \
+RUN curl -Lf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
+ && php /tmp/datadog-setup.php --php-bin=all \
  && rm /tmp/datadog-setup.php
 
 # create app user
@@ -63,6 +63,7 @@ RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install pcntl zip \
+    && pecl config-set php_ini /usr/local/etc/php.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 WORKDIR /code
@@ -73,7 +74,7 @@ COPY . .
 RUN composer install $COMPOSER_FLAGS \
     && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/
 
-USER $APP_USER_NAME
+#USER $APP_USER_NAME
 
 CMD ["php", "/code/bin/console", "app:run"]
 
@@ -89,6 +90,6 @@ ENV PHPUNIT_RESULT_CACHE /tmp/ #does not work, but should https://github.com/seb
 RUN pecl install xdebug \
  && docker-php-ext-enable xdebug
 
-USER $APP_USER_NAME
+#USER $APP_USER_NAME
 
 CMD ["/bin/bash"]
