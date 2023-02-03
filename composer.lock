@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4f29aa2fabc2ab7031b39fec8785556",
+    "content-hash": "3404ecc76287d55736c345c3559264b6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -988,16 +988,16 @@
         },
         {
             "name": "keboola/artifacts",
-            "version": "dev-odin-PST-598",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/artifacts.git",
-                "reference": "78c62b8b241d23826b093461e0991098bed02639"
+                "reference": "b6ee83362c360f3b3df06bbab8e8ed0fceb30b18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/artifacts/zipball/78c62b8b241d23826b093461e0991098bed02639",
-                "reference": "78c62b8b241d23826b093461e0991098bed02639",
+                "url": "https://api.github.com/repos/keboola/artifacts/zipball/b6ee83362c360f3b3df06bbab8e8ed0fceb30b18",
+                "reference": "b6ee83362c360f3b3df06bbab8e8ed0fceb30b18",
                 "shasum": ""
             },
             "require": {
@@ -1044,9 +1044,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/artifacts/issues",
-                "source": "https://github.com/keboola/artifacts/tree/odin-PST-598"
+                "source": "https://github.com/keboola/artifacts/tree/1.0.0"
             },
-            "time": "2023-01-30T11:18:19+00:00"
+            "time": "2023-02-02T14:44:16+00:00"
         },
         {
             "name": "keboola/azure-key-vault-client",
@@ -1193,16 +1193,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "dev-odin-PST-598",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "446bc73e90da592ee55b3f8621a2a68fb9015662"
+                "reference": "f24907d315b22b9fee084b26186a14daf3ccb3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/446bc73e90da592ee55b3f8621a2a68fb9015662",
-                "reference": "446bc73e90da592ee55b3f8621a2a68fb9015662",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/f24907d315b22b9fee084b26186a14daf3ccb3f7",
+                "reference": "f24907d315b22b9fee084b26186a14daf3ccb3f7",
                 "shasum": ""
             },
             "require": {
@@ -1251,9 +1251,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/odin-PST-598"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/3.3.0"
             },
-            "time": "2023-01-30T23:48:53+00:00"
+            "time": "2023-01-31T16:03:30+00:00"
         },
         {
             "name": "keboola/csv",
@@ -1296,19 +1296,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "a687cb7b0c876a1389109daa1e2ddc3ea04c66d0"
+                "reference": "f5d31f3e6981e9c14d55143f35d1423a805f1123"
             },
             "require": {
                 "ext-json": "*",
                 "ext-zip": "*",
-                "keboola/artifacts": "dev-odin-PST-598",
+                "keboola/artifacts": "^1.0",
                 "keboola/common-exceptions": "^1.0",
-                "keboola/gelf-server": "dev-odin-PST-598 as 3.0.0",
+                "keboola/gelf-server": "^4.0",
                 "keboola/input-mapping": "^17.0",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
                 "keboola/output-mapping": "^20.0",
-                "keboola/php-file-storage-utils": "dev-odin-PST-598 as v0.2.5",
                 "keboola/php-utils": "^5.0",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^6.0",
@@ -1332,6 +1331,14 @@
                 "symfony/dotenv": "^5.4|^6.2"
             },
             "type": "library",
+            "extra": {
+                "aws/aws-sdk-php": [
+                    "S3",
+                    "Kms",
+                    "Sts",
+                    "Ecr"
+                ]
+            },
             "autoload": {
                 "psr-4": {
                     "Keboola\\DockerBundle\\": "src/"
@@ -1344,6 +1351,9 @@
                 }
             },
             "scripts": {
+                "pre-autoload-dump": [
+                    "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+                ],
                 "tests": [
                     "phpunit"
                 ],
@@ -1376,20 +1386,20 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-01-31T14:21:44+00:00"
+            "time": "2023-01-30T15:22:19+00:00"
         },
         {
             "name": "keboola/gelf-server",
-            "version": "dev-odin-PST-598",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/gelf-server.git",
-                "reference": "24d496fa058c7673d53a1337b0d692356f34067f"
+                "reference": "c6499dc84d2ddf2a24447a0216697b4ff900d8b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/24d496fa058c7673d53a1337b0d692356f34067f",
-                "reference": "24d496fa058c7673d53a1337b0d692356f34067f",
+                "url": "https://api.github.com/repos/keboola/gelf-server/zipball/c6499dc84d2ddf2a24447a0216697b4ff900d8b7",
+                "reference": "c6499dc84d2ddf2a24447a0216697b4ff900d8b7",
                 "shasum": ""
             },
             "require": {
@@ -1429,9 +1439,9 @@
             ],
             "description": "Simple PHP server for GELF logger",
             "support": {
-                "source": "https://github.com/keboola/gelf-server/tree/odin-PST-598"
+                "source": "https://github.com/keboola/gelf-server/tree/4.0.0"
             },
-            "time": "2023-02-01T20:16:09+00:00"
+            "time": "2023-02-02T15:10:07+00:00"
         },
         {
             "name": "keboola/input-mapping",
@@ -1710,16 +1720,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "20.0.3",
+            "version": "20.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "9308ca5df4aa8d235e0e327ef6b6097f0651caeb"
+                "reference": "9f334104638324910897c4991cbaae8181cb138f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/9308ca5df4aa8d235e0e327ef6b6097f0651caeb",
-                "reference": "9308ca5df4aa8d235e0e327ef6b6097f0651caeb",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/9f334104638324910897c4991cbaae8181cb138f",
+                "reference": "9f334104638324910897c4991cbaae8181cb138f",
                 "shasum": ""
             },
             "require": {
@@ -1766,9 +1776,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/20.0.3"
+                "source": "https://github.com/keboola/output-mapping/tree/20.0.4"
             },
-            "time": "2023-02-01T14:23:07+00:00"
+            "time": "2023-02-02T09:03:57+00:00"
         },
         {
             "name": "keboola/php-datatypes",
@@ -1820,16 +1830,16 @@
         },
         {
             "name": "keboola/php-file-storage-utils",
-            "version": "dev-odin-PST-598",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-file-storage-utils.git",
-                "reference": "df61e01e2779c46c8b5aca6e9e626de359171add"
+                "reference": "447f431256f2f3e3987e101d0e223ba82b06ea8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-file-storage-utils/zipball/df61e01e2779c46c8b5aca6e9e626de359171add",
-                "reference": "df61e01e2779c46c8b5aca6e9e626de359171add",
+                "url": "https://api.github.com/repos/keboola/php-file-storage-utils/zipball/447f431256f2f3e3987e101d0e223ba82b06ea8d",
+                "reference": "447f431256f2f3e3987e101d0e223ba82b06ea8d",
                 "shasum": ""
             },
             "require": {
@@ -1876,9 +1886,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/php-file-storage-utils/issues",
-                "source": "https://github.com/keboola/php-file-storage-utils/tree/odin-PST-598"
+                "source": "https://github.com/keboola/php-file-storage-utils/tree/v0.3.0"
             },
-            "time": "2023-01-30T11:51:48+00:00"
+            "time": "2023-02-02T15:13:07+00:00"
         },
         {
             "name": "keboola/php-temp",
@@ -8459,16 +8469,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.28",
+            "version": "9.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "954ca3113a03bf780d22f07bf055d883ee04b65e"
+                "reference": "70fc8be1d0b9fad56a199a4df5f9cfabfc246f84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/954ca3113a03bf780d22f07bf055d883ee04b65e",
-                "reference": "954ca3113a03bf780d22f07bf055d883ee04b65e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/70fc8be1d0b9fad56a199a4df5f9cfabfc246f84",
+                "reference": "70fc8be1d0b9fad56a199a4df5f9cfabfc246f84",
                 "shasum": ""
             },
             "require": {
@@ -8510,7 +8520,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "9.5-dev"
+                    "dev-master": "9.6-dev"
                 }
             },
             "autoload": {
@@ -8541,7 +8551,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.28"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.0"
             },
             "funding": [
                 {
@@ -8557,7 +8567,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-14T12:32:24+00:00"
+            "time": "2023-02-03T07:32:24+00:00"
         },
         {
             "name": "sanmai/later",
@@ -9048,16 +9058,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "5.1.4",
+            "version": "5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "1b5dff7bb151a4db11d49d90e5408e4e938270f7"
+                "reference": "830c43a844f1f8d5b7a1f6d6076b784454d8b7ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/1b5dff7bb151a4db11d49d90e5408e4e938270f7",
-                "reference": "1b5dff7bb151a4db11d49d90e5408e4e938270f7",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/830c43a844f1f8d5b7a1f6d6076b784454d8b7ed",
+                "reference": "830c43a844f1f8d5b7a1f6d6076b784454d8b7ed",
                 "shasum": ""
             },
             "require": {
@@ -9099,7 +9109,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/environment/issues",
-                "source": "https://github.com/sebastianbergmann/environment/tree/5.1.4"
+                "source": "https://github.com/sebastianbergmann/environment/tree/5.1.5"
             },
             "funding": [
                 {
@@ -9107,7 +9117,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-03T09:37:03+00:00"
+            "time": "2023-02-03T06:03:51+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -9421,16 +9431,16 @@
         },
         {
             "name": "sebastian/recursion-context",
-            "version": "4.0.4",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/recursion-context.git",
-                "reference": "cd9d8cf3c5804de4341c283ed787f099f5506172"
+                "reference": "e75bd0f07204fec2a0af9b0f3cfe97d05f92efc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/cd9d8cf3c5804de4341c283ed787f099f5506172",
-                "reference": "cd9d8cf3c5804de4341c283ed787f099f5506172",
+                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/e75bd0f07204fec2a0af9b0f3cfe97d05f92efc1",
+                "reference": "e75bd0f07204fec2a0af9b0f3cfe97d05f92efc1",
                 "shasum": ""
             },
             "require": {
@@ -9469,10 +9479,10 @@
                 }
             ],
             "description": "Provides functionality to recursively process PHP variables",
-            "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
+            "homepage": "https://github.com/sebastianbergmann/recursion-context",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/recursion-context/issues",
-                "source": "https://github.com/sebastianbergmann/recursion-context/tree/4.0.4"
+                "source": "https://github.com/sebastianbergmann/recursion-context/tree/4.0.5"
             },
             "funding": [
                 {
@@ -9480,7 +9490,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-26T13:17:30+00:00"
+            "time": "2023-02-03T06:07:39+00:00"
         },
         {
             "name": "sebastian/resource-operations",
@@ -9539,16 +9549,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e"
+                "reference": "75e2c2a32f5e0b3aef905b9ed0b179b953b3d7c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e",
-                "reference": "fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/75e2c2a32f5e0b3aef905b9ed0b179b953b3d7c7",
+                "reference": "75e2c2a32f5e0b3aef905b9ed0b179b953b3d7c7",
                 "shasum": ""
             },
             "require": {
@@ -9583,7 +9593,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/3.2.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.2.1"
             },
             "funding": [
                 {
@@ -9591,7 +9601,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-12T14:47:03+00:00"
+            "time": "2023-02-03T06:13:03+00:00"
         },
         {
             "name": "sebastian/version",
@@ -10353,26 +10363,9 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/gelf-server",
-            "version": "dev-odin-PST-598",
-            "alias": "3.0.0",
-            "alias_normalized": "3.0.0.0"
-        },
-        {
-            "package": "keboola/php-file-storage-utils",
-            "version": "dev-odin-PST-598",
-            "alias": "0.2.5",
-            "alias_normalized": "0.2.5.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/artifacts": 20,
-        "keboola/gelf-server": 20,
-        "keboola/php-file-storage-utils": 20,
-        "keboola/configuration-variables-resolver": 20,
         "keboola/dockerbundle": 20
     },
     "prefer-stable": false,

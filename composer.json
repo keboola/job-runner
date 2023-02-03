@@ -19,15 +19,10 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-
         "aws/aws-sdk-php": "3.258",
-        "keboola/artifacts": "dev-odin-PST-598",
-        "keboola/gelf-server": "dev-odin-PST-598 as 3.0.0",
-        "keboola/php-file-storage-utils": "dev-odin-PST-598 as 0.2.5",
-
         "keboola/api-error-control": "^3.10",
         "keboola/billing-api-php-client": "^3.1",
-        "keboola/configuration-variables-resolver": "dev-odin-PST-598",
+        "keboola/configuration-variables-resolver": "^3.3",
         "keboola/dockerbundle": "dev-odin-PST-598",
         "keboola/input-mapping": "^17.0",
         "keboola/job-queue-internal-api-php-client": "^15.4",
