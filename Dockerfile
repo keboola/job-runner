@@ -8,12 +8,6 @@ ARG APP_USER_UID
 ARG APP_USER_GID
 
 ENV DD_PHP_TRACER_VERSION=0.74.0
-ENV DD_TRACE_DEBUG=true
-ENV DD_TRACE_CLI_ENABLED=true
-ENV DD_TRACE_GENERATE_ROOT_SPAN=false
-ENV DD_TRACE_AUTO_FLUSH_ENABLED=true
-ENV DD_TRACE_ANALYTICS_ENABLED=true
-ENV DD_TRACE_SYMFONY_ANALYTICS_ENABLED=true
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
@@ -53,7 +47,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
 
 # Datadog
 RUN curl -Lf "https://github.com/DataDog/dd-trace-php/releases/download/${DD_PHP_TRACER_VERSION}/datadog-setup.php" > /tmp/datadog-setup.php \
- && php /tmp/datadog-setup.php --php-bin=all \
+ && php /tmp/datadog-setup.php --php-bin=all --enable-profiling \
  && rm /tmp/datadog-setup.php
 
 # create app user
@@ -65,7 +59,6 @@ RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install pcntl zip \
-    && pecl config-set php_ini /usr/local/etc/php.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 WORKDIR /code
