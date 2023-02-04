@@ -2,12 +2,12 @@ ARG APP_USER_NAME=app
 ARG APP_USER_UID=1000
 ARG APP_USER_GID=1000
 
-FROM php:8.1-cli AS base
+FROM php:8.2-cli AS base
 ARG APP_USER_NAME
 ARG APP_USER_UID
 ARG APP_USER_GID
 
-ENV DD_PHP_TRACER_VERSION=0.74.0
+ENV DD_PHP_TRACER_VERSION=0.83.1
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
@@ -69,7 +69,7 @@ COPY . .
 RUN composer install $COMPOSER_FLAGS \
     && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/
 
-#USER $APP_USER_NAME
+USER $APP_USER_NAME
 
 CMD ["php", "/code/bin/console", "app:run"]
 
@@ -85,6 +85,6 @@ ENV PHPUNIT_RESULT_CACHE /tmp/ #does not work, but should https://github.com/seb
 RUN pecl install xdebug \
  && docker-php-ext-enable xdebug
 
-#USER $APP_USER_NAME
+USER $APP_USER_NAME
 
 CMD ["/bin/bash"]
