@@ -1296,7 +1296,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "457168469b307723a0b8278a299a5c7be1eb3db0"
+                "reference": "0713537f174d3ec55ac27ce062d202749dab77e1"
             },
             "require": {
                 "ext-json": "*",
@@ -1386,7 +1386,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-02-06T16:08:10+00:00"
+            "time": "2023-02-06T18:18:27+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1502,16 +1502,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "15.6.0",
+            "version": "15.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "9ef9c2b03dc222cfc26f15b34a6bf328316a7334"
+                "reference": "55392f40c518c90120273a975eca2669a2aed197"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/9ef9c2b03dc222cfc26f15b34a6bf328316a7334",
-                "reference": "9ef9c2b03dc222cfc26f15b34a6bf328316a7334",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/55392f40c518c90120273a975eca2669a2aed197",
+                "reference": "55392f40c518c90120273a975eca2669a2aed197",
                 "shasum": ""
             },
             "require": {
@@ -1559,9 +1559,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/15.6.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/15.6.1"
             },
-            "time": "2023-01-31T00:00:46+00:00"
+            "time": "2023-02-06T18:19:30+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
