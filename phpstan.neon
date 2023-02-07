@@ -5,13 +5,11 @@ parameters:
         - src
         - tests
     ignoreErrors:
-        - '#Method App\\UsageFile::setDataDir\(\) has parameter \$dataDir with no typehint specified.#'
         - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
-        - "#Offset 'component' does not exist on array\\(\\)\\|array\\('message' => 'Output mapping done\\.', 'context' => array, 'level' => 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, 'level_name' => 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', 'channel' => string, 'datetime' => DateTimeImmutable, 'extra' => array\\)\\.#"
-        - "#Offset 'runId' does not exist on array\\(\\)\\|array\\('message' => 'Output mapping done\\.', 'context' => array, 'level' => 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, 'level_name' => 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', 'channel' => string, 'datetime' => DateTimeImmutable, 'extra' => array\\)\\.#"
         - '#Unreachable statement \- code above always terminates\.#'
-        - '#If condition is always true\.#'
     tmpDir: var/cache/
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - phpstan-baseline.neon

@@ -1,0 +1,26 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			path: src/Command/RunCommand.php
+
+		-
+			message: "#^Used function DDTrace\\\\root_span not found\\.$#"
+			path: src/Command/RunCommand.php
+			reportUnmatched: false
+
+		-
+			message: "#^Parameter \\#1 \\$tableInfo of static method App\\\\Helper\\\\OutputResultConverter\\:\\:convertTableInfoToTableResult\\(\\) expects Keboola\\\\InputMapping\\\\Table\\\\Result\\\\TableInfo, mixed given\\.$#"
+			path: src/Helper/OutputResultConverter.php
+
+		-
+			message: "#^Offset 'component' on array\\{message\\: non\\-falsy\\-string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\} in empty\\(\\) does not exist\\.$#"
+			path: src/StorageApiHandler.php
+
+		-
+			message: "#^Offset 'component' does not exist on array\\{message\\: 'Output mapping done\\.', context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
+			path: tests/Command/RunCommandTest.php
+
+		-
+			message: "#^Offset 'runId' does not exist on array\\{message\\: 'Output mapping done\\.', context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
+			path: tests/Command/RunCommandTest.php

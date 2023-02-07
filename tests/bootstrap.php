@@ -3,8 +3,13 @@
 declare(strict_types=1);
 
 use Keboola\StorageApi\Client;
+use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+if (file_exists(dirname(__DIR__).'/.env.local')) {
+    (new Dotenv())->usePutenv()->bootEnv(dirname(__DIR__).'/.env.local', 'dev', []);
+}
 
 $requiredEnvs = ['CPU_COUNT', 'JOB_QUEUE_URL', 'JOB_QUEUE_TOKEN',
     'STORAGE_API_URL', 'AWS_REGION', 'AWS_KMS_KEY_ID',

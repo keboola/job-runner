@@ -1,0 +1,49 @@
+monolog:
+  channels:
+    - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+
+when@dev:
+  monolog:
+    handlers:
+      main:
+        type: stream
+        path: php://stdout
+        channels: [ '!request', '!console', '!event', '!doctrine' ]
+
+when@test:
+  monolog:
+    handlers:
+      main:
+        type: stream
+        path: php://stdout
+        level: debug
+        channels: [ '!event', '!request' ]
+
+      test_handler:
+        type: service
+        id: Monolog\Handler\TestHandler
+
+  services:
+    Monolog\Handler\TestHandler:
+
+when@prod:
+  monolog:
+    handlers:
+      main:
+        type: filter
+        handler: stdout
+        min_level: info
+        channels: [ '!request', '!console', '!event', '!deprecation' ]
+
+      # we are not interested in low severity logs from certain framework modules
+      # channels included here should be excluded from the "main" handler
+
+      stdout:
+        type: stream
+        path: php://stdout
+        formatter: monolog.formatter.json
+
+      deprecation:
+        type: stream
+        channels: [ deprecation ]
+        path: php://stderr

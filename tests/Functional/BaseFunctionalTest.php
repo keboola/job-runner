@@ -68,7 +68,6 @@ abstract class BaseFunctionalTest extends TestCase
         $this->handler = new TestHandler();
         $this->logger = new Logger('test-runner', [$this->handler]);
         $this->temp = new Temp();
-        $this->temp->initRunFolder();
 
         $this->objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
             (string) getenv('ENCRYPTOR_STACK_ID'),
