@@ -25,7 +25,7 @@
         "keboola/configuration-variables-resolver": "^3.3",
         "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^17.0",
-        "keboola/job-queue-internal-api-php-client": "dev-miro-PST-393",
+        "keboola/job-queue-internal-api-php-client": "^16.0.0",
         "keboola/object-encryptor": "^2.2",
         "keboola/output-mapping": "^20.0",
         "keboola/storage-api-client": "^14.6",
