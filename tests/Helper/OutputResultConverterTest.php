@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Helper;
 
 use App\Helper\OutputResultConverter;
+use Keboola\Artifacts\Result;
 use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoader;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
@@ -164,20 +165,12 @@ class OutputResultConverterTest extends TestCase
         $output1->setOutputTableResult($outputTableResult1);
         $output1->setTableQueue($loadQueueMock1);
         $output1->setArtifactsUploaded([
-            'current' => [
-                ['storageFileId' => 12344],
-            ],
-            'shared' => [
-                ['storageFileId' => 12347],
-            ],
+            new Result(12344),
+            new Result(12347, true),
         ]);
         $output1->setArtifactsDownloaded([
-            [
-                'storageFileId' => 12345,
-            ],
-            [
-                'storageFileId' => 12346,
-            ],
+            new Result(12345),
+            new Result(12346),
         ]);
 
         $inputTableResult2 = new InputResult();
@@ -195,23 +188,13 @@ class OutputResultConverterTest extends TestCase
         $output2->setOutputTableResult($outputTableResult2);
         $output2->setTableQueue($loadQueueMock2);
         $output2->setArtifactsUploaded([
-            'current' => [
-                ['storageFileId' => 23456],
-            ],
-            'shared' => [
-                ['storageFileId' => 23480],
-            ],
+            new Result(23456),
+            new Result(23480, true),
         ]);
         $output2->setArtifactsDownloaded([
-            [
-                'storageFileId' => 23467,
-            ],
-            [
-                'storageFileId' => 23478,
-            ],
-            [
-                'storageFileId' => 23479,
-            ],
+            new Result(23467),
+            new Result(23478),
+            new Result(23479),
         ]);
 
         $dataLoaderMock = self::createMock(DataLoader::class);
@@ -327,17 +310,17 @@ class OutputResultConverterTest extends TestCase
                 ],
                 'artifacts' => [
                     'uploaded' => [
-                        ['storageFileId' => 12344],
-                        ['storageFileId' => 12347],
-                        ['storageFileId' => 23456],
-                        ['storageFileId' => 23480],
+                        ['storageFileId' => '12344'],
+                        ['storageFileId' => '12347'],
+                        ['storageFileId' => '23456'],
+                        ['storageFileId' => '23480'],
                     ],
                     'downloaded' => [
-                        ['storageFileId' => 12345],
-                        ['storageFileId' => 12346],
-                        ['storageFileId' => 23467],
-                        ['storageFileId' => 23478],
-                        ['storageFileId' => 23479],
+                        ['storageFileId' => '12345'],
+                        ['storageFileId' => '12346'],
+                        ['storageFileId' => '23467'],
+                        ['storageFileId' => '23478'],
+                        ['storageFileId' => '23479'],
                     ],
                 ],
             ],
@@ -365,10 +348,7 @@ class OutputResultConverterTest extends TestCase
         $output->setConfigVersion('123');
         $output->setImages(['a' => 'b']);
         $output->setOutput('some output');
-        $output->setArtifactsUploaded([
-            'current' => [],
-            'shared' => [],
-        ]);
+        $output->setArtifactsUploaded([]);
         $output->setArtifactsDownloaded([]);
 
         $output2 = new Output();

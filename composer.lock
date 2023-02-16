@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9d381afc87c1d5227721a9adcd69ce1",
+    "content-hash": "af5f2d32a3b39bec010961c159f52a9d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1517,21 +1517,22 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "15.6.1",
+            "version": "dev-miro-PST-393",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "55392f40c518c90120273a975eca2669a2aed197"
+                "reference": "e18e67513d965931d9fac72f684258c4d1e09fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/55392f40c518c90120273a975eca2669a2aed197",
-                "reference": "55392f40c518c90120273a975eca2669a2aed197",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/e18e67513d965931d9fac72f684258c4d1e09fb8",
+                "reference": "e18e67513d965931d9fac72f684258c4d1e09fb8",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
+                "keboola/artifacts": "^2.0",
                 "keboola/kbc-manage-api-php-client": "^5.2|^6.0",
                 "keboola/object-encryptor": "^2.0",
                 "keboola/storage-api-client": "^14.0",
@@ -1574,9 +1575,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/15.6.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/miro-PST-393"
             },
-            "time": "2023-02-06T18:19:30+00:00"
+            "time": "2023-02-15T14:00:31+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -10381,7 +10382,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
