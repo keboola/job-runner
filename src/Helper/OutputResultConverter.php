@@ -10,11 +10,11 @@ use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\InputMapping\Table\Result\TableMetrics as InputTableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Backend;
-use Keboola\JobQueueInternalClient\Result\JobArtifacts;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
 use Keboola\JobQueueInternalClient\Result\InputOutput\ColumnCollection;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
 use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
+use Keboola\JobQueueInternalClient\Result\JobArtifacts;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\OutputMapping\Table\Result\TableMetrics as OutputTableMetrics;
@@ -48,7 +48,6 @@ class OutputResultConverter
 
             $inputTableResult = $output->getInputTableResult();
             if ($inputTableResult) {
-                /** @var TableInfo $tableInfo */
                 foreach ($inputTableResult->getTables() as $tableInfo) {
                     $inputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
                 }

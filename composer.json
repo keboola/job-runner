@@ -96,6 +96,7 @@
         "phpunit": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
         "phpstan": "phpstan analyse --no-progress --configuration phpstan.neon --xdebug",
         "phpcs": "phpcs --extensions=php src tests",
+        "phpcbf": "phpcbf --extensions=php src Tests",
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
         "build": [
             "@phpcs",
