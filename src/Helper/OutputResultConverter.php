@@ -10,11 +10,11 @@ use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
 use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\InputMapping\Table\Result\TableMetrics as InputTableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Backend;
-use Keboola\JobQueueInternalClient\Result\Artifacts;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
 use Keboola\JobQueueInternalClient\Result\InputOutput\ColumnCollection;
 use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
 use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
+use Keboola\JobQueueInternalClient\Result\JobArtifacts;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\OutputMapping\Table\Result\TableMetrics as OutputTableMetrics;
@@ -35,7 +35,7 @@ class OutputResultConverter
 
         $outputTables = new TableCollection();
         $inputTables = new TableCollection();
-        $artifacts = new Artifacts();
+        $jobArtifacts = new JobArtifacts();
         $uploadedArtifacts = [];
         $downloadedArtifacts = [];
         foreach ($outputs as $output) {
@@ -53,18 +53,10 @@ class OutputResultConverter
                 }
             }
             $uploadedArtifactsOutput = $output->getArtifactsUploaded();
-            if ($uploadedArtifactsOutput) {
-                array_push(
-                    $uploadedArtifacts,
-                    ...($uploadedArtifactsOutput['current'] ?? []),
-                    ...($uploadedArtifactsOutput['shared'] ?? [])
-                );
-            }
+            array_push($uploadedArtifacts, ...$uploadedArtifactsOutput);
 
             $downloadedArtifactsOutput = $output->getArtifactsDownloaded();
-            if ($downloadedArtifactsOutput) {
-                array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
-            }
+            array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
         }
         $jobResult
             ->setConfigVersion((string) $outputs[0]->getConfigVersion())
@@ -72,7 +64,7 @@ class OutputResultConverter
             ->setOutputTables($outputTables)
             ->setInputTables($inputTables)
             ->setArtifacts(
-                $artifacts
+                $jobArtifacts
                     ->setUploaded($uploadedArtifacts)
                     ->setDownloaded($downloadedArtifacts)
             );
