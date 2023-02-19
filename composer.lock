@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17631217a25589dd5514b4a3363e4920",
+    "content-hash": "ecf22e7a27b3e3e877712a99afea4e12",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1460,16 +1460,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "17.0.2",
+            "version": "dev-erik-PST-327",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "030d97ef5ca6f4443359b39ff4fd74ac638f7e01"
+                "reference": "5c027021aa4cce481e51a0f0331f2350393755d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/030d97ef5ca6f4443359b39ff4fd74ac638f7e01",
-                "reference": "030d97ef5ca6f4443359b39ff4fd74ac638f7e01",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/5c027021aa4cce481e51a0f0331f2350393755d5",
+                "reference": "5c027021aa4cce481e51a0f0331f2350393755d5",
                 "shasum": ""
             },
             "require": {
@@ -1511,9 +1511,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/17.0.2"
+                "source": "https://github.com/keboola/input-mapping/tree/build-erik-PST-327"
             },
-            "time": "2023-02-01T14:23:07+00:00"
+            "time": "2023-02-16T20:08:23+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -10379,10 +10379,18 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-erik-PST-327",
+            "alias": "17.0.2",
+            "alias_normalized": "17.0.2.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
