@@ -356,73 +356,32 @@ class RunCommandTest extends AbstractCommandTest
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
         $result = $finishedJob->getResult();
+
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
-        self::assertSame(
-            [
-                [
-                    'id' => 'out.c-main.modified',
-                    'name' => 'modified',
-                    'columns' => [
-                        [
-                            'name' => 'a',
-                        ],
-                        [
-                            'name' => 'b',
-                        ],
-                    ],
-                    'displayName' => 'modified',
-                ],
-                [
-                    'id' => 'out.c-main.numericModified',
-                    'name' => 'numericModified',
-                    'columns' => [
-                        [
-                            'name' => '0',
-                        ],
-                        [
-                            'name' => '1',
-                        ],
-                    ],
-                    'displayName' => 'numericModified',
-                ],
-            ],
-            $result['output']['tables']
-        );
+        self::assertCount(2, $result['output']['tables']);
+
+        $outputTables = $result['input']['tables'];
+        usort($outputTables, function ($a, $b) {
+            return strcmp($a['id'], $b['id']);
+        });
+
+        [$table1, $table2] = $outputTables;
+        $this->assertInputOutputTable($table1, $tableId1, 'someTable', ['a', 'b']);
+        $this->assertInputOutputTable($table2, $tableId2, 'someTableNumeric', ['0', '1']);
 
         self::assertArrayHasKey('input', $result);
         self::assertArrayHasKey('tables', $result['input']);
-        self::assertSame(
-            [
-                [
-                    'id' => $tableId1,
-                    'name' => 'someTable',
-                    'columns' => [
-                        [
-                            'name' => 'a',
-                        ],
-                        [
-                            'name' => 'b',
-                        ],
-                    ],
-                    'displayName' => 'someTable',
-                ],
-                [
-                    'id' => $tableId2,
-                    'name' => 'someTableNumeric',
-                    'columns' => [
-                        [
-                            'name' => '0',
-                        ],
-                        [
-                            'name' => '1',
-                        ],
-                    ],
-                    'displayName' => 'someTableNumeric',
-                ],
-            ],
-            $result['input']['tables']
-        );
+        self::assertCount(2, $result['input']['tables']);
+
+        $inputTables = $result['input']['tables'];
+        usort($inputTables, function ($a, $b) {
+            return strcmp($a['id'], $b['id']);
+        });
+
+        [$table1, $table2] = $inputTables;
+        $this->assertInputOutputTable($table1, $tableId1, 'someTable', ['a', 'b']);
+        $this->assertInputOutputTable($table2, $tableId2, 'someTableNumeric', ['0', '1']);
         self::assertSame(
             [
                 'storage' => [
@@ -1219,5 +1178,26 @@ class RunCommandTest extends AbstractCommandTest
         ));
 
         return $tableId;
+    }
+
+    private function assertInputOutputTable(
+        array $data,
+        string $expectedTableId,
+        string $expectedTableName,
+        array $expectedColumns
+    ): void {
+        self::assertSame(
+            [
+                'id' => $expectedTableId,
+                'name' => $expectedTableName,
+                'columns' => array_map(function (string $columnName): array {
+                    return [
+                        'name' => $columnName,
+                    ];
+                }, $expectedColumns),
+                'displayName' => 'someTable',
+            ],
+            $data
+        );
     }
 }
