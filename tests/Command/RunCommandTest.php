@@ -1194,6 +1194,6 @@ class RunCommandTest extends AbstractCommandTest
         $filePath = sprintf('%s/%s.csv', sys_get_temp_dir(), $tableName);
         file_put_contents($filePath, implode(',', $columnNames));
 
-        return $this->storageClient->createTable($bucketId, $tableName, new CsvFile($filePath));
+        return $this->storageClient->createTableAsync($bucketId, $tableName, new CsvFile($filePath));
     }
 }
