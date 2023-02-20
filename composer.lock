@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecf22e7a27b3e3e877712a99afea4e12",
+    "content-hash": "17631217a25589dd5514b4a3363e4920",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1460,7 +1460,7 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-erik-PST-327",
+            "version": "17.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
@@ -1736,16 +1736,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "20.0.4",
+            "version": "20.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "9f334104638324910897c4991cbaae8181cb138f"
+                "reference": "4c8f05b4be9d1be846c66c839bf89044ce916c0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/9f334104638324910897c4991cbaae8181cb138f",
-                "reference": "9f334104638324910897c4991cbaae8181cb138f",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/4c8f05b4be9d1be846c66c839bf89044ce916c0d",
+                "reference": "4c8f05b4be9d1be846c66c839bf89044ce916c0d",
                 "shasum": ""
             },
             "require": {
@@ -1792,9 +1792,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/20.0.4"
+                "source": "https://github.com/keboola/output-mapping/tree/20.0.5"
             },
-            "time": "2023-02-02T09:03:57+00:00"
+            "time": "2023-02-17T14:42:50+00:00"
         },
         {
             "name": "keboola/php-datatypes",
@@ -10379,18 +10379,10 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/input-mapping",
-            "version": "dev-erik-PST-327",
-            "alias": "17.0.2",
-            "alias_normalized": "17.0.2.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
