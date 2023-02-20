@@ -20,8 +20,10 @@ use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Metadata;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
+use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
@@ -1189,11 +1191,33 @@ class RunCommandTest extends AbstractCommandTest
         return $this->storageClient->createBucket('main', StorageClient::STAGE_IN);
     }
 
+    /**
+     * @param array<int, string>$columnNames
+     */
     private function createTestTable(string $bucketId, string $tableName, array $columnNames): string
     {
         $filePath = sprintf('%s/%s.csv', sys_get_temp_dir(), $tableName);
         file_put_contents($filePath, implode(',', $columnNames));
 
-        return $this->storageClient->createTableAsync($bucketId, $tableName, new CsvFile($filePath));
+        $tableId = $this->storageClient->createTableAsync($bucketId, $tableName, new CsvFile($filePath));
+
+        (new Metadata($this->storageClient))->postTableMetadataWithColumns(new TableMetadataUpdateOptions(
+            $tableId,
+            'runnerTests',
+            null,
+            array_map(
+                function (): array {
+                    return [
+                        [
+                            'key' => 'KBC.datatype.basetype',
+                            'value' => 'STRING',
+                        ],
+                    ];
+                },
+                array_flip($columnNames)
+            )
+        ));
+
+        return $tableId;
     }
 }
