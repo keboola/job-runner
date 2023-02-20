@@ -7,7 +7,6 @@ namespace App\Tests\Command;
 use App\Command\RunCommand;
 use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
-use App\UuidGenerator;
 use Generator;
 use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
@@ -94,9 +93,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
-
+        $tableId = $this->initTestDataTable();
         $job = $newJobFactory->createNewJob([
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
@@ -210,8 +207,10 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $bucketId = $this->recreateTestBucket();
+        $tableId1 = $this->createTestTable($bucketId, 'someTable', ['a', 'b']);
+        $tableId2 = $this->createTestTable($bucketId, 'someTableNumeric', ['0', '1']);
+
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -232,8 +231,12 @@ class RunCommandTest extends AbstractCommandTest
                     'input' => [
                         'tables' => [
                             [
-                                'source' => $tableId,
+                                'source' => $tableId1,
                                 'destination' => 'source.csv',
+                            ],
+                            [
+                                'source' => $tableId2,
+                                'destination' => 'sourceNumeric.csv',
                             ],
                         ],
                     ],
@@ -242,6 +245,10 @@ class RunCommandTest extends AbstractCommandTest
                             [
                                 'source' => 'destination.csv',
                                 'destination' => 'out.c-main.modified',
+                            ],
+                            [
+                                'source' => 'destinationNumeric.csv',
+                                'destination' => 'out.c-main.numericModified',
                             ],
                         ],
                     ],
@@ -252,6 +259,15 @@ class RunCommandTest extends AbstractCommandTest
                         'import csv',
                         'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
                         'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
+                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
+                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
+                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
+                        '   writer.writeheader()',
+                        '   for row in reader:',
+                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
+                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                        'with open("/data/in/tables/sourceNumeric.csv", mode="rt", encoding="utf-8") as in_file, ' .
+                        'open("/data/out/tables/destinationNumeric.csv", mode="wt", encoding="utf-8") as out_file:',
                         '   lazy_lines = (line.replace("\0", "") for line in in_file)',
                         '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
                         '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
@@ -326,52 +342,90 @@ class RunCommandTest extends AbstractCommandTest
         $messages = array_column($events, 'message');
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
+        // event from storage
+        self::assertContains('Downloaded file in.c-main.someTableNumeric.csv.gz', $messages);
         // event from runner
         self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
         // event from storage
         self::assertContains('Imported table out.c-main.modified', $messages);
+        // event from storage
+        self::assertContains('Imported table out.c-main.numericModified', $messages);
 
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
         $result = $finishedJob->getResult();
         self::assertArrayHasKey('output', $result);
         self::assertArrayHasKey('tables', $result['output']);
-        $outputTable = reset($result['output']['tables']);
-        self::assertSame([
-            'id' => 'out.c-main.modified',
-            'name' => 'modified',
-            'columns' => [
+        self::assertSame(
+            [
                 [
-                    'name' => 'a',
+                    'id' => 'out.c-main.modified',
+                    'name' => 'modified',
+                    'columns' => [
+                        [
+                            'name' => 'a',
+                        ],
+                        [
+                            'name' => 'b',
+                        ],
+                    ],
+                    'displayName' => 'modified',
                 ],
                 [
-                    'name' => 'b',
+                    'id' => 'out.c-main.numericModified',
+                    'name' => 'numericModified',
+                    'columns' => [
+                        [
+                            'name' => '0',
+                        ],
+                        [
+                            'name' => '1',
+                        ],
+                    ],
+                    'displayName' => 'numericModified',
                 ],
             ],
-            'displayName' => 'modified',
-        ], $outputTable);
+            $result['output']['tables']
+        );
 
         self::assertArrayHasKey('input', $result);
         self::assertArrayHasKey('tables', $result['input']);
-        $inputTable = reset($result['input']['tables']);
-        self::assertSame([
-            'id' => $tableId,
-            'name' => 'someTable',
-            'columns' => [
+        self::assertSame(
+            [
                 [
-                    'name' => 'a',
+                    'id' => $tableId1,
+                    'name' => 'someTable',
+                    'columns' => [
+                        [
+                            'name' => 'a',
+                        ],
+                        [
+                            'name' => 'b',
+                        ],
+                    ],
+                    'displayName' => 'someTable',
                 ],
                 [
-                    'name' => 'b',
+                    'id' => $tableId2,
+                    'name' => 'someTableNumeric',
+                    'columns' => [
+                        [
+                            'name' => '0',
+                        ],
+                        [
+                            'name' => '1',
+                        ],
+                    ],
+                    'displayName' => 'someTableNumeric',
                 ],
             ],
-            'displayName' => 'someTable',
-        ], $inputTable);
+            $result['input']['tables']
+        );
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 14,
-                    'outputTablesBytesSum' => 40,
+                    'inputTablesBytesSum' => 28,
+                    'outputTablesBytesSum' => 87,
                 ],
                 'backend' => [
                     'size' => null,
@@ -387,8 +441,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -501,8 +554,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
-        $tableIds = $this->initTestDataTables();
-        $tableId = reset($tableIds);
+        $tableId = $this->initTestDataTable();
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
         } catch (ClientException $e) {
@@ -1118,7 +1170,13 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals(0, $ret);
     }
 
-    private function initTestDataTables(): array
+    private function initTestDataTable(): string
+    {
+        $bucketId = $this->recreateTestBucket();
+        return $this->createTestTable($bucketId, 'someTable', ['a', 'b']);
+    }
+
+    private function recreateTestBucket(): string
     {
         try {
             $this->storageClient->dropBucket('in.c-main', ['force' => true]);
@@ -1128,11 +1186,14 @@ class RunCommandTest extends AbstractCommandTest
             }
         }
 
-        $bucketId =  $this->storageClient->createBucket('main', StorageClient::STAGE_IN);
+        return $this->storageClient->createBucket('main', StorageClient::STAGE_IN);
+    }
 
-        file_put_contents(sys_get_temp_dir() . '/someTable.csv', 'a,b');
-        $csv = new CsvFile(sys_get_temp_dir() . '/someTable.csv');
-        $tableId = $this->storageClient->createTable($bucketId, 'someTable', $csv);
-        return [$tableId];
+    private function createTestTable(string $bucketId, string $tableName, array $columnNames): string
+    {
+        $filePath = sprintf('%s/%s.csv', sys_get_temp_dir(), $tableName);
+        file_put_contents($filePath, implode(',', $columnNames));
+
+        return $this->storageClient->createTable($bucketId, $tableName, new CsvFile($filePath));
     }
 }
