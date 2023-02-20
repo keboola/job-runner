@@ -1195,7 +1195,7 @@ class RunCommandTest extends AbstractCommandTest
                         'name' => $columnName,
                     ];
                 }, $expectedColumns),
-                'displayName' => 'someTable',
+                'displayName' => $expectedTableName,
             ],
             $data
         );
