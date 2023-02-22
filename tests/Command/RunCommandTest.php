@@ -211,7 +211,7 @@ class RunCommandTest extends AbstractCommandTest
 
         $bucketId = $this->recreateTestBucket();
         $tableId1 = $this->createTestTable($bucketId, 'someTable', ['a', 'b']);
-        $tableId2 = $this->createTestTable($bucketId, 'someTableNumeric', ['0', '1']);
+        $tableId2 = $this->createTestTable($bucketId, 'someTableNumeric', ['4', '0']);
 
         try {
             $this->storageClient->dropBucket('out.c-main', ['force' => true]);
@@ -220,6 +220,42 @@ class RunCommandTest extends AbstractCommandTest
                 throw $e;
             }
         }
+
+        $tableOut1Manifest = json_encode([
+            'destination' => 'out.c-main.modified',
+            'column_metadata' => [
+                'a' => [
+                    [
+                        'key' => 'testKey',
+                        'value' => 'testA',
+                    ],
+                ],
+                'b' => [
+                    [
+                        'key' => 'testKey',
+                        'value' => 'testB',
+                    ],
+                ],
+            ],
+        ]);
+
+        $tableOut2Manifest = json_encode([
+            'destination' => 'out.c-main.numericModified',
+            'column_metadata' => [
+                '0' => [
+                    [
+                        'key' => 'testKey',
+                        'value' => 'test0',
+                    ],
+                ],
+                '4' => [
+                    [
+                        'key' => 'testKey',
+                        'value' => 'test4',
+                    ],
+                ],
+            ],
+        ]);
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
@@ -242,23 +278,12 @@ class RunCommandTest extends AbstractCommandTest
                             ],
                         ],
                     ],
-                    'output' => [
-                        'tables' => [
-                            [
-                                'source' => 'destination.csv',
-                                'destination' => 'out.c-main.modified',
-                            ],
-                            [
-                                'source' => 'destinationNumeric.csv',
-                                'destination' => 'out.c-main.numericModified',
-                            ],
-                        ],
-                    ],
                 ],
                 'parameters' => [
                     'plain' => 'not-secret',
                     'script' => [
                         'import csv',
+                        'import json',
                         'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
                         'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
                         '   lazy_lines = (line.replace("\0", "") for line in in_file)',
@@ -266,8 +291,10 @@ class RunCommandTest extends AbstractCommandTest
                         '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
                         '   writer.writeheader()',
                         '   for row in reader:',
-                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
-                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                        '      writer.writerow({"a": row["a"], "b": row["b"]})',
+                        '   writer.writerow({"a": "newA", "b": "newB"})',
+                        'with open("/data/out/tables/destination.csv.manifest", "w") as out_file_manifest:',
+                        '   json.dump(' . $tableOut1Manifest . ', out_file_manifest)',
                         'with open("/data/in/tables/sourceNumeric.csv", mode="rt", encoding="utf-8") as in_file, ' .
                         'open("/data/out/tables/destinationNumeric.csv", mode="wt", encoding="utf-8") as out_file:',
                         '   lazy_lines = (line.replace("\0", "") for line in in_file)',
@@ -275,8 +302,10 @@ class RunCommandTest extends AbstractCommandTest
                         '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
                         '   writer.writeheader()',
                         '   for row in reader:',
-                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
-                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                        '      writer.writerow({"4": row["4"], "0": row["0"]})',
+                        '   writer.writerow({"4": "new4", "0": "new0"})',
+                        'with open("/data/out/tables/destinationNumeric.csv.manifest", "w") as out_file_manifest:',
+                        '   json.dump(' . $tableOut2Manifest . ', out_file_manifest)',
                     ],
                 ],
             ],
@@ -361,14 +390,14 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('tables', $result['output']);
         self::assertCount(2, $result['output']['tables']);
 
-        $outputTables = $result['input']['tables'];
+        $outputTables = $result['output']['tables'];
         usort($outputTables, function ($a, $b) {
             return strcmp($a['id'], $b['id']);
         });
 
         [$table1, $table2] = $outputTables;
-        $this->assertInputOutputTable($table1, $tableId1, 'someTable', ['a', 'b']);
-        $this->assertInputOutputTable($table2, $tableId2, 'someTableNumeric', ['0', '1']);
+        $this->assertInputOutputTable($table1, 'out.c-main.modified', 'modified', ['a', 'b']);
+        $this->assertInputOutputTable($table2, 'out.c-main.numericModified', 'numericModified', ['4', '0']);
 
         self::assertArrayHasKey('input', $result);
         self::assertArrayHasKey('tables', $result['input']);
@@ -380,13 +409,14 @@ class RunCommandTest extends AbstractCommandTest
         });
 
         [$table1, $table2] = $inputTables;
-        $this->assertInputOutputTable($table1, $tableId1, 'someTable', ['a', 'b']);
-        $this->assertInputOutputTable($table2, $tableId2, 'someTableNumeric', ['0', '1']);
+        $this->assertInputOutputTable($table1, 'in.c-main.someTable', 'someTable', ['a', 'b']);
+        $this->assertInputOutputTable($table2, 'in.c-main.someTableNumeric', 'someTableNumeric', ['4', '0']);
+
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 28,
-                    'outputTablesBytesSum' => 87,
+                    'inputTablesBytesSum' => 361,
+                    'outputTablesBytesSum' => 123,
                 ],
                 'backend' => [
                     'size' => null,
@@ -395,6 +425,68 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
             $finishedJob->getMetrics()->jsonSerialize()
+        );
+
+        $this->assertOutputTableMetadata('out.c-main.modified', ['a', 'b']);
+        $this->assertOutputTableData(
+            'out.c-main.modified',
+            [
+                [
+                    [
+                        'columnName' => 'a',
+                        'value' => 'dataA',
+                        'isTruncated' => false,
+                    ],
+                    [
+                        'columnName' => 'b',
+                        'value' => 'dataB',
+                        'isTruncated' => false,
+                    ],
+                ],
+                [
+                    [
+                        'columnName' => 'a',
+                        'value' => 'newA',
+                        'isTruncated' => false,
+                    ],
+                    [
+                        'columnName' => 'b',
+                        'value' => 'newB',
+                        'isTruncated' => false,
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertOutputTableMetadata('out.c-main.numericModified', ['4', '0']);
+        $this->assertOutputTableData(
+            'out.c-main.numericModified',
+            [
+                [
+                    [
+                        'columnName' => '4',
+                        'value' => 'data4',
+                        'isTruncated' => false,
+                    ],
+                    [
+                        'columnName' => '0',
+                        'value' => 'data0',
+                        'isTruncated' => false,
+                    ],
+                ],
+                [
+                    [
+                        'columnName' => '4',
+                        'value' => 'new4',
+                        'isTruncated' => false,
+                    ],
+                    [
+                        'columnName' => '0',
+                        'value' => 'new0',
+                        'isTruncated' => false,
+                    ],
+                ],
+            ]
         );
     }
 
@@ -1156,9 +1248,20 @@ class RunCommandTest extends AbstractCommandTest
     private function createTestTable(string $bucketId, string $tableName, array $columnNames): string
     {
         $filePath = sprintf('%s/%s.csv', sys_get_temp_dir(), $tableName);
-        file_put_contents($filePath, implode(',', $columnNames));
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
 
-        $tableId = $this->storageClient->createTableAsync($bucketId, $tableName, new CsvFile($filePath));
+        $csv = new CsvFile($filePath);
+        $csv->writeRow($columnNames);
+        $csv->writeRow(array_map(
+            function (string $columName): string {
+                return  'data' . mb_strtoupper($columName);
+            },
+            $columnNames
+        ));
+
+        $tableId = $this->storageClient->createTableAsync($bucketId, $tableName, $csv);
 
         (new Metadata($this->storageClient))->postTableMetadataWithColumns(new TableMetadataUpdateOptions(
             $tableId,
@@ -1199,5 +1302,31 @@ class RunCommandTest extends AbstractCommandTest
             ],
             $data
         );
+    }
+
+    private function assertOutputTableMetadata(string $tableId, array $expectedColumns): void
+    {
+        $tableMetadata = $this->storageClient->getTable($tableId);
+        self::assertSame($expectedColumns, $tableMetadata['columns']);
+
+        $columnMetadata = $tableMetadata['columnMetadata'];
+        self::assertCount(count($expectedColumns), $tableMetadata['columnMetadata']);
+
+        foreach ($expectedColumns as $columnName) {
+            self::assertArrayHasKey($columnName, $columnMetadata);
+            self::assertCount(1, $columnMetadata[$columnName]);
+            $metadata = reset($columnMetadata[$columnName]);
+
+            self::assertSame('testKey', $metadata['key']);
+            self::assertSame(sprintf('test%s', mb_strtoupper($columnName)), $metadata['value']);
+            self::assertSame('keboola.python-transformation', $metadata['provider']);
+        }
+    }
+
+    private function assertOutputTableData(string $tableId, array $expectedRows): void
+    {
+        /** @var array $preview */
+        $preview = $this->storageClient->getTableDataPreview($tableId, ['format' => 'json']);
+        self::assertSame($expectedRows, $preview['rows']);
     }
 }
