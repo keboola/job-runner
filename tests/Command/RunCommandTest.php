@@ -192,7 +192,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 14,
+                    'inputTablesBytesSum' => 177,
                     'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
@@ -540,8 +540,7 @@ class RunCommandTest extends AbstractCommandTest
                         '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=reader.fieldnames)',
                         '   writer.writeheader()',
                         '   for row in reader:',
-                        '      writer.writerow({"name": row["name"], "oldValue": row["oldValue"] ' .
-                        '+ "ping", "newValue": row["newValue"] + "pong"})',
+                        '      writer.writerow({"a": row["a"], "b": row["b"]})',
                     ],
                 ],
             ],
@@ -590,7 +589,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 14,
+                    'inputTablesBytesSum' => 177,
                     'outputTablesBytesSum' => 0,
                 ],
                 'backend' => [
@@ -721,8 +720,8 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 0,
-                    'outputTablesBytesSum' => 0,
+                    'inputTablesBytesSum' => 1536,
+                    'outputTablesBytesSum' => 1536,
                 ],
                 'backend' => [
                     'size' => 'small',
