@@ -17,14 +17,7 @@ when@test:
         type: stream
         path: php://stdout
         level: debug
-        channels: [ '!event', '!request' ]
-
-      test_handler:
-        type: service
-        id: Monolog\Handler\TestHandler
-
-  services:
-    Monolog\Handler\TestHandler:
+        channels: [ "!event", "!request" ]
 
 when@prod:
   monolog:
@@ -42,8 +35,3 @@ when@prod:
         type: stream
         path: php://stdout
         formatter: monolog.formatter.json
-
-      deprecation:
-        type: stream
-        channels: [ deprecation ]
-        path: php://stderr
