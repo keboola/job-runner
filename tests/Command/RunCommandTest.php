@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\RunCommand;
-use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
 use Generator;
-use Keboola\BillingApi\CreditsChecker;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\ErrorControl\Uploader\UploaderFactory;
@@ -1043,87 +1041,6 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals(0, $ret);
     }
 
-    public function testExecuteCreditsCheck(): void
-    {
-        $tokenInfo = $this->storageClient->verifyToken();
-        $tokenInfo['owner']['features'] = 'pay-as-you-go';
-
-        $creditsCheckerMock = $this->createMock(CreditsChecker::class);
-        $creditsCheckerMock->method('hasCredits')->willReturn(false);
-
-        $storageClientMock = $this->getMockBuilder(StorageClient::class)
-            ->setConstructorArgs([[
-                'url' => getenv('STORAGE_API_URL'),
-                'token' => getenv('TEST_STORAGE_API_TOKEN'),
-            ]])
-            ->onlyMethods(['verifyToken'])
-            ->getMock();
-        $storageClientMock->method('verifyToken')->willReturn($tokenInfo);
-        $creditsCheckerFactoryMock = $this->createMock(CreditsCheckerFactory::class);
-        $creditsCheckerFactoryMock->method('getCreditsChecker')->willReturn($creditsCheckerMock);
-        $clientWrapperMock = $this->createMock(ClientWrapper::class);
-        $clientWrapperMock->method('getBasicClient')->willReturn($storageClientMock);
-        $clientWrapperMock->method('getBranchClientIfAvailable')->willReturn($storageClientMock);
-        $storageClientFactoryMock = $this->createMock(StorageClientPlainFactory::class);
-        $storageClientFactoryMock->method('createClientWrapper')->willReturn($clientWrapperMock);
-
-        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
-
-        $job = $newJobFactory->createNewJob([
-            'componentId' => 'keboola.runner-config-test',
-            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
-            'mode' => 'run',
-            'configData' => [],
-        ]);
-        $job = $client->createJob($job);
-        putenv('JOB_ID=' . $job->getId());
-        $kernel = static::createKernel();
-        $application = new Application($kernel);
-
-        $command = $application->find('app:run');
-        $reflection = new ReflectionProperty($command, 'creditsCheckerFactory');
-        $reflection->setAccessible(true);
-        $reflection->setValue($command, $creditsCheckerFactoryMock);
-        $reflection = new ReflectionProperty($command, 'storageClientFactory');
-        $reflection->setAccessible(true);
-        $reflection->setValue($command, $storageClientFactoryMock);
-
-        $property = new ReflectionProperty($command, 'logger');
-        $property->setAccessible(true);
-        /** @var Logger $logger */
-        $logger = $property->getValue($command);
-        $testHandler = new TestHandler();
-        $logger->pushHandler($testHandler);
-
-        $commandTester = new CommandTester($command);
-        $ret = $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
-        self::assertEquals(0, $ret);
-        $failedJob = $client->getJob($job->getId());
-        $result = $failedJob->getResult();
-        unset($result['error']['exceptionId']);
-        self::assertSame(
-            [
-                'error' => [
-                    'type' => 'user',
-                ],
-                'input' => [
-                    'tables' => [],
-                ],
-                'images' => [],
-                'output' => [
-                    'tables' => [],
-                ],
-                'message' => 'You do not have credits to run a job',
-                'configVersion' => null,
-            ],
-            $result
-        );
-    }
-
     public function testExecuteStateTransitionError(): void
     {
         [
@@ -1180,7 +1097,6 @@ class RunCommandTest extends AbstractCommandTest
 
         $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
-        $creditsCheckerFactory = new CreditsCheckerFactory();
         $jobDefinitionFactory = new JobDefinitionFactory();
         $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
@@ -1193,7 +1109,6 @@ class RunCommandTest extends AbstractCommandTest
             $logger,
             $logProcessor,
             $mockQueueClient,
-            $creditsCheckerFactory,
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,

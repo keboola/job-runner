@@ -21,7 +21,6 @@
         "ext-json": "*",
         "aws/aws-sdk-php": "3.258",
         "keboola/api-error-control": "^3.10",
-        "keboola/billing-api-php-client": "^3.1",
         "keboola/configuration-variables-resolver": "^3.3",
         "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^17.0",
