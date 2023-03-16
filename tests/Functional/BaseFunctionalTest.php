@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
-use App\CreditsCheckerFactory;
 use App\JobDefinitionFactory;
 use Exception;
 use Keboola\Csv\CsvFile;
@@ -154,7 +153,6 @@ abstract class BaseFunctionalTest extends TestCase
             $this->logger,
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $mockQueueClient,
-            new CreditsCheckerFactory(),
             $storageClientFactory,
             new JobDefinitionFactory(),
             $this->objectEncryptor,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17631217a25589dd5514b4a3363e4920",
+    "content-hash": "eab8c2f2f4273d8181c438b9633e13c9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1107,50 +1107,6 @@
                 "source": "https://github.com/keboola/azure-key-vault-php-client/tree/3.0.0"
             },
             "time": "2022-09-21T22:08:11+00:00"
-        },
-        {
-            "name": "keboola/billing-api-php-client",
-            "version": "3.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/keboola/billing-api-php-client.git",
-                "reference": "2acd2587729baf921355b03befdc48112af6639a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/billing-api-php-client/zipball/2acd2587729baf921355b03befdc48112af6639a",
-                "reference": "2acd2587729baf921355b03befdc48112af6639a",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "keboola/storage-api-client": "^13.0|^14.0",
-                "php": ">=7.4",
-                "symfony/validator": "^4.4|^5.0|^6.0"
-            },
-            "require-dev": {
-                "keboola/coding-standard": ">=14.0",
-                "phpstan/phpstan": "^1.8",
-                "phpstan/phpstan-phpunit": "^1.1",
-                "phpunit/phpunit": "^9.5",
-                "sempro/phpunit-pretty-print": "^1.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Keboola\\BillingApi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHP Client for Keboola Connection Billing API",
-            "support": {
-                "issues": "https://github.com/keboola/billing-api-php-client/issues",
-                "source": "https://github.com/keboola/billing-api-php-client/tree/3.1.1"
-            },
-            "time": "2022-12-19T16:13:58+00:00"
         },
         {
             "name": "keboola/common-exceptions",

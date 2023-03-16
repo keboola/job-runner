@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\CreditsCheckerFactory;
 use App\Helper\BuildBranchClientOptionsHelper;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
@@ -55,7 +54,6 @@ class RunCommand extends Command
     private QueueClient $queueClient;
     private Logger $logger;
     private LogProcessor $logProcessor;
-    private CreditsCheckerFactory $creditsCheckerFactory;
     private JobDefinitionFactory $jobDefinitionFactory;
     private ObjectEncryptor $objectEncryptor;
     private StorageClientPlainFactory $storageClientFactory;
@@ -66,7 +64,6 @@ class RunCommand extends Command
         LoggerInterface $logger,
         LogProcessor $logProcessor,
         QueueClient $queueClient,
-        CreditsCheckerFactory $creditsCheckerFactory,
         StorageClientPlainFactory $storageClientFactory,
         JobDefinitionFactory $jobDefinitionFactory,
         ObjectEncryptor $objectEncryptor,
@@ -78,7 +75,6 @@ class RunCommand extends Command
         $this->queueClient = $queueClient;
         /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->logger = $logger;
-        $this->creditsCheckerFactory = $creditsCheckerFactory;
         $this->storageClientFactory = $storageClientFactory;
         $this->jobDefinitionFactory = $jobDefinitionFactory;
         $this->objectEncryptor = $objectEncryptor;
@@ -214,11 +210,6 @@ class RunCommand extends Command
             $options->setLogger($this->logger);
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
-
-            $creditsChecker = $this->creditsCheckerFactory->getCreditsChecker($clientWrapper->getBasicClient());
-            if (!$creditsChecker->hasCredits()) {
-                throw new UserException('You do not have credits to run a job');
-            }
 
             // set up runner
             $component = $this->getComponentClass($clientWrapper, $job);
