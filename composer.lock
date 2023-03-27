@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bce80f0765203e89d78a369cd7198af",
+    "content-hash": "7cd1bb82aee15e1eb1ce5b6396ddef7b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1699,7 +1699,7 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-main",
+            "version": "20.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
@@ -1737,7 +1737,6 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^5.4|^6.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1756,7 +1755,7 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/main"
+                "source": "https://github.com/keboola/output-mapping/tree/20.1.0"
             },
             "time": "2023-03-24T11:55:47+00:00"
         },
@@ -10344,18 +10343,10 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/output-mapping",
-            "version": "dev-main",
-            "alias": "20.0.6",
-            "alias_normalized": "20.0.6.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/output-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
