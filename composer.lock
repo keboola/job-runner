@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f09e35d297986558dfaf5683dbd4f3c0",
+    "content-hash": "e5f3a6ff67433db5eee5eb02d4cbbc3b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1707,16 +1707,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-erik-PST-780",
+            "version": "21.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "a428f68fccaf1bd1cdd1b34032ea8faa66c3b101"
+                "reference": "6b4ffb72030a6e9380e801d6d14475f97ef5d755"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/a428f68fccaf1bd1cdd1b34032ea8faa66c3b101",
-                "reference": "a428f68fccaf1bd1cdd1b34032ea8faa66c3b101",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/6b4ffb72030a6e9380e801d6d14475f97ef5d755",
+                "reference": "6b4ffb72030a6e9380e801d6d14475f97ef5d755",
                 "shasum": ""
             },
             "require": {
@@ -1770,9 +1770,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/erik-PST-780"
+                "source": "https://github.com/keboola/output-mapping/tree/21.2.0"
             },
-            "time": "2023-04-05T12:13:27+00:00"
+            "time": "2023-04-05T12:50:58+00:00"
         },
         {
             "name": "keboola/php-datatypes",
@@ -10362,18 +10362,10 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/output-mapping",
-            "version": "dev-erik-PST-780",
-            "alias": "21.1.0",
-            "alias_normalized": "21.1.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/output-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
