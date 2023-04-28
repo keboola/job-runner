@@ -1146,7 +1146,7 @@ class RunCommandTest extends AbstractCommandTest
     private function recreateTestBucket(): string
     {
         try {
-            $this->storageClient->dropBucket('in.c-main', ['force' => true]);
+            $this->storageClient->dropBucket('in.c-main', ['force' => true, 'async' => true]);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
