@@ -181,7 +181,7 @@ abstract class BaseFunctionalTest extends TestCase
         $buckets = ['in.c-executor-test', 'out.c-executor-test', 'out.c-keboola-python-transformation-executor-test'];
         foreach ($buckets as $bucket) {
             try {
-                $this->storageClient->dropBucket($bucket, ['force' => true]);
+                $this->storageClient->dropBucket($bucket, ['force' => true, 'async' => true]);
             } catch (ClientException $e) {
                 if ($e->getCode() !== 404) {
                     throw $e;
