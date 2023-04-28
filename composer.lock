@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b7a34a6c81310274b39de4c59b8cce6",
+    "content-hash": "5933cc262a80d77dcb7122431bf54fef",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1706,16 +1706,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "dev-odin-PST-309",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "c8c925ad0d2a8b6c5850c4c0b2162ccec72fe4f8"
+                "reference": "4d8c7c304a9083d87c4c6e5c650cc164ee10bf8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/c8c925ad0d2a8b6c5850c4c0b2162ccec72fe4f8",
-                "reference": "c8c925ad0d2a8b6c5850c4c0b2162ccec72fe4f8",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/4d8c7c304a9083d87c4c6e5c650cc164ee10bf8a",
+                "reference": "4d8c7c304a9083d87c4c6e5c650cc164ee10bf8a",
                 "shasum": ""
             },
             "require": {
@@ -1766,9 +1766,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/odin-PST-309"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.3.0"
             },
-            "time": "2023-04-24T15:40:01+00:00"
+            "time": "2023-04-28T10:09:04+00:00"
         },
         {
             "name": "keboola/output-mapping",
@@ -10611,18 +10611,10 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/object-encryptor",
-            "version": "dev-odin-PST-309",
-            "alias": "2.2.2",
-            "alias_normalized": "2.2.2.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/object-encryptor": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
