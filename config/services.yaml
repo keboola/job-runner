@@ -62,6 +62,7 @@ services:
         $kmsRegion: '%env(AWS_REGION)%'
         $kmsRole: '%env(default::AWS_KMS_ROLE)%'
         $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
+        $backoffMaxTries: 10
 
     Keboola\ObjectEncryptor\ObjectEncryptor:
         class: Keboola\ObjectEncryptor\ObjectEncryptor

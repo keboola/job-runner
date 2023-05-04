@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
+use App\Tests\EncryptorOptionsTrait;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
-use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
@@ -50,13 +50,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
 
-        $objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
-            (string) getenv('ENCRYPTOR_STACK_ID'),
-            (string) getenv('AWS_KMS_KEY_ID'),
-            (string) getenv('AWS_REGION'),
-            null,
-            (string) getenv('AZURE_KEY_VAULT_URL'),
-        ));
+        $objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
 
         $result = $objectEncryptor->encryptForComponent(
             (string) getenv('TEST_STORAGE_API_TOKEN'),

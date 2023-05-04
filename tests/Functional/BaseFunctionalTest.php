@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
+use App\Tests\EncryptorOptionsTrait;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -37,6 +38,8 @@ use Symfony\Component\Validator\Validation;
 
 abstract class BaseFunctionalTest extends TestCase
 {
+    use EncryptorOptionsTrait;
+
     private StorageClient $storageClient;
     private Logger $logger;
     private TestHandler $handler;
@@ -68,13 +71,7 @@ abstract class BaseFunctionalTest extends TestCase
         $this->logger = new Logger('test-runner', [$this->handler]);
         $this->temp = new Temp();
 
-        $this->objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
-            (string) getenv('ENCRYPTOR_STACK_ID'),
-            (string) getenv('AWS_KMS_KEY_ID'),
-            (string) getenv('AWS_REGION'),
-            null,
-            '',
-        ));
+        $this->objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
     }
 
     protected function getCommand(
@@ -184,7 +181,7 @@ abstract class BaseFunctionalTest extends TestCase
         $buckets = ['in.c-executor-test', 'out.c-executor-test', 'out.c-keboola-python-transformation-executor-test'];
         foreach ($buckets as $bucket) {
             try {
-                $this->storageClient->dropBucket($bucket, ['force' => true]);
+                $this->storageClient->dropBucket($bucket, ['force' => true, 'async' => true]);
             } catch (ClientException $e) {
                 if ($e->getCode() !== 404) {
                     throw $e;
