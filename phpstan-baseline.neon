@@ -1,10 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			path: src/Command/RunCommand.php
-
-		-
 			message: "#^Used function DDTrace\\\\root_span not found\\.$#"
 			path: src/Command/RunCommand.php
 			reportUnmatched: false
