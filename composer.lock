@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0bb1c097c512df038b0c8fc55ddcf31",
+    "content-hash": "5933cc262a80d77dcb7122431bf54fef",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1315,11 +1315,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-SOX-41",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "2e98e373d3ad0fb0ae2e336ed99e27bd638e7bc3"
+                "reference": "5ba59cdc00526d028d9e6a1b43565d6c611cc908"
             },
             "require": {
                 "ext-json": "*",
@@ -1409,7 +1409,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-06-20T10:27:34+00:00"
+            "time": "2023-06-20T14:46:14+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -8190,16 +8190,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.19",
+            "version": "1.10.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "af5a296ff02610c1bfb4ddfac9fd4a08657b9046"
+                "reference": "c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/af5a296ff02610c1bfb4ddfac9fd4a08657b9046",
-                "reference": "af5a296ff02610c1bfb4ddfac9fd4a08657b9046",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803",
+                "reference": "c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803",
                 "shasum": ""
             },
             "require": {
@@ -8248,7 +8248,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-14T15:26:58+00:00"
+            "time": "2023-06-20T12:07:40+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
