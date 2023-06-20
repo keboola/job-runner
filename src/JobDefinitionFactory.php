@@ -56,7 +56,7 @@ class JobDefinitionFactory
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
-                    (string)$clientWrapper->getBranchId()
+                    (string) $clientWrapper->getBranchId()
                 );
             } catch (ClientException $e) {
                 throw new UserException($e->getMessage(), $e);
