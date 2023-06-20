@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Helper\BranchTypeResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
@@ -34,7 +35,12 @@ class JobDefinitionFactory
         if ($job->getConfigData()) {
             $configData = $job->getConfigDataDecrypted();
             $configData = $this->extendComponentConfigWithBackend($configData, $job);
-            $jobDefinitionParser->parseConfigData($component, $configData, $job->getConfigId());
+            $jobDefinitionParser->parseConfigData(
+                $component,
+                $configData,
+                $job->getConfigId(),
+                BranchTypeResolver::resolveBranchType($job->getBranchId(), $clientWrapper),
+            );
         } else {
             try {
                 if ($clientWrapper->hasBranch()) {
@@ -50,7 +56,7 @@ class JobDefinitionFactory
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
-                    (string) $clientWrapper->getBranchId()
+                    (string)$clientWrapper->getBranchId()
                 );
             } catch (ClientException $e) {
                 throw new UserException($e->getMessage(), $e);
@@ -68,7 +74,11 @@ class JobDefinitionFactory
                 $job
             );
 
-            $jobDefinitionParser->parseConfig($component, $configuration);
+            $jobDefinitionParser->parseConfig(
+                $component,
+                $configuration,
+                BranchTypeResolver::resolveBranchType($job->getBranchId(), $clientWrapper),
+            );
         }
 
         return $jobDefinitionParser->getJobDefinitions();

@@ -379,10 +379,19 @@ class JobDefinitionFactoryTest extends TestCase
     private function getStorageApiClientBranchMock(Client $branchClient): ClientWrapper
     {
         $clientWrapperMock = $this->createMock(ClientWrapper::class);
-        $clientWrapperMock->expects(self::never())->method('getBasicClient');
         $clientWrapperMock->method('hasBranch')->willReturn(true);
         $clientWrapperMock->method('getBranchId')->willReturn('my-branch');
         $clientWrapperMock->method('getBranchClient')->willReturn($branchClient);
+        $basicClientMock = $this->createMock(Client::class);
+        $basicClientMock->method('apiGet')
+            ->with('dev-branches/123')
+            ->willReturn(
+                [
+                    'id' => '123',
+                    'isDefault' => false,
+                ]
+            );
+        $clientWrapperMock->method('getBasicClient')->willReturn($basicClientMock);
         return $clientWrapperMock;
     }
 
@@ -441,7 +450,7 @@ class JobDefinitionFactoryTest extends TestCase
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
-            'branchId' => 'my-branch',
+            'branchId' => '123',
             'configId' => 'my-config',
         ];
 
@@ -542,7 +551,7 @@ class JobDefinitionFactoryTest extends TestCase
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
-            'branchId' => 'my-branch',
+            'branchId' => '123',
             'configId' => 'my-config',
         ];
 
