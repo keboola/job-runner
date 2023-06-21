@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5933cc262a80d77dcb7122431bf54fef",
+    "content-hash": "de55dc9865fc80c00dc9e87c63d2cc3e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -325,16 +325,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.7.0",
+            "version": "v6.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "71278f20b0a623389beefe87a641d03948a38870"
+                "reference": "48b0210c51718d682e53210c24d25c5a10a2299b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/71278f20b0a623389beefe87a641d03948a38870",
-                "reference": "71278f20b0a623389beefe87a641d03948a38870",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/48b0210c51718d682e53210c24d25c5a10a2299b",
+                "reference": "48b0210c51718d682e53210c24d25c5a10a2299b",
                 "shasum": ""
             },
             "require": {
@@ -382,9 +382,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.7.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.8.0"
             },
-            "time": "2023-06-14T15:29:26+00:00"
+            "time": "2023-06-20T16:45:35+00:00"
         },
         {
             "name": "google/auth",
@@ -1532,16 +1532,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "16.1.0",
+            "version": "dev-odin-SOX-44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "bd42cff6a260d3c29dfa399da61b12b66033e93a"
+                "reference": "e65b68b6c8436872339c0fb0ad0c1e625c39d066"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/bd42cff6a260d3c29dfa399da61b12b66033e93a",
-                "reference": "bd42cff6a260d3c29dfa399da61b12b66033e93a",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/e65b68b6c8436872339c0fb0ad0c1e625c39d066",
+                "reference": "e65b68b6c8436872339c0fb0ad0c1e625c39d066",
                 "shasum": ""
             },
             "require": {
@@ -1550,10 +1550,11 @@
                 "keboola/artifacts": "^2.0",
                 "keboola/kbc-manage-api-php-client": "^5.2|^6.0",
                 "keboola/object-encryptor": "^2.0",
+                "keboola/permission-checker": "^0.1",
                 "keboola/storage-api-client": "^14.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^3.2",
                 "monolog/monolog": "^2.6",
-                "php": "^7.4|^8.0",
+                "php": "^8.0",
                 "psr/log": "^1.1",
                 "symfony/config": "^5.4|^6.0",
                 "symfony/uid": "^5.4|^6.2",
@@ -1597,9 +1598,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/16.1.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/odin-SOX-44"
             },
-            "time": "2023-02-16T21:55:19+00:00"
+            "time": "2023-06-21T16:13:38+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -1835,6 +1836,57 @@
                 "source": "https://github.com/keboola/output-mapping/tree/21.6.1"
             },
             "time": "2023-06-15T12:54:08+00:00"
+        },
+        {
+            "name": "keboola/permission-checker",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/permission-checker.git",
+                "reference": "e3e87a829d0e59dbaed85368359aafa425e579dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/permission-checker/zipball/e3e87a829d0e59dbaed85368359aafa425e579dc",
+                "reference": "e3e87a829d0e59dbaed85368359aafa425e579dc",
+                "shasum": ""
+            },
+            "require": {
+                "keboola/common-exceptions": "^1.2",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "infection/infection": "^0.27.0",
+                "keboola/coding-standard": "^14.0",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpunit/phpunit": "^9.5",
+                "sempro/phpunit-pretty-print": "^1.4",
+                "symfony/dotenv": "^6.2",
+                "symfony/filesystem": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\PermissionChecker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Keboola K8S client library",
+            "support": {
+                "issues": "https://github.com/keboola/permission-checker/issues",
+                "source": "https://github.com/keboola/permission-checker/tree/0.2.0"
+            },
+            "time": "2023-06-15T20:23:29+00:00"
         },
         {
             "name": "keboola/php-datatypes",
@@ -10587,7 +10639,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
