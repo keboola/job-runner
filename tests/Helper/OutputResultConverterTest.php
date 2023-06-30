@@ -10,7 +10,7 @@ use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoader;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
-use Keboola\JobQueueInternalClient\JobFactory\Backend;
+use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
 use Keboola\OutputMapping\DeferredTasks\LoadTableQueue;
 use Keboola\OutputMapping\Table\Result as OutputResult;
 use PHPUnit\Framework\TestCase;

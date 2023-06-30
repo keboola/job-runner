@@ -3,7 +3,7 @@
 Symfony console application which is used inside an ECS task and wraps Docker runner library.
 
 ## Running locally
-Use `docker-compose run tests-local` to get development environment.
+Use `docker-compose run dev` to get development environment.
 To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
 To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
 
@@ -178,7 +178,7 @@ The job runner can then use with `http://localhost:80` and `JOB_ID` variable set
 Init the local environment:
 
     docker-compose build
-    source ./set-env.sh && docker-compose run tests-local composer install
+    source ./set-env.sh && docker-compose run dev composer install
 
 To run tests locally, set the environment variables and execute:
 

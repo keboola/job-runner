@@ -6,8 +6,8 @@ namespace App\Tests\Helper;
 
 use App\Helper\BuildBranchClientOptionsHelper;
 use Closure;
-use Keboola\JobQueueInternalClient\JobFactory\Backend;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
 use PHPUnit\Framework\TestCase;
 
 class BuildBranchClientOptionsHelperTest extends TestCase
