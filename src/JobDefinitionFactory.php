@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Helper\BranchTypeResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
+use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
@@ -39,7 +39,7 @@ class JobDefinitionFactory
                 $component,
                 $configData,
                 $job->getConfigId(),
-                BranchTypeResolver::resolveBranchType($job->getBranchId(), $clientWrapper),
+                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
             );
         } else {
             try {
@@ -77,7 +77,7 @@ class JobDefinitionFactory
             $jobDefinitionParser->parseConfig(
                 $component,
                 $configuration,
-                BranchTypeResolver::resolveBranchType($job->getBranchId(), $clientWrapper),
+                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
             );
         }
 
