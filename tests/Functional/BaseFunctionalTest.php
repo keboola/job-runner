@@ -20,7 +20,6 @@ use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
 use Keboola\JobQueueInternalClient\NewJobFactory;
 use Keboola\ManageApi\Client as ManageApiClient;
-use Keboola\ObjectEncryptor\EncryptorOptions;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\Client;
@@ -90,6 +89,11 @@ abstract class BaseFunctionalTest extends TestCase
             'token' => (string) getenv('MANAGE_API_TOKEN'),
         ]);
 
+        /** @var non-empty-string $encryptorStackId */
+        $encryptorStackId = (string) getenv('ENCRYPTOR_STACK_ID');
+        /** @var non-empty-string $awsRegion */
+        $awsRegion = (string) getenv('AWS_REGION');
+
         $newJobFactory = new NewJobFactory(
             $storageClientFactory,
             new JobRuntimeResolver($storageClientFactory),
@@ -98,8 +102,8 @@ abstract class BaseFunctionalTest extends TestCase
                 new DataPlaneConfigRepository(
                     $manageApiClient,
                     new DataPlaneConfigValidator(Validation::createValidator()),
-                    (string) getenv('ENCRYPTOR_STACK_ID'),
-                    (string) getenv('AWS_REGION'),
+                    $encryptorStackId,
+                    $awsRegion,
                 ),
                 false
             ),

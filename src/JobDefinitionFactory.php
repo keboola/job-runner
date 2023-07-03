@@ -10,6 +10,7 @@ use Keboola\DockerBundle\Docker\JobDefinitionParser;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
+use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
@@ -34,7 +35,12 @@ class JobDefinitionFactory
         if ($job->getConfigData()) {
             $configData = $job->getConfigDataDecrypted();
             $configData = $this->extendComponentConfigWithBackend($configData, $job);
-            $jobDefinitionParser->parseConfigData($component, $configData, $job->getConfigId());
+            $jobDefinitionParser->parseConfigData(
+                $component,
+                $configData,
+                $job->getConfigId(),
+                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
+            );
         } else {
             try {
                 if ($clientWrapper->hasBranch()) {
@@ -68,7 +74,11 @@ class JobDefinitionFactory
                 $job
             );
 
-            $jobDefinitionParser->parseConfig($component, $configuration);
+            $jobDefinitionParser->parseConfig(
+                $component,
+                $configuration,
+                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
+            );
         }
 
         return $jobDefinitionParser->getJobDefinitions();

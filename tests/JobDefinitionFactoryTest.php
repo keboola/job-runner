@@ -13,6 +13,7 @@ use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
+use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
@@ -37,6 +38,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'configData' => $configData,
+            'branchType' => null,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
@@ -113,6 +115,7 @@ class JobDefinitionFactoryTest extends TestCase
             'configId' => 'my-config',
             'configData' => $configData,
             'backend' => $backendData,
+            'branchType' => null,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
@@ -142,6 +145,7 @@ class JobDefinitionFactoryTest extends TestCase
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
+            'branchType' => null,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
@@ -216,6 +220,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'backend' => $backendData,
+            'branchType' => null,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
@@ -253,6 +258,7 @@ class JobDefinitionFactoryTest extends TestCase
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
+            'branchType' => null,
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
@@ -379,10 +385,19 @@ class JobDefinitionFactoryTest extends TestCase
     private function getStorageApiClientBranchMock(Client $branchClient): ClientWrapper
     {
         $clientWrapperMock = $this->createMock(ClientWrapper::class);
-        $clientWrapperMock->expects(self::never())->method('getBasicClient');
         $clientWrapperMock->method('hasBranch')->willReturn(true);
         $clientWrapperMock->method('getBranchId')->willReturn('my-branch');
         $clientWrapperMock->method('getBranchClient')->willReturn($branchClient);
+        $basicClientMock = $this->createMock(Client::class);
+        $basicClientMock->method('apiGet')
+            ->with('dev-branches/123')
+            ->willReturn(
+                [
+                    'id' => '123',
+                    'isDefault' => false,
+                ]
+            );
+        $clientWrapperMock->method('getBasicClient')->willReturn($basicClientMock);
         return $clientWrapperMock;
     }
 
@@ -441,17 +456,21 @@ class JobDefinitionFactoryTest extends TestCase
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
-            'branchId' => 'my-branch',
+            'branchId' => '123',
             'configId' => 'my-config',
+            'branchType' => BranchType::DEV->value,
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithBranchConfiguration($jobData, $configuration);
 
         self::assertCount(1, $jobDefinitions);
+
+        /** @var JobDefinition $jobDefinition */
         $jobDefinition = $jobDefinitions[0];
 
         self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
         self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
+        self::assertSame($jobData['branchType'], $jobDefinition->getBranchType());
         self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo']);
     }
 
@@ -476,6 +495,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
             'configId' => 'my-config',
+            'branchType' => BranchType::DEV->value,
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
@@ -542,8 +562,9 @@ class JobDefinitionFactoryTest extends TestCase
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
-            'branchId' => 'my-branch',
+            'branchId' => '123',
             'configId' => 'my-config',
+            'branchType' => BranchType::DEV->value,
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
@@ -615,6 +636,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'branchId' => 'my-branch',
             'configId' => 'my-config',
+            'branchType' => BranchType::DEV->value,
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);

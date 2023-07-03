@@ -40,7 +40,7 @@ services:
     depends_on:
       - internal-api
 
-  tests-local:
+  dev:
     <<: *tests
     volumes:
       - ./:/code
