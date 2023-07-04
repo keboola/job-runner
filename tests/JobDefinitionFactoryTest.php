@@ -349,7 +349,7 @@ class JobDefinitionFactoryTest extends TestCase
     private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
+        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -404,7 +404,7 @@ class JobDefinitionFactoryTest extends TestCase
     private function createJobDefinitionsWithBranchConfiguration(array $jobData, array $configuration): array
     {
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
+        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',
@@ -568,7 +568,7 @@ class JobDefinitionFactoryTest extends TestCase
         ];
 
         $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
+        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
 
         $component = new Component([
             'id' => 'my-component',

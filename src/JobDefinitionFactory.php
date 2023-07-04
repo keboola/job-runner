@@ -62,11 +62,12 @@ class JobDefinitionFactory
                 throw new UserException($e->getMessage(), $e);
             }
 
-            $configuration = $objectEncryptor->decryptForConfiguration(
+            $configuration = $objectEncryptor->decryptForBranchTypeConfiguration(
                 $configuration,
                 $job->getComponentId(),
                 $job->getProjectId(),
                 (string) $job->getConfigId(),
+                ($job->getBranchType() ?? BranchType::DEFAULT)->value
             );
 
             $configuration['configuration'] = $this->extendComponentConfigWithBackend(
