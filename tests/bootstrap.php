@@ -10,7 +10,7 @@ require __DIR__ . '/../vendor/autoload.php';
 (new Dotenv())->usePutenv()->bootEnv(dirname(__DIR__).'/.env', 'dev', []);
 
 $requiredEnvs = ['CPU_COUNT', 'JOB_QUEUE_URL', 'JOB_QUEUE_TOKEN',
-    'STORAGE_API_URL', 'AWS_REGION', 'AWS_KMS_KEY_ID',
+    'STORAGE_API_URL', 'VAULT_API_URL', 'AWS_REGION', 'AWS_KMS_KEY_ID',
     'AZURE_KEY_VAULT_URL', 'AZURE_LOG_ABS_CONNECTION_STRING',
     'ENCRYPTOR_STACK_ID',
     'TEST_STORAGE_API_TOKEN', 'TEST_STORAGE_API_TOKEN_MASTER', 'TEST_AWS_ACCESS_KEY_ID',

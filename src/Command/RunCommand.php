@@ -11,13 +11,15 @@ use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
+use InvalidArgumentException;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
-use Keboola\ConfigurationVariablesResolver\VariableResolver;
+use Keboola\ConfigurationVariablesResolver\VariablesResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
+use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
@@ -33,10 +35,11 @@ use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApi\DevBranches;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
+use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Logger;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,42 +53,23 @@ use function DDTrace\root_span;
 #[AsCommand(name: 'app:run')]
 class RunCommand extends Command
 {
-    private array $instanceLimits;
-    private QueueClient $queueClient;
-    private Logger $logger;
-    private LogProcessor $logProcessor;
-    private JobDefinitionFactory $jobDefinitionFactory;
-    private ObjectEncryptor $objectEncryptor;
-    private StorageClientPlainFactory $storageClientFactory;
-    private string $jobId;
-    private string $storageApiToken;
-
     public function __construct(
-        LoggerInterface $logger,
-        LogProcessor $logProcessor,
-        QueueClient $queueClient,
-        StorageClientPlainFactory $storageClientFactory,
-        JobDefinitionFactory $jobDefinitionFactory,
-        ObjectEncryptor $objectEncryptor,
-        string $jobId,
-        string $storageApiToken,
-        array $instanceLimits
+        private readonly Logger $logger,
+        private readonly LogProcessor $logProcessor,
+        private readonly QueueClient $queueClient,
+        private readonly StorageClientPlainFactory $storageClientFactory,
+        private readonly JobDefinitionFactory $jobDefinitionFactory,
+        private readonly ObjectEncryptor $objectEncryptor,
+        private readonly VariablesApiClient $variablesApiClient,
+        private readonly string $jobId,
+        private readonly string $storageApiToken,
+        private readonly array $instanceLimits
     ) {
-        parent::__construct(self::$defaultName);
-        $this->queueClient = $queueClient;
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->logger = $logger;
-        $this->storageClientFactory = $storageClientFactory;
-        $this->jobDefinitionFactory = $jobDefinitionFactory;
-        $this->objectEncryptor = $objectEncryptor;
-        $this->instanceLimits = $instanceLimits;
-        $this->logProcessor = $logProcessor;
+        parent::__construct();
 
         pcntl_signal(SIGTERM, [$this, 'terminationHandler']);
         pcntl_signal(SIGINT, [$this, 'terminationHandler']);
         pcntl_async_signals(true);
-        $this->jobId = $jobId;
-        $this->storageApiToken = $storageApiToken;
     }
 
     public function terminationHandler(int $signalNumber): void
@@ -236,6 +220,7 @@ class RunCommand extends Command
             $jobDefinitions = $this->resolveVariables(
                 $clientWrapper,
                 $jobDefinitions,
+                $job->getBranchId(),
                 $job->getVariableValuesId(),
                 $job->getVariableValuesData()
             );
@@ -339,21 +324,48 @@ class RunCommand extends Command
     private function resolveVariables(
         ClientWrapper $clientWrapper,
         array $jobDefinitions,
+        ?string $branchId,
         ?string $variableValuesId,
         array $variableValuesData
     ): array {
+        if ($variableValuesId === '') {
+            throw new InvalidArgumentException('$variableValuesId must not be empty string');
+        }
+
+        if ($branchId === null || $branchId === 'default') {
+            $branchesApiClient = new DevBranches($clientWrapper->getBranchClientIfAvailable());
+            foreach ($branchesApiClient->listBranches() as $branch) {
+                if ($branch['isDefault']) {
+                    $branchId = (string) $branch['id'];
+                    break;
+                }
+            }
+        }
+
+        if ($branchId === null || $branchId === 'default' || $branchId === '') {
+            throw new ApplicationException('Can\'t resolve branchId for the job.');
+        }
+
         $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
-        $variableResolver = new VariableResolver($clientWrapper, $this->logger);
+        $variableResolver = VariablesResolver::create(
+            $clientWrapper,
+            $this->variablesApiClient,
+            $this->logger,
+        );
 
         $newJobDefinitions = [];
         foreach ($jobDefinitions as $jobDefinition) {
-            $newConfiguration = $variableResolver->resolveVariables(
-                $sharedCodeResolver->resolveSharedCode($jobDefinition->getConfiguration()),
+            $configuration = $jobDefinition->getConfiguration();
+            $configuration = $sharedCodeResolver->resolveSharedCode($configuration);
+            $configuration = $variableResolver->resolveVariables(
+                $configuration,
+                $branchId,
                 $variableValuesId,
-                $variableValuesData
+                $variableValuesData,
             );
+
             $newJobDefinitions[] = new JobDefinition(
-                $newConfiguration,
+                $configuration,
                 $jobDefinition->getComponent(),
                 $jobDefinition->getConfigId(),
                 $jobDefinition->getConfigVersion(),

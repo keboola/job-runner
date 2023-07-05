@@ -25,6 +25,7 @@ use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
+use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use ReflectionProperty;
@@ -313,23 +314,9 @@ class RunCommandTest extends AbstractCommandTest
         $job = $client->createJob($job);
 
         putenv('JOB_ID=' . $job->getId());
-        $kernel = static::createKernel();
-        $application = new Application($kernel);
 
-        $command = $application->find('app:run');
-
-        $property = new ReflectionProperty($command, 'logger');
-        $property->setAccessible(true);
-        /** @var Logger $logger */
-        $logger = $property->getValue($command);
-        $testHandler = new TestHandler();
-        $logger->pushHandler($testHandler);
-
-        $property = new ReflectionProperty($command, 'storageClientFactory');
-        $property->setAccessible(true);
-        /** @var StorageClientPlainFactory $baseFactory */
-        $baseFactory = $property->getValue($command);
-        $baseOptions = $baseFactory->getClientOptionsReadOnly();
+        $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
+        $baseOptions = $storageClientFactory->getClientOptionsReadOnly();
 
         $storageClientFactoryMock = $this->getMockBuilder(StorageClientPlainFactory::class)
             ->setConstructorArgs([$baseOptions])
@@ -337,15 +324,28 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactoryMock
             ->expects(self::exactly(2))
             ->method('createClientWrapper')
-            ->willReturnCallback(function (ClientOptions $options) use ($baseFactory): ClientWrapper {
+            ->willReturnCallback(function (ClientOptions $options) use ($storageClientFactory): ClientWrapper {
                 $backendConfiguration = $options->getBackendConfiguration();
                 self::assertNotNull($backendConfiguration);
                 self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
-                return $baseFactory->createClientWrapper($options);
+                return $storageClientFactory->createClientWrapper($options);
             })
         ;
 
-        $property->setValue($command, $storageClientFactoryMock);
+        // reset whole kernel, so we can replace already fetched services in container
+        self::ensureKernelShutdown();
+
+        $kernel = static::bootKernel();
+        $container = static::getContainer();
+
+        $logger = $container->get('logger');
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $container->set(StorageClientPlainFactory::class, $storageClientFactoryMock);
+
+        $application = new Application($kernel);
+        $command = $application->find('app:run');
 
         $commandTester = new CommandTester($command);
         $ret = $commandTester->execute([
@@ -1112,6 +1112,7 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
+            $this->createMock(VariablesApiClient::class),
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             []

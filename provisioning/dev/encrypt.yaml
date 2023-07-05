@@ -77,3 +77,5 @@ spec:
                   key: STORAGE_API_TOKEN
             - name: STORAGE_API_URL
               value: 'https://connection.keboola.com/'
+            - name: VAULT_API_URL
+              value: 'https://vault.keboola.com'
