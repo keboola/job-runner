@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use Generator;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
@@ -12,7 +12,6 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
-use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
@@ -21,8 +20,33 @@ use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use PHPUnit\Framework\TestCase;
 
-class JobDefinitionFactoryTest extends TestCase
+class JobDefinitionParserTest extends TestCase
 {
+    private function createComponent(array $features = []): Component
+    {
+        return new Component([
+            'id' => 'my-component',
+            'data' => [
+                'definition' => [
+                    'type' => 'dockerhub',
+                    'uri' => 'keboola/docker-demo',
+                ],
+            ],
+            'features' => $features,
+        ]);
+    }
+
+    private function createJob(array $jobData): Job
+    {
+        $encryptor = $this->createMock(JobObjectEncryptor::class);
+        $encryptor->expects(self::never())->method(self::anything());
+
+        $jobStorageClientFactory = $this->createMock(StorageClientPlainFactory::class);
+        $jobStorageClientFactory->expects(self::never())->method(self::anything());
+
+        return new Job($encryptor, $jobStorageClientFactory, $jobData);
+    }
+
     public function testCreateJobDefinitionWithConfigData(): void
     {
         $configData = [
@@ -41,7 +65,7 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => null,
         ];
 
-        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
+        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
 
         self::assertCount(1, $jobDefinitions);
         $jobDefinition = $jobDefinitions[0];
@@ -118,7 +142,7 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => null,
         ];
 
-        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData, $configData);
+        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
         self::assertSame(
             $expectedBackendData,
             $jobDefinitions[0]->getConfiguration()['runtime']['backend']
@@ -240,37 +264,17 @@ class JobDefinitionFactoryTest extends TestCase
 
     public function testCreateJobDefinitionWithConfigNotFound(): void
     {
-        $configuration = [
-            'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
-            'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
-                ],
-            ],
-        ];
-
-        $jobData = [
+        $job = $this->createJob([
             'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'branchType' => null,
-        ];
+        ]);
 
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
-        $storageApiClient = $this->createMock(Client::class);
-        $storageApiClient->method('apiGet')
+        $parserStorageApiClient = $this->createMock(Client::class);
+        $parserStorageApiClient->method('apiGet')
             ->with('branch/default/components/my-component/configs/my-config')
             ->willThrowException(new ClientException(
                 'Configuration my-config not found',
@@ -280,92 +284,46 @@ class JobDefinitionFactoryTest extends TestCase
             ))
         ;
 
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-        ]);
-        $factory = new JobDefinitionFactory();
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($parserStorageApiClient);
+
+        $component = $this->createComponent();
+        $parser = new JobDefinitionParser();
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('Configuration my-config not found');
-        $factory->createFromJob(
+        $parser->createJobDefinitionsForJob(
+            $clientWrapper,
             $component,
             $job,
-            $encryptor,
-            $this->getStorageApiClientMock($storageApiClient),
         );
-    }
-
-    private function getStorageApiClientMock(Client $basicClient): ClientWrapper
-    {
-        $clientWrapperMock = $this->createMock(ClientWrapper::class);
-        $clientWrapperMock->method('getBasicClient')->willReturn($basicClient);
-        $clientWrapperMock->method('hasBranch')->willReturn(false);
-        $clientWrapperMock->expects(self::never())->method('getBranchClient');
-        return $clientWrapperMock;
     }
 
     /**
      * @return array<JobDefinition>
      */
-    private function createJobDefinitionsWithConfigData(array $jobData, array $configData): array
+    private function createJobDefinitionsWithConfigData(array $jobData): array
     {
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configData)->willReturn($configData);
-
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
+        $component = $this->createComponent();
+        $job = $this->createJob($jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->expects(self::never())->method(self::anything());
 
-        $factory = new JobDefinitionFactory();
-        return $factory->createFromJob(
-            $component,
-            $job,
-            $encryptor,
-            $this->getStorageApiClientMock($storageApiClient),
-        );
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+
+        return $parser->createJobDefinitionsForJob($clientWrapper, $component, $job);
     }
 
     private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
     {
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
-
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
+        $component = $this->createComponent();
+        $job = $this->createJob($jobData);
 
         $storageApiClient = $this->createMock(Client::class);
         $storageApiClient->method('apiGet')
@@ -373,67 +331,16 @@ class JobDefinitionFactoryTest extends TestCase
             ->willReturn($configuration)
         ;
 
-        $factory = new JobDefinitionFactory();
-        return $factory->createFromJob(
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+
+        return $parser->createJobDefinitionsForJob(
+            $clientWrapper,
             $component,
             $job,
-            $encryptor,
-            $this->getStorageApiClientMock($storageApiClient),
-        );
-    }
-
-    private function getStorageApiClientBranchMock(Client $branchClient): ClientWrapper
-    {
-        $clientWrapperMock = $this->createMock(ClientWrapper::class);
-        $clientWrapperMock->method('hasBranch')->willReturn(true);
-        $clientWrapperMock->method('getBranchId')->willReturn('my-branch');
-        $clientWrapperMock->method('getBranchClient')->willReturn($branchClient);
-        $basicClientMock = $this->createMock(Client::class);
-        $basicClientMock->method('apiGet')
-            ->with('dev-branches/123')
-            ->willReturn(
-                [
-                    'id' => '123',
-                    'isDefault' => false,
-                ]
-            );
-        $clientWrapperMock->method('getBasicClient')->willReturn($basicClientMock);
-        return $clientWrapperMock;
-    }
-
-    private function createJobDefinitionsWithBranchConfiguration(array $jobData, array $configuration): array
-    {
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
-
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
-
-        $storageApiClient = $this->createMock(BranchAwareClient::class);
-        $storageApiClient->method('apiGet')
-            ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration);
-
-        $factory = new JobDefinitionFactory();
-
-        return $factory->createFromJob(
-            $component,
-            $job,
-            $encryptor,
-            $this->getStorageApiClientBranchMock($storageApiClient)
         );
     }
 
@@ -461,7 +368,26 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $jobDefinitions = $this->createJobDefinitionsWithBranchConfiguration($jobData, $configuration);
+        $component = $this->createComponent();
+        $job = $this->createJob($jobData);
+
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
+        $storageApiClient->expects(self::once())->method('apiGet')
+            ->with('components/my-component/configs/my-config')
+            ->willReturn($configuration)
+        ;
+
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+
+        $jobDefinitions = $parser->createJobDefinitionsForJob(
+            $clientWrapper,
+            $component,
+            $job,
+        );
 
         self::assertCount(1, $jobDefinitions);
 
@@ -498,47 +424,29 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
+        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
+        $job = $this->createJob($jobData);
 
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-            'features' => ['dev-branch-configuration-unsafe'],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
-
-        $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
-            ->setConstructorArgs(
-                [
-                    'my-branch',
-                    ['token' => '123', 'url' => 'https://connection.keboola.com'],
-                ]
-            )->getMock();
-        $storageApiClient->method('apiGet')
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
+        $storageApiClient->expects(self::once())->method('apiGet')
             ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration);
+            ->willReturn($configuration)
+        ;
 
-        $factory = new JobDefinitionFactory();
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
             'It is not safe to run this configuration in a development branch. Please review the configuration.'
         );
-        $factory->createFromJob(
+        $parser->createJobDefinitionsForJob(
+            $clientWrapper,
             $component,
             $job,
-            $encryptor,
-            $this->getStorageApiClientBranchMock($storageApiClient),
         );
     }
 
@@ -567,43 +475,24 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForBranchTypeConfiguration')->with($configuration)->willReturn($configuration);
+        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
+        $job = $this->createJob($jobData);
 
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-            'features' => ['dev-branch-configuration-unsafe'],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
-
-        $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
-            ->setConstructorArgs(
-                [
-                    'my-branch',
-                    ['token' => '123', 'url' => 'https://connection.keboola.com'],
-                ]
-            )->getMock();
-        $storageApiClient->method('apiGet')
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
+        $storageApiClient->expects(self::once())->method('apiGet')
             ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration);
+            ->willReturn($configuration)
+        ;
 
-        $factory = new JobDefinitionFactory();
-        $jobDefinitions = $factory->createFromJob(
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+        $jobDefinitions = $parser->createJobDefinitionsForJob(
+            $clientWrapper,
             $component,
             $job,
-            $encryptor,
-            $this->getStorageApiClientBranchMock($storageApiClient),
         );
 
         self::assertCount(1, $jobDefinitions);
@@ -616,19 +505,6 @@ class JobDefinitionFactoryTest extends TestCase
 
     public function testCreateJobDefinitionBranchBlocked(): void
     {
-
-        $configuration = [
-            'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
-            'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
-                ],
-            ],
-        ];
-
         $jobData = [
             'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
@@ -639,42 +515,24 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $encryptor = $this->createMock(ObjectEncryptor::class);
-        $encryptor->method('decryptForConfiguration')->with($configuration)->willReturn($configuration);
+        $component = $this->createComponent(['dev-branch-job-blocked']);
+        $job = $this->createJob($jobData);
 
-        $component = new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
-                ],
-            ],
-            'features' => ['dev-branch-job-blocked'],
-        ]);
-
-        $job = new Job(
-            new JobObjectEncryptor($encryptor),
-            $this->createMock(StorageClientPlainFactory::class),
-            $jobData
-        );
-
-        $storageApiClient = $this->getMockBuilder(BranchAwareClient::class)
-            ->setConstructorArgs(
-                [
-                    'my-branch',
-                    ['token' => '123', 'url' => 'https://connection.keboola.com'],
-                ]
-            )->getMock();
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->expects(self::never())->method('apiGet');
-        $factory = new JobDefinitionFactory();
+
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper->method('hasBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+
+        $parser = new JobDefinitionParser();
+
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('This component cannot be run in a development branch.');
-        $factory->createFromJob(
+        $parser->createJobDefinitionsForJob(
+            $clientWrapper,
             $component,
             $job,
-            $encryptor,
-            $this->getStorageApiClientBranchMock($storageApiClient),
         );
     }
 }

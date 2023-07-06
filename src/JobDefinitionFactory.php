@@ -4,109 +4,129 @@ declare(strict_types=1);
 
 namespace App;
 
+use InvalidArgumentException;
+use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
+use Keboola\ConfigurationVariablesResolver\VariablesResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
-use Keboola\DockerBundle\Docker\JobDefinitionParser;
-use Keboola\DockerBundle\Exception\UserException;
+use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\ObjectEncryptor\ObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
-use Keboola\StorageApi\ClientException;
-use Keboola\StorageApi\Components;
+use Keboola\StorageApi\DevBranches;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\VaultApiClient\Variables\VariablesApiClient;
+use Psr\Log\LoggerInterface;
 
 class JobDefinitionFactory
 {
+    public function __construct(
+        private readonly JobDefinitionParser $jobDefinitionParser,
+        private readonly BranchIdResolver $branchIdResolver,
+        private readonly JobObjectEncryptor $objectEncryptor,
+        private readonly VariablesApiClient $variablesApiClient,
+        private readonly LoggerInterface $logger,
+    ) {
+    }
+
     /**
      * @return array<JobDefinition>
      */
     public function createFromJob(
         Component $component,
         JobInterface $job,
-        ObjectEncryptor $objectEncryptor,
-        ClientWrapper $clientWrapper
+        ClientWrapper $clientWrapper,
     ): array {
-        if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
-            throw new UserException('This component cannot be run in a development branch.');
-        }
+        $jobDefinitions = $this->jobDefinitionParser->createJobDefinitionsForJob(
+            $clientWrapper,
+            $component,
+            $job,
+        );
 
-        $jobDefinitionParser = new JobDefinitionParser();
+        $jobDefinitions = $this->resolveVariables(
+            $clientWrapper,
+            $jobDefinitions,
+            $job->getBranchId(),
+            $job->getVariableValuesId(),
+            $job->getVariableValuesData(),
+        );
 
-        if ($job->getConfigData()) {
-            $configData = $job->getConfigDataDecrypted();
-            $configData = $this->extendComponentConfigWithBackend($configData, $job);
-            $jobDefinitionParser->parseConfigData(
-                $component,
-                $configData,
-                $job->getConfigId(),
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
-            );
-        } else {
-            try {
-                if ($clientWrapper->hasBranch()) {
-                    $components = new Components($clientWrapper->getBranchClient());
-                    $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-                } else {
-                    $components = new Components($clientWrapper->getBasicClient());
-                    $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-                }
+        $jobDefinitions = $this->decryptConfiguration(
+            $jobDefinitions,
+            $job,
+        );
 
-                /** @var array $configuration */
-
-                $this->checkUnsafeConfiguration(
-                    $component,
-                    $configuration,
-                    (string) $clientWrapper->getBranchId()
-                );
-            } catch (ClientException $e) {
-                throw new UserException($e->getMessage(), $e);
-            }
-
-            $configuration = $objectEncryptor->decryptForBranchTypeConfiguration(
-                $configuration,
-                $job->getComponentId(),
-                $job->getProjectId(),
-                (string) $job->getConfigId(),
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value
-            );
-
-            $configuration['configuration'] = $this->extendComponentConfigWithBackend(
-                $configuration['configuration'] ?? [],
-                $job
-            );
-
-            $jobDefinitionParser->parseConfig(
-                $component,
-                $configuration,
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
-            );
-        }
-
-        return $jobDefinitionParser->getJobDefinitions();
+        return $jobDefinitions;
     }
 
-    private function extendComponentConfigWithBackend(array $config, JobInterface $job): array
-    {
-        $backend = $job->getBackend();
-
-        if ($backend->getType() !== null) {
-            $config['runtime']['backend']['type'] = $backend->getType();
+    /**
+     * @param JobDefinition[] $jobDefinitions
+     * @return JobDefinition[]
+     */
+    private function resolveVariables(
+        ClientWrapper $clientWrapper,
+        array $jobDefinitions,
+        ?string $branchId,
+        ?string $jobVariableValuesId,
+        array $variableValuesData,
+    ): array {
+        if ($jobVariableValuesId === '') {
+            throw new InvalidArgumentException('$variableValuesId must not be empty string');
         }
-        if ($backend->getContext() !== null) {
-            $config['runtime']['backend']['context'] = $backend->getContext();
-        }
 
-        return $config;
+        $branchId = $this->branchIdResolver->resolveBranchId($clientWrapper, $branchId);
+
+        $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
+        $variableResolver = VariablesResolver::create(
+            $clientWrapper,
+            $this->variablesApiClient,
+            $this->logger,
+        );
+
+        return array_map(
+            fn(JobDefinition $jobDefinition) => new JobDefinition(
+                $variableResolver->resolveVariables(
+                    $sharedCodeResolver->resolveSharedCode(
+                        $jobDefinition->getConfiguration(),
+                    ),
+                    $branchId,
+                    $jobVariableValuesId,
+                    $variableValuesData,
+                ),
+                $jobDefinition->getComponent(),
+                $jobDefinition->getConfigId(),
+                $jobDefinition->getConfigVersion(),
+                $jobDefinition->getState(),
+                $jobDefinition->getRowId(),
+                $jobDefinition->isDisabled(),
+            ),
+            $jobDefinitions,
+        );
     }
 
-    private function checkUnsafeConfiguration(Component $component, array $configuration, string $branchId): void
+    /**
+     * @param JobDefinition[] $jobDefinitions
+     * @return JobDefinition[]
+     */
+    private function decryptConfiguration(array $jobDefinitions, JobInterface $job): array
     {
-        if ($component->branchConfigurationsAreUnsafe() && $branchId) {
-            if (empty($configuration['configuration']['runtime']['safe'])) {
-                throw new UserException(
-                    'It is not safe to run this configuration in a development branch. Please review the configuration.'
-                );
-            }
-        }
+        return array_map(
+            fn(JobDefinition $jobDefinition) => new JobDefinition(
+                $this->objectEncryptor->decrypt(
+                    $jobDefinition->getConfiguration(),
+                    $jobDefinition->getComponentId(),
+                    $job->getProjectId(),
+                    $jobDefinition->getConfigId(),
+                    BranchType::from($jobDefinition->getBranchType()),
+                ),
+                $jobDefinition->getComponent(),
+                $jobDefinition->getConfigId(),
+                $jobDefinition->getConfigVersion(),
+                $jobDefinition->getState(),
+                $jobDefinition->getRowId(),
+                $jobDefinition->isDisabled(),
+            ),
+            $jobDefinitions,
+        );
     }
 }
