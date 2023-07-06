@@ -42,3 +42,28 @@ foreach ($tokeEnvs as $tokenEnv) {
         $client->getApiUrl()
     ));
 }
+
+$sensitiveVariables = [
+    'STORAGE_API_TOKEN',
+    'STORAGE_API_TOKEN_MASTER',
+    'AWS_ACCESS_KEY_ID',
+    'AWS_SECRET_ACCESS_KEY',
+    'AZURE_CLIENT_ID',
+    'AZURE_CLIENT_SECRET',
+    'AZURE_TENANT_ID',
+];
+foreach ($sensitiveVariables as $variable) {
+    // clear any real values
+    unset($_SERVER[$variable]);
+    putenv($variable);
+
+    // move TEST_* values
+    $testVariable = 'TEST_'.$variable;
+    if (array_key_exists($testVariable, $_SERVER)) {
+        $_SERVER[$variable] = $_SERVER[$testVariable];
+    }
+
+    if (getenv($testVariable) !== false) {
+        putenv($variable.'='.getenv($testVariable));
+    }
+}
