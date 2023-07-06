@@ -41,7 +41,9 @@ services:
       - internal-api
 
   dev:
-    <<: *tests
+    build:
+      context: .
+      target: dev
     volumes:
       - ./:/code
       - /tmp/:/tmp/
