@@ -6,6 +6,7 @@ namespace App\Tests\Command;
 
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -14,6 +15,7 @@ use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
+use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -1097,7 +1099,12 @@ class RunCommandTest extends AbstractCommandTest
 
         $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
-        $jobDefinitionFactory = new JobDefinitionFactory();
+        $jobDefinitionFactory = new JobDefinitionFactory(
+            new JobDefinitionParser(),
+            new JobObjectEncryptor($objectEncryptor),
+            $this->createMock(VariablesApiClient::class),
+            $logger,
+        );
         $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
@@ -1112,7 +1119,6 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
-            $this->createMock(VariablesApiClient::class),
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             []

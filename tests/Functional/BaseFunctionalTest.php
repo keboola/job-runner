@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use App\Tests\EncryptorOptionsTrait;
 use App\Tests\TestEnvVarsTrait;
 use Exception;
@@ -163,9 +164,13 @@ abstract class BaseFunctionalTest extends TestCase
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $mockQueueClient,
             $storageClientFactory,
-            new JobDefinitionFactory(),
+            new JobDefinitionFactory(
+                new JobDefinitionParser(),
+                new JobObjectEncryptor($this->objectEncryptor),
+                $this->vaultVariablesApiClient,
+                $this->logger,
+            ),
             $this->objectEncryptor,
-            $this->vaultVariablesApiClient,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1]

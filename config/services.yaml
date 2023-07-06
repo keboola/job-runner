@@ -70,6 +70,8 @@ services:
         class: Keboola\ObjectEncryptor\ObjectEncryptor
         factory: ['Keboola\ObjectEncryptor\ObjectEncryptorFactory', 'getEncryptor']
 
+    Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor:
+
     Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider:
 
     Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\ObjectEncryptorProviderInterface: '@Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider'
