@@ -185,13 +185,20 @@ class RunCommand extends Command
                 $job->getProjectId()
             ));
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
-            $clientWithoutLogger = $this->storageClientFactory
-                ->createClientWrapper($options)->getBranchClientIfAvailable();
+
+            $clientWrapperWithoutLogger = $this->storageClientFactory->createClientWrapper($options);
+            $clientWithoutLogger = $clientWrapperWithoutLogger->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
+
+            // ensure we have branchId value (even if job does not have it explicitly set or have "default")
+            $branchId = $this->resolveBranchId($clientWrapperWithoutLogger, $job->getBranchId());
+
             $containerLogger = new ContainerLogger('container-logger');
             $options = clone $options;
             $options->setLogger($this->logger);
+            $options->setBranchId($branchId);
+
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
@@ -220,7 +227,7 @@ class RunCommand extends Command
             $jobDefinitions = $this->resolveVariables(
                 $clientWrapper,
                 $jobDefinitions,
-                $job->getBranchId(),
+                $branchId,
                 $job->getVariableValuesId(),
                 $job->getVariableValuesData()
             );
@@ -318,22 +325,12 @@ class RunCommand extends Command
     }
 
     /**
-     * @param array<JobDefinition> $jobDefinitions
-     * @return array<JobDefinition>
+     * @return non-empty-string
      */
-    private function resolveVariables(
-        ClientWrapper $clientWrapper,
-        array $jobDefinitions,
-        ?string $branchId,
-        ?string $variableValuesId,
-        array $variableValuesData
-    ): array {
-        if ($variableValuesId === '') {
-            throw new InvalidArgumentException('$variableValuesId must not be empty string');
-        }
-
+    private function resolveBranchId(ClientWrapper $clientWrapper, ?string $branchId): string
+    {
         if ($branchId === null || $branchId === 'default') {
-            $branchesApiClient = new DevBranches($clientWrapper->getBranchClientIfAvailable());
+            $branchesApiClient = new DevBranches($clientWrapper->getBasicClient());
             foreach ($branchesApiClient->listBranches() as $branch) {
                 if ($branch['isDefault']) {
                     $branchId = (string) $branch['id'];
@@ -344,6 +341,25 @@ class RunCommand extends Command
 
         if ($branchId === null || $branchId === 'default' || $branchId === '') {
             throw new ApplicationException('Can\'t resolve branchId for the job.');
+        }
+
+        return $branchId;
+    }
+
+    /**
+     * @param array<JobDefinition> $jobDefinitions
+     * @param non-empty-string $branchId
+     * @return array<JobDefinition>
+     */
+    private function resolveVariables(
+        ClientWrapper $clientWrapper,
+        array $jobDefinitions,
+        string $branchId,
+        ?string $variableValuesId,
+        array $variableValuesData
+    ): array {
+        if ($variableValuesId === '') {
+            throw new InvalidArgumentException('$variableValuesId must not be empty string');
         }
 
         $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
