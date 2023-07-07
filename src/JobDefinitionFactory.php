@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use InvalidArgumentException;
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariablesResolver;
 use Keboola\DockerBundle\Docker\Component;
@@ -71,7 +70,7 @@ class JobDefinitionFactory
         array $variableValuesData,
     ): array {
         if ($jobVariableValuesId === '') {
-            throw new InvalidArgumentException('$variableValuesId must not be empty string');
+            $jobVariableValuesId = null;
         }
 
         $branchId = $this->branchIdResolver->resolveBranchId($clientWrapper, $branchId);
