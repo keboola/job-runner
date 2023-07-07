@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9398535a6e9e52fd2d198d0c1c10ffa",
+    "content-hash": "9200e6af6efe54c0729f65b15cab93a5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1202,16 +1202,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "dev-pepa_SOX-107_resolveVaultVariables",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "289b2ae939446ec194c6b3f8015c57e49f6fbd01"
+                "reference": "ba341f8c8e4ae37f49dc4a06927904b74132568e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/289b2ae939446ec194c6b3f8015c57e49f6fbd01",
-                "reference": "289b2ae939446ec194c6b3f8015c57e49f6fbd01",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/ba341f8c8e4ae37f49dc4a06927904b74132568e",
+                "reference": "ba341f8c8e4ae37f49dc4a06927904b74132568e",
                 "shasum": ""
             },
             "require": {
@@ -1262,9 +1262,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/pepa_SOX-107_resolveVaultVariables"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.0.0"
             },
-            "time": "2023-07-05T13:52:01+00:00"
+            "time": "2023-07-07T11:36:41+00:00"
         },
         {
             "name": "keboola/csv",
@@ -10696,7 +10696,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/configuration-variables-resolver": 20,
         "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
