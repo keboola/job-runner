@@ -155,6 +155,8 @@ abstract class BaseFunctionalTest extends TestCase
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
             $mockClientWrapper->method('getBranchClientIfAvailable')->willReturn($mockClient);
+            $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($mockClient);
+            $mockClientWrapper->method('getBranchId')->willReturn('123');
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
@@ -167,7 +169,6 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory,
             new JobDefinitionFactory(
                 new JobDefinitionParser(),
-                new BranchIdResolver(),
                 new JobObjectEncryptor($this->objectEncryptor),
                 $this->vaultVariablesApiClient,
                 $this->logger,
