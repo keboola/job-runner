@@ -192,14 +192,14 @@ class RunCommand extends Command
             $this->logger->pushHandler($handler);
 
             // ensure we have branchId value (even if job does not have it explicitly set or have "default")
-            $branchId = $this->resolveBranchId($clientWrapperWithoutLogger, $job->getBranchId());
+            //$branchId = $this->resolveBranchId($clientWrapperWithoutLogger, $job->getBranchId());
 
             $containerLogger = new ContainerLogger('container-logger');
             $options = clone $options;
             $options->setLogger($this->logger);
-            $options->setBranchId($branchId);
-
+            $options->setBranchId($clientWrapperWithoutLogger->getBranchId());
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
+            $containerLogger->pushHandler($h2);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             // set up runner
@@ -227,7 +227,7 @@ class RunCommand extends Command
             $jobDefinitions = $this->resolveVariables(
                 $clientWrapper,
                 $jobDefinitions,
-                $branchId,
+                $clientWrapperWithoutLogger->getBranchId(),
                 $job->getVariableValuesId(),
                 $job->getVariableValuesData()
             );

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9200e6af6efe54c0729f65b15cab93a5",
+    "content-hash": "c1322192c254324e423351a4d5b44106",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -446,16 +446,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.52.0",
+            "version": "v1.52.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "bd87e418923e0d836c7e754d82e66bc0b79964ab"
+                "reference": "8214910f79b5508d4cd1cd48f39d7970443071d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/bd87e418923e0d836c7e754d82e66bc0b79964ab",
-                "reference": "bd87e418923e0d836c7e754d82e66bc0b79964ab",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/8214910f79b5508d4cd1cd48f39d7970443071d5",
+                "reference": "8214910f79b5508d4cd1cd48f39d7970443071d5",
                 "shasum": ""
             },
             "require": {
@@ -471,7 +471,7 @@
             "require-dev": {
                 "erusev/parsedown": "^1.6",
                 "google/cloud-common-protos": "^0.4",
-                "google/gax": "^1.9",
+                "google/gax": "^1.19.1",
                 "opis/closure": "^3",
                 "phpdocumentor/reflection": "^5.0",
                 "phpspec/prophecy-phpunit": "^2.0",
@@ -505,22 +505,22 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.52.0"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.52.1"
             },
-            "time": "2023-06-21T21:05:25+00:00"
+            "time": "2023-07-07T20:46:38+00:00"
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "2dd5cee0da51e94bcf39c0af9cefd0ec6b931685"
+                "reference": "05ae33620feebe1107756b59fe0329cace3b5e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/2dd5cee0da51e94bcf39c0af9cefd0ec6b931685",
-                "reference": "2dd5cee0da51e94bcf39c0af9cefd0ec6b931685",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/05ae33620feebe1107756b59fe0329cace3b5e13",
+                "reference": "05ae33620feebe1107756b59fe0329cace3b5e13",
                 "shasum": ""
             },
             "require": {
@@ -562,9 +562,9 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.32.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.33.0"
             },
-            "time": "2023-06-21T21:05:25+00:00"
+            "time": "2023-07-07T20:46:38+00:00"
         },
         {
             "name": "google/crc32",
@@ -1317,11 +1317,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-odin-SOX-138",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "5ba59cdc00526d028d9e6a1b43565d6c611cc908"
+                "reference": "c24a3315bb622d81adc47decca52886e41c24a86"
             },
             "require": {
                 "ext-json": "*",
@@ -1329,15 +1329,15 @@
                 "keboola/artifacts": "^2.0",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "^17.0",
+                "keboola/input-mapping": "dev-odin-SOX-138-b as 17.2.3",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "^21.0",
+                "keboola/output-mapping": "dev-odin-SOX-138-b as 21.0.0",
                 "keboola/php-utils": "^5.0",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^6.0",
                 "keboola/storage-api-client": "^14.6",
-                "keboola/storage-api-php-client-branch-wrapper": "^3.0",
+                "keboola/storage-api-php-client-branch-wrapper": "dev-odin-SOX-138 as 3.3.0",
                 "monolog/monolog": "^2.5",
                 "mustache/mustache": "^2.13",
                 "php": ">=8.2",
@@ -1411,7 +1411,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-06-20T14:46:14+00:00"
+            "time": "2023-07-07T19:59:34+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1470,23 +1470,23 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "17.2.3",
+            "version": "dev-odin-SOX-138-b",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "3cf621b904dd057bebc4c38a874b9cc63d86c5a3"
+                "reference": "3116c17a878be81e8d9caba2a4c52a65f8a342ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/3cf621b904dd057bebc4c38a874b9cc63d86c5a3",
-                "reference": "3cf621b904dd057bebc4c38a874b9cc63d86c5a3",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/3116c17a878be81e8d9caba2a4c52a65f8a342ec",
+                "reference": "3116c17a878be81e8d9caba2a4c52a65f8a342ec",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/storage-api-client": "^14.5",
-                "keboola/storage-api-php-client-branch-wrapper": "^3.1",
+                "keboola/storage-api-php-client-branch-wrapper": "dev-odin-SOX-138 as 3.1.0",
                 "php": ">=8.1",
                 "symfony/config": "^5.4|^6.0",
                 "symfony/finder": "^5.4|^6.0",
@@ -1528,22 +1528,22 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/17.2.3"
+                "source": "https://github.com/keboola/input-mapping/tree/odin-SOX-138-b"
             },
-            "time": "2023-06-15T12:54:08+00:00"
+            "time": "2023-07-07T14:58:55+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "17.1.0",
+            "version": "17.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "568898ad38396d99507104a024f6072b74b429ca"
+                "reference": "0df75d2e8dbc8436f51f8bb9cda857d4f5f49520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/568898ad38396d99507104a024f6072b74b429ca",
-                "reference": "568898ad38396d99507104a024f6072b74b429ca",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0df75d2e8dbc8436f51f8bb9cda857d4f5f49520",
+                "reference": "0df75d2e8dbc8436f51f8bb9cda857d4f5f49520",
                 "shasum": ""
             },
             "require": {
@@ -1553,7 +1553,7 @@
                 "keboola/kbc-manage-api-php-client": "^5.2|^6.0",
                 "keboola/object-encryptor": "^2.0",
                 "keboola/permission-checker": "^0.1",
-                "keboola/storage-api-client": "^14.0",
+                "keboola/storage-api-client": "^14.10",
                 "keboola/storage-api-php-client-branch-wrapper": "^3.2",
                 "monolog/monolog": "^2.6",
                 "php": "^8.0",
@@ -1600,9 +1600,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.1.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.2.0"
             },
-            "time": "2023-07-03T07:00:50+00:00"
+            "time": "2023-07-03T14:21:22+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -1772,16 +1772,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "21.6.1",
+            "version": "dev-odin-SOX-138-b",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "0264bf026846020b63f7d3f4ffb37a5897edd8e7"
+                "reference": "f75a3fc54358185424e844888a732becd79a3845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/0264bf026846020b63f7d3f4ffb37a5897edd8e7",
-                "reference": "0264bf026846020b63f7d3f4ffb37a5897edd8e7",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/f75a3fc54358185424e844888a732becd79a3845",
+                "reference": "f75a3fc54358185424e844888a732becd79a3845",
                 "shasum": ""
             },
             "require": {
@@ -1791,7 +1791,7 @@
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/sanitizer": "^0.1",
                 "keboola/storage-api-client": "^14.5",
-                "keboola/storage-api-php-client-branch-wrapper": "^3.1",
+                "keboola/storage-api-php-client-branch-wrapper": "dev-odin-SOX-138 as 3.1.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
                 "php": ">=8.1",
@@ -1835,9 +1835,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/21.6.1"
+                "source": "https://github.com/keboola/output-mapping/tree/odin-SOX-138-b"
             },
-            "time": "2023-06-15T12:54:08+00:00"
+            "time": "2023-07-07T14:59:22+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2346,22 +2346,22 @@
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
-            "version": "3.3.0",
+            "version": "dev-odin-SOX-138",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client-branch-wrapper.git",
-                "reference": "a6b94d43017c12a7e1941f7432f5ad0b480c9cd7"
+                "reference": "5636ecb8d9b712229d116ddf6db8654d946fd09e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client-branch-wrapper/zipball/a6b94d43017c12a7e1941f7432f5ad0b480c9cd7",
-                "reference": "a6b94d43017c12a7e1941f7432f5ad0b480c9cd7",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client-branch-wrapper/zipball/5636ecb8d9b712229d116ddf6db8654d946fd09e",
+                "reference": "5636ecb8d9b712229d116ddf6db8654d946fd09e",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/storage-api-client": "^14.5",
-                "php": ">=7.4",
+                "php": ">=8.1",
                 "symfony/http-foundation": "^5.2|^6.0",
                 "symfony/validator": "^5.2|^6.0"
             },
@@ -2397,22 +2397,22 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client-branch-wrapper/issues",
-                "source": "https://github.com/keboola/storage-api-php-client-branch-wrapper/tree/3.3.0"
+                "source": "https://github.com/keboola/storage-api-php-client-branch-wrapper/tree/odin-SOX-138"
             },
-            "time": "2022-11-07T08:26:57+00:00"
+            "time": "2023-07-09T22:20:28+00:00"
         },
         {
             "name": "keboola/vault-api-client",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/vault-api-php-client.git",
-                "reference": "c76e3b4210e17f74ff35717b3c79cc0d49da3397"
+                "reference": "d53b873a5f0520b0f46fac38ac4481204c06f41c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/vault-api-php-client/zipball/c76e3b4210e17f74ff35717b3c79cc0d49da3397",
-                "reference": "c76e3b4210e17f74ff35717b3c79cc0d49da3397",
+                "url": "https://api.github.com/repos/keboola/vault-api-php-client/zipball/d53b873a5f0520b0f46fac38ac4481204c06f41c",
+                "reference": "d53b873a5f0520b0f46fac38ac4481204c06f41c",
                 "shasum": ""
             },
             "require": {
@@ -2450,9 +2450,9 @@
             "description": "Keboola Vault API client",
             "support": {
                 "issues": "https://github.com/keboola/vault-api-php-client/issues",
-                "source": "https://github.com/keboola/vault-api-php-client/tree/0.1.0"
+                "source": "https://github.com/keboola/vault-api-php-client/tree/0.1.1"
             },
-            "time": "2023-06-23T19:52:19+00:00"
+            "time": "2023-07-07T11:36:41+00:00"
         },
         {
             "name": "microsoft/azure-storage-blob",
@@ -8357,16 +8357,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.22",
+            "version": "1.10.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "97d694dfd4ceb57bcce4e3b38548f13ea62e4287"
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/97d694dfd4ceb57bcce4e3b38548f13ea62e4287",
-                "reference": "97d694dfd4ceb57bcce4e3b38548f13ea62e4287",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578f4e70d117f9a90699324c555922800ac38d8c",
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c",
                 "shasum": ""
             },
             "require": {
@@ -8415,7 +8415,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-30T20:04:11+00:00"
+            "time": "2023-07-06T12:11:37+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -10693,10 +10693,32 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-odin-SOX-138-b",
+            "alias": "17.2.3",
+            "alias_normalized": "17.2.3.0"
+        },
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-odin-SOX-138-b",
+            "alias": "21.0.0",
+            "alias_normalized": "21.0.0.0"
+        },
+        {
+            "package": "keboola/storage-api-php-client-branch-wrapper",
+            "version": "dev-odin-SOX-138",
+            "alias": "3.3.0",
+            "alias_normalized": "3.3.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20,
+        "keboola/output-mapping": 20,
+        "keboola/storage-api-php-client-branch-wrapper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
