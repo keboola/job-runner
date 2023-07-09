@@ -199,7 +199,6 @@ class RunCommand extends Command
             $options->setLogger($this->logger);
             $options->setBranchId($clientWrapperWithoutLogger->getBranchId());
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
-            $containerLogger->pushHandler($h2);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
             // set up runner
@@ -223,6 +222,7 @@ class RunCommand extends Command
             $usageFile->setFormat($component->getConfigurationFormat());
             $usageFile->setJobId($job->getId());
 
+            assert(!empty($clientWrapperWithoutLogger->getBranchId()));
             // resolve variables and shared code
             $jobDefinitions = $this->resolveVariables(
                 $clientWrapper,
@@ -322,28 +322,6 @@ class RunCommand extends Command
         } catch (ClientException $e) {
             throw new UserException(sprintf('Cannot get component "%s": %s.', $id, $e->getMessage()), $e);
         }
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function resolveBranchId(ClientWrapper $clientWrapper, ?string $branchId): string
-    {
-        if ($branchId === null || $branchId === 'default') {
-            $branchesApiClient = new DevBranches($clientWrapper->getBasicClient());
-            foreach ($branchesApiClient->listBranches() as $branch) {
-                if ($branch['isDefault']) {
-                    $branchId = (string) $branch['id'];
-                    break;
-                }
-            }
-        }
-
-        if ($branchId === null || $branchId === 'default' || $branchId === '') {
-            throw new ApplicationException('Can\'t resolve branchId for the job.');
-        }
-
-        return $branchId;
     }
 
     /**
