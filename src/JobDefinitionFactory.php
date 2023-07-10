@@ -99,7 +99,7 @@ class JobDefinitionFactory
         return $config;
     }
 
-    private function checkUnsafeConfiguration(Component $component, array $configuration, string $hasBranch): void
+    private function checkUnsafeConfiguration(Component $component, array $configuration, bool $hasBranch): void
     {
         if ($component->branchConfigurationsAreUnsafe() && $hasBranch) {
             if (empty($configuration['configuration']['runtime']['safe'])) {
