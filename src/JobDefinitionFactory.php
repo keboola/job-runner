@@ -56,7 +56,7 @@ class JobDefinitionFactory
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
-                    (string) $clientWrapper->getBranchId()
+                    $clientWrapper->hasBranch()
                 );
             } catch (ClientException $e) {
                 throw new UserException($e->getMessage(), $e);
@@ -99,9 +99,9 @@ class JobDefinitionFactory
         return $config;
     }
 
-    private function checkUnsafeConfiguration(Component $component, array $configuration, string $branchId): void
+    private function checkUnsafeConfiguration(Component $component, array $configuration, string $hasBranch): void
     {
-        if ($component->branchConfigurationsAreUnsafe() && $branchId) {
+        if ($component->branchConfigurationsAreUnsafe() && $hasBranch) {
             if (empty($configuration['configuration']['runtime']['safe'])) {
                 throw new UserException(
                     'It is not safe to run this configuration in a development branch. Please review the configuration.'
