@@ -33,6 +33,9 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     private const VARIABLES_CONFIG_ID = self::TEST_NAME;
     private const VARIABLES_ROW_ID = self::TEST_NAME;
 
+    private const SHARED_CODE_CONFIG_ID = self::TEST_NAME;
+    private const SHARED_CODE_ROW_ID = self::TEST_NAME;
+
     private readonly JobObjectEncryptor $jobObjectEncryptor;
     private readonly ClientWrapper $clientWrapper;
     private readonly Component $component;
@@ -138,6 +141,54 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         );
     }
 
+    public function testVariablesAreReplacedInSharedCodes(): void
+    {
+        $sharedCodeConfigId = self::TEST_NAME;
+
+        $job = $this->createJob([
+            'configData' => [
+                'variables_id' => self::VARIABLES_CONFIG_ID,
+                'variables_values_id' => self::VARIABLES_ROW_ID,
+                'shared_code_id' => $sharedCodeConfigId,
+                'shared_code_row_ids' => ['code1'],
+                'parameters' => [
+                    'script' => ['Shared {{ code1 }}'],
+                ],
+            ],
+        ]);
+
+        $this->setupSharedCode($sharedCodeConfigId, [
+            'code1' => 'print("shared code var: {{ var1 }} and {{ vault.var1 }}")',
+        ]);
+
+        $this->setupConfigurationVariables(
+            [
+                ['name' => 'var1', 'type' => 'string'],
+            ],
+            [
+                ['name' => 'var1', 'value' => 'config val'],
+            ],
+        );
+
+        $this->setupVaultVariables([
+            'var1' => 'vault val',
+        ]);
+
+        $jobDefinitions = $this->factory->createFromJob(
+            $this->component,
+            $job,
+            $this->clientWrapper,
+        );
+        self::assertCount(1, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertInstanceOf(JobDefinition::class, $jobDefinition);
+        self::assertSame(
+            ['print("shared code var: config val and vault val")'],
+            $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
+        );
+    }
+
     public function testVariablesAreReplacedBeforeDecrypted(): void
     {
         $job = $this->createJob([
@@ -219,6 +270,34 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         $row->setConfiguration(['values' => $variablesValues]);
 
         $this->setupConfigurationWithRows($configuration, [$row]);
+    }
+
+    /**
+     * @param array<non-empty-string, string> $sharedCodes
+     */
+    private function setupSharedCode(string $sharedCodeConfigId, array $sharedCodes): void
+    {
+        $configuration = new StorageConfiguration();
+        $configuration->setConfigurationId($sharedCodeConfigId);
+        $configuration->setName(self::SHARED_CODE_CONFIG_ID);
+        $configuration->setComponentId(ComponentsClientHelper::KEBOOLA_SHARED_CODE);
+        $configuration->setConfiguration([
+            'componentId' => 'keboola.python-transformation-v2',
+        ]);
+
+        $rows = [];
+        foreach ($sharedCodes as $codeId => $codeContent) {
+            $row = new ConfigurationRow($configuration);
+            $row->setRowId($codeId);
+            $row->setName(self::SHARED_CODE_ROW_ID);
+            $row->setConfiguration([
+                'code_content' => $codeContent,
+            ]);
+
+            $rows[] = $row;
+        }
+
+        $this->setupConfigurationWithRows($configuration, $rows);
     }
 
     private function setupConfigurationWithRows(StorageConfiguration $configuration, array $rows): void
