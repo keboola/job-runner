@@ -1534,16 +1534,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "17.2.0",
+            "version": "17.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "0df75d2e8dbc8436f51f8bb9cda857d4f5f49520"
+                "reference": "8717d26af4229487dfae81d31f3a60abba3bbd96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/0df75d2e8dbc8436f51f8bb9cda857d4f5f49520",
-                "reference": "0df75d2e8dbc8436f51f8bb9cda857d4f5f49520",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/8717d26af4229487dfae81d31f3a60abba3bbd96",
+                "reference": "8717d26af4229487dfae81d31f3a60abba3bbd96",
                 "shasum": ""
             },
             "require": {
@@ -1600,9 +1600,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.2.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.2.1"
             },
-            "time": "2023-07-03T14:21:22+00:00"
+            "time": "2023-07-11T07:12:46+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -8860,16 +8860,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.9",
+            "version": "9.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a9aceaf20a682aeacf28d582654a1670d8826778"
+                "reference": "a6d351645c3fe5a30f5e86be6577d946af65a328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a9aceaf20a682aeacf28d582654a1670d8826778",
-                "reference": "a9aceaf20a682aeacf28d582654a1670d8826778",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a6d351645c3fe5a30f5e86be6577d946af65a328",
+                "reference": "a6d351645c3fe5a30f5e86be6577d946af65a328",
                 "shasum": ""
             },
             "require": {
@@ -8943,7 +8943,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.10"
             },
             "funding": [
                 {
@@ -8959,7 +8959,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-11T06:13:56+00:00"
+            "time": "2023-07-10T04:04:23+00:00"
         },
         {
             "name": "sanmai/later",
