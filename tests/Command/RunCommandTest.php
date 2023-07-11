@@ -325,19 +325,21 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactoryMock
             ->expects(self::exactly(3))
             ->method('createClientWrapper')
-            ->willReturnCallback(function (ClientOptions $options) use ($storageClientFactory, &$executionIndex): ClientWrapper {
-                /* Over here during the initialization of ClientOptions, we need to deetermine if it is "SOX" project
-                with protected branch, for which we need to get project features, for which we need to call verifyToken
-                for which we need to create ClientOptions, which are created, but not initialized propeerly yet, so
-                the assertions here are hidden behhind this if statement */
-                if ($executionIndex > 0) {
-                    $backendConfiguration = $options->getBackendConfiguration();
-                    self::assertNotNull($backendConfiguration);
-                    self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
+            ->willReturnCallback(
+                function (ClientOptions $options) use ($storageClientFactory, &$executionIndex): ClientWrapper {
+                    /* Over here during the initialization of ClientOptions, we need to determine if it is "SOX"
+                    project with protected branch, for which we need to get project features, for which we need to call
+                    verifyToken for which we need to create ClientOptions, which are created, but not initialized
+                    properly yet, so the assertions here are hidden behind this if statement */
+                    if ($executionIndex > 0) {
+                        $backendConfiguration = $options->getBackendConfiguration();
+                        self::assertNotNull($backendConfiguration);
+                        self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
+                    }
+                    $executionIndex++;
+                    return $storageClientFactory->createClientWrapper($options);
                 }
-                $executionIndex++;
-                return $storageClientFactory->createClientWrapper($options);
-            })
+            )
         ;
 
         // reset whole kernel, so we can replace already fetched services in container
