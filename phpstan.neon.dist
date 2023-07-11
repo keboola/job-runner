@@ -1,13 +1,13 @@
 parameters:
-    level: max
     checkMissingIterableValueType: false
+    level: max
     paths:
         - src
         - tests
     ignoreErrors:
-        - '#Property App\\Command\\RunCommand\:\:\$logger \(Monolog\\Logger\) does not accept Psr\\Log\\LoggerInterface\.#'
         - '#Unreachable statement \- code above always terminates\.#'
-    tmpDir: var/cache/
+    symfony:
+        consoleApplicationLoader: tests/console-application.php
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon

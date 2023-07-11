@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\BranchIdResolver;
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use App\Tests\EncryptorOptionsTrait;
+use App\Tests\TestEnvVarsTrait;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -30,6 +33,7 @@ use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\Temp\Temp;
+use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
@@ -38,8 +42,10 @@ use Symfony\Component\Validator\Validation;
 abstract class BaseFunctionalTest extends TestCase
 {
     use EncryptorOptionsTrait;
+    use TestEnvVarsTrait;
 
     private StorageClient $storageClient;
+    private readonly VariablesApiClient $vaultVariablesApiClient;
     private Logger $logger;
     private TestHandler $handler;
     private Temp $temp;
@@ -66,6 +72,10 @@ abstract class BaseFunctionalTest extends TestCase
             'url' => getenv('STORAGE_API_URL'),
             'token' => getenv('TEST_STORAGE_API_TOKEN'),
         ]);
+        $this->vaultVariablesApiClient = new VariablesApiClient(
+            self::getRequiredEnv('VAULT_API_URL'),
+            self::getRequiredEnv('STORAGE_API_TOKEN'),
+        );
         $this->handler = new TestHandler();
         $this->logger = new Logger('test-runner', [$this->handler]);
         $this->temp = new Temp();
@@ -155,7 +165,13 @@ abstract class BaseFunctionalTest extends TestCase
             new LogProcessor(new UploaderFactory(''), 'test-runner'),
             $mockQueueClient,
             $storageClientFactory,
-            new JobDefinitionFactory(),
+            new JobDefinitionFactory(
+                new JobDefinitionParser(),
+                new BranchIdResolver(),
+                new JobObjectEncryptor($this->objectEncryptor),
+                $this->vaultVariablesApiClient,
+                $this->logger,
+            ),
             $this->objectEncryptor,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),

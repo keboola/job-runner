@@ -19,9 +19,10 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-pcntl": "*",
         "aws/aws-sdk-php": "3.258",
         "keboola/api-error-control": "^3.10",
-        "keboola/configuration-variables-resolver": "^3.3",
+        "keboola/configuration-variables-resolver": "^4.0",
         "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^17.0",
         "keboola/job-queue-internal-api-php-client": "^17.1",
@@ -49,7 +50,7 @@
         "keboola/coding-standard": ">=14.0.0",
         "phpstan/phpstan": "^1.1",
         "phpstan/phpstan-phpunit": "^1.1",
-        "phpstan/phpstan-symfony": "^1.1",
+        "phpstan/phpstan-symfony": "^1.3",
         "phpunit/phpunit": "^9.5.2",
         "sempro/phpunit-pretty-print": "^1.4",
         "symfony/browser-kit": "^6.2",
@@ -93,18 +94,16 @@
         ],
         "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
         "phpunit": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
-        "phpstan": "phpstan analyse --no-progress --configuration phpstan.neon --xdebug",
+        "phpstan": "phpstan analyse --no-progress -c phpstan-${APP_ENV}.neon",
         "phpcs": "phpcs --extensions=php src tests",
         "phpcbf": "phpcbf --extensions=php src Tests",
         "infection": "infection --threads=4 --min-covered-msi=60 --coverage=build/logs",
-        "build": [
+        "ci": [
+            "@composer validate --no-check-all --strict",
+            "@auto-scripts",
             "@phpcs",
             "@phpstan",
             "@phpunit"
-        ],
-        "ci": [
-            "@composer validate --no-check-all --strict",
-            "@build"
         ]
     },
     "conflict": {

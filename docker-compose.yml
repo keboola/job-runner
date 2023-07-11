@@ -20,6 +20,7 @@ services:
       - JOB_QUEUE_URL
       - JOB_QUEUE_TOKEN
       - STORAGE_API_URL
+      - VAULT_API_URL
       - AWS_REGION
       - AWS_KMS_KEY_ID
       - AWS_LOGS_S3_BUCKET
@@ -41,7 +42,9 @@ services:
       - internal-api
 
   dev:
-    <<: *tests
+    build:
+      context: .
+      target: dev
     volumes:
       - ./:/code
       - /tmp/:/tmp/
