@@ -180,15 +180,14 @@ class RunCommand extends Command
             ));
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
 
-            $clientWrapperWithoutLogger = $this->storageClientFactory->createClientWrapper($options);
-            $clientWithoutLogger = $clientWrapperWithoutLogger->getBranchClientIfAvailable();
+            $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
+                ->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
 
             $containerLogger = new ContainerLogger('container-logger');
             $options = clone $options;
             $options->setLogger($this->logger);
-            $options->setBranchId($clientWrapperWithoutLogger->getBranchId());
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
 
