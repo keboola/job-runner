@@ -1202,16 +1202,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "ba341f8c8e4ae37f49dc4a06927904b74132568e"
+                "reference": "93d8d8dae48972fbdde34de5dcc08bdbe3e53476"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/ba341f8c8e4ae37f49dc4a06927904b74132568e",
-                "reference": "ba341f8c8e4ae37f49dc4a06927904b74132568e",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/93d8d8dae48972fbdde34de5dcc08bdbe3e53476",
+                "reference": "93d8d8dae48972fbdde34de5dcc08bdbe3e53476",
                 "shasum": ""
             },
             "require": {
@@ -1262,9 +1262,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.0.0"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.0.1"
             },
-            "time": "2023-07-07T11:36:41+00:00"
+            "time": "2023-07-11T14:10:42+00:00"
         },
         {
             "name": "keboola/csv",
