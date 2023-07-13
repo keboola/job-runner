@@ -157,6 +157,7 @@ abstract class BaseFunctionalTest extends TestCase
             $mockClientWrapper->method('getBranchClientIfAvailable')->willReturn($mockClient);
             $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($mockClient);
             $mockClientWrapper->method('getBranchId')->willReturn('123');
+            $mockClientWrapper->method('getDefaultBranch')->willReturn(['branchId' => '123']);
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
