@@ -1470,23 +1470,23 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "17.4.0",
+            "version": "17.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "8361da1cde8092e2bb52e286c6601aea553d04c8"
+                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/8361da1cde8092e2bb52e286c6601aea553d04c8",
-                "reference": "8361da1cde8092e2bb52e286c6601aea553d04c8",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/af1c7d4261b5d595a361018cd4ec272b382b0295",
+                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/storage-api-client": "^14.5",
-                "keboola/storage-api-php-client-branch-wrapper": "^3.4",
+                "keboola/storage-api-php-client-branch-wrapper": "^3.5",
                 "php": ">=8.1",
                 "symfony/config": "^5.4|^6.0",
                 "symfony/finder": "^5.4|^6.0",
@@ -1528,22 +1528,22 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/17.4.0"
+                "source": "https://github.com/keboola/input-mapping/tree/17.5.0"
             },
-            "time": "2023-07-12T23:01:38+00:00"
+            "time": "2023-07-13T12:32:55+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "17.2.1",
+            "version": "17.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "8717d26af4229487dfae81d31f3a60abba3bbd96"
+                "reference": "b7807ef0bebabe75c136ece986e9e9d58192f303"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/8717d26af4229487dfae81d31f3a60abba3bbd96",
-                "reference": "8717d26af4229487dfae81d31f3a60abba3bbd96",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/b7807ef0bebabe75c136ece986e9e9d58192f303",
+                "reference": "b7807ef0bebabe75c136ece986e9e9d58192f303",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1551,7 @@
                 "guzzlehttp/guzzle": "^6.3|^7.0",
                 "keboola/artifacts": "^2.0",
                 "keboola/kbc-manage-api-php-client": "^5.2|^6.0",
-                "keboola/object-encryptor": "^2.0",
+                "keboola/object-encryptor": "^2.7",
                 "keboola/permission-checker": "^0.1",
                 "keboola/storage-api-client": "^14.10",
                 "keboola/storage-api-php-client-branch-wrapper": "^3.2",
@@ -1600,9 +1600,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.2.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/17.2.2"
             },
-            "time": "2023-07-11T07:12:46+00:00"
+            "time": "2023-07-13T12:15:38+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -1772,16 +1772,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "21.7.0",
+            "version": "21.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "c6bb3fa06380015ec07d83a2de1cafdccbed997c"
+                "reference": "301a3821883126f1ba02226c3cf7836ddd59f984"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/c6bb3fa06380015ec07d83a2de1cafdccbed997c",
-                "reference": "c6bb3fa06380015ec07d83a2de1cafdccbed997c",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/301a3821883126f1ba02226c3cf7836ddd59f984",
+                "reference": "301a3821883126f1ba02226c3cf7836ddd59f984",
                 "shasum": ""
             },
             "require": {
@@ -1835,9 +1835,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/21.7.0"
+                "source": "https://github.com/keboola/output-mapping/tree/21.8.0"
             },
-            "time": "2023-07-12T23:03:17+00:00"
+            "time": "2023-07-13T12:32:55+00:00"
         },
         {
             "name": "keboola/permission-checker",
