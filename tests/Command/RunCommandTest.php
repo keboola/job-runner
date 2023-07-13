@@ -321,18 +321,28 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
         $baseOptions = $storageClientFactory->getClientOptionsReadOnly();
 
+        $executionIndex = 0;
         $storageClientFactoryMock = $this->getMockBuilder(StorageClientPlainFactory::class)
             ->setConstructorArgs([$baseOptions])
             ->getMock();
         $storageClientFactoryMock
-            ->expects(self::exactly(2))
+            ->expects(self::exactly(3))
             ->method('createClientWrapper')
-            ->willReturnCallback(function (ClientOptions $options) use ($storageClientFactory): ClientWrapper {
-                $backendConfiguration = $options->getBackendConfiguration();
-                self::assertNotNull($backendConfiguration);
-                self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
-                return $storageClientFactory->createClientWrapper($options);
-            })
+            ->willReturnCallback(
+                function (ClientOptions $options) use ($storageClientFactory, &$executionIndex): ClientWrapper {
+                    /* Over here during the initialization of ClientOptions, we need to determine if it is "SOX"
+                    project with protected branch, for which we need to get project features, for which we need to call
+                    verifyToken for which we need to create ClientOptions, which are created, but not initialized
+                    properly yet, so the assertions here are hidden behind this if statement */
+                    if ($executionIndex > 0) {
+                        $backendConfiguration = $options->getBackendConfiguration();
+                        self::assertNotNull($backendConfiguration);
+                        self::assertSame('{"context":"123_transformation"}', $backendConfiguration->toJson());
+                    }
+                    $executionIndex++;
+                    return $storageClientFactory->createClientWrapper($options);
+                }
+            )
         ;
 
         // reset whole kernel, so we can replace already fetched services in container
@@ -1102,7 +1112,6 @@ class RunCommandTest extends AbstractCommandTest
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
         $jobDefinitionFactory = new JobDefinitionFactory(
             new JobDefinitionParser(),
-            new BranchIdResolver(),
             new JobObjectEncryptor($objectEncryptor),
             $this->createMock(VariablesApiClient::class),
             $logger,

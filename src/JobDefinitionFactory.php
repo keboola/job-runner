@@ -21,7 +21,6 @@ class JobDefinitionFactory
 {
     public function __construct(
         private readonly JobDefinitionParser $jobDefinitionParser,
-        private readonly BranchIdResolver $branchIdResolver,
         private readonly JobObjectEncryptor $objectEncryptor,
         private readonly VariablesApiClient $variablesApiClient,
         private readonly LoggerInterface $logger,
@@ -45,7 +44,6 @@ class JobDefinitionFactory
         $jobDefinitions = $this->resolveVariables(
             $clientWrapper,
             $jobDefinitions,
-            $job->getBranchId(),
             $job->getVariableValuesId(),
             $job->getVariableValuesData(),
         );
@@ -65,7 +63,6 @@ class JobDefinitionFactory
     private function resolveVariables(
         ClientWrapper $clientWrapper,
         array $jobDefinitions,
-        ?string $branchId,
         ?string $jobVariableValuesId,
         array $variableValuesData,
     ): array {
@@ -73,14 +70,14 @@ class JobDefinitionFactory
             $jobVariableValuesId = null;
         }
 
-        $branchId = $this->branchIdResolver->resolveBranchId($clientWrapper, $branchId);
-
         $sharedCodeResolver = new SharedCodeResolver($clientWrapper, $this->logger);
         $variableResolver = VariablesResolver::create(
             $clientWrapper,
             $this->variablesApiClient,
             $this->logger,
         );
+        $branchId = $clientWrapper->getBranchId();
+        assert(!empty($branchId));
 
         return array_map(
             fn(JobDefinition $jobDefinition) => new JobDefinition(

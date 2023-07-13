@@ -179,10 +179,12 @@ class RunCommand extends Command
                 $job->getProjectId()
             ));
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
-            $clientWithoutLogger = $this->storageClientFactory
-                ->createClientWrapper($options)->getBranchClientIfAvailable();
+
+            $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
+                ->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
+
             $containerLogger = new ContainerLogger('container-logger');
             $options = clone $options;
             $options->setLogger($this->logger);
