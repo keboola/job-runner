@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fcaab4012b04b242cd9d98265390a889",
+    "content-hash": "de40f44847f96bb52dc3bab748b0518f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1470,16 +1470,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-odin-SOX-138-t",
+            "version": "17.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "95b8a13d74b10f6742492b83a29e98afc1c0dcab"
+                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/95b8a13d74b10f6742492b83a29e98afc1c0dcab",
-                "reference": "95b8a13d74b10f6742492b83a29e98afc1c0dcab",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/af1c7d4261b5d595a361018cd4ec272b382b0295",
+                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295",
                 "shasum": ""
             },
             "require": {
@@ -1528,9 +1528,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/odin-SOX-138-t"
+                "source": "https://github.com/keboola/input-mapping/tree/17.5.0"
             },
-            "time": "2023-07-14T09:23:13+00:00"
+            "time": "2023-07-13T12:32:55+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -10701,18 +10701,10 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/input-mapping",
-            "version": "dev-odin-SOX-138-t",
-            "alias": "17.5.0",
-            "alias_normalized": "17.5.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
