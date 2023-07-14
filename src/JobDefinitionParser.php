@@ -46,7 +46,11 @@ class JobDefinitionParser
                 /** @var array $configuration */
 
                 if (!$clientWrapper->getClientOptionsReadOnly()->useBranchStorage()) {
-                    $this->checkUnsafeConfiguration($component, $configuration, $job->getBranchType() ?? BranchType::DEV);
+                    $this->checkUnsafeConfiguration(
+                        $component,
+                        $configuration,
+                        $job->getBranchType() ?? BranchType::DEV
+                    );
                 }
             } catch (ClientException $e) {
                 throw new UserException($e->getMessage(), $e);
