@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de40f44847f96bb52dc3bab748b0518f",
+    "content-hash": "77bb5ff2caf2dfbd4661400a19e57857",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1470,16 +1470,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "17.5.0",
+            "version": "17.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295"
+                "reference": "e7c282c028496c6966809564f6d989529ee51436"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/af1c7d4261b5d595a361018cd4ec272b382b0295",
-                "reference": "af1c7d4261b5d595a361018cd4ec272b382b0295",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/e7c282c028496c6966809564f6d989529ee51436",
+                "reference": "e7c282c028496c6966809564f6d989529ee51436",
                 "shasum": ""
             },
             "require": {
@@ -1528,9 +1528,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/17.5.0"
+                "source": "https://github.com/keboola/input-mapping/tree/17.6.0"
             },
-            "time": "2023-07-13T12:32:55+00:00"
+            "time": "2023-07-14T14:51:02+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
