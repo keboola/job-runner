@@ -95,6 +95,7 @@ class JobDefinitionFactory
                 $jobDefinition->getState(),
                 $jobDefinition->getRowId(),
                 $jobDefinition->isDisabled(),
+                $jobDefinition->getBranchType(),
             ),
             $jobDefinitions,
         );
@@ -127,6 +128,7 @@ class JobDefinitionFactory
                 ),
                 $jobDefinition->getRowId(),
                 $jobDefinition->isDisabled(),
+                $jobDefinition->getBranchType(),
             ),
             $jobDefinitions,
         );
