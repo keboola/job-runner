@@ -153,7 +153,7 @@ class RunCommand extends Command
             $this->logger->info(sprintf(
                 'Runner ID "%s": Running job "%s".',
                 $runnerId,
-                $this->jobId
+                $this->jobId,
             ));
 
             $job = $this->queueClient->getJob($this->jobId);
@@ -171,6 +171,11 @@ class RunCommand extends Command
                     ->setStatus(JobInterface::STATUS_PROCESSING)
                     ->setRunnerId($runnerId)
             );
+            $this->logger->info(sprintf(
+                'Job branch is "%s", branch type is "%s"',
+                $job->getBranchId(),
+                $job->getBranchType()->value,
+            ));
 
             // set up logging to storage API
             $this->logProcessor->setLogInfo(new LogInfo(
