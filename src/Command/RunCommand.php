@@ -15,7 +15,6 @@ use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
-use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
@@ -31,7 +30,6 @@ use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
-use Keboola\StorageApi\DevBranches;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
@@ -189,12 +187,22 @@ class RunCommand extends Command
                 ->getBranchClientIfAvailable();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
+            /*
+             * intentionally leaving this commented out, it's useful for debugging
+            $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
+            $this->logger->pushHandler($h2);
+            */
 
             $containerLogger = new ContainerLogger('container-logger');
             $options = clone $options;
             $options->setLogger($this->logger);
             $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
             $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
+
+            /*
+            $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
+            $containerLogger->pushHandler($h2);
+            */
 
             // set up runner
             $component = $this->getComponentClass($clientWrapper, $job);
