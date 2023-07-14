@@ -172,7 +172,7 @@ class RunCommand extends Command
             $this->logger->info(sprintf(
                 'Job branch is "%s", branch type is "%s"',
                 $job->getBranchId(),
-                $job->getBranchType()->value,
+                $job->getBranchType()?->value,
             ));
 
             // set up logging to storage API
