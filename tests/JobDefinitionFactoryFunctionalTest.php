@@ -279,7 +279,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         );
     }
 
-    private function createJob(array $jobData, string $branchType = null): Job
+    private function createJob(array $jobData, ?string $branchType = null): Job
     {
         return new Job(
             static::getContainer()->get(JobObjectEncryptor::class),
