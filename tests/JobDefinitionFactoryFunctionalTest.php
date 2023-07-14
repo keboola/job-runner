@@ -101,6 +101,46 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         );
     }
 
+    public function testCreateWithBranch(): void
+    {
+        $this->setupConfigurationVariables(
+            [
+                ['name' => 'var', 'type' => 'string'],
+            ],
+            [
+                ['name' => 'var', 'value' => 'val'],
+            ],
+        );
+
+        $job = $this->createJob(
+            [
+                'configData' => [
+                    'variables_id' => self::VARIABLES_CONFIG_ID,
+                    'variables_values_id' => self::VARIABLES_ROW_ID,
+                    'parameters' => [
+                        'script' => 'print("config var: {{ var }}")',
+                    ],
+                ],
+            ],
+            'dev',
+        );
+
+        $jobDefinitions = $this->factory->createFromJob(
+            $this->component,
+            $job,
+            $this->clientWrapper,
+        );
+        self::assertCount(1, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertInstanceOf(JobDefinition::class, $jobDefinition);
+        self::assertSame('dev', $jobDefinition->getBranchType());
+        self::assertSame(
+            'print("config var: val")',
+            $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
+        );
+    }
+
     public function testVariablesAreReplacedFromConfigAndVault(): void
     {
         $job = $this->createJob([
@@ -239,7 +279,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         );
     }
 
-    private function createJob(array $jobData): Job
+    private function createJob(array $jobData, $branchType = null): Job
     {
         return new Job(
             static::getContainer()->get(JobObjectEncryptor::class),
@@ -250,7 +290,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
                 'componentId' => $this->component->getId(),
                 'projectId' => explode('-', self::getRequiredEnv('STORAGE_API_TOKEN'), 2)[1],
                 'status' => JobInterface::STATUS_CREATED,
-                'branchType' => BranchType::DEFAULT->value,
+                'branchType' => $branchType ?? BranchType::DEFAULT->value,
                 ...$jobData,
             ],
         );
