@@ -152,12 +152,19 @@ abstract class BaseFunctionalTest extends TestCase
             );
 
         if ($mockClient) {
+            $clientWrapper = $storageClientFactory->createClientWrapper(
+                new ClientOptions(token: (string) getenv('TEST_STORAGE_API_TOKEN'))
+            );
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
             $mockClientWrapper->method('getBranchClientIfAvailable')->willReturn($mockClient);
             $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($mockClient);
-            $mockClientWrapper->method('getBranchId')->willReturn('123');
-            $mockClientWrapper->method('getDefaultBranch')->willReturn(['branchId' => '123']);
+            $mockClientWrapper->method('getBranchId')->willReturn(
+                $clientWrapper->getDefaultBranch()['branchId']
+            );
+            $mockClientWrapper->method('getDefaultBranch')->willReturn(
+                $clientWrapper->getDefaultBranch()
+            );
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
