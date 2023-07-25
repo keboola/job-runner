@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0668065a29b929295f6a43215c984ae9",
+    "content-hash": "0064e8bdd7cd002612c428b8113b2b3a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1317,11 +1317,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-dev-odin-SOX-234-c",
+            "version": "dev-odin-library-3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "506f2df81c40743100195890cef5c7b17bf8cbae"
+                "reference": "a60e921827f8a9f249966ec82ac7b57c2456d72d"
             },
             "require": {
                 "ext-json": "*",
@@ -1329,10 +1329,10 @@
                 "keboola/artifacts": "^2.0",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "dev-odin-SOX-234-c as 17.6.0",
+                "keboola/input-mapping": "^18.0",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "dev-odin-SOX-234-c as 21.8.0",
+                "keboola/output-mapping": "^22.0",
                 "keboola/php-utils": "^5.0",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^6.0",
@@ -1411,7 +1411,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-07-21T16:11:21+00:00"
+            "time": "2023-07-25T10:17:22+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1470,16 +1470,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-odin-SOX-234-c",
+            "version": "18.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "939900b4f1313406079bd4479c1a5626cbebbf67"
+                "reference": "bb44b993fab3d9f2cef93e72d34a34855a53d83c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/939900b4f1313406079bd4479c1a5626cbebbf67",
-                "reference": "939900b4f1313406079bd4479c1a5626cbebbf67",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/bb44b993fab3d9f2cef93e72d34a34855a53d83c",
+                "reference": "bb44b993fab3d9f2cef93e72d34a34855a53d83c",
                 "shasum": ""
             },
             "require": {
@@ -1528,9 +1528,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/odin-SOX-234-c"
+                "source": "https://github.com/keboola/input-mapping/tree/18.0.0"
             },
-            "time": "2023-07-21T14:23:40+00:00"
+            "time": "2023-07-21T14:40:59+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -1772,16 +1772,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-odin-SOX-234-c",
+            "version": "22.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "0251a9233a93ac8a509ac5c2e21ee51dfc4c0e9c"
+                "reference": "ef3341a3edfac3bd4342596783b4fb30744455eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/0251a9233a93ac8a509ac5c2e21ee51dfc4c0e9c",
-                "reference": "0251a9233a93ac8a509ac5c2e21ee51dfc4c0e9c",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/ef3341a3edfac3bd4342596783b4fb30744455eb",
+                "reference": "ef3341a3edfac3bd4342596783b4fb30744455eb",
                 "shasum": ""
             },
             "require": {
@@ -1835,9 +1835,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/odin-SOX-234-c"
+                "source": "https://github.com/keboola/output-mapping/tree/22.0.0"
             },
-            "time": "2023-07-21T14:25:24+00:00"
+            "time": "2023-07-24T17:53:46+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -10701,25 +10701,10 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/input-mapping",
-            "version": "dev-odin-SOX-234-c",
-            "alias": "17.6.0",
-            "alias_normalized": "17.6.0.0"
-        },
-        {
-            "package": "keboola/output-mapping",
-            "version": "dev-odin-SOX-234-c",
-            "alias": "21.8.0",
-            "alias_normalized": "21.8.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20,
-        "keboola/output-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
