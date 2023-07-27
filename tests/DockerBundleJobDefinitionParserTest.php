@@ -105,17 +105,21 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfigData($this->getComponent(), $configData, null, 'default');
+        $jobDefinition = $parser->parseConfigData(
+            $this->getComponent(),
+            $configData,
+            null,
+            'default'
+        );
 
-        self::assertCount(1, $parser->getJobDefinitions());
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[0]->getComponentId());
-        self::assertEquals($expected, $parser->getJobDefinitions()[0]->getConfiguration());
-        self::assertNull($parser->getJobDefinitions()[0]->getConfigId());
-        self::assertNull($parser->getJobDefinitions()[0]->getConfigVersion());
-        self::assertNull($parser->getJobDefinitions()[0]->getRowId());
-        self::assertFalse($parser->getJobDefinitions()[0]->isDisabled());
-        self::assertEmpty($parser->getJobDefinitions()[0]->getState());
-        self::assertSame('default', $parser->getJobDefinitions()[0]->getBranchType());
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertNull($jobDefinition->getConfigId());
+        self::assertNull($jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEmpty($jobDefinition->getState());
+        self::assertSame('default', $jobDefinition->getBranchType());
     }
 
     public function testSingleRowConfiguration(): void
@@ -205,17 +209,19 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfig($this->getComponent(), $config, 'default');
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
-        self::assertCount(1, $parser->getJobDefinitions());
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[0]->getComponentId());
-        self::assertEquals($expected, $parser->getJobDefinitions()[0]->getConfiguration());
-        self::assertEquals('my-config', $parser->getJobDefinitions()[0]->getConfigId());
-        self::assertEquals(1, $parser->getJobDefinitions()[0]->getConfigVersion());
-        self::assertNull($parser->getJobDefinitions()[0]->getRowId());
-        self::assertFalse($parser->getJobDefinitions()[0]->isDisabled());
-        self::assertEquals($config['state'], $parser->getJobDefinitions()[0]->getState());
-        self::assertSame('default', $parser->getJobDefinitions()[0]->getBranchType());
+        self::assertCount(1, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(1, $jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEquals($config['state'], $jobDefinition->getState());
+        self::assertSame('default', $jobDefinition->getBranchType());
     }
 
     public function testMultiRowConfiguration(): void
@@ -323,26 +329,29 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfig($this->getComponent(), $config, 'dev');
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'dev');
 
-        self::assertCount(2, $parser->getJobDefinitions());
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[0]->getComponentId());
-        self::assertEquals($expectedRow1, $parser->getJobDefinitions()[0]->getConfiguration());
-        self::assertEquals('my-config', $parser->getJobDefinitions()[0]->getConfigId());
-        self::assertEquals(3, $parser->getJobDefinitions()[0]->getConfigVersion());
-        self::assertEquals('row1', $parser->getJobDefinitions()[0]->getRowId());
-        self::assertTrue($parser->getJobDefinitions()[0]->isDisabled());
-        self::assertEquals(['key1' => 'val1'], $parser->getJobDefinitions()[0]->getState());
-        self::assertSame('dev', $parser->getJobDefinitions()[0]->getBranchType());
+        self::assertCount(2, $jobDefinitions);
 
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[1]->getComponentId());
-        self::assertEquals($expectedRow2, $parser->getJobDefinitions()[1]->getConfiguration());
-        self::assertEquals('my-config', $parser->getJobDefinitions()[1]->getConfigId());
-        self::assertEquals(3, $parser->getJobDefinitions()[1]->getConfigVersion());
-        self::assertEquals('row2', $parser->getJobDefinitions()[1]->getRowId());
-        self::assertFalse($parser->getJobDefinitions()[1]->isDisabled());
-        self::assertEquals(['key2' => 'val2'], $parser->getJobDefinitions()[1]->getState());
-        self::assertSame('dev', $parser->getJobDefinitions()[1]->getBranchType());
+        $jobDefinition = $jobDefinitions[0];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expectedRow1, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(3, $jobDefinition->getConfigVersion());
+        self::assertEquals('row1', $jobDefinition->getRowId());
+        self::assertTrue($jobDefinition->isDisabled());
+        self::assertEquals(['key1' => 'val1'], $jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
+
+        $jobDefinition = $jobDefinitions[1];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expectedRow2, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(3, $jobDefinition->getConfigVersion());
+        self::assertEquals('row2', $jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEquals(['key2' => 'val2'], $jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
     }
 
     public function testSimpleConfigDataWithConfigId(): void
@@ -424,17 +433,16 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfigData($this->getComponent(), $configData, '1234', 'dev');
+        $jobDefinition = $parser->parseConfigData($this->getComponent(), $configData, '1234', 'dev');
 
-        self::assertCount(1, $parser->getJobDefinitions());
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[0]->getComponentId());
-        self::assertEquals($expected, $parser->getJobDefinitions()[0]->getConfiguration());
-        self::assertEquals('1234', $parser->getJobDefinitions()[0]->getConfigId());
-        self::assertNull($parser->getJobDefinitions()[0]->getConfigVersion());
-        self::assertNull($parser->getJobDefinitions()[0]->getRowId());
-        self::assertFalse($parser->getJobDefinitions()[0]->isDisabled());
-        self::assertEmpty($parser->getJobDefinitions()[0]->getState());
-        self::assertSame('dev', $parser->getJobDefinitions()[0]->getBranchType());
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertEquals('1234', $jobDefinition->getConfigId());
+        self::assertNull($jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEmpty($jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
     }
 
     public function testMultiRowConfigurationWithInvalidProcessors1(): void
@@ -517,7 +525,9 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfig($this->getComponent(), $config, 'default');
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
+
+        self::assertCount(1, $jobDefinitions);
         self::assertSame(
             [
                 'shared_code_row_ids' => [],
@@ -525,7 +535,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
                 'processors' => [],
                 'parameters' => [],
             ],
-            $parser->getJobDefinitions()[0]->getConfiguration()
+            $jobDefinitions[0]->getConfiguration()
         );
     }
 
@@ -619,10 +629,12 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        $parser->parseConfig($this->getComponent(), $config, 'default');
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
-        self::assertCount(1, $parser->getJobDefinitions());
-        self::assertEquals('keboola.r-transformation', $parser->getJobDefinitions()[0]->getComponentId());
-        self::assertEquals($expected, $parser->getJobDefinitions()[0]->getConfiguration());
+        self::assertCount(1, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use Keboola\DockerBundle\Docker\Component;
+use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\PermissionChecker\BranchType;
@@ -17,6 +18,9 @@ use Keboola\StorageApiBranch\ClientWrapper;
  */
 class JobDefinitionParser
 {
+    /**
+     * @return JobDefinition[]
+     */
     public function createJobDefinitionsForJob(
         ClientWrapper $clientWrapper,
         Component $component,
@@ -32,42 +36,41 @@ class JobDefinitionParser
             $configData = $job->getConfigData();
             $configData = $this->extendComponentConfigWithBackend($configData, $job);
 
-            $jobDefinitionParser->parseConfigData(
+            $jobDefinition = $jobDefinitionParser->parseConfigData(
                 $component,
                 $configData,
                 $job->getConfigId(),
                 ($job->getBranchType() ?? BranchType::DEFAULT)->value,
             );
-        } else {
-            try {
-                $components = new Components($clientWrapper->getBranchClientIfAvailable());
-                $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-                /** @var array $configuration */
-
-                if (!$clientWrapper->getClientOptionsReadOnly()->useBranchStorage()) {
-                    $this->checkUnsafeConfiguration(
-                        $component,
-                        $configuration,
-                        $job->getBranchType() ?? BranchType::DEV
-                    );
-                }
-            } catch (ClientException $e) {
-                throw new UserException($e->getMessage(), $e);
-            }
-
-            $configuration['configuration'] = $this->extendComponentConfigWithBackend(
-                $configuration['configuration'] ?? [],
-                $job,
-            );
-
-            $jobDefinitionParser->parseConfig(
-                $component,
-                $configuration,
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
-            );
+            return [$jobDefinition];
         }
 
-        return $jobDefinitionParser->getJobDefinitions();
+        try {
+            $components = new Components($clientWrapper->getBranchClientIfAvailable());
+            $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
+            /** @var array $configuration */
+
+            if (!$clientWrapper->getClientOptionsReadOnly()->useBranchStorage()) {
+                $this->checkUnsafeConfiguration(
+                    $component,
+                    $configuration,
+                    $job->getBranchType() ?? BranchType::DEV
+                );
+            }
+        } catch (ClientException $e) {
+            throw new UserException($e->getMessage(), $e);
+        }
+
+        $configuration['configuration'] = $this->extendComponentConfigWithBackend(
+            $configuration['configuration'] ?? [],
+            $job,
+        );
+
+        return $jobDefinitionParser->parseConfig(
+            $component,
+            $configuration,
+            ($job->getBranchType() ?? BranchType::DEFAULT)->value,
+        );
     }
 
     private function extendComponentConfigWithBackend(array $config, JobInterface $job): array

@@ -12,11 +12,6 @@ use Keboola\ObjectEncryptor\ObjectEncryptor;
 class DockerBundleJobDefinitionParser
 {
     /**
-     * @var JobDefinition[]
-     */
-    private array $jobDefinitions = [];
-
-    /**
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
      */
     public function parseConfigData(
@@ -24,27 +19,27 @@ class DockerBundleJobDefinitionParser
         array $configData,
         ?string $configId,
         string $branchType,
-    ): void {
-        $jobDefinition = new JobDefinition(
+    ): JobDefinition {
+        return new JobDefinition(
             configuration: $configData,
             component: $component,
             configId: $configId,
             branchType: $branchType,
         );
-        $this->jobDefinitions = [$jobDefinition];
     }
 
     /**
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
+     * @return JobDefinition[]
      */
     public function parseConfig(
         Component $component,
         array $config,
         string $branchType,
-    ): void {
+    ): array {
         $config['rows'] = $config['rows'] ?? [];
         $this->validateConfig($config);
-        $this->jobDefinitions = [];
+
         if (count($config['rows']) === 0) {
             $jobDefinition = new JobDefinition(
                 configuration: $config['configuration'] ? (array) $config['configuration'] : [],
@@ -54,22 +49,22 @@ class DockerBundleJobDefinitionParser
                 state: $config['state'] ? (array) $config['state'] : [],
                 branchType: $branchType
             );
-            $this->jobDefinitions[] = $jobDefinition;
-        } else {
-            foreach ($config['rows'] as $row) {
-                $jobDefinition = new JobDefinition(
-                    array_replace_recursive($config['configuration'], $row['configuration']),
-                    $component,
-                    (string) $config['id'],
-                    (string) $config['version'],
-                    $row['state'] ? (array) $row['state'] : [],
-                    (string) $row['id'],
-                    (bool) $row['isDisabled'],
-                    $branchType
-                );
-                $this->jobDefinitions[] = $jobDefinition;
-            }
+            return [$jobDefinition];
         }
+
+        return array_map(
+            fn (array $row) => new JobDefinition(
+                array_replace_recursive($config['configuration'], $row['configuration']),
+                $component,
+                (string) $config['id'],
+                (string) $config['version'],
+                $row['state'] ? (array) $row['state'] : [],
+                (string) $row['id'],
+                (bool) $row['isDisabled'],
+                $branchType
+            ),
+            $config['rows'],
+        );
     }
 
     private function validateConfig(array $config): void
@@ -94,13 +89,5 @@ class DockerBundleJobDefinitionParser
             }
         }
         return false;
-    }
-
-    /**
-     * @return JobDefinition[]
-     */
-    public function getJobDefinitions(): array
-    {
-        return $this->jobDefinitions;
     }
 }
