@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use Keboola\DockerBundle\Docker\Component;
-use Keboola\DockerBundle\Docker\JobDefinitionParser as DockerBundleJobDefinitionParser;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\PermissionChecker\BranchType;
