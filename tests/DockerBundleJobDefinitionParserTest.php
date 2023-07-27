@@ -437,7 +437,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         self::assertSame('dev', $parser->getJobDefinitions()[0]->getBranchType());
     }
 
-    public function testMultiRowConfigurationWithInvalidProcessors1()
+    public function testMultiRowConfigurationWithInvalidProcessors1(): void
     {
         $config = [
             'id' => 'my-config',
@@ -499,8 +499,8 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        self::expectException(UserException::class);
-        self::expectExceptionMessage(
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places'
         );
         $parser->parseConfig($this->getComponent(), $config, 'default');
@@ -591,8 +591,8 @@ class DockerBundleJobDefinitionParserTest extends TestCase
         ];
 
         $parser = new DockerBundleJobDefinitionParser();
-        self::expectException(UserException::class);
-        self::expectExceptionMessage(
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places'
         );
         $parser->parseConfig($this->getComponent(), $config, 'default');
