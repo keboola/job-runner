@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\BranchIdResolver;
 use App\Command\RunCommand;
+use App\DockerBundleJobDefinitionParser;
 use App\JobDefinitionFactory;
-use App\JobDefinitionParser;
 use App\Tests\EncryptorOptionsTrait;
 use App\Tests\TestEnvVarsTrait;
 use Exception;
@@ -176,7 +175,7 @@ abstract class BaseFunctionalTest extends TestCase
             $mockQueueClient,
             $storageClientFactory,
             new JobDefinitionFactory(
-                new JobDefinitionParser(),
+                new DockerBundleJobDefinitionParser(),
                 new JobObjectEncryptor($this->objectEncryptor),
                 $this->vaultVariablesApiClient,
                 $this->logger,

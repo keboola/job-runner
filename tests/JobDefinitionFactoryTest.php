@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\JobDefinitionParser;
+use App\DockerBundleJobDefinitionParser;
+use App\JobDefinitionFactory;
 use Generator;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
@@ -18,9 +19,11 @@ use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
+use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class JobDefinitionParserTest extends TestCase
+class JobDefinitionFactoryTest extends TestCase
 {
     private function createComponent(array $features = []): Component
     {
@@ -289,11 +292,16 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($parserStorageApiClient);
 
         $component = $this->createComponent();
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('Configuration my-config not found');
-        $parser->createJobDefinitionsForJob(
+        $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
@@ -315,9 +323,14 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(false);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
-        return $parser->createJobDefinitionsForJob($clientWrapper, $component, $job);
+        return $factory->createJobDefinitionsForJob($clientWrapper, $component, $job);
     }
 
     private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
@@ -335,9 +348,14 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(false);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
-        return $parser->createJobDefinitionsForJob(
+        return $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
@@ -381,9 +399,14 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(true);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
-        $jobDefinitions = $parser->createJobDefinitionsForJob(
+        $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
@@ -437,13 +460,18 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(true);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
             'It is not safe to run this configuration in a development branch. Please review the configuration.'
         );
-        $parser->createJobDefinitionsForJob(
+        $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
@@ -488,8 +516,13 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(true);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->createJobDefinitionsForJob(
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
+        $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
@@ -525,11 +558,16 @@ class JobDefinitionParserTest extends TestCase
         $clientWrapper->method('hasBranch')->willReturn(true);
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
-        $parser = new JobDefinitionParser();
+        $factory = new JobDefinitionFactory(
+            new DockerBundleJobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('This component cannot be run in a development branch.');
-        $parser->createJobDefinitionsForJob(
+        $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
