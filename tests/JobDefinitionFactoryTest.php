@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\DockerBundleJobDefinitionParser;
+use App\JobDefinitionParser;
 use App\JobDefinitionFactory;
 use Generator;
 use Keboola\DockerBundle\Docker\Component;
@@ -293,7 +293,7 @@ class JobDefinitionFactoryTest extends TestCase
 
         $component = $this->createComponent();
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -324,7 +324,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -349,7 +349,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -400,7 +400,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -461,7 +461,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -517,7 +517,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)
@@ -559,7 +559,7 @@ class JobDefinitionFactoryTest extends TestCase
         $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class)

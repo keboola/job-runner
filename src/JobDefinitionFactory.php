@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
 class JobDefinitionFactory
 {
     public function __construct(
-        private readonly DockerBundleJobDefinitionParser $jobDefinitionParser,
+        private readonly JobDefinitionParser $jobDefinitionParser,
         private readonly JobObjectEncryptor $objectEncryptor,
         private readonly VariablesApiClient $variablesApiClient,
         private readonly LoggerInterface $logger,

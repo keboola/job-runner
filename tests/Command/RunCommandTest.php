@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\RunCommand;
-use App\DockerBundleJobDefinitionParser;
+use App\JobDefinitionParser;
 use App\JobDefinitionFactory;
 use Generator;
 use Keboola\Csv\CsvFile;
@@ -1110,7 +1110,7 @@ class RunCommandTest extends AbstractCommandTest
         $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
         $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
         $jobDefinitionFactory = new JobDefinitionFactory(
-            new DockerBundleJobDefinitionParser(),
+            new JobDefinitionParser(),
             new JobObjectEncryptor($objectEncryptor),
             $this->createMock(VariablesApiClient::class),
             $logger,

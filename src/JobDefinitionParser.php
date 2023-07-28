@@ -9,7 +9,7 @@ use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 
-class DockerBundleJobDefinitionParser
+class JobDefinitionParser
 {
     /**
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\DockerBundleJobDefinitionParser;
+use App\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Exception\UserException;
 use PHPUnit\Framework\TestCase;
 
-class DockerBundleJobDefinitionParserTest extends TestCase
+class JobDefinitionParserTest extends TestCase
 {
     private function getComponent(): Component
     {
@@ -104,7 +104,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'shared_code_row_ids' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinition = $parser->parseConfigData(
             $this->getComponent(),
             $configData,
@@ -208,7 +208,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'shared_code_row_ids' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
         self::assertCount(1, $jobDefinitions);
@@ -328,7 +328,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'shared_code_row_ids' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'dev');
 
         self::assertCount(2, $jobDefinitions);
@@ -432,7 +432,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'shared_code_row_ids' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinition = $parser->parseConfigData($this->getComponent(), $configData, '1234', 'dev');
 
         self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
@@ -506,7 +506,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             ],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places'
@@ -524,7 +524,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'rows' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
         self::assertCount(1, $jobDefinitions);
@@ -600,7 +600,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             ],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places'
@@ -628,7 +628,7 @@ class DockerBundleJobDefinitionParserTest extends TestCase
             'shared_code_row_ids' => [],
         ];
 
-        $parser = new DockerBundleJobDefinitionParser();
+        $parser = new JobDefinitionParser();
         $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
         self::assertCount(1, $jobDefinitions);
