@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\JobDefinitionParser;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use Generator;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;

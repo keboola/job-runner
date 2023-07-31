@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Command\RunCommand;
-use App\JobDefinitionParser;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use App\Tests\EncryptorOptionsTrait;
 use App\Tests\TestEnvVarsTrait;
 use Exception;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\RunCommand;
-use App\JobDefinitionParser;
 use App\JobDefinitionFactory;
+use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
