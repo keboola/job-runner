@@ -8,6 +8,7 @@ use App\Tests\EncryptorOptionsTrait;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use RuntimeException;
@@ -85,6 +86,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
+            'branchType' => BranchType::DEFAULT->value,
             'componentId' => 'keboola.runner-config-test',
             'projectId' => $tokenInfo['owner']['id'],
             'projectName' => $tokenInfo['owner']['name'],
@@ -200,6 +202,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
+            'branchType' => BranchType::DEFAULT->value,
             'componentId' => 'keboola.runner-config-test',
             'projectId' => $tokenInfo['owner']['id'],
             'projectName' => $tokenInfo['owner']['name'],
