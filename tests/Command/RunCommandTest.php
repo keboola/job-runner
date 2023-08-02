@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\BranchIdResolver;
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
 use App\JobDefinitionParser;
@@ -18,6 +17,7 @@ use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
+use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
@@ -885,6 +885,7 @@ class RunCommandTest extends AbstractCommandTest
         $job = $existingJobFactory->loadFromExistingJobData([
             'id' => $id,
             'runId' => $id,
+            'branchType' => BranchType::DEFAULT->value,
             'componentId' => 'keboola.runner-config-test',
             'projectId' => $tokenInfo['owner']['id'],
             'projectName' => $tokenInfo['owner']['name'],

@@ -5,94 +5,89 @@ declare(strict_types=1);
 namespace App;
 
 use Keboola\DockerBundle\Docker\Component;
-use Keboola\DockerBundle\Docker\JobDefinitionParser as DockerBundleJobDefinitionParser;
+use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
-use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\PermissionChecker\BranchType;
-use Keboola\StorageApi\ClientException;
-use Keboola\StorageApi\Components;
-use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 
-/**
- * TODO import Keboola\DockerBundle\Docker\JobDefinitionParser implementation inside here
- */
 class JobDefinitionParser
 {
-    public function createJobDefinitionsForJob(
-        ClientWrapper $clientWrapper,
+    /**
+     * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
+     */
+    public function parseConfigData(
         Component $component,
-        JobInterface $job,
+        array $configData,
+        ?string $configId,
+        string $branchType,
+    ): JobDefinition {
+        return new JobDefinition(
+            configuration: $configData,
+            component: $component,
+            configId: $configId,
+            branchType: $branchType,
+        );
+    }
+
+    /**
+     * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
+     * @return JobDefinition[]
+     */
+    public function parseConfig(
+        Component $component,
+        array $config,
+        string $branchType,
     ): array {
-        if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
-            throw new UserException('This component cannot be run in a development branch.');
+        $config['rows'] = $config['rows'] ?? [];
+        $this->validateConfig($config);
+
+        if (count($config['rows']) === 0) {
+            $jobDefinition = new JobDefinition(
+                configuration: $config['configuration'] ? (array) $config['configuration'] : [],
+                component: $component,
+                configId: (string) $config['id'],
+                configVersion: (string) $config['version'],
+                state: $config['state'] ? (array) $config['state'] : [],
+                branchType: $branchType
+            );
+            return [$jobDefinition];
         }
 
-        $jobDefinitionParser = new DockerBundleJobDefinitionParser();
-
-        if ($job->getConfigData()) {
-            $configData = $job->getConfigData();
-            $configData = $this->extendComponentConfigWithBackend($configData, $job);
-
-            $jobDefinitionParser->parseConfigData(
+        return array_map(
+            fn (array $row) => new JobDefinition(
+                array_replace_recursive($config['configuration'], $row['configuration']),
                 $component,
-                $configData,
-                $job->getConfigId(),
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
-            );
-        } else {
-            try {
-                $components = new Components($clientWrapper->getBranchClientIfAvailable());
-                $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
-                /** @var array $configuration */
-
-                if (!$clientWrapper->getClientOptionsReadOnly()->useBranchStorage()) {
-                    $this->checkUnsafeConfiguration(
-                        $component,
-                        $configuration,
-                        $job->getBranchType() ?? BranchType::DEV
-                    );
-                }
-            } catch (ClientException $e) {
-                throw new UserException($e->getMessage(), $e);
-            }
-
-            $configuration['configuration'] = $this->extendComponentConfigWithBackend(
-                $configuration['configuration'] ?? [],
-                $job,
-            );
-
-            $jobDefinitionParser->parseConfig(
-                $component,
-                $configuration,
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
-            );
-        }
-
-        return $jobDefinitionParser->getJobDefinitions();
+                (string) $config['id'],
+                (string) $config['version'],
+                $row['state'] ? (array) $row['state'] : [],
+                (string) $row['id'],
+                (bool) $row['isDisabled'],
+                $branchType
+            ),
+            $config['rows'],
+        );
     }
 
-    private function extendComponentConfigWithBackend(array $config, JobInterface $job): array
+    private function validateConfig(array $config): void
     {
-        $backend = $job->getBackend();
-
-        if ($backend->getType() !== null) {
-            $config['runtime']['backend']['type'] = $backend->getType();
+        $hasProcessors = !empty($config['configuration']['processors']['before'])
+            || !empty($config['configuration']['processors']['after']);
+        $hasRowProcessors = $this->hasRowProcessors($config);
+        if ($hasProcessors && $hasRowProcessors) {
+            throw new UserException(
+                'Processors may be set either in configuration or in configuration row, but not in both places.'
+            );
         }
-        if ($backend->getContext() !== null) {
-            $config['runtime']['backend']['context'] = $backend->getContext();
-        }
-
-        return $config;
     }
 
-    private function checkUnsafeConfiguration(Component $component, array $configuration, BranchType $branchType): void
+    private function hasRowProcessors(array $config): bool
     {
-        if ($component->branchConfigurationsAreUnsafe() && $branchType === BranchType::DEV) {
-            if (empty($configuration['configuration']['runtime']['safe'])) {
-                throw new UserException(
-                    'It is not safe to run this configuration in a development branch. Please review the configuration.'
-                );
+        foreach ($config['rows'] as $row) {
+            if (!empty($row['configuration']['processors']['before'])
+                || !empty($row['configuration']['processors']['after'])
+            ) {
+                return true;
             }
         }
+        return false;
     }
 }

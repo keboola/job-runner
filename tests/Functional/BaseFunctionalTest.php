@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\BranchIdResolver;
 use App\Command\RunCommand;
 use App\JobDefinitionFactory;
 use App\JobDefinitionParser;

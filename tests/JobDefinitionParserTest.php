@@ -5,534 +5,636 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\JobDefinitionParser;
-use Generator;
 use Keboola\DockerBundle\Docker\Component;
-use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
-use Keboola\JobQueueInternalClient\JobFactory\Job;
-use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
-use Keboola\PermissionChecker\BranchType;
-use Keboola\StorageApi\BranchAwareClient;
-use Keboola\StorageApi\Client;
-use Keboola\StorageApi\ClientException;
-use Keboola\StorageApiBranch\ClientWrapper;
-use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use PHPUnit\Framework\TestCase;
 
 class JobDefinitionParserTest extends TestCase
 {
-    private function createComponent(array $features = []): Component
+    private function getComponent(): Component
     {
-        return new Component([
-            'id' => 'my-component',
-            'data' => [
-                'definition' => [
-                    'type' => 'dockerhub',
-                    'uri' => 'keboola/docker-demo',
+        return new Component(
+            [
+                'id' => 'keboola.r-transformation',
+                'data' => [
+                    'definition' => [
+                        'type' => 'dockerhub',
+                        'uri' => 'keboola/docker-demo',
+                    ],
                 ],
-            ],
-            'features' => $features,
-        ]);
-    }
-
-    private function createJob(array $jobData): Job
-    {
-        $encryptor = $this->createMock(JobObjectEncryptor::class);
-        $encryptor->expects(self::never())->method(self::anything());
-
-        $jobStorageClientFactory = $this->createMock(StorageClientPlainFactory::class);
-        $jobStorageClientFactory->expects(self::never())->method(self::anything());
-
-        return new Job($encryptor, $jobStorageClientFactory, $jobData);
-    }
-
-    public function testCreateJobDefinitionWithConfigData(): void
-    {
-        $configData = [
-            'runtime' => [
-                'foo' => 'bar',
-            ],
-        ];
-
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'configId' => 'my-config',
-            'configData' => $configData,
-            'branchType' => null,
-        ];
-
-        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
-
-        self::assertCount(1, $jobDefinitions);
-        $jobDefinition = $jobDefinitions[0];
-
-        self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
-        self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
-        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
-    }
-
-    public function createJobDefinitionWithConfigDataAndBackendData(): Generator
-    {
-        yield 'nothing' => [
-            [],
-            [
-                'type' => 'invalid',
-                'context' => 'wml-invalid',
-            ],
-        ];
-        yield 'type' => [
-            [
-                'type' => 'custom',
-            ],
-            [
-                'type' => 'custom',
-                'context' => 'wml-invalid',
-            ],
-        ];
-        yield 'context' => [
-            [
-                'context' => 'wlm',
-            ],
-            [
-                'type' => 'invalid',
-                'context' => 'wlm',
-            ],
-        ];
-        yield 'type + context' => [
-            [
-                'type' => 'custom',
-                'context' => 'wlm',
-            ],
-            [
-                'type' => 'custom',
-                'context' => 'wlm',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider createJobDefinitionWithConfigDataAndBackendData
-     */
-    public function testCreateJobDefinitionWithConfigDataAndBackend(
-        array $backendData,
-        array $expectedBackendData
-    ): void {
-        $configData = [
-            'runtime' => [
-                'foo' => 'bar',
-                'backend' => [
-                    'type' => 'invalid',
-                    'context' => 'wml-invalid',
-                ],
-            ],
-        ];
-
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'configId' => 'my-config',
-            'configData' => $configData,
-            'backend' => $backendData,
-            'branchType' => null,
-        ];
-
-        $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
-        self::assertSame(
-            $expectedBackendData,
-            $jobDefinitions[0]->getConfiguration()['runtime']['backend']
+            ]
         );
     }
 
-    public function testCreateJobDefinitionWithConfigId(): void
+    public function testSimpleConfigData(): void
     {
-        $configuration = [
-            'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
-            'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
+        $configData = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                        ],
+                    ],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                        ],
+                    ],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    'tdata <- t(data[, !(names(data) %in% ("name"))])',
                 ],
             ],
         ];
 
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'configId' => 'my-config',
-            'branchType' => null,
+        $expected = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                            'columns' => [],
+                            'where_values' => [],
+                            'where_operator' => 'eq',
+                            'column_types' => [],
+                            'overwrite' => false,
+                            'use_view' => false,
+                            'keep_internal_timestamp_column' => true,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                            'incremental' => false,
+                            'primary_key' => [],
+                            'columns' => [],
+                            'delete_where_values' => [],
+                            'delete_where_operator' => 'eq',
+                            'delimiter' => ',',
+                            'enclosure' => '"',
+                            'metadata' => [],
+                            'column_metadata' => [],
+                            'distribution_key' => [],
+                            'write_always' => false,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    0 => 'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    1 => 'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
         ];
 
-        $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
-
-        self::assertCount(1, $jobDefinitions);
-        $jobDefinition = $jobDefinitions[0];
-
-        self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
-        self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
-        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
-    }
-
-    public function createJobDefinitionWithConfigIdAndBackendData(): Generator
-    {
-        yield 'nothing' => [
-            [],
+        $parser = new JobDefinitionParser();
+        $jobDefinition = $parser->parseConfigData(
+            $this->getComponent(),
+            $configData,
             null,
-        ];
-        yield 'type' => [
-            [
-                'type' => 'custom',
-            ],
-            [
-                'type' => 'custom',
-            ],
-        ];
-        yield 'context' => [
-            [
-                'context' => 'wlm',
-            ],
-            [
-                'context' => 'wlm',
-            ],
-        ];
-        yield 'type + context' => [
-            [
-                'type' => 'custom',
-                'context' => 'wlm',
-            ],
-            [
-                'type' => 'custom',
-                'context' => 'wlm',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider createJobDefinitionWithConfigIdAndBackendData
-     */
-    public function testCreateJobDefinitionWithConfigIdAndBackend(
-        array $backendData,
-        ?array $expectedBackendData
-    ): void {
-        $configuration = [
-            'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
-            'runtime' => [
-                'foo' => 'bar',
-                'backend' => [
-                    'type' => 'invalid',
-                    'context' => 'wml-invalid',
-                ],
-            ],
-        ];
-
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'configId' => 'my-config',
-            'backend' => $backendData,
-            'branchType' => null,
-        ];
-
-        $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
-
-        if ($expectedBackendData !== null) {
-            self::assertSame(
-                $expectedBackendData,
-                $jobDefinitions[0]->getConfiguration()['runtime']['backend']
-            );
-        } else {
-            self::assertArrayNotHasKey(
-                'runtime',
-                $jobDefinitions[0]->getConfiguration()
-            );
-        }
-    }
-
-    public function testCreateJobDefinitionWithConfigNotFound(): void
-    {
-        $job = $this->createJob([
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'configId' => 'my-config',
-            'branchType' => null,
-        ]);
-
-        $parserStorageApiClient = $this->createMock(Client::class);
-        $parserStorageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
-            ->willThrowException(new ClientException(
-                'Configuration my-config not found',
-                404,
-                null,
-                'notFound'
-            ))
-        ;
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($parserStorageApiClient);
-
-        $component = $this->createComponent();
-        $parser = new JobDefinitionParser();
-
-        $this->expectException(UserException::class);
-        $this->expectExceptionMessage('Configuration my-config not found');
-        $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
+            'default'
         );
+
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertNull($jobDefinition->getConfigId());
+        self::assertNull($jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEmpty($jobDefinition->getState());
+        self::assertSame('default', $jobDefinition->getBranchType());
     }
 
-    /**
-     * @return array<JobDefinition>
-     */
-    private function createJobDefinitionsWithConfigData(array $jobData): array
+    public function testSingleRowConfiguration(): void
     {
-        $component = $this->createComponent();
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(Client::class);
-        $storageApiClient->expects(self::never())->method(self::anything());
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
-
-        $parser = new JobDefinitionParser();
-
-        return $parser->createJobDefinitionsForJob($clientWrapper, $component, $job);
-    }
-
-    private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
-    {
-        $component = $this->createComponent();
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(Client::class);
-        $storageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
-            ->willReturn($configuration)
-        ;
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
-
-        $parser = new JobDefinitionParser();
-
-        return $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
-        );
-    }
-
-    public function testCreateJobDefinitionWithBranchConfigId(): void
-    {
-        $configuration = [
+        $config = [
             'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
+            'version' => 1,
             'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
+                'storage' => [
+                    'input' => [
+                        'tables' => [
+                            [
+                                'source' => 'in.c-docker-test.source',
+                                'destination' => 'transpose.csv',
+                            ],
+                        ],
+                    ],
+                    'output' => [
+                        'tables' => [
+                            [
+                                'source' => 'transpose.csv',
+                                'destination' => 'out.c-docker-test.transposed',
+                            ],
+                        ],
+                    ],
+                ],
+                'parameters' => [
+                    'script' => [
+                        'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                        'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                    ],
                 ],
             ],
+            'state' => ['key' => 'val'],
+            'rows' => [],
         ];
 
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'branchId' => '123',
-            'configId' => 'my-config',
-            'branchType' => BranchType::DEV->value,
+        $expected = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                            'columns' => [],
+                            'where_values' => [],
+                            'where_operator' => 'eq',
+                            'column_types' => [],
+                            'overwrite' => false,
+                            'use_view' => false,
+                            'keep_internal_timestamp_column' => true,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+                'output' =>
+                    [
+                        'tables' =>
+                            [
+                                [
+                                    'source' => 'transpose.csv',
+                                    'destination' => 'out.c-docker-test.transposed',
+                                    'incremental' => false,
+                                    'primary_key' => [],
+                                    'columns' => [],
+                                    'delete_where_values' => [],
+                                    'delete_where_operator' => 'eq',
+                                    'delimiter' => ',',
+                                    'enclosure' => '"',
+                                    'metadata' => [],
+                                    'column_metadata' => [],
+                                    'distribution_key' => [],
+                                    'write_always' => false,
+                                ],
+                            ],
+                        'files' => [],
+                    ],
+            ],
+            'parameters' => [
+                'script' => [
+                    0 => 'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    1 => 'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
         ];
-
-        $component = $this->createComponent();
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(BranchAwareClient::class);
-        $storageApiClient->expects(self::once())->method('apiGet')
-            ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration)
-        ;
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
 
         $parser = new JobDefinitionParser();
-
-        $jobDefinitions = $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
-        );
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
         self::assertCount(1, $jobDefinitions);
 
-        /** @var JobDefinition $jobDefinition */
         $jobDefinition = $jobDefinitions[0];
-
-        self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
-        self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
-        self::assertSame($jobData['branchType'], $jobDefinition->getBranchType());
-        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo']);
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(1, $jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEquals($config['state'], $jobDefinition->getState());
+        self::assertSame('default', $jobDefinition->getBranchType());
     }
 
-    public function testCreateJobDefinitionBranchUnsafe(): void
+    public function testMultiRowConfiguration(): void
     {
-        $configuration = [
+        $config = [
             'id' => 'my-config',
-            'version' => '1',
-            'state' => [],
-            'rows' => [],
+            'version' => 3,
             'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
+                'parameters' => [
+                    'credentials' => [
+                        'username' => 'user',
+                        '#password' => 'password',
+                    ],
+                ],
+            ],
+            'state' => ['key' => 'val'],
+            'rows' => [
+                [
+                    'id' => 'row1',
+                    'version' => 2,
+                    'isDisabled' => true,
+                    'configuration' => [
+                        'storage' => [
+                            'input' => [
+                                'tables' => [
+                                    [
+                                        'source' => 'in.c-docker-test.source',
+                                        'destination' => 'transpose.csv',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'parameters' => [
+                            'credentials' => [
+                                'username' => 'override user',
+                            ],
+                            'key' => 'val',
+                        ],
+                    ],
+                    'state' => [
+                        'key1' => 'val1',
+                    ],
+                ],
+                [
+                    'id' => 'row2',
+                    'version' => 1,
+                    'isDisabled' => false,
+                    'configuration' => [
+                        'storage' => [
+                            'input' => [],
+                        ],
+                    ],
+                    'state' => [
+                        'key2' => 'val2',
+                    ],
                 ],
             ],
         ];
 
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'branchId' => 'my-branch',
-            'configId' => 'my-config',
-            'branchType' => BranchType::DEV->value,
+        $expectedRow1 = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                            'columns' => [],
+                            'where_values' => [],
+                            'where_operator' => 'eq',
+                            'column_types' => [],
+                            'overwrite' => false,
+                            'use_view' => false,
+                            'keep_internal_timestamp_column' => true,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+            ],
+            'parameters' => [
+                'credentials' => [
+                    'username' => 'override user',
+                    '#password' => 'password',
+                ],
+                'key' => 'val',
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
         ];
 
-        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(BranchAwareClient::class);
-        $storageApiClient->expects(self::once())->method('apiGet')
-            ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration)
-        ;
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $expectedRow2 = [
+            'storage' => [
+                'input' => [
+                    'tables' => [],
+                    'files' => [],
+                ],
+            ],
+            'parameters' => [
+                'credentials' => [
+                    'username' => 'user',
+                    '#password' => 'password',
+                ],
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
+        ];
 
         $parser = new JobDefinitionParser();
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'dev');
 
+        self::assertCount(2, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expectedRow1, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(3, $jobDefinition->getConfigVersion());
+        self::assertEquals('row1', $jobDefinition->getRowId());
+        self::assertTrue($jobDefinition->isDisabled());
+        self::assertEquals(['key1' => 'val1'], $jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
+
+        $jobDefinition = $jobDefinitions[1];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expectedRow2, $jobDefinition->getConfiguration());
+        self::assertEquals('my-config', $jobDefinition->getConfigId());
+        self::assertEquals(3, $jobDefinition->getConfigVersion());
+        self::assertEquals('row2', $jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEquals(['key2' => 'val2'], $jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
+    }
+
+    public function testSimpleConfigDataWithConfigId(): void
+    {
+        $configData = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                        ],
+                    ],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                        ],
+                    ],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+        ];
+
+        $expected = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                            'columns' => [],
+                            'where_values' => [],
+                            'where_operator' => 'eq',
+                            'column_types' => [],
+                            'overwrite' => false,
+                            'use_view' => false,
+                            'keep_internal_timestamp_column' => true,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                            'incremental' => false,
+                            'primary_key' => [],
+                            'columns' => [],
+                            'delete_where_values' => [],
+                            'delete_where_operator' => 'eq',
+                            'delimiter' => ',',
+                            'enclosure' => '"',
+                            'metadata' => [],
+                            'column_metadata' => [],
+                            'distribution_key' => [],
+                            'write_always' => false,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    0 => 'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    1 => 'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
+        ];
+
+        $parser = new JobDefinitionParser();
+        $jobDefinition = $parser->parseConfigData($this->getComponent(), $configData, '1234', 'dev');
+
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertEquals('1234', $jobDefinition->getConfigId());
+        self::assertNull($jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEmpty($jobDefinition->getState());
+        self::assertSame('dev', $jobDefinition->getBranchType());
+    }
+
+    public function testMultiRowConfigurationWithInvalidProcessors1(): void
+    {
+        $config = [
+            'id' => 'my-config',
+            'version' => 3,
+            'state' => [],
+            'configuration' => [
+                'parameters' => ['first' => 'second'],
+                'processors' => [
+                    'before' => [],
+                    'after' => [
+                        [
+                            'definition' => [
+                                'component' => 'keboola.processor-skip-lines',
+                            ],
+                            'parameters' => [
+                                'lines' => 1,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'rows' => [
+                [
+                    'id' => 'row1',
+                    'version' => 1,
+                    'isDisabled' => false,
+                    'state' => [],
+                    'configuration' => [
+                        'parameters' => [
+                            'a' => 'b',
+                        ],
+                    ],
+                ],
+                [
+                    'id' => 'row2',
+                    'version' => 1,
+                    'isDisabled' => false,
+                    'state' => [],
+                    'configuration' => [
+                        'parameters' => [
+                            'c' => 'd',
+                        ],
+                        'processors' => [
+                            'before' => [
+                                [
+                                    'definition' => [
+                                        'component' => 'keboola.processor-iconv',
+                                    ],
+                                    'parameters' => [
+                                        'source_encoding' => 'WINDOWS-1250',
+                                    ],
+                                ],
+                            ],
+                            'after' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $parser = new JobDefinitionParser();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'It is not safe to run this configuration in a development branch. Please review the configuration.'
+            'Processors may be set either in configuration or in configuration row, but not in both places'
         );
-        $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
+        $parser->parseConfig($this->getComponent(), $config, 'default');
+    }
+
+    public function testEmptyConfig(): void
+    {
+        $config = [
+            'id' => 'my-config',
+            'version' => 3,
+            'state' => null,
+            'configuration' => null,
+            'rows' => [],
+        ];
+
+        $parser = new JobDefinitionParser();
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
+
+        self::assertCount(1, $jobDefinitions);
+        self::assertSame(
+            [
+                'shared_code_row_ids' => [],
+                'storage' => [],
+                'processors' => [],
+                'parameters' => [],
+            ],
+            $jobDefinitions[0]->getConfiguration()
         );
     }
 
-    public function testCreateJobDefinitionBranchUnsafeSafe(): void
+    public function testMultiRowConfigurationWithInvalidProcessors2(): void
     {
-        $configuration = [
+        $config = [
             'id' => 'my-config',
-            'version' => '1',
+            'version' => 3,
             'state' => [],
-            'rows' => [],
             'configuration' => [
-                'runtime' => [
-                    'foo' => 'bar',
-                    'safe' => true,
+                'parameters' => ['first' => 'second'],
+                'processors' => [
+                    'before' => [
+                        [
+                            'definition' => [
+                                'component' => 'keboola.processor-skip-lines',
+                            ],
+                            'parameters' => [
+                                'lines' => 1,
+                            ],
+                        ],
+                    ],
+                    'after' => [],
+                ],
+            ],
+            'rows' => [
+                [
+                    'id' => 'row1',
+                    'version' => 1,
+                    'isDisabled' => false,
+                    'state' => [],
+                    'configuration' => [
+                        'parameters' => [
+                            'a' => 'b',
+                        ],
+                    ],
+                ],
+                [
+                    'id' => 'row2',
+                    'version' => 1,
+                    'isDisabled' => false,
+                    'state' => [],
+                    'configuration' => [
+                        'parameters' => [
+                            'c' => 'd',
+                        ],
+                        'processors' => [
+                            'before' => [
+                                [
+                                    'definition' => [
+                                        'component' => 'keboola.processor-iconv',
+                                    ],
+                                    'parameters' => [
+                                        'source_encoding' => 'WINDOWS-1250',
+                                    ],
+                                ],
+                            ],
+                            'after' => [],
+                        ],
+                    ],
                 ],
             ],
         ];
 
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'branchId' => '123',
-            'configId' => 'my-config',
-            'branchType' => BranchType::DEV->value,
-        ];
-
-        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(BranchAwareClient::class);
-        $storageApiClient->expects(self::once())->method('apiGet')
-            ->with('components/my-component/configs/my-config')
-            ->willReturn($configuration)
-        ;
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
-
         $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
+            'Processors may be set either in configuration or in configuration row, but not in both places'
         );
-
-        self::assertCount(1, $jobDefinitions);
-        $jobDefinition = $jobDefinitions[0];
-
-        self::assertSame($jobData['configId'], $jobDefinition->getConfigId());
-        self::assertSame($jobData['componentId'], $jobDefinition->getComponentId());
-        self::assertSame('bar', $jobDefinition->getConfiguration()['runtime']['foo'] ?? null);
+        $parser->parseConfig($this->getComponent(), $config, 'default');
     }
 
-    public function testCreateJobDefinitionBranchBlocked(): void
+    public function testNullRows(): void
     {
-        $jobData = [
-            'status' => JobInterface::STATUS_CREATED,
-            'runId' => '1234',
-            'projectId' => 'my-project',
-            'componentId' => 'my-component',
-            'branchId' => 'my-branch',
-            'configId' => 'my-config',
-            'branchType' => BranchType::DEV->value,
+        $config = [
+            'id' => 'my-config',
+            'version' => 1,
+            'configuration' => [
+                'storage' => [],
+                'parameters' => ['first' => 'second'],
+            ],
+            'state' => ['key' => 'val'],
+            'rows' => null,
         ];
 
-        $component = $this->createComponent(['dev-branch-job-blocked']);
-        $job = $this->createJob($jobData);
-
-        $storageApiClient = $this->createMock(BranchAwareClient::class);
-        $storageApiClient->expects(self::never())->method('apiGet');
-
-        $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $expected = [
+            'storage' => [],
+            'parameters' => ['first' => 'second'],
+            'processors' => [],
+            'shared_code_row_ids' => [],
+        ];
 
         $parser = new JobDefinitionParser();
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
 
-        $this->expectException(UserException::class);
-        $this->expectExceptionMessage('This component cannot be run in a development branch.');
-        $parser->createJobDefinitionsForJob(
-            $clientWrapper,
-            $component,
-            $job,
-        );
+        self::assertCount(1, $jobDefinitions);
+
+        $jobDefinition = $jobDefinitions[0];
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
     }
 }
