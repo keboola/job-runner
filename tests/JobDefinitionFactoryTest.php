@@ -25,10 +25,12 @@ use Psr\Log\LoggerInterface;
 
 class JobDefinitionFactoryTest extends TestCase
 {
-    private function createComponent(array $features = []): Component
-    {
+    private function createComponent(
+        array $features = [],
+        string $componentId = 'my-component',
+    ): Component {
         return new Component([
-            'id' => 'my-component',
+            'id' => $componentId,
             'data' => [
                 'definition' => [
                     'type' => 'dockerhub',
@@ -447,7 +449,7 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
+        $component = $this->createComponent(features: ['dev-branch-configuration-unsafe']);
         $job = $this->createJob($jobData);
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
@@ -503,7 +505,7 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $component = $this->createComponent(['dev-branch-configuration-unsafe']);
+        $component = $this->createComponent(features: ['dev-branch-configuration-unsafe']);
         $job = $this->createJob($jobData);
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
@@ -548,7 +550,7 @@ class JobDefinitionFactoryTest extends TestCase
             'branchType' => BranchType::DEV->value,
         ];
 
-        $component = $this->createComponent(['dev-branch-job-blocked']);
+        $component = $this->createComponent(features: ['dev-branch-job-blocked']);
         $job = $this->createJob($jobData);
 
         $storageApiClient = $this->createMock(BranchAwareClient::class);
@@ -572,5 +574,129 @@ class JobDefinitionFactoryTest extends TestCase
             $component,
             $job,
         );
+    }
+
+    public function testCreateJobDefinitionBlockedForSandboxesOnSoxDefaultBranch(): void
+    {
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
+        $storageApiClient
+            ->expects(self::once())
+            ->method('verifyToken')
+            ->willReturn([
+                'owner' => [
+                    'features' => ['protected-default-branch'],
+                ],
+            ])
+        ;
+
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper
+            ->expects(self::once())
+            ->method('isDefaultBranch')
+            ->willReturn(true)
+        ;
+        $clientWrapper
+            ->expects(self::once())
+            ->method('getBranchClientIfAvailable')
+            ->willReturn($storageApiClient)
+        ;
+
+        $encryptor = $this->createMock(JobObjectEncryptor::class);
+        $encryptor
+            ->expects(self::once())
+            ->method('decrypt')
+            ->willReturn('decrypted-token')
+        ;
+
+        $jobStorageClientFactory = $this->createMock(StorageClientPlainFactory::class);
+        $jobStorageClientFactory->expects(self::once())
+            ->method('createClientWrapper')
+            ->willReturn($clientWrapper)
+        ;
+
+        $componentId = 'keboola.sandboxes';
+        $component = $this->createComponent(componentId: $componentId);
+
+        $jobData = [
+            'status' => JobInterface::STATUS_CREATED,
+            'runId' => '1234',
+            'projectId' => 'my-project',
+            'componentId' => $componentId,
+            'branchId' => 'my-branch',
+            'configData' => [
+                'parameters' => [],
+            ],
+            'branchType' => BranchType::DEFAULT->value,
+            '#tokenString' => 'encrypted-token',
+        ];
+
+        $job = new Job($encryptor, $jobStorageClientFactory, $jobData);
+
+        $factory = new JobDefinitionFactory(
+            new JobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage('Component "keboola.sandboxes" is not allowed to run on default branch.');
+        $factory->createJobDefinitionsForJob(
+            $clientWrapper,
+            $component,
+            $job,
+        );
+    }
+
+    public function testCreateJobDefinitionIsNotBlockedForSandboxesOnDevBranch(): void
+    {
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
+        $storageApiClient->expects(self::never())->method('apiGet');
+
+        $clientWrapper = $this->createMock(ClientWrapper::class);
+        $clientWrapper
+            ->expects(self::once())
+            ->method('isDefaultBranch')
+            ->willReturn(false)
+        ;
+
+        $encryptor = $this->createMock(JobObjectEncryptor::class);
+        $encryptor->expects(self::never())->method(self::anything());
+
+        $jobStorageClientFactory = $this->createMock(StorageClientPlainFactory::class);
+        $jobStorageClientFactory->expects(self::never())->method(self::anything());
+
+        $componentId = 'keboola.sandboxes';
+        $component = $this->createComponent(componentId: $componentId);
+
+        $jobData = [
+            'status' => JobInterface::STATUS_CREATED,
+            'runId' => '1234',
+            'projectId' => 'my-project',
+            'componentId' => $componentId,
+            'branchId' => 'my-branch',
+            'configData' => [
+                'parameters' => [],
+            ],
+            'branchType' => BranchType::DEFAULT->value,
+            '#tokenString' => 'encrypted-token',
+        ];
+
+        $job = new Job($encryptor, $jobStorageClientFactory, $jobData);
+
+        $factory = new JobDefinitionFactory(
+            new JobDefinitionParser(),
+            $this->createMock(JobObjectEncryptor::class),
+            $this->createMock(VariablesApiClient::class),
+            $this->createMock(LoggerInterface::class)
+        );
+
+        $jobDefinitions = $factory->createJobDefinitionsForJob(
+            $clientWrapper,
+            $component,
+            $job,
+        );
+
+        self::assertCount(1, $jobDefinitions);
     }
 }

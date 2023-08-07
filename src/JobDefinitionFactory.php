@@ -10,6 +10,7 @@ use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
@@ -69,6 +70,17 @@ class JobDefinitionFactory
     ): array {
         if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
             throw new UserException('This component cannot be run in a development branch.');
+        }
+
+        if ($component->getId() === 'keboola.sandboxes'
+            && $clientWrapper->isDefaultBranch()
+            && in_array(JobFactory::PROTECTED_DEFAULT_BRANCH_FEATURE, $job->getProjectFeatures(), true)
+        ) {
+            throw new UserException(sprintf(
+                'Component "%s" is not allowed to run on %s branch.',
+                $component->getId(),
+                BranchType::DEFAULT->value
+            ));
         }
 
         if ($job->getConfigData()) {
