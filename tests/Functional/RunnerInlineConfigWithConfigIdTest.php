@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
@@ -49,21 +50,35 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                 'default_bucket_stage' => 'out',
             ],
         ];
-        $clientMock = $this->getMockBuilder(Client::class)
+        $basicClientMock = $this->getMockBuilder(Client::class)
             ->setConstructorArgs([['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')]])
             ->onlyMethods(['apiGet', 'getServiceUrl'])
             ->getMock();
-        $clientMock
+        $basicClientMock
+            ->method('apiGet')
+            ->willReturnCallback(function ($url, $filename) use ($client) {
+                return $client->apiGet($url, $filename);
+            });
+        $basicClientMock
             ->method('getServiceUrl')
             ->withConsecutive(['sandboxes'], ['oauth'])
             ->willReturnOnConsecutiveCalls(
                 'https://sandboxes.someurl',
                 'https://oauth.someurl',
             );
-        $clientMock
+        $branchClientMock = $this->getMockBuilder(BranchAwareClient::class)
+            ->setConstructorArgs(
+                [
+                    'default',
+                    ['token' => getenv('TEST_STORAGE_API_TOKEN'), 'url' => getenv('STORAGE_API_URL')],
+                ],
+            )
+            ->onlyMethods(['apiGet', 'getServiceUrl'])
+            ->getMock();
+        $branchClientMock
             ->method('apiGet')
             ->willReturnCallback(function ($url, $filename) use ($componentData, $client) {
-                if ($url === 'branch/default/components/keboola.python-transformation') {
+                if ($url === 'components/keboola.python-transformation') {
                     return $componentData;
                 } else {
                     return $client->apiGet($url, $filename);
@@ -96,8 +111,8 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                 ],
             ],
         ];
-        /** @var Client $clientMock */
-        $command = $this->getCommand($jobData, $clientMock);
+        /** @var Client $basicClientMock */
+        $command = $this->getCommand($jobData, $basicClientMock, $branchClientMock);
         $return = $command->run(new StringInput(''), new NullOutput());
 
         self::assertEquals(0, $return);

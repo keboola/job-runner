@@ -15,7 +15,6 @@ use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\BranchAwareClient;
-use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
@@ -67,7 +66,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'configData' => $configData,
-            'branchType' => null,
+            'branchType' => 'default',
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
@@ -144,7 +143,7 @@ class JobDefinitionFactoryTest extends TestCase
             'configId' => 'my-config',
             'configData' => $configData,
             'backend' => $backendData,
-            'branchType' => null,
+            'branchType' => 'default',
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
@@ -174,7 +173,7 @@ class JobDefinitionFactoryTest extends TestCase
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
-            'branchType' => null,
+            'branchType' => 'default',
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
@@ -249,7 +248,7 @@ class JobDefinitionFactoryTest extends TestCase
             'componentId' => 'my-component',
             'configId' => 'my-config',
             'backend' => $backendData,
-            'branchType' => null,
+            'branchType' => 'default',
         ];
 
         $jobDefinitions = $this->createJobDefinitionsWithConfiguration($jobData, $configuration);
@@ -275,12 +274,12 @@ class JobDefinitionFactoryTest extends TestCase
             'projectId' => 'my-project',
             'componentId' => 'my-component',
             'configId' => 'my-config',
-            'branchType' => null,
+            'branchType' => 'default',
         ]);
 
-        $parserStorageApiClient = $this->createMock(Client::class);
+        $parserStorageApiClient = $this->createMock(BranchAwareClient::class);
         $parserStorageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
+            ->with('components/my-component/configs/my-config')
             ->willThrowException(new ClientException(
                 'Configuration my-config not found',
                 404,
@@ -290,8 +289,8 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($parserStorageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClient')->willReturn($parserStorageApiClient);
 
         $component = $this->createComponent();
         $factory = new JobDefinitionFactory(
@@ -318,12 +317,12 @@ class JobDefinitionFactoryTest extends TestCase
         $component = $this->createComponent();
         $job = $this->createJob($jobData);
 
-        $storageApiClient = $this->createMock(Client::class);
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->expects(self::never())->method(self::anything());
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -340,15 +339,15 @@ class JobDefinitionFactoryTest extends TestCase
         $component = $this->createComponent();
         $job = $this->createJob($jobData);
 
-        $storageApiClient = $this->createMock(Client::class);
+        $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient->method('apiGet')
-            ->with('branch/default/components/my-component/configs/my-config')
+            ->with('components/my-component/configs/my-config')
             ->willReturn($configuration)
         ;
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(false);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(false);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -398,8 +397,8 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -459,8 +458,8 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -515,8 +514,8 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -557,8 +556,8 @@ class JobDefinitionFactoryTest extends TestCase
         $storageApiClient->expects(self::never())->method('apiGet');
 
         $clientWrapper = $this->createMock(ClientWrapper::class);
-        $clientWrapper->method('hasBranch')->willReturn(true);
-        $clientWrapper->method('getBranchClientIfAvailable')->willReturn($storageApiClient);
+        $clientWrapper->method('isDevelopmentBranch')->willReturn(true);
+        $clientWrapper->method('getBranchClient')->willReturn($storageApiClient);
 
         $factory = new JobDefinitionFactory(
             new JobDefinitionParser(),
@@ -597,7 +596,7 @@ class JobDefinitionFactoryTest extends TestCase
         ;
         $clientWrapper
             ->expects(self::once())
-            ->method('getBranchClientIfAvailable')
+            ->method('getBranchClient')
             ->willReturn($storageApiClient)
         ;
 

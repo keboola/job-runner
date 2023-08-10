@@ -68,7 +68,7 @@ class JobDefinitionFactory
         Component $component,
         JobInterface $job,
     ): array {
-        if ($component->blockBranchJobs() && $clientWrapper->hasBranch()) {
+        if ($component->blockBranchJobs() && $clientWrapper->isDevelopmentBranch()) {
             throw new UserException('This component cannot be run in a development branch.');
         }
 
@@ -91,13 +91,13 @@ class JobDefinitionFactory
                 $component,
                 $configData,
                 $job->getConfigId(),
-                ($job->getBranchType() ?? BranchType::DEFAULT)->value,
+                $job->getBranchType()->value,
             );
             return [$jobDefinition];
         }
 
         try {
-            $components = new Components($clientWrapper->getBranchClientIfAvailable());
+            $components = new Components($clientWrapper->getBranchClient());
             $configuration = $components->getConfiguration($job->getComponentId(), $job->getConfigId());
             /** @var array $configuration */
 
@@ -105,7 +105,7 @@ class JobDefinitionFactory
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
-                    $job->getBranchType() ?? BranchType::DEV
+                    $job->getBranchType()
                 );
             }
         } catch (ClientException $e) {
@@ -120,7 +120,7 @@ class JobDefinitionFactory
         return $this->jobDefinitionParser->parseConfig(
             $component,
             $configuration,
-            ($job->getBranchType() ?? BranchType::DEFAULT)->value,
+            $job->getBranchType()->value,
         );
     }
 

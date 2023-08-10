@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use Aws\S3\S3Client;
 use Keboola\Csv\CsvFile;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
@@ -215,8 +216,12 @@ class DebugModeTest extends BaseFunctionalTest
                 ],
             ],
         ];
-        $expectedJobResult = ['message' => 'Intentional error'];
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $expectedJobResult = [
+            'message' => 'Intentional error',
+            'configVersion' => '',
+            'images' => [],
+        ];
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
 
         $return = $command->run(new StringInput(''), new NullOutput());
 
@@ -309,24 +314,10 @@ class DebugModeTest extends BaseFunctionalTest
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
-            'configVersion' => 1,
-            'images' => [
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                ],
-            ],
+            'configVersion' => '1',
+            'images' => ['developer-portal-v2/keboola.python-transformation'],
         ];
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
         $return = $command->run(new StringInput(''), new NullOutput());
 
         self::assertEquals(0, $return);
@@ -342,7 +333,7 @@ class DebugModeTest extends BaseFunctionalTest
             }
         }
         $config = json_decode(strrev((string) base64_decode($output)), true);
-        self::assertIsArray($config);
+        self::assertIsArray($config, $output);
         self::assertIsArray($config['parameters']);
         self::assertEquals('secret', $config['parameters']['#encrypted']);
         self::assertEquals('not-secret', $config['parameters']['plain']);
@@ -404,37 +395,10 @@ class DebugModeTest extends BaseFunctionalTest
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
-            'configVersion' => 3,
-            'images' => [
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                ],
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                ],
-            ],
+            'configVersion' => '3',
+            'images' => ['developer-portal-v2/keboola.python-transformation'],
         ];
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
         $return = $command->run(new StringInput(''), new NullOutput());
 
         self::assertEquals(0, $return);
@@ -603,56 +567,15 @@ class DebugModeTest extends BaseFunctionalTest
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
-            'configVersion' => 3,
+            'configVersion' => '3',
             'images' => [
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                            'keboola.processor-create-manifest:0.5.6',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.processor-create-manifest@sha256:' .
-                                '2f34809009be86dd85809a1ef0605a69582d19613d9142ccf30e74acf3849da6',
-                        ],
-                    ],
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                            'keboola.processor-add-row-number-column:2.2.1',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.processor-add-row-number-column@sha256:' .
-                                'c20477b47326ba230879bd7f4b67ba823f3291b91595c0d80a12459b27d1e89d',
-                        ],
-                    ],
-                ],
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                ],
+                'developer-portal-v2/keboola.python-transformation',
+                'developer-portal-v2/keboola.processor-create-manifest',
+                'developer-portal-v2/keboola.processor-add-row-number-column',
             ],
         ];
 
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
         $return = $command->run(new StringInput(''), new NullOutput());
 
         self::assertEquals(0, $return);

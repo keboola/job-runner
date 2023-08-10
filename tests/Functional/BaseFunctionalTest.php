@@ -21,9 +21,11 @@ use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
 use Keboola\JobQueueInternalClient\NewJobFactory;
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ManageApi\Client as ManageApiClient;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
+use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -84,8 +86,9 @@ abstract class BaseFunctionalTest extends TestCase
 
     protected function getCommand(
         array $jobData,
-        ?Client $mockClient = null,
-        ?array $expectedJobResult = null
+        ?Client $basicClientMock = null,
+        ?BranchAwareClient $branchAwareClientMock = null,
+        ?array $expectedJobResult = null,
     ): RunCommand {
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
 
@@ -140,26 +143,57 @@ abstract class BaseFunctionalTest extends TestCase
                     array_merge($job->jsonSerialize(), ['status' => 'processing'])
                 )
             );
-        $mockQueueClient->expects(self::once())
-            ->method('postJobResult')
-            ->willReturn(
-                new Job(
-                    new JobObjectEncryptor($this->objectEncryptor),
-                    $storageClientFactory,
-                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
+        if ($expectedJobResult) {
+            $mockQueueClient->expects(self::once())
+                ->method('postJobResult')
+                ->with(
+                    self::anything(),
+                    self::anything(),
+                    self::callback(function (JobResult $arg) use ($expectedJobResult) {
+                        self::assertArrayHasKey('message', $expectedJobResult, 'Expectation format is invalid');
+                        self::assertArrayHasKey('configVersion', $expectedJobResult, 'Expectation format is invalid');
+                        self::assertIsArray($expectedJobResult['images']);
+                        self::assertSame($expectedJobResult['message'], $arg->getMessage());
+                        self::assertEquals($expectedJobResult['configVersion'], $arg->getConfigVersion());
+                        if ($expectedJobResult['images']) {
+                            self::assertGreaterThan(0, count($arg->getImages()));
+                            self::assertGreaterThan(0, count($arg->getImages()[0]));
+                            foreach ($expectedJobResult['images'] as $index => $image) {
+                                self::assertStringStartsWith($image, $arg->getImages()[0][$index]['id']);
+                            }
+                        }
+                        return true;
+                    })
                 )
-            );
+                ->willReturn(
+                    new Job(
+                        new JobObjectEncryptor($this->objectEncryptor),
+                        $storageClientFactory,
+                        array_merge($job->jsonSerialize(), ['status' => 'processing'])
+                    )
+                );
+        } else {
+            $mockQueueClient->expects(self::once())
+                ->method('postJobResult')
+                ->willReturn(
+                    new Job(
+                        new JobObjectEncryptor($this->objectEncryptor),
+                        $storageClientFactory,
+                        array_merge($job->jsonSerialize(), ['status' => 'processing'])
+                    )
+                );
+        }
 
-        if ($mockClient) {
+        if ($basicClientMock) {
             $clientWrapper = $storageClientFactory->createClientWrapper(
                 new ClientOptions(token: (string) getenv('TEST_STORAGE_API_TOKEN'))
             );
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
-            $mockClientWrapper->method('getBasicClient')->willReturn($mockClient);
-            $mockClientWrapper->method('getBranchClientIfAvailable')->willReturn($mockClient);
-            $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($mockClient);
+            $mockClientWrapper->method('getBasicClient')->willReturn($basicClientMock);
+            $mockClientWrapper->method('getBranchClient')->willReturn($branchAwareClientMock);
+            $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($basicClientMock);
             $mockClientWrapper->method('getBranchId')->willReturn(
-                $clientWrapper->getDefaultBranch()['branchId']
+                $clientWrapper->getBranch()->id
             );
             $mockClientWrapper->method('getDefaultBranch')->willReturn(
                 $clientWrapper->getDefaultBranch()

@@ -319,6 +319,7 @@ class RunCommandTest extends AbstractCommandTest
         putenv('JOB_ID=' . $job->getId());
 
         $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
+        self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientFactory);
         $baseOptions = $storageClientFactory->getClientOptionsReadOnly();
 
         $executionIndex = 0;
@@ -352,6 +353,7 @@ class RunCommandTest extends AbstractCommandTest
         $container = static::getContainer();
 
         $logger = $container->get('logger');
+        self::assertInstanceOf(Logger::class, $logger);
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
@@ -1081,6 +1083,7 @@ class RunCommandTest extends AbstractCommandTest
                     ],
                 ],
             ],
+            'branchType' => 'default',
         ];
 
         $jobData = $objectEncryptor->encryptGeneric($jobData);

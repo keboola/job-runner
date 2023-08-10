@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
@@ -219,7 +220,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
 
         $expectedJobResult = [
             'message' => 'No configurations executed.',
-            'configVersion' => null,
+            'configVersion' => '',
             'images' => [],
         ];
         $jobData = [
@@ -227,7 +228,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             'mode' => 'run',
             'configId' => $configId,
         ];
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
 
         $return = $command->run(new StringInput(''), new NullOutput());
 

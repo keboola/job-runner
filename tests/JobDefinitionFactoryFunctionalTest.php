@@ -45,9 +45,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->jobObjectEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
+        $jobEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
+        self::assertInstanceOf(JobObjectEncryptor::class, $jobEncryptor);
+        $this->jobObjectEncryptor = $jobEncryptor;
 
         $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
+        self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientFactory);
         $this->clientWrapper = $storageClientFactory->createClientWrapper(new ClientOptions(
             token: self::getRequiredEnv('STORAGE_API_TOKEN'),
         ));
@@ -62,7 +65,9 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             ],
         ]);
 
-        $this->factory = static::getContainer()->get(JobDefinitionFactory::class);
+        $jobDefinitionFactory = static::getContainer()->get(JobDefinitionFactory::class);
+        self::assertInstanceOf(JobDefinitionFactory::class, $jobDefinitionFactory);
+        $this->factory = $jobDefinitionFactory;
     }
 
     public function testCreateWithConfigData(): void
@@ -281,9 +286,14 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
 
     private function createJob(array $jobData, ?string $branchType = null): Job
     {
+        $jobObjectEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
+        $storageClientPlainFactory = static::getContainer()->get(StorageClientPlainFactory::class);
+        self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientPlainFactory);
+        self::assertInstanceOf(JobObjectEncryptor::class, $jobObjectEncryptor);
+
         return new Job(
-            static::getContainer()->get(JobObjectEncryptor::class),
-            static::getContainer()->get(StorageClientPlainFactory::class),
+            $jobObjectEncryptor,
+            $storageClientPlainFactory,
             [
                 'id' => '1234',
                 'runId' => '1234',
@@ -342,7 +352,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
 
     private function setupConfigurationWithRows(StorageConfiguration $configuration, array $rows): void
     {
-        $componentsApiClient = new Components($this->clientWrapper->getBranchClientIfAvailable());
+        $componentsApiClient = new Components($this->clientWrapper->getBranchClient());
 
         try {
             $componentsApiClient->deleteConfiguration(
@@ -372,6 +382,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         ];
 
         $vaultVariablesClient = static::getContainer()->get(VariablesApiClient::class);
+        self::assertInstanceOf(VariablesApiClient::class, $vaultVariablesClient);
         $existingVariables = $vaultVariablesClient->listVariables(new ListOptions(attributes: $attributes));
 
         foreach ($existingVariables as $variable) {
