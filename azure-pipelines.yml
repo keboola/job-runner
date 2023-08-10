@@ -11,6 +11,8 @@ trigger:
 variables:
   acrRepositoryMain: 'keboola.azurecr.io'
   acrRepositoryPes: 'keboolapes.azurecr.io'
+  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
+  garRepositoryProjectId: keboola-prod-artifacts
   imageName: 'job-runner'
   tag: $(Build.BuildId)
   productionTag: production-$(Build.SourceVersion)
@@ -186,6 +188,7 @@ stages:
               set -Eeuo pipefail
               docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
+              docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
@@ -200,6 +203,15 @@ stages:
               sourceImageTag: latest
               repositoryName: 'keboola/$(imageName)'
               pushTag: $(productionTag)
+
+          - task: Docker@2
+            displayName: 'Push to GAR $(productionTag)]'
+            inputs:
+              command: push
+              containerRegistry: 'Keboola GAR'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
+              tags: $(productionTag)
 
           - task: ECRPushImage@1
             displayName: 'Push to ECR [latest]'
@@ -273,6 +285,7 @@ stages:
               set -Eeuo pipefail
               docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(dockerTag)
+              docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(dockerTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(dockerTag)
             displayName: 'Load image'
 
@@ -286,6 +299,15 @@ stages:
               sourceImageTag: latest
               repositoryName: 'keboola/$(imageName)'
               pushTag: $(dockerTag)
+
+          - task: Docker@2
+            displayName: 'Push to GAR $(dockerTag)]'
+            inputs:
+              command: push
+              containerRegistry: 'Keboola GAR'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
+              tags: $(dockerTag)
 
           - task: Docker@2
             displayName: 'Push to ACR [$(dockerTag)]'
