@@ -2283,16 +2283,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.11.1",
+            "version": "v14.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "d399a49aba1b333fc890853034846057c2d632ab"
+                "reference": "29fbb58e7251e37327aee768e1f71eed7c9c34ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/d399a49aba1b333fc890853034846057c2d632ab",
-                "reference": "d399a49aba1b333fc890853034846057c2d632ab",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/29fbb58e7251e37327aee768e1f71eed7c9c34ec",
+                "reference": "29fbb58e7251e37327aee768e1f71eed7c9c34ec",
                 "shasum": ""
             },
             "require": {
@@ -2341,9 +2341,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.11.1"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.11.2"
             },
-            "time": "2023-08-02T11:55:55+00:00"
+            "time": "2023-08-11T08:28:50+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
