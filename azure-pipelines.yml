@@ -189,7 +189,6 @@ stages:
               docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):latest
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
@@ -224,15 +223,6 @@ stages:
               dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
               repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
               tags: $(productionTag)
-
-          - task: Docker@2
-            displayName: 'Push to GAR [latest]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola GAR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
-              tags: latest
 
           - task: Docker@2
             displayName: 'Push to ACR $(productionTag)'
