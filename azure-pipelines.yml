@@ -190,7 +190,6 @@ stages:
               docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(productionTag)
               docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):latest
             displayName: 'Load image'
 
           - task: ECRPushImage@1
@@ -203,17 +202,6 @@ stages:
               sourceImageTag: latest
               repositoryName: 'keboola/$(imageName)'
               pushTag: $(productionTag)
-
-          - task: ECRPushImage@1
-            displayName: 'Push to ECR [latest]'
-            inputs:
-              awsCredentials: 'Production - ECR Distribution'
-              regionName: 'us-east-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: latest
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: latest
 
           - task: Docker@2
             displayName: 'Push to GAR [$(productionTag)]'
@@ -233,16 +221,6 @@ stages:
               repository: $(imageName)
               tags: |
                 $(productionTag)
-
-          - task: Docker@2
-            displayName: 'Push to ACR latest'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                latest
 
           - task: Docker@2
             displayName: 'Push to Docker Hub $(productionTag)'
