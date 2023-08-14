@@ -55,24 +55,10 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
         ];
         $expectedJobResult = [
             'message' => 'Component processing finished.',
-            'configVersion' => 1,
-            'images' => [
-                [
-                    [
-                        'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                            'developer-portal-v2/keboola.python-transformation:1.1.20',
-                        'digests' => [
-                            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                            'keboola.python-transformation@sha256:' .
-                            '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                            'quay.io/keboola/python-transformation@sha256:' .
-                            'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                        ],
-                    ],
-                ],
-            ],
+            'configVersion' => '1',
+            'images' => ['developer-portal-v2/keboola.python-transformation'],
         ];
-        $command = $this->getCommand($jobData, null, $expectedJobResult);
+        $command = $this->getCommand($jobData, null, null, $expectedJobResult);
 
         $return = $command->run(new StringInput(''), new NullOutput());
 
@@ -151,24 +137,10 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
             ];
             $expectedJobResult = [
                 'message' => 'Component processing finished.',
-                'configVersion' => 1,
-                'images' => [
-                    [
-                        [
-                            'id' => '147946154733.dkr.ecr.us-east-1.amazonaws.com/' .
-                                'developer-portal-v2/keboola.python-transformation:1.1.20',
-                            'digests' => [
-                                '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-                                'keboola.python-transformation@sha256:' .
-                                '3b52906b9dc7d74c897414be0f12c45ee2487a9e377910a4680a802ed2986afc',
-                                'quay.io/keboola/python-transformation@sha256:' .
-                                'ec73abf4be360803a07bca7d8c1defe84e7b1d57a0615f1c5bcc6c7a39af75fb',
-                            ],
-                        ],
-                    ],
-                ],
+                'configVersion' => '1',
+                'images' => ['developer-portal-v2/keboola.python-transformation'],
             ];
-            $command = $this->getCommand($jobData, null, $expectedJobResult);
+            $command = $this->getCommand($jobData, null, null, $expectedJobResult);
 
             $return = $command->run(new StringInput(''), new NullOutput());
 

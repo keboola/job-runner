@@ -172,7 +172,7 @@ class RunCommand extends Command
             $this->logger->info(sprintf(
                 'Job branch is "%s", branch type is "%s"',
                 $job->getBranchId(),
-                $job->getBranchType()?->value,
+                $job->getBranchType()->value,
             ));
 
             // set up logging to storage API
@@ -184,11 +184,11 @@ class RunCommand extends Command
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
 
             $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
-                ->getBranchClientIfAvailable();
+                ->getBranchClient();
             $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
             $this->logger->pushHandler($handler);
-            /*
-             * intentionally leaving this commented out, it's useful for debugging
+
+            /* intentionally leaving this commented out, it's useful for debugging
             $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
             $this->logger->pushHandler($h2);
             */
@@ -304,7 +304,7 @@ class RunCommand extends Command
 
     private function getComponent(ClientWrapper $clientWrapper, string $id): array
     {
-        $componentsApi = new Components($clientWrapper->getBasicClient());
+        $componentsApi = new Components($clientWrapper->getBranchClient());
         try {
             return $componentsApi->getComponent($id);
         } catch (ClientException $e) {
