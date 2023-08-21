@@ -6,7 +6,6 @@ namespace App\Tests\Functional;
 
 use Aws\S3\S3Client;
 use Keboola\Csv\CsvFile;
-use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
