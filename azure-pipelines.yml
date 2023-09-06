@@ -44,10 +44,9 @@ stages:
               docker-compose up -d internal-api
               docker-compose logs internal-api
 
-              docker-compose run tests
+              docker-compose run ci
             displayName: 'Run Tests'
             env:
-              CPU_COUNT: $(CPU_COUNT)
               JOB_QUEUE_URL: $(JOB_QUEUE_URL)
               JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
               STORAGE_API_URL: $(STORAGE_API_URL)
