@@ -1,0 +1,11 @@
+parameters:
+  - name: name
+    type: string
+
+steps:
+  - download: current
+    artifact: ${{ parameters.name }}
+    displayName: Download ${{ parameters.name }} artifact
+
+  - script: tar xvf "$(Pipeline.Workspace)/${{ parameters.name }}/${{ parameters.name }}.tar"
+    displayName: Restore ${{ parameters.name }} artifact

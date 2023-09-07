@@ -1,0 +1,14 @@
+parameters:
+  - name: name
+    type: string
+
+  - name: path
+    type: string
+
+steps:
+  - script: tar cvf "$(Build.ArtifactStagingDirectory)/${{ parameters.name }}.tar" "${{ parameters.path }}"
+    displayName: Export ${{ parameters.name }} artifact
+
+  - publish: "$(Build.ArtifactStagingDirectory)/${{ parameters.name }}.tar"
+    artifact: ${{ parameters.name }}
+    displayName: Publish ${{ parameters.name }} artifact

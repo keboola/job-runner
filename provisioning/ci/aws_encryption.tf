@@ -8,7 +8,7 @@ resource "aws_iam_user_policy" "job_runner_kms_access" {
   name_prefix = "kms_access_"
 
   policy = jsonencode({
-    "Version"   = "2012-10-17",
+    "Version" = "2012-10-17",
     "Statement" = [
       {
         "Sid"    = "UseKMS",

@@ -1,0 +1,76 @@
+parameters:
+  - name: name
+    type: string
+    default:
+
+  - name: displayName
+    type: string
+    default: Tests
+
+  - name: dependsOn
+    type: string
+    default:
+
+  - name: serviceName
+    type: string
+    default: ci
+
+  - name: testCommand
+    type: string
+    default: composer ci
+
+  - name: variables
+    type: object
+    default: {}
+
+  - name: secrets
+    type: object
+    default: {}
+
+  - name: dockerArtifactName
+    type: string
+    default: docker-images
+
+  - name: dockerArtifactFile
+    type: string
+    default: docker-images.tar
+
+  - name: envName
+    type: string
+
+jobs:
+  - job: ${{ parameters.name }}
+    displayName: ${{ parameters.displayName }}
+    dependsOn: ${{ parameters.dependsOn }}
+    variables: ${{ parameters.variables }}
+    steps:
+      - template: ../steps/restore-docker-artifact.yml
+
+      - task: Docker@2
+        displayName: Test ACR login
+        inputs:
+          command: login
+          containerRegistry: 'Keboola PS Test ACR'
+
+      - script: ./provisioning/ci/pipelines-scripts/terraform-install.sh
+        displayName: Install Terraform
+
+      - script: ./provisioning/ci/pipelines-scripts/terraform-init.sh
+        displayName: Init Terraform
+        env:
+          AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
+
+      - script: ./provisioning/ci/update-env.sh -v -e .env -a ${{ parameters.envName }}
+        displayName: Configure ENV
+        env:
+          AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
+
+      - script: docker-compose run --rm ${{ parameters.serviceName }} ${{ parameters.testCommand }}
+        displayName: Run tests
+        env: ${{ parameters.secrets }}
+
+      - script: docker-compose logs
+        displayName: Show logs
+        condition: failed()

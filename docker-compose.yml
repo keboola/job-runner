@@ -28,7 +28,6 @@ services:
       APP_ENV: test
       TEST_STORAGE_API_TOKEN:
       TEST_STORAGE_API_TOKEN_MASTER:
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/:/tmp/

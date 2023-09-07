@@ -25,11 +25,11 @@ terraform {
 }
 
 locals {
-  app_name = "job-runner"
+  app_name         = "job-runner"
   app_display_name = "Job Runner"
 }
 
 variable "name_prefix" {
-  type = string
+  type    = string
   default = "ci"
 }

@@ -1,0 +1,73 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: condition
+    type: string
+    default: True
+
+  - name: awsCredentials
+    type: string
+
+  - name: awsRegionName
+    type: string
+
+  - name: acrRegistry
+    type: string
+
+  - name: garPushEnabled
+    type: string
+    default: False
+
+  - name: garRegistry
+    type: string
+    default: ""
+
+  - name: garRepository
+    type: string
+    default: ""
+
+  - name: garRepositoryProjectId
+    type: string
+    default: ""
+
+  - name: sourceImage
+    type: string
+
+  - name: targetImage
+    type: string
+
+  - name: tags
+    type: object
+
+steps:
+- template: push-ecr.yml
+  parameters:
+    displayName: Push ECR - ${{ parameters.displayName }}
+    condition: ${{ parameters.condition }}
+    awsCredentials: ${{ parameters.awsCredentials }}
+    awsRegionName: ${{ parameters.awsRegionName }}
+    sourceImage: ${{ parameters.sourceImage }}
+    targetImage: keboola/${{ parameters.targetImage }}
+    tags: ${{ parameters.tags }}
+
+- template: push-gar.yml
+  parameters:
+    displayName: Push GAR - ${{ parameters.displayName }}
+    condition: ${{ parameters.condition }}
+    garPushEnabled: ${{ parameters.garPushEnabled }}
+    garRegistry: ${{ parameters.garRegistry }}
+    garRepository: ${{ parameters.garRepository }}
+    garRepositoryProjectId: ${{ parameters.garRepositoryProjectId }}
+    sourceImage: ${{ parameters.sourceImage }}
+    targetImage: ${{ parameters.targetImage }}
+    tags: ${{ parameters.tags }}
+
+- template: push-acr.yml
+  parameters:
+    displayName: Push ACR - ${{ parameters.displayName }}
+    condition: ${{ parameters.condition }}
+    acrRegistry: ${{ parameters.acrRegistry }}
+    sourceImage: ${{ parameters.sourceImage }}
+    targetImage: ${{ parameters.targetImage }}
+    tags: ${{ parameters.tags }}

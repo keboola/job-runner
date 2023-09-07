@@ -4,6 +4,9 @@ Parameters:
   BackendPrefix:
     Type: String
     Description: Prefix for all Terraform Backend resources
+  EcrRepoName:
+    Type: String
+    Description: Name of the repository
   OIDCProviderArn:
     Type: String
     Description: OIDC Provider ARN
@@ -55,6 +58,12 @@ Resources:
           Value:
             Fn::Sub: "${BackendPrefix}-terraform-table"
 
+  EcrRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      ImageTagMutability: MUTABLE
+      RepositoryName: !Ref EcrRepoName
+
   AzurePipelinesUser:
     Type: AWS::IAM::User
     Properties:
@@ -82,6 +91,29 @@ Resources:
                   Fn::GetAtt:
                     - TerraformRemoteStateLockDynamoDBTable
                     - Arn
+        - PolicyName: AllowEcrPush
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: AllowPush
+                Effect: Allow
+                Action:
+                  - ecr:BatchGetImage
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:CompleteLayerUpload
+                  - ecr:DescribeImages
+                  - ecr:DescribeRepositories
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:InitiateLayerUpload
+                  - ecr:ListImages
+                  - ecr:PutImage
+                  - ecr:UploadLayerPart
+                Resource: !GetAtt EcrRepository.Arn
+              - Sid: GetAuthorizationToken
+                Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                Resource: "*"
 
   GithubActionsRole:
     Type: AWS::IAM::Role

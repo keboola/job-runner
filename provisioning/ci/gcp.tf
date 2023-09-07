@@ -1,6 +1,6 @@
 locals {
   gcp_project = "kbc-ci-platform-services"
-  gcp_region = "us-central1"
+  gcp_region  = "us-central1"
 }
 
 provider "google" {

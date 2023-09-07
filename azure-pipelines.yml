@@ -6,297 +6,106 @@ trigger:
       - '*'
   tags:
     include:
-      - '*'
+      - 'dev-*'
 
-variables:
-  acrRepositoryMain: 'keboola.azurecr.io'
-  acrRepositoryPes: 'keboolapes.azurecr.io'
-  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
-  garRepositoryProjectId: keboola-prod-artifacts
-  imageName: 'job-runner'
-  tag: $(Build.BuildId)
-  productionTag: production-$(Build.SourceVersion)
+pool:
+  vmImage: ubuntu-latest
 
 stages:
-  - stage: prepare
-    displayName: Prepare & Test
-    pool:
-      name: 'Default'
+  - stage: build
+    displayName: Build
+    dependsOn: []
     jobs:
-      - job: test
-        displayName: 'Test'
+      - job: build
+        displayName: Build Docker Images
         steps:
-          - task: Docker@2
-            displayName: Test ACR login
-            inputs:
-              command: login
-              containerRegistry: 'Keboola PS Test ACR'
+          - script: docker build --target=base --tag keboola/job-runner .
+            displayName: Build Docker images
 
-          - script: ./provisioning/ci/pipelines-scripts/terraform-install.sh
-            displayName: 'Install Terraform'
+          - template: azure-pipelines/steps/store-docker-artifact.yml
 
-          - script: ./provisioning/ci/pipelines-scripts/terraform-init.sh
-            displayName: Init Terraform
-            env:
-              AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
-
-          - script: ./provisioning/ci/update-env.sh -v -e .env -a aws
-            displayName: Configure ENV
-            env:
-              AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
-
-          - script: |
-              set -e
-              docker-compose down
-              docker-compose build
-              docker-compose pull internal-api
-            displayName: 'Build Tests'
-
-          - script: |
-              set -e
-              docker-compose up -d internal-api
-              docker-compose logs internal-api
-
-              docker-compose run ci
-            displayName: 'Run Tests'
-            env:
-              TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
-              TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
-
-          - script: |
-              set -Eeuo pipefail
-
-              docker image save keboola/$(imageName):latest -o $(Build.ArtifactStagingDirectory)/build-image.tar
-            displayName: 'Save image'
-
-          - publish: $(Build.ArtifactStagingDirectory)
-            artifact: docker-images
-            displayName: 'Publish artifacts'
-
-  # Push test image to test ACR
-  - stage: deploy_test
-    displayName: Deploy Test
+  - stage: tests
+    displayName: Tests
+    dependsOn: build
     pool:
-      vmImage: ubuntu-latest
+      name: Default # run on custom worker, tests needs Docker socket
     jobs:
-      - job: deploy
-        displayName: 'Deploy'
-        steps:
-          - download: current
-            artifact: docker-images
-            displayName: 'Download artifacts'
+      - template: azure-pipelines/jobs/run-tests.yml
+        parameters:
+          displayName: Run Tests
+          envName: aws
+          secrets:
+            TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
+            TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
 
-          - script: |
-              set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
-
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(tag)
-
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):$(tag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryPes)/$(imageName):latest
-            displayName: 'Load image'
-
-          # Push test image to test AWS ECR
-          - task: ECRPushImage@1
-            displayName: 'Push ECR [$(productionTag)]'
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: $(tag)
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-
-          - task: ECRPushImage@1
-            displayName: 'Push ECR [$(tag)]'
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: $(tag)
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-
-          - task: ECRPushImage@1
-            displayName: 'Push ECR latest'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-            inputs:
-              regionName: 'eu-central-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: 'latest'
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: 'latest'
-              autoCreateRepository: true
-            env:
-              AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-
-          - task: Docker@2
-            displayName: 'Push ACR [$(productionTag), $(tag)]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola PS Test ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                $(productionTag)
-                $(tag)
-
-          - task: Docker@2
-            displayName: 'Push ACR [latest]'
-            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-            inputs:
-              command: push
-              containerRegistry: 'Keboola PS Test ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                latest
-
-  # Push image to production
-  - stage:
-    displayName: Deploy Production
-    dependsOn: prepare
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    pool:
-      vmImage: ubuntu-latest
-    jobs:
-      - job: deploy
-        displayName: 'Deploy'
-        steps:
-          - download: current
-            artifact: docker-images
-            displayName: 'Download artifacts'
-
-          - script: |
-              set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(productionTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(productionTag)
-            displayName: 'Load image'
-
-          - task: ECRPushImage@1
-            displayName: 'Push to ECR [$(productionTag)]'
-            inputs:
-              awsCredentials: 'Production - ECR Distribution'
-              regionName: 'us-east-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: latest
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(productionTag)
-
-          - task: Docker@2
-            displayName: 'Push to GAR [$(productionTag)]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola GAR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
-              tags: $(productionTag)
-
-          - task: Docker@2
-            displayName: 'Push to ACR $(productionTag)'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: |
-                $(productionTag)
-
-          - task: Docker@2
-            displayName: 'Push to Docker Hub $(productionTag)'
-            inputs:
-              command: push
-              containerRegistry: 'Docker Hub'
-              repository: keboola/$(imageName)
-              tags: |
-                $(productionTag)
-
-          - script: |
-              printf "%s" "$(productionTag)" > artifact
-            displayName: Create artifact
-
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: 'artifact'
-              artifact: 'keboola.job-runner.latest-build'
-
-
-  # Push image to production (dev-* tags)
-  - stage:
-    displayName: Deploy Production (dev-* tags)
-    dependsOn: prepare
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-'))
-    pool:
-      vmImage: ubuntu-latest
+  # push to testing
+  - stage: publishImages_testing
+    displayName: Publish Testing Images
+    dependsOn: [build, tests]
     jobs:
       - job:
-        displayName: Publish Production Images (dev tag)
-        variables:
-          - name: dockerTag
-            value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+        displayName: Publish Docker Images
         steps:
-          - download: current
-            artifact: docker-images
-            displayName: 'Download artifacts'
+          - template: azure-pipelines/steps/restore-docker-artifact.yml
+          - template: azure-pipelines/steps/push-docker-image.yml
+            parameters:
+              displayName: Testing
+              awsCredentials: Testing - ECR Distribution
+              awsRegionName: eu-central-1
+              acrRegistry: keboolapes.azurecr.io
+              sourceImage: keboola/job-runner
+              targetImage: job-runner
+              tags:
+                - build-$(Build.SourceVersion)
+                - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+                    - latest
 
-          - script: |
-              set -Eeuo pipefail
-              docker load --input $(Pipeline.Workspace)/docker-images/build-image.tar
-              docker tag keboola/$(imageName):latest keboola/$(imageName):$(dockerTag)
-              docker tag keboola/$(imageName):latest $(garRepository)/$(imageName)/$(imageName):$(dockerTag)
-              docker tag keboola/$(imageName):latest $(acrRepositoryMain)/$(imageName):$(dockerTag)
-            displayName: 'Load image'
+  # push to production (dev-* tags)
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-') }}:
+      - stage: publishImages_production
+        displayName: Publish Production Images (dev tag)
+        dependsOn: [build, tests]
+        jobs:
+          - job:
+            displayName: Publish Docker Images
+            steps:
+              - template: azure-pipelines/steps/restore-docker-artifact.yml
+              - template: azure-pipelines/steps/push-docker-image.yml
+                parameters:
+                  displayName: Production
+                  awsCredentials: Production - ECR Distribution
+                  awsRegionName: us-east-1
+                  acrRegistry: keboola.azurecr.io
+                  garPushEnabled: True
+                  garRegistry: Keboola GAR
+                  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
+                  garRepositoryProjectId: keboola-prod-artifacts
+                  sourceImage: keboola/job-runner
+                  targetImage: job-runner
+                  tags:
+                    - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
 
-          - task: ECRPushImage@1
-            displayName: 'Push to ECR [$(dockerTag)]'
-            inputs:
-              awsCredentials: 'Production - ECR Distribution'
-              regionName: 'us-east-1'
-              imageSource: 'imagename'
-              sourceImageName: keboola/$(imageName)
-              sourceImageTag: latest
-              repositoryName: 'keboola/$(imageName)'
-              pushTag: $(dockerTag)
-
-          - task: Docker@2
-            displayName: 'Push to GAR [$(dockerTag)]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola GAR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: '$(garRepositoryProjectId)/$(imageName)/$(imageName)'
-              tags: $(dockerTag)
-
-          - task: Docker@2
-            displayName: 'Push to ACR [$(dockerTag)]'
-            inputs:
-              command: push
-              containerRegistry: 'Keboola ACR'
-              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-              repository: $(imageName)
-              tags: $(dockerTag)
-
-          - task: Docker@2
-            displayName: 'Push to Docker Hub [$(dockerTag)]'
-            inputs:
-              command: push
-              containerRegistry: 'Docker Hub'
-              repository: keboola/$(imageName)
-              tags: $(dockerTag)
+  # push to production (main branch)
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+      - stage: publishImages_production
+        displayName: Publish Production Images (main branch)
+        dependsOn: [build, tests]
+        jobs:
+          - job:
+            displayName: Publish Docker Images
+            steps:
+              - template: azure-pipelines/steps/restore-docker-artifact.yml
+              - template: azure-pipelines/steps/push-docker-image.yml
+                parameters:
+                  displayName: Production
+                  awsCredentials: Production - ECR Distribution
+                  awsRegionName: us-east-1
+                  acrRegistry: keboola.azurecr.io
+                  garPushEnabled: True
+                  garRegistry: Keboola GAR
+                  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
+                  garRepositoryProjectId: keboola-prod-artifacts
+                  sourceImage: keboola/job-runner
+                  targetImage: job-runner
+                  tags:
+                    - production-$(Build.SourceVersion)

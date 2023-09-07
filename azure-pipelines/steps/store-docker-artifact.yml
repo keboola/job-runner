@@ -1,0 +1,16 @@
+parameters:
+  - name: imagesFilter
+    type: string
+    default: keboola/*
+
+  - name: name
+    type: string
+    default: docker-images
+
+steps:
+  - script: docker image save $(docker image ls --filter 'reference=${{ parameters.imagesFilter }}' --format '{{.Repository}}:latest') -o "$(Build.ArtifactStagingDirectory)/${{ parameters.name }}.tar"
+    displayName: Export ${{ parameters.name }} artifact
+
+  - publish: "$(Build.ArtifactStagingDirectory)/${{ parameters.name }}.tar"
+    artifact: ${{ parameters.name }}
+    displayName: Publish ${{ parameters.name }} artifact

@@ -15,11 +15,13 @@ REPO_NAME=job-runner
 
 TERRAFORM_BACKEND_STACK_PREFIX=ci-${REPO_NAME}
 TERRAFORM_BACKEND_STACK_NAME="${TERRAFORM_BACKEND_STACK_PREFIX}-terraform"
+ECR_REPO_NAME=keboola/${REPO_NAME}
 OIDC_PROVIDE_ARN=arn:aws:iam::480319613404:oidc-provider/token.actions.githubusercontent.com
 
 aws cloudformation deploy --stack-name "${TERRAFORM_BACKEND_STACK_NAME}" \
   --parameter-overrides \
     "BackendPrefix=${TERRAFORM_BACKEND_STACK_PREFIX}" \
+    "EcrRepoName=${ECR_REPO_NAME}" \
     "OIDCProviderArn=${OIDC_PROVIDE_ARN}" \
     "GitHubOrganization=keboola" \
     "GitHubRepositoryName=${REPO_NAME}" \

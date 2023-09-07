@@ -1,6 +1,6 @@
 locals {
   gcp_project = "kbc-dev-platform-services"
-  gcp_region = "europe-west1"
+  gcp_region  = "europe-west1"
 }
 
 provider "google" {
