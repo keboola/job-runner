@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Terraform role & remote state backend
+Parameters:
+  BackendPrefix:
+    Type: String
+    Description: Prefix for all Terraform Backend resources
+  OIDCProviderArn:
+    Type: String
+    Description: OIDC Provider ARN
+  GitHubOrganization:
+    Type: String
+    Description: GitHub Organization Name
+  GitHubRepositoryName:
+    Type: String
+    Description: GitHub Repository Name
+
+Resources:
+  TerraformRemoteStateS3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: "${BackendPrefix}-terraform-bucket"
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${BackendPrefix}-terraform-bucket"
+
+  TerraformRemoteStateLockDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName:
+        Fn::Sub: "${BackendPrefix}-terraform-table"
+      AttributeDefinitions:
+        - AttributeName: LockID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: LockID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${BackendPrefix}-terraform-table"
+
+  AzurePipelinesUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName:
+        Fn::Sub: "${BackendPrefix}-terraform"
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:*
+                Resource:
+                  Fn::Sub: arn:aws:s3:::${TerraformRemoteStateS3Bucket}/*
+        - PolicyName: DynamoDbAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: DynamoDbAccess
+                Effect: Allow
+                Action:
+                  - dynamodb:*
+                Resource:
+                  Fn::GetAtt:
+                    - TerraformRemoteStateLockDynamoDBTable
+                    - Arn
+
+  GithubActionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: GitHub Actions role
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated:
+                Ref: OIDCProviderArn
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub:
+                  Fn::Sub: repo:${GitHubOrganization}/${GitHubRepositoryName}:*
+      Policies:
+        - PolicyName: TerraformPlan
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: S3ReadOnlyAccess
+                Effect: Allow
+                Action:
+                  - s3:Get*
+                  - s3:List*
+                Resource:
+                  Fn::Sub: arn:aws:s3:::${TerraformRemoteStateS3Bucket}/*
+              - Sid: DynamoDbAccess
+                Effect: Allow
+                Action:
+                  - dynamodb:*
+                Resource:
+                  Fn::GetAtt:
+                    - TerraformRemoteStateLockDynamoDBTable
+                    - Arn
+
+Outputs:
+  Region:
+    Value:
+      Ref: AWS::Region
+  S3BucketName:
+    Value:
+      Ref: TerraformRemoteStateS3Bucket
+  LockDynamoDBTableName:
+    Value:
+      Ref: TerraformRemoteStateLockDynamoDBTable
+  GithubActionsRoleArn:
+    Value:
+      Fn::GetAtt: [GithubActionsRole, Arn]
