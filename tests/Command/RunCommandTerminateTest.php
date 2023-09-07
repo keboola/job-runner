@@ -111,7 +111,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
             actually create containers, we'd still have to create the containers not belonging to the job, so let's
             do them all here.
         */
-        $commandText = 'docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
+        $commandText = 'sudo docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
             '--label com.keboola.docker-runner.jobId=%s waisbrot/wait';
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, $job->getId()));
         $tmpProcess->setTimeout(600); // to pull the image if necessary
@@ -121,14 +121,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, 4321));
         $tmpProcess->mustRun();
         $tmpProcess = Process::fromShellCommandline(sprintf(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
             $job->getId()
         ));
         $tmpProcess->mustRun();
         $containerIdsToRemove = explode("\n", trim($tmpProcess->getOutput()));
 
         $tmpProcess = Process::fromShellCommandline(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
         );
         $tmpProcess->mustRun();
         $containerIdsToKeep = explode("\n", trim($tmpProcess->getOutput()));
@@ -178,7 +178,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 
-        $tmpProcess = Process::fromShellCommandline('docker ps --format "{{.ID}}"');
+        $tmpProcess = Process::fromShellCommandline('sudo docker ps --format "{{.ID}}"');
         $tmpProcess->mustRun();
         $containers = explode("\n", $tmpProcess->getOutput());
         self::assertContains($containerIdsToKeep[0], $containers);
@@ -225,7 +225,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         ]);
         $job = $client->createJob($job);
 
-        $commandText = 'docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
+        $commandText = 'sudo docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
             '--label com.keboola.docker-runner.jobId=%s waisbrot/wait';
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, $job->getId()));
         $tmpProcess->setTimeout(600); // to pull the image if necessary
@@ -234,13 +234,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess->mustRun();
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, 4321));
         $tmpProcess->mustRun();
-        $tmpProcess = Process::fromShellCommandline(
-            sprintf('docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"', $job->getId())
-        );
+        $tmpProcess = Process::fromShellCommandline(sprintf(
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+            $job->getId(),
+        ));
         $tmpProcess->mustRun();
         $jobContainers = explode("\n", trim($tmpProcess->getOutput()));
         $tmpProcess = Process::fromShellCommandline(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
         );
         $tmpProcess->mustRun();
         $nonJobContainers = explode("\n", trim($tmpProcess->getOutput()));
@@ -293,7 +294,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 
-        $tmpProcess = Process::fromShellCommandline('docker ps --format "{{.ID}}"');
+        $tmpProcess = Process::fromShellCommandline('sudo docker ps --format "{{.ID}}"');
         $tmpProcess->mustRun();
         $containers = explode("\n", $tmpProcess->getOutput());
         // all containers are preserved (no cleanup occurred)
