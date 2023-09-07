@@ -20,34 +20,20 @@ services:
       context: .
       target: base
     image: keboola/job-runner
+    command: composer ci
+    env_file:
+      - .env
+      - .env.test
+    environment:
+      APP_ENV: test
+      TEST_STORAGE_API_TOKEN:
+      TEST_STORAGE_API_TOKEN_MASTER:
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/:/tmp/
-    command: composer ci
     depends_on:
       - internal-api
-    environment:
-      APP_ENV: test
-      CPU_COUNT: 1
-      JOB_QUEUE_URL: http://internal-api:8080
-      JOB_QUEUE_TOKEN: dummy-token
-      STORAGE_API_URL:
-      VAULT_API_URL:
-      AWS_REGION:
-      AWS_KMS_KEY_ID:
-      AWS_LOGS_S3_BUCKET:
-      AZURE_KEY_VAULT_URL:
-      AZURE_LOG_ABS_CONNECTION_STRING:
-      AZURE_LOG_ABS_CONTAINER:
-      ENCRYPTOR_STACK_ID:
-      TEST_STORAGE_API_TOKEN:
-      TEST_STORAGE_API_TOKEN_MASTER:
-      TEST_INTERNAL_API_APPLICATION_TOKEN:
-      TEST_AWS_ACCESS_KEY_ID:
-      TEST_AWS_SECRET_ACCESS_KEY:
-      TEST_AZURE_CLIENT_ID:
-      TEST_AZURE_CLIENT_SECRET:
-      TEST_AZURE_TENANT_ID:
 
   internal-api:
     image: keboolapes.azurecr.io/job-queue-internal-api:latest

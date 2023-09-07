@@ -32,6 +32,21 @@ stages:
               command: login
               containerRegistry: 'Keboola PS Test ACR'
 
+          - script: ./provisioning/ci/pipelines-scripts/terraform-install.sh
+            displayName: 'Install Terraform'
+
+          - script: ./provisioning/ci/pipelines-scripts/terraform-init.sh
+            displayName: Init Terraform
+            env:
+              AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
+
+          - script: ./provisioning/ci/update-env.sh -v -e .env -a aws
+            displayName: Configure ENV
+            env:
+              AWS_ACCESS_KEY_ID: $(TERRAFORM_AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(TERRAFORM_AWS_SECRET_ACCESS_KEY)
+
           - script: |
               set -e
               docker-compose down
@@ -47,25 +62,8 @@ stages:
               docker-compose run ci
             displayName: 'Run Tests'
             env:
-              JOB_QUEUE_URL: $(JOB_QUEUE_URL)
-              JOB_QUEUE_TOKEN: $(JOB_QUEUE_TOKEN)
-              STORAGE_API_URL: $(STORAGE_API_URL)
-              VAULT_API_URL: $(VAULT_API_URL)
-              AWS_REGION: $(AWS_REGION)
-              AWS_KMS_KEY_ID: $(AWS_KMS_KEY_ID)
-              AWS_LOGS_S3_BUCKET: $(AWS_LOGS_S3_BUCKET)
-              AZURE_KEY_VAULT_URL: $(AZURE_KEY_VAULT_URL)
-              AZURE_LOG_ABS_CONNECTION_STRING: $(AZURE_LOG_ABS_CONNECTION_STRING)
-              AZURE_LOG_ABS_CONTAINER: $(AZURE_LOG_ABS_CONTAINER)
-              ENCRYPTOR_STACK_ID: $(ENCRYPTOR_STACK_ID)
               TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
               TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
-              TEST_INTERNAL_API_APPLICATION_TOKEN: $(TEST_INTERNAL_API_APPLICATION_TOKEN)
-              TEST_AWS_ACCESS_KEY_ID: $(TEST_AWS_ACCESS_KEY_ID)
-              TEST_AWS_SECRET_ACCESS_KEY: $(TEST_AWS_SECRET_ACCESS_KEY)
-              TEST_AZURE_CLIENT_ID: $(TEST_AZURE_CLIENT_ID)
-              TEST_AZURE_CLIENT_SECRET: $(TEST_AZURE_CLIENT_SECRET)
-              TEST_AZURE_TENANT_ID: $(TEST_AZURE_TENANT_ID)
 
           - script: |
               set -Eeuo pipefail
