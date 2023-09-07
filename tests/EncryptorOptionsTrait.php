@@ -22,12 +22,16 @@ trait EncryptorOptionsTrait
         $azureKeyVaultUrl = (string) getenv('AZURE_KEY_VAULT_URL');
         self::assertNotEmpty($azureKeyVaultUrl);
 
+        $gcpKmsKeyId = (string) getenv('GCP_KMS_KEY_ID');
+        self::assertNotEmpty($gcpKmsKeyId);
+
         return new EncryptorOptions(
             $stackId,
             $awsKmsKeyId,
             $awsRegion,
             null,
             $azureKeyVaultUrl,
+            $gcpKmsKeyId,
         );
     }
 }

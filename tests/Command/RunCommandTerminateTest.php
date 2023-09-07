@@ -50,6 +50,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'));
 
         $objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
 
@@ -63,6 +64,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_ID=');
         putenv('AZURE_CLIENT_SECRET=');
         putenv('AZURE_TENANT_ID=');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=');
 
         return $result;
     }
@@ -140,6 +142,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_ID' => getenv('TEST_AZURE_CLIENT_ID'),
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
+                'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]
@@ -251,6 +254,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_ID' => getenv('TEST_AZURE_CLIENT_ID'),
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
+                'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]

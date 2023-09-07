@@ -32,6 +32,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/:/tmp/
+      - ./var/gcp-private-key.json:/code/var/gcp-private-key.json
     depends_on:
       - internal-api
 
