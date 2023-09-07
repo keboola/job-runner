@@ -14,6 +14,7 @@ parameters:
     'env(AZURE_KEY_VAULT_URL)': ''
     'env(AZURE_LOG_ABS_CONNECTION_STRING)': ''
     'env(AZURE_LOG_ABS_CONTAINER)': ''
+    'env(GCP_KMS_KEY_ID)': ''
     'env(JOB_QUEUE_TOKEN)': ''
     'env(JOB_QUEUE_URL)': ''
     'env(STORAGE_API_URL)': ''
@@ -64,6 +65,7 @@ services:
         $kmsRegion: '%env(AWS_REGION)%'
         $kmsRole: '%env(default::AWS_KMS_ROLE)%'
         $akvUrl: '%env(AZURE_KEY_VAULT_URL)%'
+        $gkmsKeyId: '%env(GCP_KMS_KEY_ID)%'
         $backoffMaxTries: 10
 
     Keboola\ObjectEncryptor\ObjectEncryptor:
