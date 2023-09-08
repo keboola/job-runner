@@ -26,7 +26,7 @@ echo ''
 output_var 'GCP_KMS_KEY_ID' "$(terraform_output 'gcp_kms_key_id')"
 
 PRIVATE_KEY_ENCODED="$(terraform_output 'gcp_private_key')"
-PRIVATE_KEY=$(printf "%s" "${PRIVATE_KEY_ENCODED}" | base64 --decode --wrap=0)
+PRIVATE_KEY=$(printf "%s" "${PRIVATE_KEY_ENCODED}" | base64 --decode)
 output_file 'var/gcp-private-key.json' "${PRIVATE_KEY}"
 output_var 'TEST_GOOGLE_APPLICATION_CREDENTIALS' 'var/gcp-private-key.json'
 echo ''
