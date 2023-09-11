@@ -7,15 +7,6 @@ Parameters:
   EcrRepoName:
     Type: String
     Description: Name of the repository
-  OIDCProviderArn:
-    Type: String
-    Description: OIDC Provider ARN
-  GitHubOrganization:
-    Type: String
-    Description: GitHub Organization Name
-  GitHubRepositoryName:
-    Type: String
-    Description: GitHub Repository Name
 
 Resources:
   TerraformRemoteStateS3Bucket:
@@ -60,6 +51,7 @@ Resources:
 
   EcrRepository:
     Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
     Properties:
       ImageTagMutability: MUTABLE
       RepositoryName: !Ref EcrRepoName
@@ -115,44 +107,6 @@ Resources:
                   - ecr:GetAuthorizationToken
                 Resource: "*"
 
-  GithubActionsRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Description: GitHub Actions role
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Action: sts:AssumeRoleWithWebIdentity
-            Principal:
-              Federated:
-                Ref: OIDCProviderArn
-            Condition:
-              StringEquals:
-                token.actions.githubusercontent.com:aud: sts.amazonaws.com
-              StringLike:
-                token.actions.githubusercontent.com:sub:
-                  Fn::Sub: repo:${GitHubOrganization}/${GitHubRepositoryName}:*
-      Policies:
-        - PolicyName: TerraformPlan
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Sid: S3ReadOnlyAccess
-                Effect: Allow
-                Action:
-                  - s3:Get*
-                  - s3:List*
-                Resource:
-                  Fn::Sub: arn:aws:s3:::${TerraformRemoteStateS3Bucket}/*
-              - Sid: DynamoDbAccess
-                Effect: Allow
-                Action:
-                  - dynamodb:*
-                Resource:
-                  Fn::GetAtt:
-                    - TerraformRemoteStateLockDynamoDBTable
-                    - Arn
-
 Outputs:
   Region:
     Value:
@@ -163,6 +117,3 @@ Outputs:
   LockDynamoDBTableName:
     Value:
       Ref: TerraformRemoteStateLockDynamoDBTable
-  GithubActionsRoleArn:
-    Value:
-      Fn::GetAtt: [GithubActionsRole, Arn]
