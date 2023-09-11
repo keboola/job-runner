@@ -26,7 +26,7 @@
         "keboola/dockerbundle": "dev-odin-library-3",
         "keboola/input-mapping": "^18.0",
         "keboola/job-queue-internal-api-php-client": "^18.2",
-        "keboola/object-encryptor": "^2.3",
+        "keboola/object-encryptor": "^2.8",
         "keboola/output-mapping": "^22.0",
         "keboola/storage-api-client": "^14.6",
         "keboola/storage-api-php-client-branch-wrapper": "^5.0",

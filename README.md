@@ -2,188 +2,61 @@
 
 Symfony console application which is used inside an ECS task and wraps Docker runner library.
 
-## Running locally
-Use `docker-compose run dev` to get development environment.
-To configure Debugger in PHPStorm, point PHPStorm to phpunit.phar in `bin\.phpunit\phpunit-6.5\phpunit`.
-To recreate the `bin\.phpunit` folder, run `php bin/phpunit`.
-
 ## Development
+Prerequisites:
+* configured `az` and `aws` CLI tools (run `az login` and `aws configure --profile Keboola-CI-Platform-Services-Team-AWSAdministratorAccess`)
+* installed `terraform` (https://www.terraform.io) and `jq` (https://stedolan.github.io/jq) to setup local env
+* intalled `docker` and `docker-compose` to run & develop the app
 
-### Prepare Images
-Create a service principal to download Internal Queue API image and Job Runner Image and login:
-
-    ```bash
-	SERVICE_PRINCIPAL_NAME=<prefix>-job-queue-internal-api-pull
-	ACR_REGISTRY_ID=$(az acr show --name keboolapes --query id --output tsv --subscription c5182964-8dca-42c8-a77a-fa2a3c6946ea)
-	SP_PASSWORD=$(az ad sp create-for-rbac --name http://$SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
-	SP_APP_ID=$(az ad sp list --all --query "[?appDisplayName=='http://$SERVICE_PRINCIPAL_NAME'].appId" --output tsv)	
-    ```
-
-
-Add the repository credentials to the k8s cluster:
-
-    ```bash
-    kubectl create secret docker-registry regcred --docker-server="https://keboolapes.azurecr.io" --docker-username="$SP_APP_ID" --docker-password="$SP_PASSWORD" --namespace <prefix>-job-runner
-    kubectl patch serviceaccount default -p "{\"imagePullSecrets\":[{\"name\":\"regcred\"}]}" --namespace <prefix>-job-runner
-    ```
-
-Login and pull the image:
-
-    ```bash
-	docker login keboolapes.azurecr.io --username $SP_APP_ID --password $SP_PASSWORD
-	docker pull keboolapes.azurecr.io/job-queue-internal-api:latest
-    ```
-
-- Set the following environment variables in `set-env.sh` file (use `set-env.template.sh` as sample):
-    - `STORAGE_API_URL` - Keboola Connection URL.
-    - `VAULT_API_URL` - Keboola Vault URL.
-    - `TEST_STORAGE_API_TOKEN` - Token to a test project.
-    - `TEST_STORAGE_API_TOKEN_MASTER` - Master token to the same project.  
-    - `TEST_INTERNAL_API_APPLICATION_TOKEN` - Application token used to run Internal API, mush have `projects:read` scope.
-
-### AWS Setup
-- Create a user (`JobRunnerUser`) for local development using the `provisioning/dev/aws.json` CF template. 
-    - Create AWS key for the created user. 
-    - Set the following environment variables in `.env` file (use `.env.dist` as sample):
-        - `TEST_AWS_ACCESS_KEY_ID` - The created security credentials for the `JobRunnerUser` user.
-        - `TEST_AWS_SECRET_ACCESS_KEY` - The created security credentials for the `JobRunnerUser` user.
-        - `AWS_REGION` - `Region` output of the above stack.
-        - `AWS_KMS_KEY_ID` - `KmsKey` output of the above stack.
-        - `AWS_LOGS_S3_BUCKET` - `S3LogsBucket` output of the above stack.
-
-### Azure Setup
-
-- Create a resource group:
-    ```bash
-    az account set --subscription "Keboola DEV PS Team CI"
-    az group create --name <prefix>-job-runner --location "East US"
-    ```
-
-- Create a service principal:
-    ```bash
-    az ad sp create-for-rbac --name <prefix>-job-runner
-    ```
-
-- Use the response to set values `TEST_AZURE_CLIENT_ID`, `TEST_AZURE_CLIENT_SECRET` and `TEST_AZURE_TENANT_ID` in the `set-env.sh` file:
-    ```json 
-    {
-      "appId": "268a6f05-xxxxxxxxxxxxxxxxxxxxxxxxxxx", //-> TEST_AZURE_CLIENT_ID
-      "displayName": "testing-job-runner",
-      "name": "http://testing-job-runner",
-      "password": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", //-> TEST_AZURE_CLIENT_SECRET
-      "tenant": "9b85ee6f-xxxxxxxxxxxxxxxxxxxxxxxxxxx" //-> TEST_AZURE_TENANT_ID
-    }
-    ```
-
-- Get ID of the service principal:
-    ```bash
-    SERVICE_PRINCIPAL_ID=$(az ad sp list --display-name <prefix>-job-runner --query "[0].id" --output tsv)
-
-    ```
-
-- Get ID of a group to which the current user belongs (e.g. "Developers"):
-    ```bash
-    GROUP_ID=$(az ad group list --display-name "Developers" --query "[0].id" --output tsv)
-    ```
-
-- Deploy the key vault and log container. Provide tenant ID, service principal ID and group ID from the previous commands:
-    ```bash
-    az deployment group create --resource-group <prefix>-job-runner --template-file provisioning/dev/azure.json --parameters vault_name=<prefix>-job-runner tenant_id=9b85ee6f-4fb0-4a46-8cb7-4dcc6b262a89 service_principal_object_id=$SERVICE_PRINCIPAL_ID group_object_id=$GROUP_ID storage_account_name=<prefix>jobrunner container_name=debug-files
-    az keyvault show --name <prefix>-job-runner --query "properties.vaultUri"
-    ```
-
-    and use the return value to set the value in `set-env.sh` file:
-    - `AZURE_KEY_VAULT_URL` - https://<prefix>-job-runner.vault.azure.net
-
-    Go to the [Azure Portal](https://portal.azure.com/) - Storage Account - Access Keys and copy connection string. 
-    Go to Storage Account - Lifecycle Management - and set a cleanup rule to remove files older than 1 day from the container.
-    Set  `AZURE_LOG_ABS_CONNECTION_STRING` and `AZURE_LOG_ABS_CONTAINER`.
-
-### Start Internal API
-Copy `dev-environments.yaml.template` to `dev-environments.yaml` and
-fill in AWS Key and Credentials with access to the Key and required component images.
-
-Run:
+TL;DR:
 ```
-kubectl apply -f provisioning/dev/environments.yaml
+export NAME_PREFIX= # your name/nickname to make your resource unique & recognizable
+
+cat <<EOF > ./provisioning/local/terraform.tfvars
+name_prefix = "${NAME_PREFIX}"
+EOF
+
+cat <<EOF > .env.local
+TEST_STORAGE_API_TOKEN= # regular token for your Keboola project
+TEST_STORAGE_API_TOKEN_MASTER= # master token for your Keboola project
+EOF
+
+terraform -chdir=./provisioning/local init -backend-config="key=job-runner/${NAME_PREFIX}.tfstate"
+terraform -chdir=./provisioning/local apply
+./provisioning/local/update-env.sh aws # or azure
+
+docker-compose run --rm dev composer install
+docker-compose run --rm dev composer ci
 ```
 
-Run
-```
-kubectl apply -f provisioning/dev/internal-api.yaml
-```
+### Using Docker
+Project has Docker development environment setup, so you don't need to install anything on your local computer, except
+the Docker & Docker Compose.
 
-This will start the internal API server. It takes a while to start. Check that it runs by executing:
-
-```
-curl http://localhost/jobs
-```
-
-which should return empty list `[]`.
-
-(provided that the kubernetes cluster runs on localhost)
-
-### Encrypt token
-
-Run:
-
-```
-kubectl apply -f provisioning/dev-encrypt.yaml
-kubectl wait --for=condition=complete job/job-runner-encrypt --timeout=900s
+To run PHP scripts, use the `dev` service:
+```shell
+docker-compose run --rm dev composer install   # install dependencies using Composer 
+docker-compose run --rm dev composer phpunit   # run Phpunit as a Composer script
+docker-compose run --rm dev vendor/bin/phpunit # run Phpunit standalone
+docker-compose run --rm dev bin/console        # run Symfony console commands
 ```
 
-If you get `field is immutable` error run:
-```
-kubectl delete job/job-runner-encrypt
-```
-
-Get the encrypted token value:
-
-```
-kubectl logs job/job-runner-encrypt
+To run local tests, use `ci` service. This will validate `composer` files and execute `phpcs`, `phpstan` and `phpunit` tests.
+```shell
+docker-compose run --rm ci
 ```
 
-This will return sth like:
+## ENV & Configuration
+For local development, we follow Symfony best practices as described in
+[docs](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-env-files)
+and use `.env` file:
+* `.env` is versioned, should contain sane defaults to run the service out of the box locally
+* `.env.local` is not versioned, can be created to override any ENV variable locally
+* `.env.test` is versioned, should contain anything extra is needed for `test` environment
 
-```
-KBC::Secure::eJwBXXXX
-```
-
-Create a job - a minimal configuration:
-
-```
-curl --location --request POST 'localhost:80/jobs' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "token": {
-        "token": "KBC::Secure::eJwBXXXX",
-        "id": "165618"
-    },
-    "project": {
-        "id": "6553"
-    },
-    "id": "133",
-    "status": "processing",
-    "params": {
-        "config": "2797256784",
-        "component": "keboola.ex-http",
-        "mode": "run"
-    }
-}'
-```
-
-Provided that `config` and `component` are valid. Take care that `id` must be unique and `status` must be `processing`.
-The job runner can then use with `http://localhost:80` and `JOB_ID` variable set to the chosen id.
-
-### Run tests
-Init the local environment:
-
-    docker-compose build
-    source ./set-env.sh && docker-compose run dev composer install
-
-To run tests locally, set the environment variables and execute:
-
-    source ./set-env.sh && docker-compose run --rm tests composer ci
+These are used for local development only and are not included in final Docker images, used to run the app in
+production. Instead, we put an empty `.env.local.php` file into Docker, disabling the `.env` functionality and all
+configuration must be provided using regular environment variables (like `-e` flag of Docker).
 
 ## License
 

@@ -1,8 +1,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/var/cache/
-/var/log/
+/var
 /vendor/
 /.php_cs.cache
 .phpunit

@@ -11,7 +11,8 @@ $objectEncryptor = ObjectEncryptorFactory::getEncryptor(new EncryptorOptions(
     getenv('AWS_KMS_KEY_ID'),
     getenv('AWS_REGION'),
     ((string) getenv('AWS_KMS_ROLE')) ?: null,
-    getenv('AZURE_KEY_VAULT_URL')
+    getenv('AZURE_KEY_VAULT_URL'),
+    getenv('GCP_KMS_KEY_ID'),
 ));
 
 echo $objectEncryptor->encryptGeneric($argv[1]);

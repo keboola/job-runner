@@ -55,15 +55,18 @@ abstract class BaseFunctionalTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $requiredEnvs = ['AWS_KMS_KEY_ID', 'AWS_REGION', 'ENCRYPTOR_STACK_ID', 'STORAGE_API_URL',
+        $requiredEnvs = [
+            'AWS_KMS_KEY_ID', 'AWS_REGION', 'GCP_KMS_KEY_ID', 'ENCRYPTOR_STACK_ID', 'STORAGE_API_URL',
             'AZURE_KEY_VAULT_URL', 'TEST_STORAGE_API_TOKEN', 'TEST_AWS_ACCESS_KEY_ID', 'TEST_AWS_SECRET_ACCESS_KEY',
             'TEST_AZURE_CLIENT_ID', 'TEST_AZURE_CLIENT_SECRET', 'TEST_AZURE_TENANT_ID',
+            'TEST_GOOGLE_APPLICATION_CREDENTIALS',
         ];
         putenv('AWS_ACCESS_KEY_ID=' . getenv('TEST_AWS_ACCESS_KEY_ID'));
         putenv('AWS_SECRET_ACCESS_KEY=' . getenv('TEST_AWS_SECRET_ACCESS_KEY'));
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
         putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'));
         foreach ($requiredEnvs as $env) {
             if (empty(getenv($env))) {
                 throw new Exception(sprintf('Environment variable "%s" is empty', $env));

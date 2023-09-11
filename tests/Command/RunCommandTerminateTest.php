@@ -50,6 +50,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_ID=' . getenv('TEST_AZURE_CLIENT_ID'));
         putenv('AZURE_CLIENT_SECRET=' . getenv('TEST_AZURE_CLIENT_SECRET'));
         putenv('AZURE_TENANT_ID=' . getenv('TEST_AZURE_TENANT_ID'));
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'));
 
         $objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
 
@@ -63,6 +64,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         putenv('AZURE_CLIENT_ID=');
         putenv('AZURE_CLIENT_SECRET=');
         putenv('AZURE_TENANT_ID=');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=');
 
         return $result;
     }
@@ -109,7 +111,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
             actually create containers, we'd still have to create the containers not belonging to the job, so let's
             do them all here.
         */
-        $commandText = 'docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
+        $commandText = 'sudo docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
             '--label com.keboola.docker-runner.jobId=%s waisbrot/wait';
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, $job->getId()));
         $tmpProcess->setTimeout(600); // to pull the image if necessary
@@ -119,14 +121,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, 4321));
         $tmpProcess->mustRun();
         $tmpProcess = Process::fromShellCommandline(sprintf(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
             $job->getId()
         ));
         $tmpProcess->mustRun();
         $containerIdsToRemove = explode("\n", trim($tmpProcess->getOutput()));
 
         $tmpProcess = Process::fromShellCommandline(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
         );
         $tmpProcess->mustRun();
         $containerIdsToKeep = explode("\n", trim($tmpProcess->getOutput()));
@@ -140,6 +142,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_ID' => getenv('TEST_AZURE_CLIENT_ID'),
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
+                'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]
@@ -175,7 +178,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 
-        $tmpProcess = Process::fromShellCommandline('docker ps --format "{{.ID}}"');
+        $tmpProcess = Process::fromShellCommandline('sudo docker ps --format "{{.ID}}"');
         $tmpProcess->mustRun();
         $containers = explode("\n", $tmpProcess->getOutput());
         self::assertContains($containerIdsToKeep[0], $containers);
@@ -222,7 +225,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         ]);
         $job = $client->createJob($job);
 
-        $commandText = 'docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
+        $commandText = 'sudo docker run -d -e TARGETS=localhost:12345 -e TIMEOUT=300 ' .
             '--label com.keboola.docker-runner.jobId=%s waisbrot/wait';
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, $job->getId()));
         $tmpProcess->setTimeout(600); // to pull the image if necessary
@@ -231,13 +234,14 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess->mustRun();
         $tmpProcess = Process::fromShellCommandline(sprintf($commandText, 4321));
         $tmpProcess->mustRun();
-        $tmpProcess = Process::fromShellCommandline(
-            sprintf('docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"', $job->getId())
-        );
+        $tmpProcess = Process::fromShellCommandline(sprintf(
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
+            $job->getId(),
+        ));
         $tmpProcess->mustRun();
         $jobContainers = explode("\n", trim($tmpProcess->getOutput()));
         $tmpProcess = Process::fromShellCommandline(
-            'docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
         );
         $tmpProcess->mustRun();
         $nonJobContainers = explode("\n", trim($tmpProcess->getOutput()));
@@ -251,6 +255,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'AZURE_CLIENT_ID' => getenv('TEST_AZURE_CLIENT_ID'),
                 'AZURE_CLIENT_SECRET' => getenv('TEST_AZURE_CLIENT_SECRET'),
                 'AZURE_TENANT_ID' => getenv('TEST_AZURE_TENANT_ID'),
+                'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
             ]
@@ -289,7 +294,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 
-        $tmpProcess = Process::fromShellCommandline('docker ps --format "{{.ID}}"');
+        $tmpProcess = Process::fromShellCommandline('sudo docker ps --format "{{.ID}}"');
         $tmpProcess->mustRun();
         $containers = explode("\n", $tmpProcess->getOutput());
         // all containers are preserved (no cleanup occurred)

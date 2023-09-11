@@ -1,0 +1,46 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: condition
+    type: string
+    default: True
+
+  - name: garPushEnabled
+    type: string
+    default: False
+
+  - name: garRegistry
+    type: string
+
+  - name: garRepository
+    type: string
+
+  - name: garRepositoryProjectId
+    type: string
+
+  - name: sourceImage
+    type: string
+
+  - name: targetImage
+    type: string
+
+  - name: tags
+    type: object
+    default: [latest]
+
+steps:
+- ${{ each tag in parameters.tags }}:
+    - script: docker tag ${{ parameters.sourceImage }}:latest ${{ parameters.garRepository }}/${{ parameters.targetImage }}/${{ parameters.targetImage }}:${{ tag }}
+      displayName: ${{ parameters.displayName }} - Build tag ${{ tag }}
+      condition: and(succeeded(), eq('${{ parameters.condition }}', 'True'), eq('${{ parameters.garPushEnabled }}', 'True'))
+
+- ${{ each tag in parameters.tags }}:
+  - task: Docker@2
+    displayName: ${{ parameters.displayName }} - Push tag ${{ tag }}
+    inputs:
+      command: push
+      containerRegistry: ${{ parameters.garRegistry }}
+      repository: ${{ parameters.garRepositoryProjectId }}/${{ parameters.targetImage }}/${{ parameters.targetImage }}
+      tags: ${{ tag }}
+    condition: and(succeeded(), eq('${{ parameters.condition }}', 'True'), eq('${{ parameters.garPushEnabled }}', 'True'))
