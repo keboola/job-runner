@@ -110,7 +110,7 @@ stages:
                   tags:
                     - production-$(Build.SourceVersion)
 
-              - script: printf "%s" "$(productionTag)" > artifact
+              - script: echo "production-$(Build.SourceVersion)" > artifact
                 displayName: Create artifact
               - task: PublishPipelineArtifact@1
                 inputs:
