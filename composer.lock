@@ -388,16 +388,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.29.1",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "f199ed635b945e5adfd3c1a203543d8d86aff239"
+                "reference": "6028b072aa444d7edecbed603431322026704627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/f199ed635b945e5adfd3c1a203543d8d86aff239",
-                "reference": "f199ed635b945e5adfd3c1a203543d8d86aff239",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/6028b072aa444d7edecbed603431322026704627",
+                "reference": "6028b072aa444d7edecbed603431322026704627",
                 "shasum": ""
             },
             "require": {
@@ -440,27 +440,27 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.29.1"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.30.0"
             },
-            "time": "2023-08-23T08:49:35+00:00"
+            "time": "2023-09-07T19:13:44+00:00"
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.52.2",
+            "version": "v1.52.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "37817d3e7d8f3a38db7d75810e3dfbcf0eb6b1de"
+                "reference": "21c004745a32c71e03ab62effd7fbee0cf3ae7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/37817d3e7d8f3a38db7d75810e3dfbcf0eb6b1de",
-                "reference": "37817d3e7d8f3a38db7d75810e3dfbcf0eb6b1de",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/21c004745a32c71e03ab62effd7fbee0cf3ae7c6",
+                "reference": "21c004745a32c71e03ab62effd7fbee0cf3ae7c6",
                 "shasum": ""
             },
             "require": {
                 "google/auth": "^1.18",
-                "guzzlehttp/guzzle": "^5.3|^6.5.7|^7.4.4",
+                "guzzlehttp/guzzle": "^6.5.8|^7.4.4",
                 "guzzlehttp/promises": "^1.4||^2.0",
                 "guzzlehttp/psr7": "^1.7|^2.0",
                 "monolog/monolog": "^1.1|^2.0|^3.0",
@@ -505,9 +505,9 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.52.2"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.52.4"
             },
-            "time": "2023-08-17T19:37:27+00:00"
+            "time": "2023-09-15T20:50:36+00:00"
         },
         {
             "name": "google/cloud-kms",
@@ -562,16 +562,16 @@
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.33.1",
+            "version": "v1.33.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "dc3fbf15d1a1519de20f4b55ab76b2ac94b89652"
+                "reference": "6148b428737eae9b6590ccd8fec508ab8689d096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/dc3fbf15d1a1519de20f4b55ab76b2ac94b89652",
-                "reference": "dc3fbf15d1a1519de20f4b55ab76b2ac94b89652",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/6148b428737eae9b6590ccd8fec508ab8689d096",
+                "reference": "6148b428737eae9b6590ccd8fec508ab8689d096",
                 "shasum": ""
             },
             "require": {
@@ -612,9 +612,9 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.33.1"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.33.2"
             },
-            "time": "2023-08-17T19:37:27+00:00"
+            "time": "2023-09-15T20:50:36+00:00"
         },
         {
             "name": "google/common-protos",
@@ -1497,16 +1497,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "4.1.0",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "5121767d506c7918f1adc46fc0426c76c6e85de8"
+                "reference": "3306317aff9892b8303677531764ff5713ea69b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/5121767d506c7918f1adc46fc0426c76c6e85de8",
-                "reference": "5121767d506c7918f1adc46fc0426c76c6e85de8",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/3306317aff9892b8303677531764ff5713ea69b2",
+                "reference": "3306317aff9892b8303677531764ff5713ea69b2",
                 "shasum": ""
             },
             "require": {
@@ -1557,9 +1557,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.1.0"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.1.1"
             },
-            "time": "2023-08-07T14:13:39+00:00"
+            "time": "2023-09-19T05:56:44+00:00"
         },
         {
             "name": "keboola/csv",
@@ -2709,16 +2709,16 @@
         },
         {
             "name": "keboola/vault-api-client",
-            "version": "0.1.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/vault-api-php-client.git",
-                "reference": "d53b873a5f0520b0f46fac38ac4481204c06f41c"
+                "reference": "d7771512a951be5057444dfeed5d6e29f91ebaf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/vault-api-php-client/zipball/d53b873a5f0520b0f46fac38ac4481204c06f41c",
-                "reference": "d53b873a5f0520b0f46fac38ac4481204c06f41c",
+                "url": "https://api.github.com/repos/keboola/vault-api-php-client/zipball/d7771512a951be5057444dfeed5d6e29f91ebaf4",
+                "reference": "d7771512a951be5057444dfeed5d6e29f91ebaf4",
                 "shasum": ""
             },
             "require": {
@@ -2756,9 +2756,9 @@
             "description": "Keboola Vault API client",
             "support": {
                 "issues": "https://github.com/keboola/vault-api-php-client/issues",
-                "source": "https://github.com/keboola/vault-api-php-client/tree/0.1.1"
+                "source": "https://github.com/keboola/vault-api-php-client/tree/1.0.0"
             },
-            "time": "2023-07-07T11:36:41+00:00"
+            "time": "2023-09-19T05:56:44+00:00"
         },
         {
             "name": "microsoft/azure-storage-blob",
@@ -5496,16 +5496,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v6.3.2",
+            "version": "v6.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "43ed99d30f5f466ffa00bdac3f5f7aa9cd7617c3"
+                "reference": "cac1556fdfdf6719668181974104e6fcfa60e844"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/43ed99d30f5f466ffa00bdac3f5f7aa9cd7617c3",
-                "reference": "43ed99d30f5f466ffa00bdac3f5f7aa9cd7617c3",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/cac1556fdfdf6719668181974104e6fcfa60e844",
+                "reference": "cac1556fdfdf6719668181974104e6fcfa60e844",
                 "shasum": ""
             },
             "require": {
@@ -5553,7 +5553,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v6.3.2"
+                "source": "https://github.com/symfony/http-foundation/tree/v6.3.4"
             },
             "funding": [
                 {
@@ -5569,7 +5569,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-23T21:58:39+00:00"
+            "time": "2023-08-22T08:20:46+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -6420,16 +6420,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.3.2",
+            "version": "v6.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d"
+                "reference": "0b5c29118f2e980d455d2e34a5659f4579847c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d",
-                "reference": "c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d",
+                "url": "https://api.github.com/repos/symfony/process/zipball/0b5c29118f2e980d455d2e34a5659f4579847c54",
+                "reference": "0b5c29118f2e980d455d2e34a5659f4579847c54",
                 "shasum": ""
             },
             "require": {
@@ -6461,7 +6461,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.3.2"
+                "source": "https://github.com/symfony/process/tree/v6.3.4"
             },
             "funding": [
                 {
@@ -6477,7 +6477,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-12T16:00:22+00:00"
+            "time": "2023-08-07T10:39:22+00:00"
         },
         {
             "name": "symfony/routing",
