@@ -109,3 +109,10 @@ stages:
                   targetImage: job-runner
                   tags:
                     - production-$(Build.SourceVersion)
+
+              - script: printf "%s" "$(productionTag)" > artifact
+                displayName: Create artifact
+              - task: PublishPipelineArtifact@1
+                inputs:
+                  targetPath: artifact
+                  artifact: keboola.job-runner.latest-build
