@@ -57,7 +57,7 @@ stages:
               targetImage: job-runner
               tags:
                 - build-$(Build.SourceVersion)
-                - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+                - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
                     - latest
 
   # push to production (dev-* tags)
