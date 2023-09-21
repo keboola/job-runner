@@ -67,10 +67,11 @@ RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
 
 COPY . .
 RUN composer install $COMPOSER_FLAGS \
-    && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/
+ && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/ \
+ && chown "${APP_USER_NAME}:${APP_USER_NAME}" vendor/infection/extension-installer/src/GeneratedExtensionsConfig.php
 
 USER $APP_USER_NAME
-
+ENTRYPOINT ["/code/bin/app-entrypoint.sh"]
 CMD ["php", "/code/bin/console", "app:run"]
 
 
