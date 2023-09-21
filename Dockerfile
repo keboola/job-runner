@@ -70,7 +70,7 @@ RUN composer install $COMPOSER_FLAGS \
     && chown -R "${APP_USER_NAME}:${APP_USER_NAME}" var/
 
 USER $APP_USER_NAME
-
+ENTRYPOINT ["/code/bin/app-entrypoint.sh"]
 CMD ["php", "/code/bin/console", "app:run"]
 
 
