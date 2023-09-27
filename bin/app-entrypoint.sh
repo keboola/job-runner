@@ -11,5 +11,11 @@ echo "=== Preparing application for ${APP_ENV} environment"
 # finish install scripts
 composer run post-install-cmd
 
+DATA_VOLUME_HOST_PATH="${DATA_VOLUME_HOST_PATH:-}"
+if [ ! -z "${DATA_VOLUME_HOST_PATH}" ]; then
+  echo "Setting TMPDIR to \"${DATA_VOLUME_HOST_PATH}\""
+  export TMPDIR="${DATA_VOLUME_HOST_PATH}"
+fi
+
 echo "=== Setup done, starting application"
 exec docker-php-entrypoint "$@"

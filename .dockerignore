@@ -1,4 +1,6 @@
 .git
-var
-vendor
+azure-pipelines/
+provisioning/
+var/
+vendor/
 bin/.phpunit
