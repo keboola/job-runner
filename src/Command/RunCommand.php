@@ -55,7 +55,7 @@ class RunCommand extends Command
         private readonly ObjectEncryptor $objectEncryptor,
         private readonly string $jobId,
         private readonly string $storageApiToken,
-        private readonly array $instanceLimits
+        private readonly array $instanceLimits,
     ) {
         parent::__construct();
 
@@ -72,7 +72,7 @@ class RunCommand extends Command
             $jobStatus = $this->queueClient->getJob($this->jobId)->getStatus();
             if ($jobStatus !== JobInterface::STATUS_TERMINATING) {
                 $this->logger->info(
-                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus)
+                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus),
                 );
                 return;
             }
@@ -85,9 +85,9 @@ class RunCommand extends Command
         $process = Process::fromShellCommandline(
             sprintf(
                 'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
-                escapeshellcmd($this->jobId)
+                escapeshellcmd($this->jobId),
                 // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
-            )
+            ),
         );
         try {
             $process->mustRun();
@@ -119,7 +119,7 @@ class RunCommand extends Command
                         'error' => $e->getMessage(),
                         'stdout' => $process->getOutput(),
                         'stderr' => $process->getErrorOutput(),
-                    ]
+                    ],
                 );
             }
         }
@@ -167,7 +167,7 @@ class RunCommand extends Command
                 $job->getId(),
                 (new JobPatchData())
                     ->setStatus(JobInterface::STATUS_PROCESSING)
-                    ->setRunnerId($runnerId)
+                    ->setRunnerId($runnerId),
             );
             $this->logger->info(sprintf(
                 'Job branch is "%s", branch type is "%s"',
@@ -179,7 +179,7 @@ class RunCommand extends Command
             $this->logProcessor->setLogInfo(new LogInfo(
                 $job->getId(),
                 $job->getComponentId(),
-                $job->getProjectId()
+                $job->getProjectId(),
             ));
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
 
@@ -213,7 +213,7 @@ class RunCommand extends Command
                 $clientWrapper,
                 $loggerService,
                 new OutputFilter(60000),
-                $this->instanceLimits
+                $this->instanceLimits,
             );
             $usageFile = new UsageFile();
             $usageFile->setQueueClient($this->queueClient);
@@ -230,7 +230,7 @@ class RunCommand extends Command
                 $job->getConfigRowIds(),
                 $outputs,
                 $job->getBackend()->getContainerType(),
-                $job->getOrchestrationJobId()
+                $job->getOrchestrationJobId(),
             );
 
             $result = OutputResultConverter::convertOutputsToResult($outputs);
@@ -247,7 +247,7 @@ class RunCommand extends Command
                 $this->jobId,
                 JobInterface::STATUS_ERROR,
                 ExceptionConverter::convertExceptionToResult($this->logger, $e, $this->jobId, $outputs),
-                $metrics
+                $metrics,
             );
         }
         // end with success so that there are no restarts
@@ -275,20 +275,20 @@ class RunCommand extends Command
                 sprintf(
                     'Failed to save result for job "%s". Job has already reached terminal state: "%s"',
                     $jobId,
-                    $e->getMessage()
-                )
+                    $e->getMessage(),
+                ),
             );
         } catch (StateTransitionForbiddenException $e) {
             $this->logger->notice(
                 sprintf(
                     'Failed to save result for job "%s". State transition forbidden: "%s"',
                     $jobId,
-                    $e->getMessage()
-                )
+                    $e->getMessage(),
+                ),
             );
         } catch (Throwable $e) {
             $this->logger->error(
-                sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage())
+                sprintf('Failed to save result for job "%s". Error: "%s".', $jobId, $e->getMessage()),
             );
         }
     }

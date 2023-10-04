@@ -27,7 +27,7 @@ class ExceptionConverterTest extends TestCase
         string $expectedErrorType,
         string $expectedMessage,
         string $expectedLog,
-        string $method
+        string $method,
     ): void {
         $logger = new TestLogger();
         $result = ExceptionConverter::convertExceptionToResult($logger, $exception, '123', []);
@@ -91,13 +91,13 @@ class ExceptionConverterTest extends TestCase
             '123',
             [
                 $output,
-            ]
+            ],
         );
         self::assertEquals('some error', $result->getMessage());
         self::assertSame('123', $result->getConfigVersion());
         self::assertSame(
             [['a' => 'b']],
-            $result->getImages()
+            $result->getImages(),
         );
     }
 }

@@ -32,7 +32,7 @@ class OutputResultConverterTest extends TestCase
                     'tables' => [],
                 ],
             ],
-            $jobResult->jsonSerialize()
+            $jobResult->jsonSerialize(),
         );
     }
 
@@ -51,7 +51,7 @@ class OutputResultConverterTest extends TestCase
                     'context' => null,
                 ],
             ],
-            $jobMetrics->jsonSerialize()
+            $jobMetrics->jsonSerialize(),
         );
     }
 
@@ -73,7 +73,7 @@ class OutputResultConverterTest extends TestCase
                     'context' => null,
                 ],
             ],
-            $jobMetrics->jsonSerialize()
+            $jobMetrics->jsonSerialize(),
         );
     }
 
@@ -324,7 +324,7 @@ class OutputResultConverterTest extends TestCase
                     ],
                 ],
             ],
-            $jobResult->jsonSerialize()
+            $jobResult->jsonSerialize(),
         );
         self::assertSame(
             [
@@ -338,7 +338,7 @@ class OutputResultConverterTest extends TestCase
                     'context' => 'wlm',
                 ],
             ],
-            $jobMetrics->jsonSerialize()
+            $jobMetrics->jsonSerialize(),
         );
     }
 
@@ -379,7 +379,7 @@ class OutputResultConverterTest extends TestCase
                     'downloaded' => [],
                 ],
             ],
-            $jobResult->jsonSerialize()
+            $jobResult->jsonSerialize(),
         );
     }
 

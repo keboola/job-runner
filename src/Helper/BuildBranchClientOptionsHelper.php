@@ -29,10 +29,10 @@ class BuildBranchClientOptionsHelper
             ->setJobPollRetryDelay(self::getStepPollDelayFunction())
             ->setBackendConfiguration(new BackendConfiguration(
                 $job->getBackend()->getContext(),
-                $job->getBackend()->getType()
+                $job->getBackend()->getType(),
             ))
             ->setUseBranchStorage(
-                in_array(self::PROTECTED_DEFAULT_BRANCH_FEATURE, $job->getProjectFeatures(), true)
+                in_array(self::PROTECTED_DEFAULT_BRANCH_FEATURE, $job->getProjectFeatures(), true),
             )
         ;
     }

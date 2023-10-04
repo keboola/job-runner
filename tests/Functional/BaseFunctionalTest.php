@@ -96,7 +96,7 @@ abstract class BaseFunctionalTest extends TestCase
         $jobData['#tokenString'] = (string) getenv('TEST_STORAGE_API_TOKEN');
 
         $storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions($this->storageClient->getApiUrl())
+            new ClientOptions($this->storageClient->getApiUrl()),
         );
 
         $manageApiClient = new ManageApiClient([
@@ -120,7 +120,7 @@ abstract class BaseFunctionalTest extends TestCase
                     $encryptorStackId,
                     $awsRegion,
                 ),
-                false
+                false,
             ),
         );
 
@@ -137,14 +137,14 @@ abstract class BaseFunctionalTest extends TestCase
                 $job->getId(),
                 self::callback(function ($jobPatchData) {
                     return !empty($jobPatchData->getRunnerId());
-                })
+                }),
             )
             ->willReturn(
                 new Job(
                     new JobObjectEncryptor($this->objectEncryptor),
                     $storageClientFactory,
-                    array_merge($job->jsonSerialize(), ['status' => 'processing'])
-                )
+                    array_merge($job->jsonSerialize(), ['status' => 'processing']),
+                ),
             );
         if ($expectedJobResult) {
             $mockQueueClient->expects(self::once())
@@ -166,14 +166,14 @@ abstract class BaseFunctionalTest extends TestCase
                             }
                         }
                         return true;
-                    })
+                    }),
                 )
                 ->willReturn(
                     new Job(
                         new JobObjectEncryptor($this->objectEncryptor),
                         $storageClientFactory,
-                        array_merge($job->jsonSerialize(), ['status' => 'processing'])
-                    )
+                        array_merge($job->jsonSerialize(), ['status' => 'processing']),
+                    ),
                 );
         } else {
             $mockQueueClient->expects(self::once())
@@ -182,24 +182,24 @@ abstract class BaseFunctionalTest extends TestCase
                     new Job(
                         new JobObjectEncryptor($this->objectEncryptor),
                         $storageClientFactory,
-                        array_merge($job->jsonSerialize(), ['status' => 'processing'])
-                    )
+                        array_merge($job->jsonSerialize(), ['status' => 'processing']),
+                    ),
                 );
         }
 
         if ($basicClientMock) {
             $clientWrapper = $storageClientFactory->createClientWrapper(
-                new ClientOptions(token: (string) getenv('TEST_STORAGE_API_TOKEN'))
+                new ClientOptions(token: (string) getenv('TEST_STORAGE_API_TOKEN')),
             );
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($basicClientMock);
             $mockClientWrapper->method('getBranchClient')->willReturn($branchAwareClientMock);
             $mockClientWrapper->method('getTableAndFileStorageClient')->willReturn($basicClientMock);
             $mockClientWrapper->method('getBranchId')->willReturn(
-                $clientWrapper->getBranch()->id
+                $clientWrapper->getBranch()->id,
             );
             $mockClientWrapper->method('getDefaultBranch')->willReturn(
-                $clientWrapper->getDefaultBranch()
+                $clientWrapper->getDefaultBranch(),
             );
             $storageClientFactory = $this->createMock(StorageClientPlainFactory::class);
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
@@ -220,7 +220,7 @@ abstract class BaseFunctionalTest extends TestCase
             $this->objectEncryptor,
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            ['cpu_count' => 1]
+            ['cpu_count' => 1],
         );
     }
 

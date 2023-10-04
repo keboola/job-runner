@@ -66,7 +66,7 @@ class OutputResultConverter
             ->setArtifacts(
                 $jobArtifacts
                     ->setUploaded($uploadedArtifacts)
-                    ->setDownloaded($downloadedArtifacts)
+                    ->setDownloaded($downloadedArtifacts),
             );
         return $jobResult;
     }
@@ -129,7 +129,7 @@ class OutputResultConverter
     {
         return array_map(
             fn (Output $output) => $output->getImages(),
-            $outputs
+            $outputs,
         );
     }
 
@@ -145,7 +145,7 @@ class OutputResultConverter
             $tableInfo->getId(),
             $tableInfo->getName(),
             (string) $tableInfo->getDisplayName(),
-            $columnCollection
+            $columnCollection,
         );
     }
 }

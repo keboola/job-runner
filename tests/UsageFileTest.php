@@ -101,7 +101,7 @@ YAML;
                 self::equalTo('1'),
                 self::callback(function ($actualUsage) use ($usage) {
                     return $actualUsage === json_decode($usage, true);
-                })
+                }),
             );
         /** @var Client $client */
         $usageFile = new UsageFile();
@@ -156,7 +156,7 @@ YAML;
                 self::equalTo('1'),
                 self::callback(function ($actualUsage) {
                     return $actualUsage === [];
-                })
+                }),
             );
 
         /** @var Client $client */

@@ -20,7 +20,7 @@ class LogInfoTest extends TestCase
                 ],
                 'runId' => '123456',
             ],
-            $logInfo->toArray()
+            $logInfo->toArray(),
         );
     }
 }

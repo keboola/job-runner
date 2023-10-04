@@ -22,7 +22,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
             [
                 'token' => (string) getenv('TEST_STORAGE_API_TOKEN'),
                 'url' => (string) getenv('STORAGE_API_URL'),
-            ]
+            ],
         );
         $componentsApi = new Components($client);
         $configuration = new Configuration();
@@ -135,7 +135,7 @@ class RunnerInlineConfigWithConfigIdTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
     }
 }

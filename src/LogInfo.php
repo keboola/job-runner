@@ -15,7 +15,7 @@ class LogInfo implements LogInfoInterface
     public function __construct(
         string $runId,
         string $componentId,
-        string $projectId
+        string $projectId,
     ) {
         $this->runId = $runId;
         $this->componentId = $componentId;

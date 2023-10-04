@@ -35,7 +35,7 @@ class EncryptionTest extends BaseFunctionalTest
                 '#key4' => $this->getObjectEncryptor()->encryptForProject(
                     'fourth',
                     'keboola.python-transformation',
-                    (string) $tokenInfo['owner']['id']
+                    (string) $tokenInfo['owner']['id'],
                 ),
             ],
         ];
@@ -167,7 +167,7 @@ class EncryptionTest extends BaseFunctionalTest
                 '#key4' => $this->getObjectEncryptor()->encryptForProject(
                     'fourth',
                     'keboola.python-transformation',
-                    (string) $tokenInfo['owner']['id']
+                    (string) $tokenInfo['owner']['id'],
                 ),
             ],
         ];

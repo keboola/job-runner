@@ -37,7 +37,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             'out.c-executor-test.output',
             [
                 'limit' => 1000,
-            ]
+            ],
         );
         $data = Client::parseCsv($csvData);
         usort($data, function ($a, $b) {
@@ -56,14 +56,14 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
 
         $csvData = $this->getClient()->getTableDataPreview(
             'out.c-executor-test.output-2',
             [
                 'limit' => 1000,
-            ]
+            ],
         );
         $data = Client::parseCsv($csvData);
         usort($data, function ($a, $b) {
@@ -82,7 +82,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
         $components = new Components($this->getClient());
         $components->deleteConfiguration('keboola.python-transformation', $configId);
@@ -124,7 +124,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
                         'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
                     ],
                 ],
-            ]
+            ],
         );
         $row->setIsDisabled($disabled);
         $components->addConfigurationRow($row);
@@ -156,7 +156,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
                         'copyfile("/data/in/tables/input.csv", "/data/out/tables/result.csv")',
                     ],
                 ],
-            ]
+            ],
         );
         $row->setIsDisabled($disabled);
         $components->addConfigurationRow($row);
@@ -187,7 +187,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
             'out.c-executor-test.output-2',
             [
                 'limit' => 1000,
-            ]
+            ],
         );
         $data = Client::parseCsv($csvData);
         usort($data, function ($a, $b) {
@@ -206,7 +206,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
         $components = new Components($this->getClient());
         $components->deleteConfiguration('keboola.python-transformation', $configId);

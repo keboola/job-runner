@@ -79,7 +79,7 @@ class JobDefinitionFactory
             throw new UserException(sprintf(
                 'Component "%s" is not allowed to run on %s branch.',
                 $component->getId(),
-                BranchType::DEFAULT->value
+                BranchType::DEFAULT->value,
             ));
         }
 
@@ -105,7 +105,7 @@ class JobDefinitionFactory
                 $this->checkUnsafeConfiguration(
                     $component,
                     $configuration,
-                    $job->getBranchType()
+                    $job->getBranchType(),
                 );
             }
         } catch (ClientException $e) {
@@ -221,7 +221,8 @@ class JobDefinitionFactory
         if ($component->branchConfigurationsAreUnsafe() && $branchType === BranchType::DEV) {
             if (empty($configuration['configuration']['runtime']['safe'])) {
                 throw new UserException(
-                    'It is not safe to run this configuration in a development branch. Please review the configuration.'
+                    'It is not safe to run this configuration in a development branch. ' .
+                    'Please review the configuration.',
                 );
             }
         }

@@ -123,7 +123,7 @@ class JobDefinitionFactoryTest extends TestCase
      */
     public function testCreateJobDefinitionWithConfigDataAndBackend(
         array $backendData,
-        array $expectedBackendData
+        array $expectedBackendData,
     ): void {
         $configData = [
             'runtime' => [
@@ -149,7 +149,7 @@ class JobDefinitionFactoryTest extends TestCase
         $jobDefinitions = $this->createJobDefinitionsWithConfigData($jobData);
         self::assertSame(
             $expectedBackendData,
-            $jobDefinitions[0]->getConfiguration()['runtime']['backend']
+            $jobDefinitions[0]->getConfiguration()['runtime']['backend'],
         );
     }
 
@@ -225,7 +225,7 @@ class JobDefinitionFactoryTest extends TestCase
      */
     public function testCreateJobDefinitionWithConfigIdAndBackend(
         array $backendData,
-        ?array $expectedBackendData
+        ?array $expectedBackendData,
     ): void {
         $configuration = [
             'id' => 'my-config',
@@ -256,12 +256,12 @@ class JobDefinitionFactoryTest extends TestCase
         if ($expectedBackendData !== null) {
             self::assertSame(
                 $expectedBackendData,
-                $jobDefinitions[0]->getConfiguration()['runtime']['backend']
+                $jobDefinitions[0]->getConfiguration()['runtime']['backend'],
             );
         } else {
             self::assertArrayNotHasKey(
                 'runtime',
-                $jobDefinitions[0]->getConfiguration()
+                $jobDefinitions[0]->getConfiguration(),
             );
         }
     }
@@ -284,7 +284,7 @@ class JobDefinitionFactoryTest extends TestCase
                 'Configuration my-config not found',
                 404,
                 null,
-                'notFound'
+                'notFound',
             ))
         ;
 
@@ -297,7 +297,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $this->expectException(UserException::class);
@@ -328,7 +328,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         return $factory->createJobDefinitionsForJob($clientWrapper, $component, $job);
@@ -353,7 +353,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         return $factory->createJobDefinitionsForJob(
@@ -404,7 +404,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $jobDefinitions = $factory->createJobDefinitionsForJob(
@@ -465,12 +465,12 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'It is not safe to run this configuration in a development branch. Please review the configuration.'
+            'It is not safe to run this configuration in a development branch. Please review the configuration.',
         );
         $factory->createJobDefinitionsForJob(
             $clientWrapper,
@@ -521,7 +521,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
         $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
@@ -563,7 +563,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $this->expectException(UserException::class);
@@ -635,7 +635,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $this->expectException(UserException::class);
@@ -687,7 +687,7 @@ class JobDefinitionFactoryTest extends TestCase
             new JobDefinitionParser(),
             $this->createMock(JobObjectEncryptor::class),
             $this->createMock(VariablesApiClient::class),
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
 
         $jobDefinitions = $factory->createJobDefinitionsForJob(

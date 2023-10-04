@@ -47,7 +47,7 @@ class JobDefinitionParser
                 configId: (string) $config['id'],
                 configVersion: (string) $config['version'],
                 state: $config['state'] ? (array) $config['state'] : [],
-                branchType: $branchType
+                branchType: $branchType,
             );
             return [$jobDefinition];
         }
@@ -61,7 +61,7 @@ class JobDefinitionParser
                 $row['state'] ? (array) $row['state'] : [],
                 (string) $row['id'],
                 (bool) $row['isDisabled'],
-                $branchType
+                $branchType,
             ),
             $config['rows'],
         );
@@ -74,7 +74,7 @@ class JobDefinitionParser
         $hasRowProcessors = $this->hasRowProcessors($config);
         if ($hasProcessors && $hasRowProcessors) {
             throw new UserException(
-                'Processors may be set either in configuration or in configuration row, but not in both places.'
+                'Processors may be set either in configuration or in configuration row, but not in both places.',
             );
         }
     }
