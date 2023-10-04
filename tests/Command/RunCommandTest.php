@@ -152,7 +152,7 @@ class RunCommandTest extends AbstractCommandTest
         self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
         self::assertEquals($job->getId(), $jobRecord['runId']);
         self::assertTrue($testHandler->hasInfoThatContains(
-            '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }'
+            '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }',
         ));
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Runner ID'));
@@ -202,7 +202,7 @@ class RunCommandTest extends AbstractCommandTest
                     'context' => $this->tokenData['owner']['id'] . '-application',
                 ],
             ],
-            $finishedJob->getMetrics()->jsonSerialize()
+            $finishedJob->getMetrics()->jsonSerialize(),
         );
     }
 
@@ -341,7 +341,7 @@ class RunCommandTest extends AbstractCommandTest
                     }
                     $executionIndex++;
                     return $storageClientFactory->createClientWrapper($options);
-                }
+                },
             )
         ;
 
@@ -436,7 +436,7 @@ class RunCommandTest extends AbstractCommandTest
                     'context' => '123_transformation',
                 ],
             ],
-            $finishedJob->getMetrics()->jsonSerialize()
+            $finishedJob->getMetrics()->jsonSerialize(),
         );
 
         $this->assertOutputTableMetadata('out.c-main.modified', ['a', 'b']);
@@ -467,7 +467,7 @@ class RunCommandTest extends AbstractCommandTest
                         'isTruncated' => false,
                     ],
                 ],
-            ]
+            ],
         );
 
         $this->assertOutputTableMetadata('out.c-main.numericModified', ['4', '0']);
@@ -498,7 +498,7 @@ class RunCommandTest extends AbstractCommandTest
                         'isTruncated' => false,
                     ],
                 ],
-            ]
+            ],
         );
     }
 
@@ -610,7 +610,7 @@ class RunCommandTest extends AbstractCommandTest
                     'context' => '123_transformation',
                 ],
             ],
-            $finishedJob->getMetrics()->jsonSerialize()
+            $finishedJob->getMetrics()->jsonSerialize(),
         );
     }
 
@@ -741,7 +741,7 @@ class RunCommandTest extends AbstractCommandTest
                     'context' => $this->tokenData['owner']['id'] . '-other',
                 ],
             ],
-            $job->getMetrics()->jsonSerialize()
+            $job->getMetrics()->jsonSerialize(),
         );
     }
 
@@ -749,7 +749,7 @@ class RunCommandTest extends AbstractCommandTest
     {
         $storageClientFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
-            (string) getenv('TEST_STORAGE_API_TOKEN')
+            (string) getenv('TEST_STORAGE_API_TOKEN'),
         ));
         $storageClient = $storageClientFactory->createClientWrapper(new ClientOptions())->getBasicClient();
         $componentsApi = new Components($storageClient);
@@ -782,7 +782,7 @@ class RunCommandTest extends AbstractCommandTest
                 'variables_id' => $variablesId,
                 'shared_code_id' => $sharedCodeId,
                 'shared_code_row_ids' => ['code-id'],
-            ]
+            ],
         );
         $configurationId = $componentsApi->addConfiguration($configurationApi)['id'];
         ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
@@ -849,7 +849,7 @@ class RunCommandTest extends AbstractCommandTest
                         'context' => $this->tokenData['owner']['id'] . '-application',
                     ],
                 ],
-                $data
+                $data,
             );
             self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
             self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
@@ -865,7 +865,7 @@ class RunCommandTest extends AbstractCommandTest
     public function testExecuteUnEncryptedJobData(): void
     {
         $storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions((string) getenv('STORAGE_API_URL'))
+            new ClientOptions((string) getenv('STORAGE_API_URL')),
         );
 
         [
@@ -877,8 +877,8 @@ class RunCommandTest extends AbstractCommandTest
         $storageClient = $storageClientFactory->createClientWrapper(
             new ClientOptions(
                 null,
-                (string) getenv('TEST_STORAGE_API_TOKEN')
-            )
+                (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ),
         )->getBasicClient();
         $tokenInfo = $storageClient->verifytoken();
         // fabricate an erroneous job which contains unencrypted values
@@ -996,7 +996,7 @@ class RunCommandTest extends AbstractCommandTest
         $ret = $commandTester->execute(
             ['command' => $command->getName()],
             ['verbosity' => OutputInterface::VERBOSITY_DEBUG,
-            'capture_stderr_separately' => true]
+            'capture_stderr_separately' => true],
         );
 
         self::assertCount(2, $testHandler->getRecords());
@@ -1048,7 +1048,7 @@ class RunCommandTest extends AbstractCommandTest
         $ret = $commandTester->execute(
             ['command' => $command->getName()],
             ['verbosity' => OutputInterface::VERBOSITY_DEBUG,
-            'capture_stderr_separately' => true]
+            'capture_stderr_separately' => true],
         );
 
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
@@ -1097,14 +1097,14 @@ class RunCommandTest extends AbstractCommandTest
             ->method('patchJob')
             ->willReturn($existingJobFactory->loadFromExistingJobData(array_merge(
                 $jobData,
-                ['status' => 'processing']
+                ['status' => 'processing'],
             )));
         $mockQueueClient
             ->expects(self::once())
             ->method('postJobResult')
             ->willThrowException(new StateTransitionForbiddenException(
                 'Invalid status transition of job "123" from ' .
-                '"terminated (desired: terminating)" to "error desired: processing"'
+                '"terminated (desired: terminating)" to "error desired: processing"',
             ));
 
         $logger = new Logger('job-runner-test');
@@ -1135,7 +1135,7 @@ class RunCommandTest extends AbstractCommandTest
             $objectEncryptor,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            []
+            [],
         ));
 
         $command = $application->find('app:run');
@@ -1150,10 +1150,10 @@ class RunCommandTest extends AbstractCommandTest
         self::assertFalse($testHandler->hasWarningRecords());
 
         self::assertTrue($testHandler->hasInfoThatContains(
-            'Running job "123".'
+            'Running job "123".',
         ));
         self::assertTrue($testHandler->hasNoticeThatContains(
-            'Failed to save result for job "123". State transition forbidden:'
+            'Failed to save result for job "123". State transition forbidden:',
         ));
         self::assertEquals(0, $ret);
     }
@@ -1193,7 +1193,7 @@ class RunCommandTest extends AbstractCommandTest
             function (string $columName): string {
                 return  'data' . mb_strtoupper($columName);
             },
-            $columnNames
+            $columnNames,
         ));
 
         $tableId = $this->storageClient->createTableAsync($bucketId, $tableName, $csv);
@@ -1211,8 +1211,8 @@ class RunCommandTest extends AbstractCommandTest
                         ],
                     ];
                 },
-                array_flip($columnNames)
-            )
+                array_flip($columnNames),
+            ),
         ));
 
         return $tableId;
@@ -1222,7 +1222,7 @@ class RunCommandTest extends AbstractCommandTest
         array $data,
         string $expectedTableId,
         string $expectedTableName,
-        array $expectedColumns
+        array $expectedColumns,
     ): void {
         self::assertSame(
             [
@@ -1235,7 +1235,7 @@ class RunCommandTest extends AbstractCommandTest
                 }, $expectedColumns),
                 'displayName' => $expectedTableName,
             ],
-            $data
+            $data,
         );
     }
 

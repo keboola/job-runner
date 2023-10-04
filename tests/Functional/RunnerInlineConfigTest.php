@@ -74,7 +74,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
     }
 
@@ -129,7 +129,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                         ],
                     ],
                     'components' => [$componentData],
-                ]
+                ],
             ));
 
         $jobId = $this->getClient()->generateId();
@@ -241,7 +241,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                         ],
                     ],
                     'components' => [$componentData],
-                ]
+                ],
             ));
 
         $jobId = $this->getClient()->generateId();
@@ -383,7 +383,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
     }
 
@@ -396,15 +396,15 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
 
         $id1 = $this->getClient()->uploadFile(
             $root . '/upload',
-            (new FileUploadOptions())->setTags(['executor-test', 'toprocess'])
+            (new FileUploadOptions())->setTags(['executor-test', 'toprocess']),
         );
         $id2 = $this->getClient()->uploadFile(
             $root . '/upload',
-            (new FileUploadOptions())->setTags(['executor-test', 'toprocess'])
+            (new FileUploadOptions())->setTags(['executor-test', 'toprocess']),
         );
         $id3 = $this->getClient()->uploadFile(
             $root . '/upload',
-            (new FileUploadOptions())->setTags(['executor-test', 'incremental-test'])
+            (new FileUploadOptions())->setTags(['executor-test', 'incremental-test']),
         );
 
         $jobData = [

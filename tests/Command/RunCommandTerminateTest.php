@@ -34,7 +34,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 throw new RuntimeException(sprintf(
                     date('c') . 'Failed to settle condition, actual value "%s" does not match target value "%s".',
                     $actualValue,
-                    $targetValue
+                    $targetValue,
                 ));
             }
 
@@ -56,7 +56,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
 
         $result = $objectEncryptor->encryptForComponent(
             (string) getenv('TEST_STORAGE_API_TOKEN'),
-            'keboola.runner-config-test'
+            'keboola.runner-config-test',
         );
 
         putenv('AWS_ACCESS_KEY_ID=');
@@ -72,13 +72,13 @@ class RunCommandTerminateTest extends AbstractCommandTest
     public function testExecuteSuccessTerminatingJob(): void
     {
         $storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions((string) getenv('STORAGE_API_URL'))
+            new ClientOptions((string) getenv('STORAGE_API_URL')),
         );
         $storageClient = $storageClientFactory->createClientWrapper(
             new ClientOptions(
                 null,
-                (string) getenv('TEST_STORAGE_API_TOKEN')
-            )
+                (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ),
         )->getBasicClient();
         ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
 
@@ -122,13 +122,13 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess->mustRun();
         $tmpProcess = Process::fromShellCommandline(sprintf(
             'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
-            $job->getId()
+            $job->getId(),
         ));
         $tmpProcess->mustRun();
         $containerIdsToRemove = explode("\n", trim($tmpProcess->getOutput()));
 
         $tmpProcess = Process::fromShellCommandline(
-            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"',
         );
         $tmpProcess->mustRun();
         $containerIdsToKeep = explode("\n", trim($tmpProcess->getOutput()));
@@ -145,7 +145,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
-            ]
+            ],
         );
         $mainProcess->start();
         $this->settle(
@@ -154,7 +154,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 echo $mainProcess->getOutput();
                 echo $mainProcess->getErrorOutput();
                 return $client->getJob($job->getId())->getStatus();
-            }
+            },
         );
 
         $job = $client->patchJob($job->getId(), (new JobPatchData())
@@ -169,12 +169,12 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $output = $mainProcess->getOutput();
         self::assertStringContainsString(
             sprintf('Terminating containers for job "%s"', $job->getId()),
-            $output
+            $output,
         );
         self::assertStringContainsString('Terminating container', $output);
         self::assertStringContainsString(
             sprintf('Finished container cleanup for job "%s"', $job->getId()),
-            $output
+            $output,
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 
@@ -191,13 +191,13 @@ class RunCommandTerminateTest extends AbstractCommandTest
     public function testExecuteSuccessNonTerminatingJob(): void
     {
         $storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions((string) getenv('STORAGE_API_URL'))
+            new ClientOptions((string) getenv('STORAGE_API_URL')),
         );
         $storageClient = $storageClientFactory->createClientWrapper(
             new ClientOptions(
                 null,
-                (string) getenv('TEST_STORAGE_API_TOKEN')
-            )
+                (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ),
         )->getBasicClient();
         ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
         $tokenInfo = $storageClient->verifytoken();
@@ -241,7 +241,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
         $tmpProcess->mustRun();
         $jobContainers = explode("\n", trim($tmpProcess->getOutput()));
         $tmpProcess = Process::fromShellCommandline(
-            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"'
+            'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=4321"',
         );
         $tmpProcess->mustRun();
         $nonJobContainers = explode("\n", trim($tmpProcess->getOutput()));
@@ -258,7 +258,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 'GOOGLE_APPLICATION_CREDENTIALS' => getenv('TEST_GOOGLE_APPLICATION_CREDENTIALS'),
                 'JOB_ID' => $job->getId(),
                 'STORAGE_API_TOKEN' => getenv('TEST_STORAGE_API_TOKEN'),
-            ]
+            ],
         );
         $mainProcess->start();
         $this->settle(
@@ -267,7 +267,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 echo $mainProcess->getOutput();
                 echo $mainProcess->getErrorOutput();
                 return $client->getJob($job->getId())->getStatus();
-            }
+            },
         );
 
         $pid = $mainProcess->getPid();
@@ -278,7 +278,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
 
         self::assertStringNotContainsString(
             sprintf('Terminating containers for job "%s"', $job->getId()),
-            $output
+            $output,
         );
         self::assertStringNotContainsString(
             'Terminating container',
@@ -286,11 +286,11 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertStringNotContainsString(
             sprintf('Finished container cleanup for job "%s"', $job->getId()),
-            $output
+            $output,
         );
         self::assertStringContainsString(
             sprintf('Job "%s" is in status "processing", letting the job to finish.', $job->getId()),
-            $output
+            $output,
         );
         self::assertEquals(0, $mainProcess->getExitCode());
 

@@ -28,7 +28,7 @@ foreach ($tokeEnvs as $tokenEnv) {
         [
             'token' => (string) getenv($tokenEnv),
             'url' => (string) getenv('STORAGE_API_URL'),
-        ]
+        ],
     );
     $tokenInfo = $client->verifyToken();
 
@@ -38,7 +38,7 @@ foreach ($tokeEnvs as $tokenEnv) {
         $tokenInfo['id'],
         $tokenInfo['owner']['name'],
         $tokenInfo['owner']['id'],
-        $client->getApiUrl()
+        $client->getApiUrl(),
     ));
 }
 

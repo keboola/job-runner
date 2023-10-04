@@ -82,7 +82,7 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
                     'newValue' => 'big',
                 ],
             ],
-            $data
+            $data,
         );
         $components->deleteConfiguration('keboola.python-transformation', $configId);
     }
@@ -164,7 +164,7 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
                         'newValue' => 'big',
                     ],
                 ],
-                $data
+                $data,
             );
         } finally {
             $branchApi->deleteBranch($branchId);

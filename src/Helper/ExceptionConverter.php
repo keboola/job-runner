@@ -18,26 +18,26 @@ class ExceptionConverter
         LoggerInterface $logger,
         Throwable $e,
         string $jobId,
-        array $outputs
+        array $outputs,
     ): JobResult {
         $transformedException = ExceptionTransformer::transformException($e);
         if (is_a($e, EncryptionUserException::class)) {
             $errorType = JobResult::ERROR_TYPE_USER;
             $logger->error(
                 sprintf('Job "%s" ended with encryption error: "%s"', $jobId, $transformedException->getError()),
-                $transformedException->getFullArray()
+                $transformedException->getFullArray(),
             );
         } elseif (is_a($e, UserExceptionInterface::class)) {
             $errorType = JobResult::ERROR_TYPE_USER;
             $logger->error(
                 sprintf('Job "%s" ended with user error: "%s"', $jobId, $transformedException->getError()),
-                $transformedException->getFullArray()
+                $transformedException->getFullArray(),
             );
         } else {
             $errorType = JobResult::ERROR_TYPE_APPLICATION;
             $logger->critical(
                 sprintf('Job "%s" ended with application error: "%s"', $jobId, $transformedException->getError()),
-                $transformedException->getFullArray()
+                $transformedException->getFullArray(),
             );
         }
         $result = new JobResult();

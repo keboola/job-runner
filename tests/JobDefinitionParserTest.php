@@ -22,7 +22,7 @@ class JobDefinitionParserTest extends TestCase
                         'uri' => 'keboola/docker-demo',
                     ],
                 ],
-            ]
+            ],
         );
     }
 
@@ -109,7 +109,7 @@ class JobDefinitionParserTest extends TestCase
             $this->getComponent(),
             $configData,
             null,
-            'default'
+            'default',
         );
 
         self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
@@ -509,7 +509,7 @@ class JobDefinitionParserTest extends TestCase
         $parser = new JobDefinitionParser();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Processors may be set either in configuration or in configuration row, but not in both places'
+            'Processors may be set either in configuration or in configuration row, but not in both places',
         );
         $parser->parseConfig($this->getComponent(), $config, 'default');
     }
@@ -535,7 +535,7 @@ class JobDefinitionParserTest extends TestCase
                 'processors' => [],
                 'parameters' => [],
             ],
-            $jobDefinitions[0]->getConfiguration()
+            $jobDefinitions[0]->getConfiguration(),
         );
     }
 
@@ -603,7 +603,7 @@ class JobDefinitionParserTest extends TestCase
         $parser = new JobDefinitionParser();
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Processors may be set either in configuration or in configuration row, but not in both places'
+            'Processors may be set either in configuration or in configuration row, but not in both places',
         );
         $parser->parseConfig($this->getComponent(), $config, 'default');
     }

@@ -34,7 +34,7 @@ abstract class AbstractCommandTest extends KernelTestCase
     protected function getJobFactoryAndClient(): array
     {
         $storageClientFactory = new StorageClientPlainFactory(
-            new ClientOptions((string) getenv('STORAGE_API_URL'))
+            new ClientOptions((string) getenv('STORAGE_API_URL')),
         );
 
         $objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
@@ -48,13 +48,13 @@ abstract class AbstractCommandTest extends KernelTestCase
             new DataPlaneObjectEncryptorProvider(
                 $objectEncryptor,
                 $dataPlaneConfigRepository,
-                false
+                false,
             ),
         );
 
         $existingJobFactory = new ExistingJobFactory(
             $storageClientFactory,
-            new GenericObjectEncryptorProvider($objectEncryptor)
+            new GenericObjectEncryptorProvider($objectEncryptor),
         );
 
         $client = new Client(
@@ -62,7 +62,7 @@ abstract class AbstractCommandTest extends KernelTestCase
             $existingJobFactory,
             (string) getenv('JOB_QUEUE_URL'),
             (string) getenv('JOB_QUEUE_TOKEN'),
-            null
+            null,
         );
 
         return [
