@@ -104,6 +104,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'print("config var: val")',
             $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
         );
+        self::assertSame(
+            [
+                'var' => 'val',
+            ],
+            $jobDefinition->getInputVariableValues(),
+        );
     }
 
     public function testCreateWithBranch(): void
@@ -144,6 +150,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'print("config var: val")',
             $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
         );
+        self::assertSame(
+            [
+                'var' => 'val',
+            ],
+            $jobDefinition->getInputVariableValues(),
+        );
     }
 
     public function testVariablesAreReplacedFromConfigAndVault(): void
@@ -183,6 +195,13 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         self::assertSame(
             'print("config var: config val, vault var: vault val")',
             $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
+        );
+        self::assertSame(
+            [
+                'vault.var1' => 'vault val',
+                'var1' => 'config val',
+            ],
+            $jobDefinition->getInputVariableValues(),
         );
     }
 
@@ -231,6 +250,13 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         self::assertSame(
             ['print("shared code var: config val and vault val")'],
             $jobDefinition->getConfiguration()['parameters']['script'] ?? null,
+        );
+        self::assertSame(
+            [
+                'vault.var1' => 'vault val',
+                'var1' => 'config val',
+            ],
+            $jobDefinition->getInputVariableValues(),
         );
     }
 
@@ -282,6 +308,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'val2',
             $jobDefinition->getConfiguration()['parameters']['#password'] ?? null,
         );
+
+        $variables = $jobDefinition->getInputVariableValues();
+        self::assertIsArray($variables);
+        self::assertSame(['var1', 'var2'], array_keys($variables));
+        self::assertSame('val1', array_shift($variables));
+        self::assertStringStartsWith('KBC::BranchTypeSecureKV::', array_shift($variables));
     }
 
     private function createJob(array $jobData, ?string $branchType = null): Job
