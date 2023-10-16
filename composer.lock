@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc9b2468c6ac7ba72bdec80e7483a786",
+    "content-hash": "2f89e919856b10402038e86698284d30",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1497,16 +1497,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "4.1.1",
+            "version": "dev-erik-SOX-391",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "3306317aff9892b8303677531764ff5713ea69b2"
+                "reference": "281ed8adff28b390579884f6adb91f7c96fcd9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/3306317aff9892b8303677531764ff5713ea69b2",
-                "reference": "3306317aff9892b8303677531764ff5713ea69b2",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/281ed8adff28b390579884f6adb91f7c96fcd9bd",
+                "reference": "281ed8adff28b390579884f6adb91f7c96fcd9bd",
                 "shasum": ""
             },
             "require": {
@@ -1557,9 +1557,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.1.1"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/erik-SOX-391"
             },
-            "time": "2023-09-19T05:56:44+00:00"
+            "time": "2023-10-15T16:01:14+00:00"
         },
         {
             "name": "keboola/csv",
@@ -1612,11 +1612,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-erik-SOX-391",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "6718b6b57337e70c00aa730702f43928753c5598"
+                "reference": "1808cfcb8302b1a45094365db111f967ab99cea8"
             },
             "require": {
                 "ext-json": "*",
@@ -1706,7 +1706,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-08-21T08:49:48+00:00"
+            "time": "2023-10-16T14:56:05+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1829,16 +1829,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "18.4.0",
+            "version": "dev-erik-SOX-391",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "04d3f0dc811fcc55e7a9e3398cec77197c0e2437"
+                "reference": "a92f21f976c001b74711667a42095e1da2bee667"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/04d3f0dc811fcc55e7a9e3398cec77197c0e2437",
-                "reference": "04d3f0dc811fcc55e7a9e3398cec77197c0e2437",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a92f21f976c001b74711667a42095e1da2bee667",
+                "reference": "a92f21f976c001b74711667a42095e1da2bee667",
                 "shasum": ""
             },
             "require": {
@@ -1896,9 +1896,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/18.4.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-SOX-391"
             },
-            "time": "2023-09-20T11:02:27+00:00"
+            "time": "2023-10-10T15:22:51+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -11015,10 +11015,25 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/configuration-variables-resolver",
+            "version": "dev-erik-SOX-391",
+            "alias": "4.1.1",
+            "alias_normalized": "4.1.1.0"
+        },
+        {
+            "package": "keboola/job-queue-internal-api-php-client",
+            "version": "dev-erik-SOX-391",
+            "alias": "18.4.0",
+            "alias_normalized": "18.4.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/configuration-variables-resolver": 20,
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
