@@ -22,7 +22,7 @@
         "ext-pcntl": "*",
         "aws/aws-sdk-php": "3.258",
         "keboola/api-error-control": "^3.10",
-        "keboola/configuration-variables-resolver": "dev-erik-SOX-391 as 4.1.1",
+        "keboola/configuration-variables-resolver": "^5.0.0",
         "keboola/dockerbundle": "dev-erik-SOX-391",
         "keboola/input-mapping": "^18.3",
         "keboola/job-queue-internal-api-php-client": "^18.7.0",

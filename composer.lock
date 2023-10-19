@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b652e4cd3a2486d9ad9260dfdd33e4e",
+    "content-hash": "8320872364a6d82fdc4e2ff9558e7a8a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1497,16 +1497,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "dev-erik-SOX-391",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "281ed8adff28b390579884f6adb91f7c96fcd9bd"
+                "reference": "90221b97e12064b9345e08904b9af8a5ce3f7802"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/281ed8adff28b390579884f6adb91f7c96fcd9bd",
-                "reference": "281ed8adff28b390579884f6adb91f7c96fcd9bd",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/90221b97e12064b9345e08904b9af8a5ce3f7802",
+                "reference": "90221b97e12064b9345e08904b9af8a5ce3f7802",
                 "shasum": ""
             },
             "require": {
@@ -1557,9 +1557,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/erik-SOX-391"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/5.0.0"
             },
-            "time": "2023-10-15T16:01:14+00:00"
+            "time": "2023-10-18T08:56:55+00:00"
         },
         {
             "name": "keboola/csv",
@@ -11015,17 +11015,9 @@
             "time": "2021-07-28T10:34:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/configuration-variables-resolver",
-            "version": "dev-erik-SOX-391",
-            "alias": "4.1.1",
-            "alias_normalized": "4.1.1.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/configuration-variables-resolver": 20,
         "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
