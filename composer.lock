@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f89e919856b10402038e86698284d30",
+    "content-hash": "7b652e4cd3a2486d9ad9260dfdd33e4e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1829,16 +1829,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-erik-SOX-391",
+            "version": "18.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "a92f21f976c001b74711667a42095e1da2bee667"
+                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/a92f21f976c001b74711667a42095e1da2bee667",
-                "reference": "a92f21f976c001b74711667a42095e1da2bee667",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/db39a89c9e612bc008e8b7b66ee2cad646ac2618",
+                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618",
                 "shasum": ""
             },
             "require": {
@@ -1896,9 +1896,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/erik-SOX-391"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/18.7.0"
             },
-            "time": "2023-10-10T15:22:51+00:00"
+            "time": "2023-10-19T15:15:45+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -11021,19 +11021,12 @@
             "version": "dev-erik-SOX-391",
             "alias": "4.1.1",
             "alias_normalized": "4.1.1.0"
-        },
-        {
-            "package": "keboola/job-queue-internal-api-php-client",
-            "version": "dev-erik-SOX-391",
-            "alias": "18.4.0",
-            "alias_normalized": "18.4.0.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/configuration-variables-resolver": 20,
-        "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
