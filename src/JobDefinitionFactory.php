@@ -148,23 +148,36 @@ class JobDefinitionFactory
         assert(!empty($branchId));
 
         return array_map(
-            fn(JobDefinition $jobDefinition) => new JobDefinition(
-                $variableResolver->resolveVariables(
+            function (JobDefinition $jobDefinition) use (
+                $variableResolver,
+                $sharedCodeResolver,
+                $branchId,
+                $jobVariableValuesId,
+                $variableValuesData,
+            ): JobDefinition {
+                $resolveResults = $variableResolver->resolveVariables(
                     $sharedCodeResolver->resolveSharedCode(
                         $jobDefinition->getConfiguration(),
                     ),
                     $branchId,
                     $jobVariableValuesId,
                     $variableValuesData,
-                ),
-                $jobDefinition->getComponent(),
-                $jobDefinition->getConfigId(),
-                $jobDefinition->getConfigVersion(),
-                $jobDefinition->getState(),
-                $jobDefinition->getRowId(),
-                $jobDefinition->isDisabled(),
-                $jobDefinition->getBranchType(),
-            ),
+                );
+
+                $jobDefinition = new JobDefinition(
+                    $resolveResults->configuration,
+                    $jobDefinition->getComponent(),
+                    $jobDefinition->getConfigId(),
+                    $jobDefinition->getConfigVersion(),
+                    $jobDefinition->getState(),
+                    $jobDefinition->getRowId(),
+                    $jobDefinition->isDisabled(),
+                    $jobDefinition->getBranchType(),
+                    $resolveResults->replacedVariablesValues,
+                );
+
+                return $jobDefinition;
+            },
             $jobDefinitions,
         );
     }
@@ -197,6 +210,7 @@ class JobDefinitionFactory
                 $jobDefinition->getRowId(),
                 $jobDefinition->isDisabled(),
                 $jobDefinition->getBranchType(),
+                $jobDefinition->getInputVariableValues(),
             ),
             $jobDefinitions,
         );

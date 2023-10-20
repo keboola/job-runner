@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc9b2468c6ac7ba72bdec80e7483a786",
+    "content-hash": "027d3b5ab8bd56d3cc7eebb3b9e86ddd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1497,16 +1497,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "4.1.1",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "3306317aff9892b8303677531764ff5713ea69b2"
+                "reference": "90221b97e12064b9345e08904b9af8a5ce3f7802"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/3306317aff9892b8303677531764ff5713ea69b2",
-                "reference": "3306317aff9892b8303677531764ff5713ea69b2",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/90221b97e12064b9345e08904b9af8a5ce3f7802",
+                "reference": "90221b97e12064b9345e08904b9af8a5ce3f7802",
                 "shasum": ""
             },
             "require": {
@@ -1557,9 +1557,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/4.1.1"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/5.0.0"
             },
-            "time": "2023-09-19T05:56:44+00:00"
+            "time": "2023-10-18T08:56:55+00:00"
         },
         {
             "name": "keboola/csv",
@@ -1616,7 +1616,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "6718b6b57337e70c00aa730702f43928753c5598"
+                "reference": "e310a632c17dfae2e796fae29b74a96a235dc797"
             },
             "require": {
                 "ext-json": "*",
@@ -1706,7 +1706,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2023-08-21T08:49:48+00:00"
+            "time": "2023-10-19T16:23:23+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1829,16 +1829,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "18.4.0",
+            "version": "18.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "04d3f0dc811fcc55e7a9e3398cec77197c0e2437"
+                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/04d3f0dc811fcc55e7a9e3398cec77197c0e2437",
-                "reference": "04d3f0dc811fcc55e7a9e3398cec77197c0e2437",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/db39a89c9e612bc008e8b7b66ee2cad646ac2618",
+                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618",
                 "shasum": ""
             },
             "require": {
@@ -1896,9 +1896,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/18.4.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/18.7.0"
             },
-            "time": "2023-09-20T11:02:27+00:00"
+            "time": "2023-10-19T15:15:45+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",

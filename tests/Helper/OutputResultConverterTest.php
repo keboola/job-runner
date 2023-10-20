@@ -172,6 +172,9 @@ class OutputResultConverterTest extends TestCase
             new Result(12345),
             new Result(12346),
         ]);
+        $output1->setInputVariableValues([
+            'vault.foo' => 'vault bar',
+        ]);
 
         $inputTableResult2 = new InputResult();
         $inputTableResult2->addTable($this->getTableInfo()['fifth']);
@@ -195,6 +198,9 @@ class OutputResultConverterTest extends TestCase
             new Result(23467),
             new Result(23478),
             new Result(23479),
+        ]);
+        $output2->setInputVariableValues([
+            'foo' => 'bar',
         ]);
 
         $dataLoaderMock = self::createMock(DataLoader::class);
@@ -323,6 +329,16 @@ class OutputResultConverterTest extends TestCase
                         ['storageFileId' => '23479'],
                     ],
                 ],
+                'variables' => [
+                    [
+                        'name' => 'vault.foo',
+                        'value' => 'vault bar',
+                    ],
+                    [
+                        'name' => 'foo',
+                        'value' => 'bar',
+                    ],
+                ],
             ],
             $jobResult->jsonSerialize(),
         );
@@ -378,6 +394,47 @@ class OutputResultConverterTest extends TestCase
                     'uploaded' => [],
                     'downloaded' => [],
                 ],
+                'variables' => [],
+            ],
+            $jobResult->jsonSerialize(),
+        );
+    }
+
+    public function testEmptyVariables(): void
+    {
+        $output = new Output();
+        $output->setConfigVersion('123');
+        $output->setImages(['a' => 'b']);
+        $output->setOutput('some output');
+        $output->setInputVariableValues([]);
+
+        $output2 = new Output();
+        $output2->setConfigVersion('124');
+        $output2->setImages(['c' => 'd']);
+        $output2->setOutput('some output 2');
+        $output2->setInputVariableValues([]);
+
+        $outputs = [$output, $output2];
+        $jobResult = OutputResultConverter::convertOutputsToResult($outputs);
+        self::assertSame(
+            [
+                'message' => 'Component processing finished.',
+                'configVersion' => '123',
+                'images' => [
+                    ['a' => 'b'],
+                    ['c' => 'd'],
+                ],
+                'input' => [
+                    'tables' => [],
+                ],
+                'output' => [
+                    'tables' => [],
+                ],
+                'artifacts' => [
+                    'uploaded' => [],
+                    'downloaded' => [],
+                ],
+                'variables' => [],
             ],
             $jobResult->jsonSerialize(),
         );

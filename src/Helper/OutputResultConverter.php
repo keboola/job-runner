@@ -17,6 +17,8 @@ use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
 use Keboola\JobQueueInternalClient\Result\JobArtifacts;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
+use Keboola\JobQueueInternalClient\Result\Variable\Variable;
+use Keboola\JobQueueInternalClient\Result\Variable\VariableCollection;
 use Keboola\OutputMapping\Table\Result\TableMetrics as OutputTableMetrics;
 
 class OutputResultConverter
@@ -38,6 +40,7 @@ class OutputResultConverter
         $jobArtifacts = new JobArtifacts();
         $uploadedArtifacts = [];
         $downloadedArtifacts = [];
+        $variables = new VariableCollection();
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
@@ -57,6 +60,10 @@ class OutputResultConverter
 
             $downloadedArtifactsOutput = $output->getArtifactsDownloaded();
             array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
+
+            foreach ($output->getInputVariableValues() as $variableName => $variableValue) {
+                $variables->addVariable(new Variable((string) $variableName, $variableValue));
+            }
         }
         $jobResult
             ->setConfigVersion((string) $outputs[0]->getConfigVersion())
@@ -67,7 +74,9 @@ class OutputResultConverter
                 $jobArtifacts
                     ->setUploaded($uploadedArtifacts)
                     ->setDownloaded($downloadedArtifacts),
-            );
+            )
+            ->setVariables($variables)
+        ;
         return $jobResult;
     }
 
