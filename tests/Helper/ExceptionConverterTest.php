@@ -37,6 +37,10 @@ class ExceptionConverterTest extends TestCase
         self::assertNull($result->getConfigVersion());
         self::assertSame([], $result->getImages());
         self::assertTrue($logger->$method($expectedLog));
+
+        $variables = $result->getVariables();
+        self::assertNotNull($variables);
+        self::assertCount(0, $variables);
     }
 
     public function provideExceptions(): Generator
@@ -81,23 +85,47 @@ class ExceptionConverterTest extends TestCase
     public function testExceptionConversionOutputs(): void
     {
         $logger = new TestLogger();
-        $output = new Output();
-        $output->setImages(['a' => 'b']);
-        $output->setConfigVersion('123');
+        $output1 = new Output();
+        $output1->setImages(['a' => 'b']);
+        $output1->setConfigVersion('123');
+        $output1->setInputVariableValues(['foo' => 'bar']);
+
+        $output2 = new Output();
+        $output2->setImages(['c' => 'd']);
+        $output2->setInputVariableValues(['vault.foo' => 'vault bar']);
 
         $result = ExceptionConverter::convertExceptionToResult(
             $logger,
             new UserException('some error'),
             '123',
             [
-                $output,
+                $output1,
+                $output2,
             ],
         );
         self::assertEquals('some error', $result->getMessage());
         self::assertSame('123', $result->getConfigVersion());
         self::assertSame(
-            [['a' => 'b']],
+            [
+                ['a' => 'b'],
+                ['c' => 'd'],
+            ],
             $result->getImages(),
+        );
+        $variables = $result->getVariables();
+        self::assertNotNull($variables);
+        self::assertSame(
+            [
+                [
+                    'name'=> 'foo',
+                    'value'=> 'bar',
+                ],
+                [
+                    'name'=> 'vault.foo',
+                    'value'=> 'vault bar',
+                ],
+            ],
+            $variables->jsonSerialize(),
         );
     }
 }
