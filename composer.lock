@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "027d3b5ab8bd56d3cc7eebb3b9e86ddd",
+    "content-hash": "1602b939f0aee8c9f6d093fe53e458a9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -443,6 +443,56 @@
                 "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.30.0"
             },
             "time": "2023-09-07T19:13:44+00:00"
+        },
+        {
+            "name": "google/cloud-bigquery-analyticshub",
+            "version": "v0.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-cloud-php-bigquery-analyticshub.git",
+                "reference": "90609322f03c9d95b7ac56abd0a786255e10a4cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery-analyticshub/zipball/90609322f03c9d95b7ac56abd0a786255e10a4cd",
+                "reference": "90609322f03c9d95b7ac56abd0a786255e10a4cd",
+                "shasum": ""
+            },
+            "require": {
+                "google/gax": "^1.19.1",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "suggest": {
+                "ext-grpc": "Enables use of gRPC, a universal high-performance RPC framework created by Google.",
+                "ext-protobuf": "Provides a significant increase in throughput over the pure PHP protobuf implementation. See https://cloud.google.com/php/grpc for installation instructions."
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-bigquery-analyticshub",
+                    "path": "BigQueryAnalyticsHub",
+                    "entry": null,
+                    "target": "googleapis/google-cloud-php-bigquery-analyticshub.git"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\BigQuery\\AnalyticsHub\\": "src",
+                    "GPBMetadata\\Google\\Cloud\\Bigquery\\Analyticshub\\": "metadata"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Google Cloud BigQuery Analytics Hub Client for PHP",
+            "support": {
+                "source": "https://github.com/googleapis/google-cloud-php-bigquery-analyticshub/tree/v0.2.2"
+            },
+            "time": "2023-07-07T20:46:38+00:00"
         },
         {
             "name": "google/cloud-core",
@@ -2580,21 +2630,22 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.11.3",
+            "version": "v14.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "5b20f4693f952ed0ae1df356d2483442da0a1c71"
+                "reference": "6b7ffe92b82a4489311e34f1fd3f898f7b9ff780"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/5b20f4693f952ed0ae1df356d2483442da0a1c71",
-                "reference": "5b20f4693f952ed0ae1df356d2483442da0a1c71",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/6b7ffe92b82a4489311e34f1fd3f898f7b9ff780",
+                "reference": "6b7ffe92b82a4489311e34f1fd3f898f7b9ff780",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "~3.2",
                 "ext-json": "*",
+                "google/cloud-bigquery-analyticshub": "^0.2.2",
                 "google/cloud-storage": "^1.27",
                 "guzzlehttp/guzzle": "~7.0",
                 "keboola/csv": "^1",
@@ -2638,9 +2689,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.11.3"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.12.0"
             },
-            "time": "2023-08-17T06:49:40+00:00"
+            "time": "2023-10-31T19:35:01+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
