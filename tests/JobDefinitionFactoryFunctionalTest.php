@@ -40,6 +40,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     private readonly ClientWrapper $clientWrapper;
     private readonly Component $component;
     private readonly JobDefinitionFactory $factory;
+    private readonly VariablesApiClient $vaultVariablesMasterApiClient;
 
     protected function setUp(): void
     {
@@ -68,6 +69,11 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         $jobDefinitionFactory = static::getContainer()->get(JobDefinitionFactory::class);
         self::assertInstanceOf(JobDefinitionFactory::class, $jobDefinitionFactory);
         $this->factory = $jobDefinitionFactory;
+
+        $this->vaultVariablesMasterApiClient = new VariablesApiClient(
+            self::getRequiredEnv('VAULT_API_URL'),
+            self::getRequiredEnv('TEST_STORAGE_API_TOKEN_MASTER'),
+        );
     }
 
     public function testCreateWithConfigData(): void
@@ -413,16 +419,16 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'testId' => 'job-runner-variables-test',
         ];
 
-        $vaultVariablesClient = static::getContainer()->get(VariablesApiClient::class);
-        self::assertInstanceOf(VariablesApiClient::class, $vaultVariablesClient);
-        $existingVariables = $vaultVariablesClient->listVariables(new ListOptions(attributes: $attributes));
+        $existingVariables = $this->vaultVariablesMasterApiClient->listVariables(
+            new ListOptions(attributes: $attributes),
+        );
 
         foreach ($existingVariables as $variable) {
-            $vaultVariablesClient->deleteVariable($variable->hash);
+            $this->vaultVariablesMasterApiClient->deleteVariable($variable->hash);
         }
 
         foreach ($values as $key => $value) {
-            $vaultVariablesClient->createVariable($key, $value, attributes: $attributes);
+            $this->vaultVariablesMasterApiClient->createVariable($key, $value, attributes: $attributes);
         }
     }
 }
