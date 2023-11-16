@@ -27,7 +27,7 @@
         "keboola/input-mapping": "^18.4",
         "keboola/job-queue-internal-api-php-client": "^18.7.0",
         "keboola/object-encryptor": "^2.8",
-        "keboola/output-mapping": "^22.0",
+        "keboola/output-mapping": "^22.3",
         "keboola/storage-api-client": "^14.12",
         "keboola/storage-api-php-client-branch-wrapper": "^5.0",
         "symfony/console": "^6.2",
@@ -92,7 +92,10 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
+        "pre-autoload-dump": [
+            "Aws\\Script\\Composer\\Composer::removeUnusedServices",
+            "Keboola\\Slicer\\Slicer::installSlicer"
+        ],
         "phpunit": "phpunit --cache-result-file=/tmp/.phpunit.result.cache",
         "phpstan": "phpstan analyse --no-progress -c phpstan-${APP_ENV}.neon",
         "phpcs": "phpcs --extensions=php src tests",

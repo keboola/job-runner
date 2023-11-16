@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f599e2dc76f7790c2a61a1d4cc19f15",
+    "content-hash": "669e9d0554aff34f3ed00aee4671d223",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2119,16 +2119,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "22.2.0",
+            "version": "22.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "a620f3fce5e5f7934218a01569fe2392f125f2b9"
+                "reference": "dac7aea90a54a8bb9aa5d821fdc3ad1de933e04e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/a620f3fce5e5f7934218a01569fe2392f125f2b9",
-                "reference": "a620f3fce5e5f7934218a01569fe2392f125f2b9",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/dac7aea90a54a8bb9aa5d821fdc3ad1de933e04e",
+                "reference": "dac7aea90a54a8bb9aa5d821fdc3ad1de933e04e",
                 "shasum": ""
             },
             "require": {
@@ -2139,7 +2139,7 @@
                 "keboola/sanitizer": "^0.1",
                 "keboola/slicer": "*@dev",
                 "keboola/storage-api-client": "^14.11.2",
-                "keboola/storage-api-php-client-branch-wrapper": "^5.0",
+                "keboola/storage-api-php-client-branch-wrapper": "^5.1",
                 "microsoft/azure-storage-blob": "^1.5",
                 "monolog/monolog": "^1.25.5|^2.0",
                 "php": ">=8.1",
@@ -2183,9 +2183,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/22.2.0"
+                "source": "https://github.com/keboola/output-mapping/tree/22.3.0"
             },
-            "time": "2023-11-13T18:26:39+00:00"
+            "time": "2023-11-16T07:56:07+00:00"
         },
         {
             "name": "keboola/permission-checker",
