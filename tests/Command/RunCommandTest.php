@@ -17,6 +17,7 @@ use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
+use Keboola\OutputMapping\Writer\TableWriter;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
@@ -28,6 +29,7 @@ use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
+use Keboola\StorageApiBranch\StorageApiToken;
 use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
@@ -1156,6 +1158,175 @@ class RunCommandTest extends AbstractCommandTest
             'Failed to save result for job "123". State transition forbidden:',
         ));
         self::assertEquals(0, $ret);
+    }
+
+    public function executeSuccessWithUsageOfSlicerProvider(): Generator
+    {
+        yield 'storage output configured + empty manifest' => [
+            'configDataOuputStorage' => [
+                'tables' => [
+                    [
+                        'source' => 'destination.csv',
+                        'destination' => 'out.c-main.modified',
+                    ],
+                ],
+            ],
+            'manifestData' => [],
+        ];
+        yield 'manifest configured' => [
+            'configDataOuputStorage' => [],
+            'manifestData' => [
+                'destination' => 'out.c-main.modified',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider executeSuccessWithUsageOfSlicerProvider
+     */
+    public function testExecuteSuccessWithUsageOfSlicer(array $configDataOuputStorage, array $manifestData): void
+    {
+        ['newJobFactory' => $newJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
+
+        $tableId = $this->initTestDataTable();
+        try {
+            $this->storageClient->dropBucket('out.c-main', ['force' => true, 'async' => true]);
+        } catch (ClientException $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+        }
+
+        $configDataStorage = [
+            'input' => [
+                'tables' => [
+                    [
+                        'source' => $tableId,
+                        'destination' => 'source.csv',
+                    ],
+                ],
+            ],
+        ];
+
+        if ($configDataOuputStorage) {
+            $configDataStorage['output'] = $configDataOuputStorage;
+        }
+
+        $jobData = [
+            'componentId' => 'keboola.python-transformation',
+            '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
+            'mode' => 'run',
+            'backend' => [
+                'context' => '123_transformation',
+            ],
+            'configData' => [
+                'storage' => $configDataStorage,
+                'parameters' => [
+                    'plain' => 'not-secret',
+                    'script' => [
+                        'import csv',
+                        'import json',
+                        'manifest_path = "/data/out/tables/destination.csv.manifest"',
+                        'custom_fieldnames = ["c", "d"]',
+                        'json_data = ' . ($manifestData ? json_encode($manifestData) : '{}'),
+                        'with open(manifest_path, "w") as json_file:' .
+                        '   json.dump(json_data, json_file, indent=2)',
+                        'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
+                        'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
+                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
+                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
+                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=custom_fieldnames)',
+                        '   writer.writeheader()',
+                        '   for row in reader:',
+                        '      writer.writerow({"c": row["a"], "d": row["b"]})',
+                    ],
+                ],
+            ],
+        ];
+
+        $job = $newJobFactory->createNewJob($jobData);
+        $job = $client->createJob($job);
+        putenv('JOB_ID=' . $job->getId());
+
+        $storageApiTokenMock = $this->createMock(StorageApiToken::class);
+        $storageApiTokenMock->expects(self::atLeastOnce())
+            ->method('hasFeature')
+            ->willReturnCallback(function (string $feature): bool {
+                return $feature === TableWriter::OUTPUT_MAPPING_SLICE_FEATURE;
+            })
+        ;
+
+        $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
+        self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientFactory);
+        $baseOptions = $storageClientFactory->getClientOptionsReadOnly();
+
+        $storageClientFactoryMock = $this->getMockBuilder(StorageClientPlainFactory::class)
+            ->setConstructorArgs([$baseOptions])
+            ->getMock();
+        $storageClientFactoryMock
+            ->method('createClientWrapper')
+            ->willReturnCallback(
+                function (ClientOptions $clientOptions) use ($baseOptions, $storageApiTokenMock): ClientWrapper {
+                    $options = clone $baseOptions;
+                    $options->addValuesFrom($clientOptions);
+
+                    return new class($options, $storageApiTokenMock) extends ClientWrapper {
+                        public function __construct(
+                            ClientOptions $clientOptions,
+                            private readonly StorageApiToken $storageApiTokenMock,
+                        ) {
+                            parent::__construct($clientOptions);
+                        }
+
+                        public function getToken(): StorageApiToken
+                        {
+                            return $this->storageApiTokenMock;
+                        }
+                    };
+                },
+            )
+        ;
+
+        // reset whole kernel, so we can replace already fetched services in container
+        self::ensureKernelShutdown();
+
+        $kernel = static::bootKernel();
+        $container = static::getContainer();
+
+        $logger = $container->get('logger');
+        self::assertInstanceOf(Logger::class, $logger);
+        $testHandler = new TestHandler();
+        $logger->pushHandler($testHandler);
+
+        $container->set(StorageClientPlainFactory::class, $storageClientFactoryMock);
+
+        $application = new Application($kernel);
+
+        $command = $application->find('app:run');
+
+        $commandTester = new CommandTester($command);
+        $ret = $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
+        self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Slicing table "destination.csv".'));
+        self::assertTrue($testHandler->hasInfoThatContains('Table "destination.csv" sliced:'));
+        self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
+        self::assertEquals(0, $ret);
+
+        /** @var Job $finishedJob */
+        $finishedJob = $client->getJob($job->getId());
+        self::assertSame('success', $finishedJob->getStatus());
+        $result = $finishedJob->getResult();
+
+        self::assertArrayHasKey('message', $result);
+        self::assertSame('Component processing finished.', $result['message']);
+
+        $table = $this->storageClient->getTable('out.c-main.modified');
+        self::assertSame(1, $table['rowsCount']);
+        self::assertSame(['c', 'd'], $table['columns']);
     }
 
     private function initTestDataTable(): string
