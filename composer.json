@@ -27,7 +27,7 @@
         "keboola/input-mapping": "^18.5",
         "keboola/job-queue-internal-api-php-client": "^18.7.0",
         "keboola/object-encryptor": "^2.8",
-        "keboola/output-mapping": "^22.4",
+        "keboola/output-mapping": "^22.6",
         "keboola/storage-api-client": "^14.12",
         "keboola/storage-api-php-client-branch-wrapper": "^5.0",
         "symfony/console": "^6.2",
