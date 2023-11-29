@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08bcffdc886103dd10ea6ed958d362c2",
+    "content-hash": "115d0d9ba9241e84eee5a6255e977030",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2119,7 +2119,7 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "22.6.0",
+            "version": "22.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
@@ -2183,7 +2183,7 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/22.6.0"
+                "source": "https://github.com/keboola/output-mapping/tree/22.7.0"
             },
             "time": "2023-11-27T09:55:44+00:00"
         },
