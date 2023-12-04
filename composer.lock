@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "115d0d9ba9241e84eee5a6255e977030",
+    "content-hash": "939a44fcb0c0b1b7d2961d24dcc09216",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1879,16 +1879,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "18.7.0",
+            "version": "19.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618"
+                "reference": "6c031d1f492213643f27929a515dfaa25cc7d4ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/db39a89c9e612bc008e8b7b66ee2cad646ac2618",
-                "reference": "db39a89c9e612bc008e8b7b66ee2cad646ac2618",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/6c031d1f492213643f27929a515dfaa25cc7d4ab",
+                "reference": "6c031d1f492213643f27929a515dfaa25cc7d4ab",
                 "shasum": ""
             },
             "require": {
@@ -1898,7 +1898,7 @@
                 "keboola/kbc-manage-api-php-client": "^5.2|^6.0|^7.0",
                 "keboola/object-encryptor": "^2.8",
                 "keboola/permission-checker": "^2.0",
-                "keboola/storage-api-client": "^14.10",
+                "keboola/storage-api-client": "^14.12",
                 "keboola/storage-api-php-client-branch-wrapper": "^5.0",
                 "monolog/monolog": "^2.6",
                 "php": "^8.2",
@@ -1946,9 +1946,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/18.7.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/19.0.1"
             },
-            "time": "2023-10-19T15:15:45+00:00"
+            "time": "2023-12-04T07:52:21+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2052,16 +2052,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "cf0d4448f79fb1f10c92db177b90bee6b21b6e0c"
+                "reference": "c23314205ed38c0aaa0f0f516b214d204ca8137b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/cf0d4448f79fb1f10c92db177b90bee6b21b6e0c",
-                "reference": "cf0d4448f79fb1f10c92db177b90bee6b21b6e0c",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/c23314205ed38c0aaa0f0f516b214d204ca8137b",
+                "reference": "c23314205ed38c0aaa0f0f516b214d204ca8137b",
                 "shasum": ""
             },
             "require": {
@@ -2113,9 +2113,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/2.8.0"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.8.1"
             },
-            "time": "2023-08-31T08:39:45+00:00"
+            "time": "2023-11-28T08:00:33+00:00"
         },
         {
             "name": "keboola/output-mapping",
@@ -11148,5 +11148,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
