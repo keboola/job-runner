@@ -1167,7 +1167,7 @@ class RunCommandTest extends AbstractCommandTest
                 'tables' => [
                     [
                         'source' => 'destination.csv',
-                        'destination' => 'out.c-main.modified',
+                        'destination' => 'out.c-main.sliced',
                     ],
                 ],
             ],
@@ -1176,7 +1176,7 @@ class RunCommandTest extends AbstractCommandTest
         yield 'manifest configured' => [
             'configDataOuputStorage' => [],
             'manifestData' => [
-                'destination' => 'out.c-main.modified',
+                'destination' => 'out.c-main.sliced',
             ],
         ];
     }
@@ -1197,17 +1197,7 @@ class RunCommandTest extends AbstractCommandTest
             }
         }
 
-        $configDataStorage = [
-            'input' => [
-                'tables' => [
-                    [
-                        'source' => $tableId,
-                        'destination' => 'source.csv',
-                    ],
-                ],
-            ],
-        ];
-
+        $configDataStorage = [];
         if ($configDataOuputStorage) {
             $configDataStorage['output'] = $configDataOuputStorage;
         }
@@ -1225,20 +1215,23 @@ class RunCommandTest extends AbstractCommandTest
                     'plain' => 'not-secret',
                     'script' => [
                         'import csv',
+                        'import random',
+                        'import uuid',
                         'import json',
                         'manifest_path = "/data/out/tables/destination.csv.manifest"',
-                        'custom_fieldnames = ["c", "d"]',
+                        'table_path = "/data/out/tables/destination.csv"',
+                        'output_size = 55 * 1024 * 1024',
                         'json_data = ' . ($manifestData ? json_encode($manifestData) : '{}'),
                         'with open(manifest_path, "w") as json_file:' .
-                        '   json.dump(json_data, json_file, indent=2)',
-                        'with open("/data/in/tables/source.csv", mode="rt", encoding="utf-8") as in_file, ' .
-                        'open("/data/out/tables/destination.csv", mode="wt", encoding="utf-8") as out_file:',
-                        '   lazy_lines = (line.replace("\0", "") for line in in_file)',
-                        '   reader = csv.DictReader(lazy_lines, dialect="kbc")',
-                        '   writer = csv.DictWriter(out_file, dialect="kbc", fieldnames=custom_fieldnames)',
-                        '   writer.writeheader()',
-                        '   for row in reader:',
-                        '      writer.writerow({"c": row["a"], "d": row["b"]})',
+                        '    json.dump(json_data, json_file, indent=2)',
+                        'with open(table_path, "w") as table_file:',
+                        '    size = 0',
+                        '    table_file.write("col1,col2,col3,col4\n")',
+                        '    while size < output_size:',
+                        '        txt = "%s,%.6f,%.6f,%i\n" % (uuid.uuid4(), random.random()*50,'
+                            . ' random.random()*50, random.randrange(1000))',
+                        '        size += len(txt)',
+                        '        table_file.write(str(txt))',
                     ],
                 ],
             ],
@@ -1324,9 +1317,8 @@ class RunCommandTest extends AbstractCommandTest
         self::assertArrayHasKey('message', $result);
         self::assertSame('Component processing finished.', $result['message']);
 
-        $table = $this->storageClient->getTable('out.c-main.modified');
-        self::assertSame(1, $table['rowsCount']);
-        self::assertSame(['c', 'd'], $table['columns']);
+        $table = $this->storageClient->getTable('out.c-main.sliced');
+        self::assertSame(['col1', 'col2', 'col3', 'col4'], $table['columns']);
     }
 
     private function initTestDataTable(): string
