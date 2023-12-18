@@ -1204,7 +1204,6 @@ class RunCommandTest extends AbstractCommandTest
 
         $jobData = [
             'componentId' => 'keboola.python-transformation',
-            'tag' => 'latest',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
             'backend' => [
