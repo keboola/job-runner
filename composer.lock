@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cc8a4e35700d9b018004532e90b9e7e",
+    "content-hash": "bf6f271becc45f1983607638d61d183c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2577,16 +2577,16 @@
         },
         {
             "name": "keboola/slicer",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/slicer.git",
-                "reference": "f47337ce90a07b6e2b36e115a233e18ff26f6506"
+                "reference": "2d3498aa23297f50e78d75cb831e34a43c445f0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/slicer/zipball/f47337ce90a07b6e2b36e115a233e18ff26f6506",
-                "reference": "f47337ce90a07b6e2b36e115a233e18ff26f6506",
+                "url": "https://api.github.com/repos/keboola/slicer/zipball/2d3498aa23297f50e78d75cb831e34a43c445f0e",
+                "reference": "2d3498aa23297f50e78d75cb831e34a43c445f0e",
                 "shasum": ""
             },
             "require": {
@@ -2627,9 +2627,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/slicer/issues",
-                "source": "https://github.com/keboola/slicer/tree/1.0.2"
+                "source": "https://github.com/keboola/slicer/tree/1.0.3"
             },
-            "time": "2023-12-14T13:52:25+00:00"
+            "time": "2024-01-04T14:37:54+00:00"
         },
         {
             "name": "keboola/staging-provider",
@@ -11148,5 +11148,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
