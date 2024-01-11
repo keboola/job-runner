@@ -1,26 +1,31 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Used function DDTrace\\\\root_span not found\\.$#"
-			path: src/Command/RunCommand.php
-			reportUnmatched: false
-
-		-
 			message: "#^Parameter \\#1 \\$tableInfo of static method App\\\\Helper\\\\OutputResultConverter\\:\\:convertTableInfoToTableResult\\(\\) expects Keboola\\\\InputMapping\\\\Table\\\\Result\\\\TableInfo, mixed given\\.$#"
+			count: 1
 			path: src/Helper/OutputResultConverter.php
 
 		-
 			message: "#^Offset 'component' does not exist on array\\{message\\: non\\-falsy\\-string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
+			count: 1
 			path: src/StorageApiHandler.php
 
 		-
 			message: "#^Offset 'component' on array\\{message\\: non\\-falsy\\-string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\} in empty\\(\\) does not exist\\.$#"
+			count: 1
 			path: src/StorageApiHandler.php
 
 		-
 			message: "#^Offset 'component' does not exist on array\\{message\\: 'Output mapping done\\.', context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
+			count: 3
 			path: tests/Command/RunCommandTest.php
 
 		-
 			message: "#^Offset 'runId' does not exist on array\\{message\\: 'Output mapping done\\.', context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
+			count: 3
 			path: tests/Command/RunCommandTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$record of method App\\\\StorageApiHandler\\:\\:handle\\(\\) expects array\\{message\\: string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}, array given\\.$#"
+			count: 2
+			path: tests/StorageApiHandlerTest.php
