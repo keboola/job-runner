@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use Keboola\DockerBundle\Docker\Helper\Logger as LoggerHelper;
 use Keboola\DockerBundle\Monolog\Handler\StorageApiHandlerInterface;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Event;
@@ -66,7 +67,7 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
         } else {
             $event->setComponent($this->appName);
         }
-        $event->setMessage(sanitizeUtf8($record['message']));
+        $event->setMessage(sanitizeUtf8(LoggerHelper::truncateMessage($record['message'])));
         $event->setRunId($this->storageApiClient->getRunId());
 
         if ($this->verbosity[$record['level']] === self::VERBOSITY_VERBOSE) {

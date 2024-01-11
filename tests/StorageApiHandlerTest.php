@@ -258,4 +258,33 @@ class StorageApiHandlerTest extends TestCase
 
         self::assertFalse($handler->handle($record));
     }
+
+    public function testHandleTruncatesLargeMessages(): void
+    {
+        $storageApiClientMock = $this->createMock(Client::class);
+        $storageApiClientMock
+            ->expects(self::once())
+            ->method('createEvent')
+            ->with(self::callback(
+                function (Event $event): bool {
+                    self::assertSame(3999, mb_strlen($event->getMessage()));
+                    self::assertStringContainsString(' ... ', $event->getMessage());
+                    return true;
+                },
+            ))
+        ;
+
+        $handler = new StorageApiHandler(
+            'StorageApiHandlerTest',
+            $storageApiClientMock,
+        );
+
+        $text = 'Lorem ipsum dolor sit amet, consectetur adipisici elit.';
+        $longText = str_repeat($text, 100); // 5500 chars
+
+        self::assertFalse($handler->handle([
+            'message' => $longText,
+            'level' => Logger::INFO,
+        ]));
+    }
 }
