@@ -14,17 +14,14 @@ use function Keboola\Utils\sanitizeUtf8;
 
 class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInterface
 {
-    protected string $appName;
-    protected Client $storageApiClient;
-
     /** @var array<string> */
     private array $verbosity;
 
-    public function __construct(string $appName, Client $client)
-    {
+    public function __construct(
+        private readonly string $appName,
+        private readonly Client $storageApiClient,
+    ) {
         parent::__construct();
-        $this->storageApiClient = $client;
-        $this->appName = $appName;
         $this->verbosity[Logger::DEBUG] = self::VERBOSITY_NONE;
         $this->verbosity[Logger::INFO] = self::VERBOSITY_NORMAL;
         $this->verbosity[Logger::NOTICE] = self::VERBOSITY_NORMAL;
@@ -83,12 +80,10 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
         }
 
         switch ($record['level']) {
-            case Logger::ERROR:
-                $type = Event::TYPE_ERROR;
-                break;
-            case Logger::CRITICAL:
-            case Logger::EMERGENCY:
             case Logger::ALERT:
+            case Logger::EMERGENCY:
+            case Logger::CRITICAL:
+            case Logger::ERROR:
                 $type = Event::TYPE_ERROR;
                 break;
             case Logger::WARNING:
