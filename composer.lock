@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf6f271becc45f1983607638d61d183c",
+    "content-hash": "8c5c9f910cdc792c2d4e4f561cacb21e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2119,16 +2119,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "22.7.3",
+            "version": "22.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "dac21b2c30dc888472a581f2825e173886d0aaca"
+                "reference": "b20eeadbb394cc16b6d3414a8e1660f8b06f3685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/dac21b2c30dc888472a581f2825e173886d0aaca",
-                "reference": "dac21b2c30dc888472a581f2825e173886d0aaca",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b20eeadbb394cc16b6d3414a8e1660f8b06f3685",
+                "reference": "b20eeadbb394cc16b6d3414a8e1660f8b06f3685",
                 "shasum": ""
             },
             "require": {
@@ -2183,9 +2183,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/22.7.3"
+                "source": "https://github.com/keboola/output-mapping/tree/22.7.5"
             },
-            "time": "2024-01-04T14:37:54+00:00"
+            "time": "2024-01-11T08:39:28+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2577,16 +2577,16 @@
         },
         {
             "name": "keboola/slicer",
-            "version": "1.0.3",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/slicer.git",
-                "reference": "2d3498aa23297f50e78d75cb831e34a43c445f0e"
+                "reference": "e7847f024bd465c37a537440829e3fa27876eb6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/slicer/zipball/2d3498aa23297f50e78d75cb831e34a43c445f0e",
-                "reference": "2d3498aa23297f50e78d75cb831e34a43c445f0e",
+                "url": "https://api.github.com/repos/keboola/slicer/zipball/e7847f024bd465c37a537440829e3fa27876eb6c",
+                "reference": "e7847f024bd465c37a537440829e3fa27876eb6c",
                 "shasum": ""
             },
             "require": {
@@ -2627,9 +2627,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/slicer/issues",
-                "source": "https://github.com/keboola/slicer/tree/1.0.3"
+                "source": "https://github.com/keboola/slicer/tree/2.0.1"
             },
-            "time": "2024-01-04T14:37:54+00:00"
+            "time": "2024-01-11T08:39:28+00:00"
         },
         {
             "name": "keboola/staging-provider",
