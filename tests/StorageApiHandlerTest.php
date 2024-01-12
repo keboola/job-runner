@@ -214,7 +214,7 @@ class StorageApiHandlerTest extends TestCase
     /**
      * @dataProvider handleDataProvider
      */
-    public function testHandleErik(
+    public function testHandle(
         array $record,
         string $expectedMessage,
         string $expectedComponent,
