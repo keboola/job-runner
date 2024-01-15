@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use Keboola\DockerBundle\Docker\Helper\Logger as LoggerHelper;
 use Keboola\DockerBundle\Monolog\Handler\StorageApiHandlerInterface;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Event;
@@ -13,17 +14,14 @@ use function Keboola\Utils\sanitizeUtf8;
 
 class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInterface
 {
-    protected string $appName;
-    protected Client $storageApiClient;
-
     /** @var array<string> */
     private array $verbosity;
 
-    public function __construct(string $appName, Client $client)
-    {
+    public function __construct(
+        private readonly string $appName,
+        private readonly Client $storageApiClient,
+    ) {
         parent::__construct();
-        $this->storageApiClient = $client;
-        $this->appName = $appName;
         $this->verbosity[Logger::DEBUG] = self::VERBOSITY_NONE;
         $this->verbosity[Logger::INFO] = self::VERBOSITY_NORMAL;
         $this->verbosity[Logger::NOTICE] = self::VERBOSITY_NORMAL;
@@ -66,7 +64,7 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
         } else {
             $event->setComponent($this->appName);
         }
-        $event->setMessage(sanitizeUtf8($record['message']));
+        $event->setMessage(sanitizeUtf8(LoggerHelper::truncateMessage($record['message'])));
         $event->setRunId($this->storageApiClient->getRunId());
 
         if ($this->verbosity[$record['level']] === self::VERBOSITY_VERBOSE) {
@@ -82,12 +80,10 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
         }
 
         switch ($record['level']) {
-            case Logger::ERROR:
-                $type = Event::TYPE_ERROR;
-                break;
-            case Logger::CRITICAL:
-            case Logger::EMERGENCY:
             case Logger::ALERT:
+            case Logger::EMERGENCY:
+            case Logger::CRITICAL:
+            case Logger::ERROR:
                 $type = Event::TYPE_ERROR;
                 break;
             case Logger::WARNING:
