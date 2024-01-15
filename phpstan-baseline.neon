@@ -4,6 +4,7 @@ parameters:
 			message: "#^Used function DDTrace\\\\root_span not found\\.$#"
 			path: src/Command/RunCommand.php
 			reportUnmatched: false
+
 		-
 			message: "#^Parameter \\#1 \\$tableInfo of static method App\\\\Helper\\\\OutputResultConverter\\:\\:convertTableInfoToTableResult\\(\\) expects Keboola\\\\InputMapping\\\\Table\\\\Result\\\\TableInfo, mixed given\\.$#"
 			count: 1
