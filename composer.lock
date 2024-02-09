@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c5c9f910cdc792c2d4e4f561cacb21e",
+    "content-hash": "b3fb7896579906a95e40a4cdd1bebc1d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2692,16 +2692,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.13.0",
+            "version": "v14.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "57fa5591c1d2496b9dbe44f4c3fa207e7e692321"
+                "reference": "6812bfab7b60defee70fc88270fdb6a050121220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/57fa5591c1d2496b9dbe44f4c3fa207e7e692321",
-                "reference": "57fa5591c1d2496b9dbe44f4c3fa207e7e692321",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/6812bfab7b60defee70fc88270fdb6a050121220",
+                "reference": "6812bfab7b60defee70fc88270fdb6a050121220",
                 "shasum": ""
             },
             "require": {
@@ -2716,8 +2716,7 @@
                 "php": ">=7.4",
                 "psr/log": "^1.1|^2.0|^3.0",
                 "symfony/filesystem": "^6.0||^5.0||^4.0",
-                "symfony/process": "^6.0||^5.0||^4.0",
-                "tomasfejfar/phpstan-phpunit": "~0.0.1"
+                "symfony/process": "^6.0||^5.0||^4.0"
             },
             "require-dev": {
                 "brianium/paratest": "2.*|6.*",
@@ -2733,7 +2732,8 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^7.0|^8.0|^9.0",
                 "rector/rector": "^0.12.23",
-                "squizlabs/php_codesniffer": "^3"
+                "squizlabs/php_codesniffer": "^3",
+                "tomasfejfar/phpstan-phpunit": "~0.0.1"
             },
             "type": "library",
             "autoload": {
@@ -2752,9 +2752,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.13.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.15.0"
             },
-            "time": "2024-01-24T08:35:40+00:00"
+            "time": "2024-02-02T14:11:19+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -3237,68 +3237,6 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
-        },
-        {
-            "name": "phpstan/phpstan",
-            "version": "1.10.57",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1627b1d03446904aaa77593f370c5201d2ecc34e",
-                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2|^8.0"
-            },
-            "conflict": {
-                "phpstan/phpstan-shim": "*"
-            },
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHPStan - PHP Static Analysis Tool",
-            "keywords": [
-                "dev",
-                "static analysis"
-            ],
-            "support": {
-                "docs": "https://phpstan.org/user-guide/getting-started",
-                "forum": "https://github.com/phpstan/phpstan/discussions",
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "security": "https://github.com/phpstan/phpstan/security/policy",
-                "source": "https://github.com/phpstan/phpstan-src"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-01-24T11:51:34+00:00"
         },
         {
             "name": "psr/cache",
@@ -7489,49 +7427,6 @@
             "time": "2024-01-23T14:51:35+00:00"
         },
         {
-            "name": "tomasfejfar/phpstan-phpunit",
-            "version": "0.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tomasfejfar/phpstan-phpunit.git",
-                "reference": "fc2e865ee871bf1842a0aa4ef50806e62a29b8ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tomasfejfar/phpstan-phpunit/zipball/fc2e865ee871bf1842a0aa4ef50806e62a29b8ae",
-                "reference": "fc2e865ee871bf1842a0aa4ef50806e62a29b8ae",
-                "shasum": ""
-            },
-            "require": {
-                "phpstan/phpstan": "^1.10"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10.4"
-            },
-            "type": "phpstan-plugin",
-            "autoload": {
-                "psr-4": {
-                    "Tomasfejfar\\PhpstanPhpunit\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tomáš Fejfar",
-                    "email": "tomas.fejfar@gmail.com"
-                }
-            ],
-            "description": "Collection of phpstan rules for phpunit",
-            "support": {
-                "issues": "https://github.com/tomasfejfar/phpstan-phpunit/issues",
-                "source": "https://github.com/tomasfejfar/phpstan-phpunit/tree/0.0.5"
-            },
-            "time": "2024-01-10T10:28:28+00:00"
-        },
-        {
             "name": "vkartaviy/retry",
             "version": "v0.2.2",
             "source": {
@@ -8903,6 +8798,68 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/1.25.0"
             },
             "time": "2024-01-04T17:06:16+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.10.57",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-01-24T11:51:34+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
