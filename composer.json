@@ -23,7 +23,7 @@
         "aws/aws-sdk-php": "3.258",
         "keboola/api-error-control": "^3.10",
         "keboola/configuration-variables-resolver": "^5.0.0",
-        "keboola/dockerbundle": "dev-odin-library-3",
+        "keboola/dockerbundle": "dev-odin-PST-1229",
         "keboola/input-mapping": "^18.5",
         "keboola/job-queue-internal-api-php-client": "^19.0.1",
         "keboola/object-encryptor": "^2.8",
