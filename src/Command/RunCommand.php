@@ -31,6 +31,7 @@ use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -46,6 +47,8 @@ use function DDTrace\root_span;
 #[AsCommand(name: 'app:run')]
 class RunCommand extends Command
 {
+    private Runner $runner;
+
     public function __construct(
         private readonly Logger $logger,
         private readonly LogProcessor $logProcessor,
@@ -69,19 +72,43 @@ class RunCommand extends Command
         $this->logger->notice(sprintf('Received signal "%s"', $signalNumber));
         $this->logProcessor->setLogInfo(new LogInfo($this->jobId, '', ''));
         try {
-            $jobStatus = $this->queueClient->getJob($this->jobId)->getStatus();
-            if ($jobStatus !== JobInterface::STATUS_TERMINATING) {
-                $this->logger->info(
-                    sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus),
-                );
-                return;
-            }
+            $job = $this->queueClient->getJob($this->jobId);
         } catch (ClientException $e) {
             $this->logger->error(sprintf('Failed to get job "%s" for cleanup: ' . $e->getMessage(), $this->jobId));
             // we don't want the handler to crash
             return;
         }
+
+        $jobStatus = $job->getStatus();
+        if ($jobStatus !== JobInterface::STATUS_TERMINATING) {
+            $this->logger->info(
+                sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus),
+            );
+            return;
+        }
+
+        // set up logging to storage API
+        $this->logProcessor->setLogInfo(new LogInfo(
+            $job->getId(),
+            $job->getComponentId(),
+            $job->getProjectId(),
+        ));
+
         $this->logger->info(sprintf('Terminating containers for job "%s".', $this->jobId));
+        $containerIds = $this->getContainerIds();
+
+        foreach ($containerIds as $containerId) {
+            $this->terminateContainer($containerId);
+        }
+
+        $this->logger->info(sprintf('Clearing up workspaces for job "%s".', $this->jobId));
+        $this->runner->cleanup();
+        $this->logger->info(sprintf('Finished cleanup for job "%s".', $this->jobId));
+        exit;
+    }
+
+    private function getContainerIds(): array
+    {
         $process = Process::fromShellCommandline(
             sprintf(
                 'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
@@ -101,36 +128,59 @@ class RunCommand extends Command
                 'stdout' => $process->getOutput(),
                 'stderr' => $process->getErrorOutput(),
             ]);
+            return [];
+        }
+        return explode("\n", $process->getOutput());
+    }
+
+    private function terminateContainer(string $containerId): void
+    {
+        if (empty(trim($containerId))) {
             return;
         }
-        $containerIds = explode("\n", $process->getOutput());
-        foreach ($containerIds as $containerId) {
-            if (empty(trim($containerId))) {
-                continue;
-            }
-            $this->logger->info(sprintf('Terminating container "%s".', $containerId));
-            $process = new Process(['sudo', 'docker', 'stop', $containerId]);
-            try {
-                $process->mustRun();
-            } catch (ProcessFailedException $e) {
-                $this->logger->error(
-                    sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage()),
-                    [
-                        'error' => $e->getMessage(),
-                        'stdout' => $process->getOutput(),
-                        'stderr' => $process->getErrorOutput(),
-                    ],
-                );
-            }
+        $this->logger->info(sprintf('Terminating container "%s".', $containerId));
+        $process = new Process(['sudo', 'docker', 'stop', $containerId]);
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            $this->logger->error(
+                sprintf('Failed to terminate container "%s": %s.', $containerId, $e->getMessage()),
+                [
+                    'error' => $e->getMessage(),
+                    'stdout' => $process->getOutput(),
+                    'stderr' => $process->getErrorOutput(),
+                ],
+            );
         }
-        $this->logger->info(sprintf('Finished container cleanup for job "%s".', $this->jobId));
-        exit;
     }
 
     protected function configure(): void
     {
         $this->setDescription('Run job')
             ->setHelp('Run job identified by JOB_ID environment variable.');
+    }
+
+    private function getLoggerService(ClientOptions $options): LoggersService
+    {
+        $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
+            ->getBranchClient();
+        $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
+        $this->logger->pushHandler($handler);
+
+        /* intentionally leaving this commented out, it's useful for debugging
+        $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
+        $this->logger->pushHandler($h2);
+        */
+
+        $containerLogger = new ContainerLogger('container-logger');
+        return new LoggersService($this->logger, $containerLogger, clone $handler);
+    }
+
+    private function getClientWrapper(ClientOptions $options): ClientWrapper
+    {
+        $options = clone $options;
+        $options->setLogger($this->logger);
+        return $this->storageClientFactory->createClientWrapper($options);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -182,33 +232,14 @@ class RunCommand extends Command
                 $job->getProjectId(),
             ));
             $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
-
-            $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
-                ->getBranchClient();
-            $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
-            $this->logger->pushHandler($handler);
-
-            /* intentionally leaving this commented out, it's useful for debugging
-            $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
-            $this->logger->pushHandler($h2);
-            */
-
-            $containerLogger = new ContainerLogger('container-logger');
-            $options = clone $options;
-            $options->setLogger($this->logger);
-            $clientWrapper = $this->storageClientFactory->createClientWrapper($options);
-            $loggerService = new LoggersService($this->logger, $containerLogger, clone $handler);
-
-            /*
-            $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);
-            $containerLogger->pushHandler($h2);
-            */
+            $loggerService = $this->getLoggerService($options);
+            $clientWrapper = $this->getClientWrapper($options);
 
             // set up runner
             $component = $this->getComponentClass($clientWrapper, $job);
             $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
 
-            $runner = new Runner(
+            $this->runner = new Runner(
                 $this->objectEncryptor,
                 $clientWrapper,
                 $loggerService,
@@ -221,7 +252,7 @@ class RunCommand extends Command
             $usageFile->setJobId($job->getId());
 
             // run job
-            $runner->run(
+            $this->runner->run(
                 $jobDefinitions,
                 'run',
                 $job->isInRunMode() ? JobInterface::MODE_RUN : JobInterface::MODE_DEBUG,

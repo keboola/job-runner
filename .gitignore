@@ -14,3 +14,4 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 /build/logs
+/bin/slicer
