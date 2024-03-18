@@ -85,6 +85,9 @@ services:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
             $internalQueueToken: ~
             $storageApiToken: '%env(STORAGE_API_TOKEN)%'
+            $options:
+                userAgent: 'QueueRunner'
+                backoffMaxTries: 20
 
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
