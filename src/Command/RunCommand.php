@@ -29,7 +29,6 @@ use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
-use Keboola\Sandboxes\Api\Client;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
@@ -48,6 +47,8 @@ use function DDTrace\root_span;
 #[AsCommand(name: 'app:run')]
 class RunCommand extends Command
 {
+    private Runner $runner;
+
     public function __construct(
         private readonly Logger $logger,
         private readonly LogProcessor $logProcessor,
@@ -88,28 +89,10 @@ class RunCommand extends Command
 
         // set up logging to storage API
         $this->logProcessor->setLogInfo(new LogInfo(
-            $job->getId(),
+             $job->getId(),
             $job->getComponentId(),
             $job->getProjectId(),
         ));
-        $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
-        $loggerService = $this->getLoggerService($options);
-        $clientWrapper = $this->getClientWrapper($options);
-
-        // set up runner
-        $component = $this->getComponentClass($clientWrapper, $job);
-        $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
-
-        $runner = new Runner(
-            $this->objectEncryptor,
-            $clientWrapper,
-            $loggerService,
-            new OutputFilter(60000),
-            $this->instanceLimits,
-        );
-        foreach ($jobDefinitions as $jobDefinition) {
-            $runner->cleanup($jobDefinition);
-        }
 
         $this->logger->info(sprintf('Terminating containers for job "%s".', $this->jobId));
         $containerIds = $this->getContainerIds();
@@ -117,7 +100,10 @@ class RunCommand extends Command
         foreach ($containerIds as $containerId) {
             $this->terminateContainer($containerId);
         }
-        $this->logger->info(sprintf('Finished container cleanup for job "%s".', $this->jobId));
+
+        $this->logger->info(sprintf('Clearing up workspaces for job "%s".', $this->jobId));
+        $this->runner->cleanup();
+        $this->logger->info(sprintf('Finished cleanup for job "%s".', $this->jobId));
         exit;
     }
 
@@ -253,7 +239,7 @@ class RunCommand extends Command
             $component = $this->getComponentClass($clientWrapper, $job);
             $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
 
-            $runner = new Runner(
+            $this->runner = new Runner(
                 $this->objectEncryptor,
                 $clientWrapper,
                 $loggerService,
@@ -266,7 +252,7 @@ class RunCommand extends Command
             $usageFile->setJobId($job->getId());
 
             // run job
-            $runner->run(
+            $this->runner->run(
                 $jobDefinitions,
                 'run',
                 $job->isInRunMode() ? JobInterface::MODE_RUN : JobInterface::MODE_DEBUG,
