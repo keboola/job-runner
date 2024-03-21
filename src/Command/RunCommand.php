@@ -89,7 +89,7 @@ class RunCommand extends Command
 
         // set up logging to storage API
         $this->logProcessor->setLogInfo(new LogInfo(
-             $job->getId(),
+            $job->getId(),
             $job->getComponentId(),
             $job->getProjectId(),
         ));
@@ -111,9 +111,9 @@ class RunCommand extends Command
     {
         $process = Process::fromShellCommandline(
             sprintf(
-                'sudo docker ps --format \'{{.ID}} {{.Label "com.keboola.docker-runner.workspaceId" }}\' --filter "label=com.keboola.docker-runner.jobId=%s"',
+                'sudo docker ps --format "{{.ID}}" --filter "label=com.keboola.docker-runner.jobId=%s"',
                 escapeshellcmd($this->jobId),
-            // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
+                // intentionally using escapeshellcmd() instead of escapeshellarg(), value is already quoted
             ),
         );
         try {
