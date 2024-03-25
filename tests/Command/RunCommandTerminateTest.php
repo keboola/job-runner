@@ -173,7 +173,11 @@ class RunCommandTerminateTest extends AbstractCommandTest
         );
         self::assertStringContainsString('Terminating container', $output);
         self::assertStringContainsString(
-            sprintf('Finished container cleanup for job "%s"', $job->getId()),
+            sprintf('Clearing up workspaces for job "%s"', $job->getId()),
+            $output,
+        );
+        self::assertStringContainsString(
+            sprintf('Finished cleanup for job "%s"', $job->getId()),
             $output,
         );
         self::assertEquals(0, $mainProcess->getExitCode());
