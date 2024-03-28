@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3fb7896579906a95e40a4cdd1bebc1d",
+    "content-hash": "2c79d788519c9e618d33baa89d222399",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1664,7 +1664,7 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-odin-library-3",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
@@ -1702,6 +1702,7 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^5.4|^6.2"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "aws/aws-sdk-php": [
@@ -2690,16 +2691,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v14.16.0",
+            "version": "v14.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "11e9e160f619787660e5bbf834a141bd415d9028"
+                "reference": "a726272689e62ce2ebdb9c9f212ce77086674f0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/11e9e160f619787660e5bbf834a141bd415d9028",
-                "reference": "11e9e160f619787660e5bbf834a141bd415d9028",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/a726272689e62ce2ebdb9c9f212ce77086674f0e",
+                "reference": "a726272689e62ce2ebdb9c9f212ce77086674f0e",
                 "shasum": ""
             },
             "require": {
@@ -2722,7 +2723,7 @@
                 "ext-pdo_pgsql": "*",
                 "keboola/coding-standard": "^15.0",
                 "keboola/php-csv-db-import": "^6",
-                "keboola/phpunit-retry-annotations": "^0.4",
+                "keboola/phpunit-retry-annotations": "^0.5",
                 "keboola/retry": "^0.5.0",
                 "keboola/table-backend-utils": "^1",
                 "phpcompatibility/php-compatibility": "*",
@@ -2750,9 +2751,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v14.16.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v15.0.0"
             },
-            "time": "2024-02-26T10:07:39+00:00"
+            "time": "2024-03-27T08:41:59+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -7678,16 +7679,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "ced299686f41dce890debac69273b47ffe98a40c"
+                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/ced299686f41dce890debac69273b47ffe98a40c",
-                "reference": "ced299686f41dce890debac69273b47ffe98a40c",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
+                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
                 "shasum": ""
             },
             "require": {
@@ -7698,7 +7699,7 @@
             "require-dev": {
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "symfony/phpunit-bridge": "^6.0"
+                "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5"
             },
             "type": "library",
             "autoload": {
@@ -7722,9 +7723,9 @@
                 "performance"
             ],
             "support": {
-                "irc": "irc://irc.freenode.org/composer",
+                "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
-                "source": "https://github.com/composer/xdebug-handler/tree/3.0.3"
+                "source": "https://github.com/composer/xdebug-handler/tree/3.0.4"
             },
             "funding": [
                 {
@@ -7740,7 +7741,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-25T21:32:43+00:00"
+            "time": "2024-03-26T18:29:49+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -8785,16 +8786,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.65",
+            "version": "1.10.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3c657d057a0b7ecae19cb12db446bbc99d8839c6"
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3c657d057a0b7ecae19cb12db446bbc99d8839c6",
-                "reference": "3c657d057a0b7ecae19cb12db446bbc99d8839c6",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/94779c987e4ebd620025d9e5fdd23323903950bd",
+                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd",
                 "shasum": ""
             },
             "require": {
@@ -8843,7 +8844,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-23T10:30:26+00:00"
+            "time": "2024-03-28T16:17:31+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
