@@ -6,7 +6,7 @@ Symfony console application which is used inside an ECS task and wraps Docker ru
 Prerequisites:
 * configured `az` and `aws` CLI tools (run `az login` and `aws configure --profile Keboola-CI-Platform-Services-Team-AWSAdministratorAccess`)
 * installed `terraform` (https://www.terraform.io) and `jq` (https://stedolan.github.io/jq) to setup local env
-* intalled `docker` and `docker-compose` to run & develop the app
+* intalled `docker` to run & develop the app
 
 TL;DR:
 ```
@@ -25,8 +25,8 @@ terraform -chdir=./provisioning/local init -backend-config="key=job-runner/${NAM
 terraform -chdir=./provisioning/local apply
 ./provisioning/local/update-env.sh aws # or azure
 
-docker-compose run --rm dev composer install
-docker-compose run --rm dev composer ci
+docker compose run --rm dev composer install
+docker compose run --rm dev composer ci
 ```
 
 ### Using Docker
@@ -35,15 +35,15 @@ the Docker & Docker Compose.
 
 To run PHP scripts, use the `dev` service:
 ```shell
-docker-compose run --rm dev composer install   # install dependencies using Composer 
-docker-compose run --rm dev composer phpunit   # run Phpunit as a Composer script
-docker-compose run --rm dev vendor/bin/phpunit # run Phpunit standalone
-docker-compose run --rm dev bin/console        # run Symfony console commands
+docker compose run --rm dev composer install   # install dependencies using Composer 
+docker compose run --rm dev composer phpunit   # run Phpunit as a Composer script
+docker compose run --rm dev vendor/bin/phpunit # run Phpunit standalone
+docker compose run --rm dev bin/console        # run Symfony console commands
 ```
 
 To run local tests, use `ci` service. This will validate `composer` files and execute `phpcs`, `phpstan` and `phpunit` tests.
 ```shell
-docker-compose run --rm ci
+docker compose run --rm ci
 ```
 
 ## ENV & Configuration
