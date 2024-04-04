@@ -47,7 +47,7 @@ use function DDTrace\root_span;
 #[AsCommand(name: 'app:run')]
 class RunCommand extends Command
 {
-    private Runner $runner;
+    private ?Runner $runner = null;
 
     public function __construct(
         private readonly Logger $logger,
@@ -101,9 +101,12 @@ class RunCommand extends Command
             $this->terminateContainer($containerId);
         }
 
-        $this->logger->info(sprintf('Clearing up workspaces for job "%s".', $this->jobId));
-        $this->runner->cleanup();
-        $this->logger->info(sprintf('Finished cleanup for job "%s".', $this->jobId));
+        if ($this->runner !== null) {
+            $this->logger->info(sprintf('Clearing up workspaces for job "%s".', $this->jobId));
+            $this->runner->cleanup();
+            $this->logger->info(sprintf('Finished cleanup for job "%s".', $this->jobId));
+        }
+
         exit;
     }
 
