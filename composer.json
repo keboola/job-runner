@@ -22,7 +22,7 @@
         "ext-pcntl": "*",
         "aws/aws-sdk-php": "^3.258",
         "keboola/api-error-control": "^3.10",
-        "keboola/configuration-variables-resolver": "^5.0.0",
+        "keboola/configuration-variables-resolver": "dev-odin-PST-1670 as 5.0.2",
         "keboola/dockerbundle": "dev-main",
         "keboola/input-mapping": "^18.5",
         "keboola/job-queue-internal-api-php-client": "^19.0.1",
