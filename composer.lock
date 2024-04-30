@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "713b607b2aaa0a17d34bac8ab129c890",
+    "content-hash": "e144b795dfda48d576803012c55358dd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1563,16 +1563,16 @@
         },
         {
             "name": "keboola/configuration-variables-resolver",
-            "version": "5.0.2",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/configuration-variables-resolver.git",
-                "reference": "3019814070daa28d4cea38eb8a8ac7849c0d36be"
+                "reference": "5c12115333c0beaca32aa458e86eec1715ef1775"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/3019814070daa28d4cea38eb8a8ac7849c0d36be",
-                "reference": "3019814070daa28d4cea38eb8a8ac7849c0d36be",
+                "url": "https://api.github.com/repos/keboola/configuration-variables-resolver/zipball/5c12115333c0beaca32aa458e86eec1715ef1775",
+                "reference": "5c12115333c0beaca32aa458e86eec1715ef1775",
                 "shasum": ""
             },
             "require": {
@@ -1623,9 +1623,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/configuration-variables-resolver/issues",
-                "source": "https://github.com/keboola/configuration-variables-resolver/tree/5.0.2"
+                "source": "https://github.com/keboola/configuration-variables-resolver/tree/5.0.3"
             },
-            "time": "2024-03-19T13:15:30+00:00"
+            "time": "2024-04-25T10:59:40+00:00"
         },
         {
             "name": "keboola/csv",
