@@ -26,11 +26,6 @@ parameters:
 			path: tests/Command/RunCommandTest.php
 
 		-
-			message: "#^Offset 'runId' does not exist on array\\{message\\: 'Output mapping done\\.', context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
-			count: 3
-			path: tests/Command/RunCommandTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$record of method App\\\\StorageApiHandler\\:\\:handle\\(\\) expects array\\{message\\: string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}, array given\\.$#"
 			count: 2
 			path: tests/StorageApiHandlerTest.php

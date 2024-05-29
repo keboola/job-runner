@@ -151,7 +151,7 @@ class RunCommandTest extends AbstractCommandTest
         }
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertTrue($testHandler->hasInfoThatContains(
             '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }',
         ));
@@ -376,7 +376,7 @@ class RunCommandTest extends AbstractCommandTest
 
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.python-transformation', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
@@ -684,7 +684,7 @@ class RunCommandTest extends AbstractCommandTest
 
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-workspace-test', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
