@@ -10,7 +10,6 @@ use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
-use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
@@ -1113,8 +1112,7 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
-        $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
+        $logProcessor = new LogProcessor('job-runner-test');
         $jobDefinitionFactory = new JobDefinitionFactory(
             new JobDefinitionParser(),
             new JobObjectEncryptor($objectEncryptor),

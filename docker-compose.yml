@@ -43,10 +43,6 @@ services:
       # to get wait-for-it
       - ./:/build-code
     environment:
-      - log_abs_connection_string=
-      - log_abs_container=debug-files
-      - logs_s3_bucket=
-      - logs_s3_bucket_region=
       - MYSQL_ROOT_PASSWORD=root
       - DATABASE_USER=root
       - DATABASE_PASSWORD=root
