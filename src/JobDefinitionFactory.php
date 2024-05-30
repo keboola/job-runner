@@ -8,7 +8,6 @@ use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariablesResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
-use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
@@ -16,7 +15,6 @@ use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
-use Keboola\StorageApi\DevBranches;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Psr\Log\LoggerInterface;
@@ -56,6 +54,8 @@ class JobDefinitionFactory
             $jobDefinitions,
             $job,
         );
+
+        $this->logger->info('All job definitions decrypted');
 
         return $jobDefinitions;
     }
@@ -189,29 +189,37 @@ class JobDefinitionFactory
     private function decryptConfiguration(array $jobDefinitions, JobInterface $job): array
     {
         return array_map(
-            fn(JobDefinition $jobDefinition) => new JobDefinition(
-                $this->objectEncryptor->decrypt(
-                    $jobDefinition->getConfiguration(),
-                    $jobDefinition->getComponentId(),
-                    $job->getProjectId(),
+            function (JobDefinition $jobDefinition) use ($job) {
+                $this->logger->info('Decrypting job definition of config {configId}, row {rowId}', [
+                    'jobId' => $job->getId(),
+                    'configId' => $jobDefinition->getConfigId(),
+                    'rowId' => $jobDefinition->getRowId(),
+                ]);
+
+                return new JobDefinition(
+                    $this->objectEncryptor->decrypt(
+                        $jobDefinition->getConfiguration(),
+                        $jobDefinition->getComponentId(),
+                        $job->getProjectId(),
+                        $jobDefinition->getConfigId(),
+                        BranchType::from($jobDefinition->getBranchType()),
+                    ),
+                    $jobDefinition->getComponent(),
                     $jobDefinition->getConfigId(),
-                    BranchType::from($jobDefinition->getBranchType()),
-                ),
-                $jobDefinition->getComponent(),
-                $jobDefinition->getConfigId(),
-                $jobDefinition->getConfigVersion(),
-                $this->objectEncryptor->decrypt(
-                    $jobDefinition->getState(),
-                    $jobDefinition->getComponentId(),
-                    $job->getProjectId(),
-                    $jobDefinition->getConfigId(),
-                    BranchType::from($jobDefinition->getBranchType()),
-                ),
-                $jobDefinition->getRowId(),
-                $jobDefinition->isDisabled(),
-                $jobDefinition->getBranchType(),
-                $jobDefinition->getInputVariableValues(),
-            ),
+                    $jobDefinition->getConfigVersion(),
+                    $this->objectEncryptor->decrypt(
+                        $jobDefinition->getState(),
+                        $jobDefinition->getComponentId(),
+                        $job->getProjectId(),
+                        $jobDefinition->getConfigId(),
+                        BranchType::from($jobDefinition->getBranchType()),
+                    ),
+                    $jobDefinition->getRowId(),
+                    $jobDefinition->isDisabled(),
+                    $jobDefinition->getBranchType(),
+                    $jobDefinition->getInputVariableValues(),
+                );
+            },
             $jobDefinitions,
         );
     }
