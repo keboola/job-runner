@@ -156,6 +156,8 @@ class RunCommandTerminateTest extends AbstractCommandTest
                 return $client->getJob($job->getId())->getStatus();
             },
         );
+        sleep(5); // there is nothing better to check than the job status above, but after that, there are two more
+                  // storage API requests that must be done, before runner is actually initialized
 
         $job = $client->patchJob($job->getId(), (new JobPatchData())
             ->setStatus(JobInterface::STATUS_TERMINATING)
