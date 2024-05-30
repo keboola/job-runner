@@ -9,11 +9,8 @@ parameters:
         cpu_count: '%env(CPU_COUNT)%'
 
     'env(AWS_KMS_KEY_ID)': ''
-    'env(AWS_LOGS_S3_BUCKET)': ''
     'env(AWS_REGION)': ''
     'env(AZURE_KEY_VAULT_URL)': ''
-    'env(AZURE_LOG_ABS_CONNECTION_STRING)': ''
-    'env(AZURE_LOG_ABS_CONTAINER)': ''
     'env(GCP_KMS_KEY_ID)': ''
     'env(JOB_QUEUE_TOKEN)': ''
     'env(JOB_QUEUE_URL)': ''
@@ -42,14 +39,6 @@ services:
             $storageApiToken: '%env(STORAGE_API_TOKEN)%'
             $instanceLimits: '%instance_limits%'
 
-    Keboola\ErrorControl\Uploader\UploaderFactory:
-        arguments:
-            $storageApiUrl: "%env(STORAGE_API_URL)%"
-            $s3Bucket: "%env(AWS_LOGS_S3_BUCKET)%"
-            $s3Region: "%env(AWS_REGION)%"
-            $absConnectionString: "%env(AZURE_LOG_ABS_CONNECTION_STRING)%"
-            $absContainer: "%env(AZURE_LOG_ABS_CONTAINER)%"
-
     Monolog\Formatter\JsonFormatter:
 
     Keboola\ErrorControl\Monolog\LogProcessor:
@@ -57,7 +46,7 @@ services:
         arguments:
             $appName: "%app_name%"
         tags:
-            - { name: monolog.processor, method: processRecord }
+            - { name: monolog.processor, handler: main }
 
     Keboola\ObjectEncryptor\EncryptorOptions:
         $stackId: '%env(ENCRYPTOR_STACK_ID)%'

@@ -208,7 +208,7 @@ abstract class BaseFunctionalTest extends TestCase
         /** @var QueueClient $mockQueueClient */
         return new RunCommand(
             $this->logger,
-            new LogProcessor(new UploaderFactory(''), 'test-runner'),
+            new LogProcessor('test-runner'),
             $mockQueueClient,
             $storageClientFactory,
             new JobDefinitionFactory(

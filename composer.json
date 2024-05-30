@@ -21,7 +21,7 @@
         "ext-json": "*",
         "ext-pcntl": "*",
         "aws/aws-sdk-php": "^3.258",
-        "keboola/api-error-control": "^3.10",
+        "keboola/api-error-control": "^4.2",
         "keboola/configuration-variables-resolver": "5.0.3",
         "keboola/dockerbundle": "dev-main",
         "keboola/input-mapping": "^18.5",

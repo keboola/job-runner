@@ -10,7 +10,6 @@ use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
-use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
@@ -152,7 +151,7 @@ class RunCommandTest extends AbstractCommandTest
         }
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-config-test', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertTrue($testHandler->hasInfoThatContains(
             '" p a r a m e t e r s " : { " a r b i t r a r y " : { " # f o o " : " b a r " }',
         ));
@@ -377,7 +376,7 @@ class RunCommandTest extends AbstractCommandTest
 
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.python-transformation', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
@@ -685,7 +684,7 @@ class RunCommandTest extends AbstractCommandTest
 
         self::assertNotEmpty($jobRecord);
         self::assertEquals('keboola.runner-workspace-test', $jobRecord['component']);
-        self::assertEquals($job->getId(), $jobRecord['runId']);
+        self::assertEquals($job->getId(), $jobRecord['extra']['runId']);
         self::assertFalse($testHandler->hasInfoThatContains('Job is already running'));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
@@ -1113,8 +1112,7 @@ class RunCommandTest extends AbstractCommandTest
         $testHandler = new TestHandler();
         $logger->pushHandler($testHandler);
 
-        $uploaderFactory = new UploaderFactory((string) getenv('STORAGE_API_URL'));
-        $logProcessor = new LogProcessor($uploaderFactory, 'job-runner-test');
+        $logProcessor = new LogProcessor('job-runner-test');
         $jobDefinitionFactory = new JobDefinitionFactory(
             new JobDefinitionParser(),
             new JobObjectEncryptor($objectEncryptor),

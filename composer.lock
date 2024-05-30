@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b34028a98cadd96ef9680bf652c043c",
+    "content-hash": "8ed443e7e586a6e0a950878514ca16df",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1342,26 +1342,23 @@
         },
         {
             "name": "keboola/api-error-control",
-            "version": "3.10.1",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/api-error-control.git",
-                "reference": "6e6936c4815c1a02cba3d709bb1f25c809f581fa"
+                "reference": "bf65e58dd28b630e82f151c63d233859d12bb41d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/6e6936c4815c1a02cba3d709bb1f25c809f581fa",
-                "reference": "6e6936c4815c1a02cba3d709bb1f25c809f581fa",
+                "url": "https://api.github.com/repos/keboola/api-error-control/zipball/bf65e58dd28b630e82f151c63d233859d12bb41d",
+                "reference": "bf65e58dd28b630e82f151c63d233859d12bb41d",
                 "shasum": ""
             },
             "require": {
-                "aws/aws-sdk-php": "^3.138",
                 "ext-json": "*",
                 "keboola/common-exceptions": "^1.0",
-                "microsoft/azure-storage-blob": "^1.5",
-                "monolog/monolog": "^1.23|^2.0",
-                "php": "^7.1|^8.0",
-                "symfony/filesystem": "^5.0|^6.0",
+                "monolog/monolog": "^2.0|^3.0",
+                "php": "^8.2",
                 "symfony/http-foundation": "^5.0|^6.0",
                 "symfony/http-kernel": "^5.0|^6.0"
             },
@@ -1390,9 +1387,9 @@
             ],
             "description": "API Error control library - Utility classes for implementing logging in a KBC API",
             "support": {
-                "source": "https://github.com/keboola/api-error-control/tree/3.10.1"
+                "source": "https://github.com/keboola/api-error-control/tree/4.2.0"
             },
-            "time": "2022-11-14T10:57:04+00:00"
+            "time": "2024-03-15T12:48:31+00:00"
         },
         {
             "name": "keboola/artifacts",
