@@ -34,6 +34,7 @@ use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,6 +60,7 @@ class RunCommand extends Command
         private readonly string $jobId,
         private readonly string $storageApiToken,
         private readonly array $instanceLimits,
+        private readonly ?LoggerInterface $debugLogger = null,
     ) {
         parent::__construct();
 
@@ -242,7 +244,7 @@ class RunCommand extends Command
             $component = $this->getComponentClass($clientWrapper, $job);
             $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
 
-            $this->logger->info('Job definitions created');
+            $this->debugLogger?->info('Job definitions created');
 
             $this->runner = new Runner(
                 $this->objectEncryptor,
@@ -250,6 +252,7 @@ class RunCommand extends Command
                 $loggerService,
                 new OutputFilter(60000),
                 $this->instanceLimits,
+                debugLogger: $this->debugLogger,
             );
             $usageFile = new UsageFile();
             $usageFile->setQueueClient($this->queueClient);

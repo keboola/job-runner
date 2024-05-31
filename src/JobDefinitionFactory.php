@@ -26,6 +26,7 @@ class JobDefinitionFactory
         private readonly JobObjectEncryptor $objectEncryptor,
         private readonly VariablesApiClient $variablesApiClient,
         private readonly LoggerInterface $logger,
+        private readonly ?LoggerInterface $debugLogger = null,
     ) {
     }
 
@@ -55,7 +56,7 @@ class JobDefinitionFactory
             $job,
         );
 
-        $this->logger->info('All job definitions decrypted');
+        $this->debugLogger?->info('All job definitions decrypted');
 
         return $jobDefinitions;
     }
@@ -190,7 +191,7 @@ class JobDefinitionFactory
     {
         return array_map(
             function (JobDefinition $jobDefinition) use ($job) {
-                $this->logger->info('Decrypting job definition of config {configId}, row {rowId}', [
+                $this->debugLogger?->info('Decrypting job definition of config {configId}, row {rowId}', [
                     'jobId' => $job->getId(),
                     'configId' => $jobDefinition->getConfigId(),
                     'rowId' => $jobDefinition->getRowId(),
