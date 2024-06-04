@@ -122,6 +122,7 @@ class JobDefinitionFactory
             $component,
             $configuration,
             $job->getBranchType()->value,
+            $job->getConfigRowIds(),
         );
     }
 
