@@ -643,4 +643,68 @@ class JobDefinitionParserTest extends TestCase
         self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
         self::assertEquals($expected, $jobDefinition->getConfiguration());
     }
+
+    public function testRequestedRowIdsFilterThrowsException(): void
+    {
+        $config = [
+            'id' => 'my-config',
+            'version' => 1,
+            'state' => [],
+            'configuration' => [],
+            'rows' => [
+                ['id' => 'row1'],
+                ['id' => 'row2'],
+            ],
+        ];
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage('None of rows "non-existing-row-id" was found.');
+
+        (new JobDefinitionParser())->parseConfig(
+            component: $this->getComponent(),
+            config: $config,
+            branchType: 'default',
+            rowIds: ['non-existing-row-id'],
+        );
+    }
+
+    public function testRequestedRowIdsFilterReturnsCorrectJobs(): void
+    {
+        $config = [
+            'id' => 'my-config',
+            'version' => 1,
+            'state' => [],
+            'configuration' => [],
+            'rows' => [
+                [
+                    'id' => 'row1',
+                    'configuration' => [
+                        'parameters' => [],
+                    ],
+                    'state' => null,
+                    'isDisabled' => false,
+                ],
+                [
+                    'id' => 'row2',
+                    'configuration' => [
+                        'parameters' => [
+                            'test' => '{{non-existing-variable}}',
+                        ],
+                    ],
+                    'state' => null,
+                    'isDisabled' => false,
+                ],
+            ],
+        ];
+
+        $jobDefinitions = (new JobDefinitionParser())->parseConfig(
+            component: $this->getComponent(),
+            config: $config,
+            branchType: 'default',
+            rowIds: ['row1'],
+        );
+
+        self::assertCount(1, $jobDefinitions);
+        self::assertEquals('row1', $jobDefinitions[0]->getRowId());
+    }
 }

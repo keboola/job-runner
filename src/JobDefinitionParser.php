@@ -36,6 +36,7 @@ class JobDefinitionParser
         Component $component,
         array $config,
         string $branchType,
+        array $rowIds = [],
     ): array {
         $config['rows'] = $config['rows'] ?? [];
         $this->validateConfig($config);
@@ -50,6 +51,17 @@ class JobDefinitionParser
                 branchType: $branchType,
             );
             return [$jobDefinition];
+        }
+
+        if ($rowIds) {
+            $config['rows'] = array_filter(
+                $config['rows'],
+                fn(array $row) => in_array($row['id'], $rowIds, true),
+            );
+
+            if (count($config['rows']) === 0) {
+                throw new UserException(sprintf('None of rows "%s" was found.', implode(',', $rowIds)));
+            }
         }
 
         return array_map(
