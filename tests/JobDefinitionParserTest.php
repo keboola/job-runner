@@ -246,7 +246,7 @@ class JobDefinitionParserTest extends TestCase
                 [
                     'id' => 'row1',
                     'version' => 2,
-                    'isDisabled' => true,
+                    'isDisabled' => false,
                     'configuration' => [
                         'storage' => [
                             'input' => [
@@ -343,7 +343,7 @@ class JobDefinitionParserTest extends TestCase
         self::assertEquals('my-config', $jobDefinition->getConfigId());
         self::assertEquals(3, $jobDefinition->getConfigVersion());
         self::assertEquals('row1', $jobDefinition->getRowId());
-        self::assertTrue($jobDefinition->isDisabled());
+        self::assertFalse($jobDefinition->isDisabled());
         self::assertEquals(['key1' => 'val1'], $jobDefinition->getState());
         self::assertSame('dev', $jobDefinition->getBranchType());
 

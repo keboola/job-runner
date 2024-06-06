@@ -62,6 +62,11 @@ class JobDefinitionParser
             if (count($config['rows']) === 0) {
                 throw new UserException(sprintf('None of rows "%s" was found.', implode(',', $rowIds)));
             }
+        } else {
+            $config['rows'] = array_filter(
+                $config['rows'],
+                fn(array $row) => !$row['isDisabled'],
+            );
         }
 
         return array_map(
