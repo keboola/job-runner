@@ -9,6 +9,7 @@ use Keboola\ConfigurationVariablesResolver\VariablesResolver;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
@@ -37,11 +38,13 @@ class JobDefinitionFactory
         Component $component,
         JobInterface $job,
         ClientWrapper $clientWrapper,
+        LoggersService $loggersService,
     ): array {
         $jobDefinitions = $this->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersService,
         );
 
         $jobDefinitions = $this->resolveVariables(
@@ -68,6 +71,7 @@ class JobDefinitionFactory
         ClientWrapper $clientWrapper,
         Component $component,
         JobInterface $job,
+        LoggersService $loggersService,
     ): array {
         if ($component->blockBranchJobs() && $clientWrapper->isDevelopmentBranch()) {
             throw new UserException('This component cannot be run in a development branch.');
@@ -122,6 +126,7 @@ class JobDefinitionFactory
             $component,
             $configuration,
             $job->getBranchType()->value,
+            $loggersService,
             $job->getConfigRowIds(),
         );
     }
