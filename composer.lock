@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69a7c8d63de53058be9ed7ba386b7f4e",
+    "content-hash": "120943377d48bdfdec41ac235faf98d6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1829,22 +1829,22 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "18.5.2",
+            "version": "18.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "af0cd7e33aa305f53ca347265655e47821fc8150"
+                "reference": "03e5436ef2c45e2b998585874d6971808321c629"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/af0cd7e33aa305f53ca347265655e47821fc8150",
-                "reference": "af0cd7e33aa305f53ca347265655e47821fc8150",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/03e5436ef2c45e2b998585874d6971808321c629",
+                "reference": "03e5436ef2c45e2b998585874d6971808321c629",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/php-file-storage-utils": "^0.2",
-                "keboola/storage-api-client": "^14.11.2",
+                "keboola/storage-api-client": "^14.18",
                 "keboola/storage-api-php-client-branch-wrapper": "^5.0.1",
                 "php": ">=8.1",
                 "symfony/config": "^5.4|^6.0",
@@ -1888,9 +1888,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/18.5.2"
+                "source": "https://github.com/keboola/input-mapping/tree/18.6.0"
             },
-            "time": "2024-01-29T07:44:23+00:00"
+            "time": "2024-06-10T10:30:56+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
