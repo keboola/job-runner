@@ -242,7 +242,12 @@ class RunCommand extends Command
 
             // set up runner
             $component = $this->getComponentClass($clientWrapper, $job);
-            $jobDefinitions = $this->jobDefinitionFactory->createFromJob($component, $job, $clientWrapper);
+            $jobDefinitions = $this->jobDefinitionFactory->createFromJob(
+                $component,
+                $job,
+                $clientWrapper,
+                $loggerService,
+            );
 
             $this->debugLogger?->info('Job definitions created');
 

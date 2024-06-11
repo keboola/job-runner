@@ -7,6 +7,7 @@ namespace App;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 
 class JobDefinitionParser
@@ -36,6 +37,7 @@ class JobDefinitionParser
         Component $component,
         array $config,
         string $branchType,
+        LoggersService $loggersService,
         array $rowIds = [],
     ): array {
         $config['rows'] = $config['rows'] ?? [];
@@ -62,6 +64,22 @@ class JobDefinitionParser
             if (count($config['rows']) === 0) {
                 throw new UserException(sprintf('None of rows "%s" was found.', implode(',', $rowIds)));
             }
+        } else {
+            $rowsToBeDisabled = array_filter(
+                $config['rows'],
+                fn(array $row) => $row['isDisabled'],
+            );
+
+            foreach ($rowsToBeDisabled as $row) {
+                $loggersService->getLog()->info(
+                    'Skipping disabled configuration: ' . $config['id']
+                    . ', version: ' . $config['version']
+                    . ', row: ' . $row['id'],
+                );
+            }
+
+            assert($rowsToBeDisabled !== null);
+            $config['rows'] = array_diff_key($config['rows'], $rowsToBeDisabled);
         }
 
         return array_map(

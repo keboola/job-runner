@@ -7,6 +7,7 @@ namespace App\Tests;
 use App\JobDefinitionParser;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\DockerBundle\Service\LoggersService;
 use PHPUnit\Framework\TestCase;
 
 class JobDefinitionParserTest extends TestCase
@@ -213,7 +214,8 @@ class JobDefinitionParserTest extends TestCase
         ];
 
         $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default', $loggersServiceMock);
 
         self::assertCount(1, $jobDefinitions);
 
@@ -246,7 +248,7 @@ class JobDefinitionParserTest extends TestCase
                 [
                     'id' => 'row1',
                     'version' => 2,
-                    'isDisabled' => true,
+                    'isDisabled' => false,
                     'configuration' => [
                         'storage' => [
                             'input' => [
@@ -333,7 +335,8 @@ class JobDefinitionParserTest extends TestCase
         ];
 
         $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'dev');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'dev', $loggersServiceMock);
 
         self::assertCount(2, $jobDefinitions);
 
@@ -343,7 +346,7 @@ class JobDefinitionParserTest extends TestCase
         self::assertEquals('my-config', $jobDefinition->getConfigId());
         self::assertEquals(3, $jobDefinition->getConfigVersion());
         self::assertEquals('row1', $jobDefinition->getRowId());
-        self::assertTrue($jobDefinition->isDisabled());
+        self::assertFalse($jobDefinition->isDisabled());
         self::assertEquals(['key1' => 'val1'], $jobDefinition->getState());
         self::assertSame('dev', $jobDefinition->getBranchType());
 
@@ -517,7 +520,8 @@ class JobDefinitionParserTest extends TestCase
         $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places',
         );
-        $parser->parseConfig($this->getComponent(), $config, 'default');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $parser->parseConfig($this->getComponent(), $config, 'default', $loggersServiceMock);
     }
 
     public function testEmptyConfig(): void
@@ -531,7 +535,8 @@ class JobDefinitionParserTest extends TestCase
         ];
 
         $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default', $loggersServiceMock);
 
         self::assertCount(1, $jobDefinitions);
         self::assertSame(
@@ -611,7 +616,8 @@ class JobDefinitionParserTest extends TestCase
         $this->expectExceptionMessage(
             'Processors may be set either in configuration or in configuration row, but not in both places',
         );
-        $parser->parseConfig($this->getComponent(), $config, 'default');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $parser->parseConfig($this->getComponent(), $config, 'default', $loggersServiceMock);
     }
 
     public function testNullRows(): void
@@ -635,7 +641,8 @@ class JobDefinitionParserTest extends TestCase
         ];
 
         $parser = new JobDefinitionParser();
-        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        $jobDefinitions = $parser->parseConfig($this->getComponent(), $config, 'default', $loggersServiceMock);
 
         self::assertCount(1, $jobDefinitions);
 
@@ -660,10 +667,12 @@ class JobDefinitionParserTest extends TestCase
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('None of rows "non-existing-row-id" was found.');
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         (new JobDefinitionParser())->parseConfig(
             component: $this->getComponent(),
             config: $config,
             branchType: 'default',
+            loggersService: $loggersServiceMock,
             rowIds: ['non-existing-row-id'],
         );
     }
@@ -697,10 +706,12 @@ class JobDefinitionParserTest extends TestCase
             ],
         ];
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = (new JobDefinitionParser())->parseConfig(
             component: $this->getComponent(),
             config: $config,
             branchType: 'default',
+            loggersService: $loggersServiceMock,
             rowIds: ['row1'],
         );
 

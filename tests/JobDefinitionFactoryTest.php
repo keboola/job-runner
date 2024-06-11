@@ -10,6 +10,7 @@ use Generator;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
@@ -302,10 +303,12 @@ class JobDefinitionFactoryTest extends TestCase
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('Configuration my-config not found');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
     }
 
@@ -331,7 +334,8 @@ class JobDefinitionFactoryTest extends TestCase
             $this->createMock(LoggerInterface::class),
         );
 
-        return $factory->createJobDefinitionsForJob($clientWrapper, $component, $job);
+        $loggersServiceMock = $this->createMock(LoggersService::class);
+        return $factory->createJobDefinitionsForJob($clientWrapper, $component, $job, $loggersServiceMock);
     }
 
     private function createJobDefinitionsWithConfiguration(array $jobData, array $configuration): array
@@ -356,10 +360,12 @@ class JobDefinitionFactoryTest extends TestCase
             $this->createMock(LoggerInterface::class),
         );
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         return $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
     }
 
@@ -407,10 +413,12 @@ class JobDefinitionFactoryTest extends TestCase
             $this->createMock(LoggerInterface::class),
         );
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
 
         self::assertCount(1, $jobDefinitions);
@@ -472,10 +480,12 @@ class JobDefinitionFactoryTest extends TestCase
         $this->expectExceptionMessage(
             'It is not safe to run this configuration in a development branch. Please review the configuration.',
         );
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
     }
 
@@ -523,10 +533,12 @@ class JobDefinitionFactoryTest extends TestCase
             $this->createMock(VariablesApiClient::class),
             $this->createMock(LoggerInterface::class),
         );
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
 
         self::assertCount(1, $jobDefinitions);
@@ -568,10 +580,12 @@ class JobDefinitionFactoryTest extends TestCase
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('This component cannot be run in a development branch.');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
     }
 
@@ -640,10 +654,12 @@ class JobDefinitionFactoryTest extends TestCase
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('Component "keboola.sandboxes" is not allowed to run on default branch.');
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
     }
 
@@ -690,10 +706,12 @@ class JobDefinitionFactoryTest extends TestCase
             $this->createMock(LoggerInterface::class),
         );
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $factory->createJobDefinitionsForJob(
             $clientWrapper,
             $component,
             $job,
+            $loggersServiceMock,
         );
 
         self::assertCount(1, $jobDefinitions);

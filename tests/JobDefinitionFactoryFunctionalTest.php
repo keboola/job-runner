@@ -8,6 +8,7 @@ use App\JobDefinitionFactory;
 use Keboola\ConfigurationVariablesResolver\ComponentsClientHelper;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
+use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
@@ -97,10 +98,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             ],
         ]);
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $this->factory->createFromJob(
             $this->component,
             $job,
             $this->clientWrapper,
+            $loggersServiceMock,
         );
         self::assertCount(1, $jobDefinitions);
 
@@ -142,10 +145,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'dev',
         );
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $this->factory->createFromJob(
             $this->component,
             $job,
             $this->clientWrapper,
+            $loggersServiceMock,
         );
         self::assertCount(1, $jobDefinitions);
 
@@ -189,10 +194,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'var1' => 'vault val',
         ]);
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $this->factory->createFromJob(
             $this->component,
             $job,
             $this->clientWrapper,
+            $loggersServiceMock,
         );
         self::assertCount(1, $jobDefinitions);
 
@@ -244,10 +251,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             'var1' => 'vault val',
         ]);
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $this->factory->createFromJob(
             $this->component,
             $job,
             $this->clientWrapper,
+            $loggersServiceMock,
         );
         self::assertCount(1, $jobDefinitions);
 
@@ -297,10 +306,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             ],
         );
 
+        $loggersServiceMock = $this->createMock(LoggersService::class);
         $jobDefinitions = $this->factory->createFromJob(
             $this->component,
             $job,
             $this->clientWrapper,
+            $loggersServiceMock,
         );
         self::assertCount(1, $jobDefinitions);
 
