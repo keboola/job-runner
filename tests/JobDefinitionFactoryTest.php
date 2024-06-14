@@ -13,7 +13,7 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\ClientException;
@@ -591,6 +591,9 @@ class JobDefinitionFactoryTest extends TestCase
 
     public function testCreateJobDefinitionBlockedForSandboxesOnSoxDefaultBranch(): void
     {
+        $componentId = 'keboola.sandboxes';
+        $component = $this->createComponent(componentId: $componentId);
+
         $storageApiClient = $this->createMock(BranchAwareClient::class);
         $storageApiClient
             ->expects(self::once())
@@ -618,6 +621,7 @@ class JobDefinitionFactoryTest extends TestCase
         $encryptor
             ->expects(self::once())
             ->method('decrypt')
+            ->with('encrypted-token', $componentId, 'my-project', null, BranchType::DEFAULT)
             ->willReturn('decrypted-token')
         ;
 
@@ -626,9 +630,6 @@ class JobDefinitionFactoryTest extends TestCase
             ->method('createClientWrapper')
             ->willReturn($clientWrapper)
         ;
-
-        $componentId = 'keboola.sandboxes';
-        $component = $this->createComponent(componentId: $componentId);
 
         $jobData = [
             'status' => JobInterface::STATUS_CREATED,

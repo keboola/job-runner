@@ -6,11 +6,9 @@ namespace App\Tests\Command;
 
 use App\Tests\EncryptorOptionsTrait;
 use Keboola\JobQueueInternalClient\Client;
-use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
 use Keboola\JobQueueInternalClient\ExistingJobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\GenericObjectEncryptorProvider;
 use Keboola\JobQueueInternalClient\NewJobFactory;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
@@ -38,23 +36,17 @@ abstract class AbstractCommandTest extends KernelTestCase
         );
 
         $objectEncryptor = ObjectEncryptorFactory::getEncryptor($this->getEncryptorOptions());
-
-        $dataPlaneConfigRepository = $this->createMock(DataPlaneConfigRepository::class);
-        $dataPlaneConfigRepository->expects(self::never())->method(self::anything());
+        $jobObjectEncryptor = new JobObjectEncryptor($objectEncryptor);
 
         $newJobFactory = new NewJobFactory(
             $storageClientFactory,
             new JobRuntimeResolver($storageClientFactory),
-            new DataPlaneObjectEncryptorProvider(
-                $objectEncryptor,
-                $dataPlaneConfigRepository,
-                false,
-            ),
+            $jobObjectEncryptor,
         );
 
         $existingJobFactory = new ExistingJobFactory(
             $storageClientFactory,
-            new GenericObjectEncryptorProvider($objectEncryptor),
+            $jobObjectEncryptor,
         );
 
         $client = new Client(
@@ -62,6 +54,7 @@ abstract class AbstractCommandTest extends KernelTestCase
             $existingJobFactory,
             (string) getenv('JOB_QUEUE_URL'),
             (string) getenv('JOB_QUEUE_TOKEN'),
+            null,
             null,
         );
 
