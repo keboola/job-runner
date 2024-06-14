@@ -11,11 +11,11 @@ use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
+use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
-use Keboola\StorageApi\DevBranches;
 use Keboola\StorageApi\Options\Components\Configuration as StorageConfiguration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApiBranch\ClientWrapper;
@@ -37,7 +37,6 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     private const SHARED_CODE_CONFIG_ID = self::TEST_NAME;
     private const SHARED_CODE_ROW_ID = self::TEST_NAME;
 
-    private readonly JobObjectEncryptor $jobObjectEncryptor;
     private readonly ClientWrapper $clientWrapper;
     private readonly Component $component;
     private readonly JobDefinitionFactory $factory;
@@ -46,10 +45,6 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $jobEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
-        self::assertInstanceOf(JobObjectEncryptor::class, $jobEncryptor);
-        $this->jobObjectEncryptor = $jobEncryptor;
 
         $storageClientFactory = static::getContainer()->get(StorageClientPlainFactory::class);
         self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientFactory);
@@ -288,11 +283,12 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             ],
         ]);
 
-        $encryptedValue = $this->jobObjectEncryptor->encrypt(
+        $objectEncryptor = self::getContainer()->get(ObjectEncryptor::class);
+        $encryptedValue = $objectEncryptor->encryptForBranchType(
             'val2',
             $job->getComponentId(),
             $job->getProjectId(),
-            $job->getBranchType(),
+            $job->getBranchType()->value,
         );
 
         $this->setupConfigurationVariables(
@@ -335,13 +331,13 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
 
     private function createJob(array $jobData, ?string $branchType = null): Job
     {
-        $jobObjectEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
+        $objectEncryptor = static::getContainer()->get(JobObjectEncryptor::class);
         $storageClientPlainFactory = static::getContainer()->get(StorageClientPlainFactory::class);
         self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientPlainFactory);
-        self::assertInstanceOf(JobObjectEncryptor::class, $jobObjectEncryptor);
+        self::assertInstanceOf(JobObjectEncryptor::class, $objectEncryptor);
 
         return new Job(
-            $jobObjectEncryptor,
+            $objectEncryptor,
             $storageClientPlainFactory,
             [
                 'id' => '1234',

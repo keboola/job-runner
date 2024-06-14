@@ -14,7 +14,7 @@ use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
+use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\OutputMapping\Writer\TableWriter;
 use Keboola\PermissionChecker\BranchType;

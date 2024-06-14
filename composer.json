@@ -25,7 +25,7 @@
         "keboola/configuration-variables-resolver": "5.0.3",
         "keboola/dockerbundle": "dev-main",
         "keboola/input-mapping": "18.5.2",
-        "keboola/job-queue-internal-api-php-client": "^19.0.1",
+        "keboola/job-queue-internal-api-php-client": "dev-pepa_PST-1829_noDataPlane as 23.0.0",
         "keboola/object-encryptor": "^2.8",
         "keboola/output-mapping": "^24.8",
         "keboola/slicer": "^2.0.1",

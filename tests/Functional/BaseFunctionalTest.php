@@ -12,17 +12,12 @@ use App\Tests\TestEnvVarsTrait;
 use Exception;
 use Keboola\Csv\CsvFile;
 use Keboola\ErrorControl\Monolog\LogProcessor;
-use Keboola\ErrorControl\Uploader\UploaderFactory;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
-use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigRepository;
-use Keboola\JobQueueInternalClient\DataPlane\DataPlaneConfigValidator;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptor\JobObjectEncryptor;
-use Keboola\JobQueueInternalClient\JobFactory\ObjectEncryptorProvider\DataPlaneObjectEncryptorProvider;
 use Keboola\JobQueueInternalClient\NewJobFactory;
 use Keboola\JobQueueInternalClient\Result\JobResult;
-use Keboola\ManageApi\Client as ManageApiClient;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\StorageApi\BranchAwareClient;
@@ -38,7 +33,6 @@ use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
 
 abstract class BaseFunctionalTest extends TestCase
 {
@@ -99,29 +93,12 @@ abstract class BaseFunctionalTest extends TestCase
             new ClientOptions($this->storageClient->getApiUrl()),
         );
 
-        $manageApiClient = new ManageApiClient([
-            'url' => (string) getenv('STORAGE_API_URL'),
-            'token' => (string) getenv('MANAGE_API_TOKEN'),
-        ]);
-
-        /** @var non-empty-string $encryptorStackId */
-        $encryptorStackId = (string) getenv('ENCRYPTOR_STACK_ID');
-        /** @var non-empty-string $awsRegion */
-        $awsRegion = (string) getenv('AWS_REGION');
+        $jobObjectEncryptor = new JobObjectEncryptor($this->objectEncryptor);
 
         $newJobFactory = new NewJobFactory(
             $storageClientFactory,
             new JobRuntimeResolver($storageClientFactory),
-            new DataPlaneObjectEncryptorProvider(
-                $this->objectEncryptor,
-                new DataPlaneConfigRepository(
-                    $manageApiClient,
-                    new DataPlaneConfigValidator(Validation::createValidator()),
-                    $encryptorStackId,
-                    $awsRegion,
-                ),
-                false,
-            ),
+            $jobObjectEncryptor,
         );
 
         $job = $newJobFactory->createNewJob($jobData);
@@ -141,7 +118,7 @@ abstract class BaseFunctionalTest extends TestCase
             )
             ->willReturn(
                 new Job(
-                    new JobObjectEncryptor($this->objectEncryptor),
+                    $jobObjectEncryptor,
                     $storageClientFactory,
                     array_merge($job->jsonSerialize(), ['status' => 'processing']),
                 ),
@@ -170,7 +147,7 @@ abstract class BaseFunctionalTest extends TestCase
                 )
                 ->willReturn(
                     new Job(
-                        new JobObjectEncryptor($this->objectEncryptor),
+                        $jobObjectEncryptor,
                         $storageClientFactory,
                         array_merge($job->jsonSerialize(), ['status' => 'processing']),
                     ),
@@ -180,7 +157,7 @@ abstract class BaseFunctionalTest extends TestCase
                 ->method('postJobResult')
                 ->willReturn(
                     new Job(
-                        new JobObjectEncryptor($this->objectEncryptor),
+                        $jobObjectEncryptor,
                         $storageClientFactory,
                         array_merge($job->jsonSerialize(), ['status' => 'processing']),
                     ),
@@ -213,7 +190,7 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory,
             new JobDefinitionFactory(
                 new JobDefinitionParser(),
-                new JobObjectEncryptor($this->objectEncryptor),
+                $jobObjectEncryptor,
                 $this->vaultVariablesApiClient,
                 $this->logger,
             ),
