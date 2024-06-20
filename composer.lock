@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60fad718c9e5e444b9874d7b71f33330",
+    "content-hash": "40733fed385937bf54fdfbb5f64ce8cb",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1894,16 +1894,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "19.0.1",
+            "version": "23.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "6c031d1f492213643f27929a515dfaa25cc7d4ab"
+                "reference": "89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/6c031d1f492213643f27929a515dfaa25cc7d4ab",
-                "reference": "6c031d1f492213643f27929a515dfaa25cc7d4ab",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad",
+                "reference": "89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad",
                 "shasum": ""
             },
             "require": {
@@ -1928,6 +1928,7 @@
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.3",
                 "phpunit/phpunit": "^9.5",
+                "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^6.3"
             },
             "type": "library",
@@ -1961,9 +1962,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/19.0.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.0.0"
             },
-            "time": "2023-12-04T07:52:21+00:00"
+            "time": "2024-06-18T12:21:35+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
