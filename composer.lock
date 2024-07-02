@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40733fed385937bf54fdfbb5f64ce8cb",
+    "content-hash": "051962668e6e8e8f9484b4cd6d4dd6dd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1679,7 +1679,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "022002cf693b242147cf9fefcf07a80e4e9a0c52"
+                "reference": "85922186f458d60e7cc9915576c6f969d29a6a44"
             },
             "require": {
                 "ext-json": "*",
@@ -1690,7 +1690,7 @@
                 "keboola/input-mapping": "^18.0",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "^24.8",
+                "keboola/output-mapping": "^24.12",
                 "keboola/php-utils": "^5.0",
                 "keboola/sandboxes-api-php-client": "^6.7",
                 "keboola/staging-provider": "^7.0",
@@ -1770,7 +1770,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2024-06-14T09:12:19+00:00"
+            "time": "2024-07-02T08:08:16+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -2135,16 +2135,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.8.0",
+            "version": "24.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "2938a5b3901a72e3e3e711c4ecf33daecc77559f"
+                "reference": "bd7d4781542b961b662907df7b105ded8c75bc9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/2938a5b3901a72e3e3e711c4ecf33daecc77559f",
-                "reference": "2938a5b3901a72e3e3e711c4ecf33daecc77559f",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/bd7d4781542b961b662907df7b105ded8c75bc9c",
+                "reference": "bd7d4781542b961b662907df7b105ded8c75bc9c",
                 "shasum": ""
             },
             "require": {
@@ -2200,9 +2200,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.8.0"
+                "source": "https://github.com/keboola/output-mapping/tree/24.12.1"
             },
-            "time": "2024-06-11T10:11:43+00:00"
+            "time": "2024-06-26T12:54:28+00:00"
         },
         {
             "name": "keboola/permission-checker",
