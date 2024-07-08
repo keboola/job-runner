@@ -21,6 +21,8 @@ TEST_STORAGE_API_TOKEN= # regular token for your Keboola project
 TEST_STORAGE_API_TOKEN_MASTER= # master token for your Keboola project
 EOF
 
+az acr login -n keboolapes
+
 terraform -chdir=./provisioning/local init -backend-config="key=job-runner/${NAME_PREFIX}.tfstate"
 terraform -chdir=./provisioning/local apply
 ./provisioning/local/update-env.sh aws # or azure
