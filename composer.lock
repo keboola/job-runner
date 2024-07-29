@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "051962668e6e8e8f9484b4cd6d4dd6dd",
+    "content-hash": "c1581e17d6bd66c81ee6eba756d98496",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1894,16 +1894,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "23.0.0",
+            "version": "23.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad"
+                "reference": "6700d0cd6a86a5e39b98c6709702221729ac6e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad",
-                "reference": "89b855a290f6b55fb2dbc5e0c195e5f156c1b2ad",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/6700d0cd6a86a5e39b98c6709702221729ac6e1f",
+                "reference": "6700d0cd6a86a5e39b98c6709702221729ac6e1f",
                 "shasum": ""
             },
             "require": {
@@ -1962,9 +1962,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.0.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.3.0"
             },
-            "time": "2024-06-18T12:21:35+00:00"
+            "time": "2024-07-29T07:36:27+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
