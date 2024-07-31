@@ -6,15 +6,6 @@ parameters:
     type: string
     default: True
 
-  - name: awsCredentials
-    type: string
-
-  - name: awsRegionName
-    type: string
-
-  - name: acrRegistry
-    type: string
-
   - name: garPushEnabled
     type: string
     default: False
