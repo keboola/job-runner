@@ -3,10 +3,10 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
+      - "*"
   tags:
     include:
-      - 'dev-*'
+      - "dev-*"
 
 pool:
   vmImage: ubuntu-latest
@@ -21,50 +21,13 @@ stages:
         steps:
           - script: docker build --target=base --tag keboola/job-runner .
             displayName: Build Docker images
-
           - template: azure-pipelines/steps/store-docker-artifact.yml
-
-  - stage: tests
-    displayName: Tests
-    dependsOn: build
-    pool:
-      name: Default # run on custom worker, tests needs Docker socket
-    jobs:
-      - template: azure-pipelines/jobs/run-tests.yml
-        parameters:
-          displayName: Run Tests
-          envName: aws
-          secrets:
-            TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
-            TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
-
-  # push to testing
-  - stage: publishImages_testing
-    displayName: Publish Testing Images
-    dependsOn: [build, tests]
-    jobs:
-      - job:
-        displayName: Publish Docker Images
-        steps:
-          - template: azure-pipelines/steps/restore-docker-artifact.yml
-          - template: azure-pipelines/steps/push-docker-image.yml
-            parameters:
-              displayName: Testing
-              awsCredentials: Testing - ECR Distribution
-              awsRegionName: eu-central-1
-              acrRegistry: keboolapes.azurecr.io
-              sourceImage: keboola/job-runner
-              targetImage: job-runner
-              tags:
-                - build-$(Build.SourceVersion)
-                - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                    - latest
 
   # push to production (dev-* tags)
   - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-') }}:
       - stage: publishImages_production
-        displayName: Publish Production Images (dev tag)
-        dependsOn: [build, tests]
+        displayName: Publish Images to GitOps Lab GAR
+        dependsOn: [build]
         jobs:
           - job:
             displayName: Publish Docker Images
@@ -72,47 +35,12 @@ stages:
               - template: azure-pipelines/steps/restore-docker-artifact.yml
               - template: azure-pipelines/steps/push-docker-image.yml
                 parameters:
-                  displayName: Production
-                  awsCredentials: Production - ECR Distribution
-                  awsRegionName: us-east-1
-                  acrRegistry: keboola.azurecr.io
+                  displayName: GitOps Lab GAR
                   garPushEnabled: True
-                  garRegistry: Keboola GAR
-                  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
-                  garRepositoryProjectId: keboola-prod-artifacts
+                  garRegistry: "Keboola GAR GitOps Lab"
+                  garRepository: europe-west3-docker.pkg.dev/gitops-stacks-provisioning
+                  garRepositoryProjectId: gitops-stacks-provisioning
                   sourceImage: keboola/job-runner
                   targetImage: job-runner
                   tags:
                     - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
-
-  # push to production (main branch)
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-      - stage: publishImages_production
-        displayName: Publish Production Images (main branch)
-        dependsOn: [build, tests]
-        jobs:
-          - job:
-            displayName: Publish Docker Images
-            steps:
-              - template: azure-pipelines/steps/restore-docker-artifact.yml
-              - template: azure-pipelines/steps/push-docker-image.yml
-                parameters:
-                  displayName: Production
-                  awsCredentials: Production - ECR Distribution
-                  awsRegionName: us-east-1
-                  acrRegistry: keboola.azurecr.io
-                  garPushEnabled: True
-                  garRegistry: Keboola GAR
-                  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
-                  garRepositoryProjectId: keboola-prod-artifacts
-                  sourceImage: keboola/job-runner
-                  targetImage: job-runner
-                  tags:
-                    - production-$(Build.SourceVersion)
-
-              - script: echo "production-$(Build.SourceVersion)" > artifact
-                displayName: Create artifact
-              - task: PublishPipelineArtifact@1
-                inputs:
-                  targetPath: artifact
-                  artifact: keboola.job-runner.latest-build

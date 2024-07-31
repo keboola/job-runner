@@ -41,33 +41,14 @@ parameters:
     type: object
 
 steps:
-- template: push-ecr.yml
-  parameters:
-    displayName: Push ECR - ${{ parameters.displayName }}
-    condition: ${{ parameters.condition }}
-    awsCredentials: ${{ parameters.awsCredentials }}
-    awsRegionName: ${{ parameters.awsRegionName }}
-    sourceImage: ${{ parameters.sourceImage }}
-    targetImage: keboola/${{ parameters.targetImage }}
-    tags: ${{ parameters.tags }}
-
-- template: push-gar.yml
-  parameters:
-    displayName: Push GAR - ${{ parameters.displayName }}
-    condition: ${{ parameters.condition }}
-    garPushEnabled: ${{ parameters.garPushEnabled }}
-    garRegistry: ${{ parameters.garRegistry }}
-    garRepository: ${{ parameters.garRepository }}
-    garRepositoryProjectId: ${{ parameters.garRepositoryProjectId }}
-    sourceImage: ${{ parameters.sourceImage }}
-    targetImage: ${{ parameters.targetImage }}
-    tags: ${{ parameters.tags }}
-
-- template: push-acr.yml
-  parameters:
-    displayName: Push ACR - ${{ parameters.displayName }}
-    condition: ${{ parameters.condition }}
-    acrRegistry: ${{ parameters.acrRegistry }}
-    sourceImage: ${{ parameters.sourceImage }}
-    targetImage: ${{ parameters.targetImage }}
-    tags: ${{ parameters.tags }}
+  - template: push-gar.yml
+    parameters:
+      displayName: Push GAR - ${{ parameters.displayName }}
+      condition: ${{ parameters.condition }}
+      garPushEnabled: ${{ parameters.garPushEnabled }}
+      garRegistry: ${{ parameters.garRegistry }}
+      garRepository: ${{ parameters.garRepository }}
+      garRepositoryProjectId: ${{ parameters.garRepositoryProjectId }}
+      sourceImage: ${{ parameters.sourceImage }}
+      targetImage: ${{ parameters.targetImage }}
+      tags: ${{ parameters.tags }}
