@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec20f626e0108fe6095d7c6d1cf97f8a",
+    "content-hash": "b4d5afe95844aa712af5e94ec6464190",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.319.4",
+            "version": "3.320.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b39a56786bef9e922c8bdd0e47c73ba828cc512e"
+                "reference": "8dd47fd0af8450124057b83cbcf727b4735a14d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b39a56786bef9e922c8bdd0e47c73ba828cc512e",
-                "reference": "b39a56786bef9e922c8bdd0e47c73ba828cc512e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8dd47fd0af8450124057b83cbcf727b4735a14d9",
+                "reference": "8dd47fd0af8450124057b83cbcf727b4735a14d9",
                 "shasum": ""
             },
             "require": {
@@ -154,9 +154,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.319.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.320.0"
             },
-            "time": "2024-08-13T18:04:50+00:00"
+            "time": "2024-08-14T18:04:04+00:00"
         },
         {
             "name": "brick/math",
@@ -1678,11 +1678,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-miro-PST-1967",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "05a3cdc6fec1ca258d206d6b506e21c41ecd48ca"
+                "reference": "f52889a1e550ef670c817b10e1bcf59c671ed8f0"
             },
             "require": {
                 "ext-json": "*",
@@ -1690,7 +1690,7 @@
                 "keboola/artifacts": "^3.1",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "dev-miro-PST-1967 as 19.0",
+                "keboola/input-mapping": "^18.8",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
                 "keboola/output-mapping": "^24.17",
@@ -1716,6 +1716,7 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^5.4|^6.2"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "aws/aws-sdk-php": [
@@ -1772,7 +1773,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2024-08-14T12:56:18+00:00"
+            "time": "2024-08-01T12:09:41+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1831,7 +1832,7 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-miro-PST-1967",
+            "version": "18.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
@@ -11092,18 +11093,10 @@
             "time": "2024-03-03T12:36:25+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "keboola/input-mapping",
-            "version": "dev-miro-PST-1967",
-            "alias": "19.0",
-            "alias_normalized": "19.0.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
