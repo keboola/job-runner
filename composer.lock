@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "671988a49a93f75c151acf587e8e1df7",
+    "content-hash": "b4d5afe95844aa712af5e94ec6464190",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.316.10",
+            "version": "3.320.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "eeb8df6ff6caa428e8bcd631ad2a96430900a249"
+                "reference": "8dd47fd0af8450124057b83cbcf727b4735a14d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/eeb8df6ff6caa428e8bcd631ad2a96430900a249",
-                "reference": "eeb8df6ff6caa428e8bcd631ad2a96430900a249",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8dd47fd0af8450124057b83cbcf727b4735a14d9",
+                "reference": "8dd47fd0af8450124057b83cbcf727b4735a14d9",
                 "shasum": ""
             },
             "require": {
@@ -124,7 +124,10 @@
                 ],
                 "psr-4": {
                     "Aws\\": "src/"
-                }
+                },
+                "exclude-from-classmap": [
+                    "src/data/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -151,9 +154,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.316.10"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.320.0"
             },
-            "time": "2024-07-30T18:10:20+00:00"
+            "time": "2024-08-14T18:04:04+00:00"
         },
         {
             "name": "brick/math",
@@ -504,16 +507,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.59.0",
+            "version": "v1.59.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "56d31be2663780a7ed0736bee60d01f047bf15c0"
+                "reference": "35aae23dc4d0b860b6c3733e5cf381a510b506d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/56d31be2663780a7ed0736bee60d01f047bf15c0",
-                "reference": "56d31be2663780a7ed0736bee60d01f047bf15c0",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/35aae23dc4d0b860b6c3733e5cf381a510b506d9",
+                "reference": "35aae23dc4d0b860b6c3733e5cf381a510b506d9",
                 "shasum": ""
             },
             "require": {
@@ -564,9 +567,9 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.59.0"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.59.1"
             },
-            "time": "2024-06-07T22:33:41+00:00"
+            "time": "2024-08-10T02:24:23+00:00"
         },
         {
             "name": "google/cloud-kms",
@@ -1829,16 +1832,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "18.8.0",
+            "version": "18.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "c105955b5e9730f090e93f73189c7c28119ec095"
+                "reference": "42be1c376d8cd3ab35fb793f30c6fc9796fd6474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/c105955b5e9730f090e93f73189c7c28119ec095",
-                "reference": "c105955b5e9730f090e93f73189c7c28119ec095",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/42be1c376d8cd3ab35fb793f30c6fc9796fd6474",
+                "reference": "42be1c376d8cd3ab35fb793f30c6fc9796fd6474",
                 "shasum": ""
             },
             "require": {
@@ -1888,9 +1891,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/18.8.0"
+                "source": "https://github.com/keboola/input-mapping/tree/dev-miro-pst-1967"
             },
-            "time": "2024-07-29T08:56:27+00:00"
+            "time": "2024-08-14T12:44:12+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -2135,16 +2138,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.19.1",
+            "version": "24.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "e71d31629904105c80155aabb7df18eeb57e7f32"
+                "reference": "7056f693c033709020862c91c66f18a6c08e3596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/e71d31629904105c80155aabb7df18eeb57e7f32",
-                "reference": "e71d31629904105c80155aabb7df18eeb57e7f32",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/7056f693c033709020862c91c66f18a6c08e3596",
+                "reference": "7056f693c033709020862c91c66f18a6c08e3596",
                 "shasum": ""
             },
             "require": {
@@ -2200,9 +2203,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.19.1"
+                "source": "https://github.com/keboola/output-mapping/tree/24.20.1"
             },
-            "time": "2024-08-08T14:09:25+00:00"
+            "time": "2024-08-13T06:52:01+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2258,16 +2261,16 @@
         },
         {
             "name": "keboola/php-datatypes",
-            "version": "7.7.0",
+            "version": "7.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-datatypes.git",
-                "reference": "c869241a64de74c27a1f6b025cd6f3ee39034d38"
+                "reference": "cb3b828061c567a1abf490bb932d61f029d40b9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/c869241a64de74c27a1f6b025cd6f3ee39034d38",
-                "reference": "c869241a64de74c27a1f6b025cd6f3ee39034d38",
+                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/cb3b828061c567a1abf490bb932d61f029d40b9e",
+                "reference": "cb3b828061c567a1abf490bb932d61f029d40b9e",
                 "shasum": ""
             },
             "require": {
@@ -2300,9 +2303,9 @@
             "description": "PHP datatypes for databases",
             "support": {
                 "issues": "https://github.com/keboola/php-datatypes/issues",
-                "source": "https://github.com/keboola/php-datatypes/tree/7.7.0"
+                "source": "https://github.com/keboola/php-datatypes/tree/7.8.0"
             },
-            "time": "2024-07-19T13:27:02+00:00"
+            "time": "2024-08-07T14:12:39+00:00"
         },
         {
             "name": "keboola/php-file-storage-utils",
@@ -11107,5 +11110,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
