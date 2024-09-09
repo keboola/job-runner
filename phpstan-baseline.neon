@@ -6,11 +6,6 @@ parameters:
 			reportUnmatched: false
 
 		-
-			message: "#^Parameter \\#1 \\$tableInfo of static method App\\\\Helper\\\\OutputResultConverter\\:\\:convertTableInfoToTableResult\\(\\) expects Keboola\\\\InputMapping\\\\Table\\\\Result\\\\TableInfo, mixed given\\.$#"
-			count: 1
-			path: src/Helper/OutputResultConverter.php
-
-		-
 			message: "#^Offset 'component' does not exist on array\\{message\\: non\\-falsy\\-string, context\\: array, level\\: 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600, level_name\\: 'ALERT'\\|'CRITICAL'\\|'DEBUG'\\|'EMERGENCY'\\|'ERROR'\\|'INFO'\\|'NOTICE'\\|'WARNING', channel\\: string, datetime\\: DateTimeImmutable, extra\\: array\\}\\.$#"
 			count: 1
 			path: src/StorageApiHandler.php

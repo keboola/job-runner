@@ -6,13 +6,8 @@ namespace App\Helper;
 
 use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoaderInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
-use Keboola\InputMapping\Table\Result\Column as ColumnInfo;
-use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\InputMapping\Table\Result\TableMetrics as InputTableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
-use Keboola\JobQueueInternalClient\Result\InputOutput\Column;
-use Keboola\JobQueueInternalClient\Result\InputOutput\ColumnCollection;
-use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
 use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
 use Keboola\JobQueueInternalClient\Result\JobArtifacts;
 use Keboola\JobQueueInternalClient\Result\JobMetrics;
@@ -45,14 +40,14 @@ class OutputResultConverter
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
                 foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
-                    $outputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
+                    $outputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
                 }
             }
 
             $inputTableResult = $output->getInputTableResult();
             if ($inputTableResult) {
                 foreach ($inputTableResult->getTables() as $tableInfo) {
-                    $inputTables->addTable(self::convertTableInfoToTableResult($tableInfo));
+                    $inputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
                 }
             }
             $uploadedArtifactsOutput = $output->getArtifactsUploaded();
@@ -139,22 +134,6 @@ class OutputResultConverter
         return array_map(
             fn (Output $output) => $output->getImages(),
             $outputs,
-        );
-    }
-
-    private static function convertTableInfoToTableResult(TableInfo $tableInfo): Table
-    {
-        $columnCollection = new ColumnCollection();
-        foreach ($tableInfo->getColumns() as $columnInfo) {
-            /** @var ColumnInfo $columnInfo */
-            $columnCollection->addColumn(new Column($columnInfo->getName()));
-        }
-
-        return new Table(
-            $tableInfo->getId(),
-            $tableInfo->getName(),
-            (string) $tableInfo->getDisplayName(),
-            $columnCollection,
         );
     }
 }
