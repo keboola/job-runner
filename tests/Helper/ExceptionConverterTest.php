@@ -11,6 +11,8 @@ use Keboola\ConfigurationVariablesResolver\Exception\UserException as OutsideUse
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\DockerBundle\Exception\UserException;
+use Keboola\InputMapping\Table\Result;
+use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +43,10 @@ class ExceptionConverterTest extends TestCase
         $variables = $result->getVariables();
         self::assertNotNull($variables);
         self::assertCount(0, $variables);
+
+        $inputTables = $result->getInputTables();
+        self::assertNotNull($inputTables);
+        self::assertCount(0, $inputTables);
     }
 
     public function provideExceptions(): Generator
@@ -90,9 +96,38 @@ class ExceptionConverterTest extends TestCase
         $output1->setConfigVersion('123');
         $output1->setInputVariableValues(['foo' => 'bar']);
 
+        $inputTableResult1 = new Result();
+        $inputTableResult1->addTable(new TableInfo([
+            'id' => 'in.c-main.my-first-table',
+            'displayName' => 'My first table',
+            'name' => 'my-first-table',
+            'lastImportDate' => '2021-02-12T10:36:15+0100',
+            'lastChangeDate' => '2021-12-12T10:36:15+0100',
+            'columns' => [
+                'first',
+                'second',
+            ],
+        ]));
+
+        $output1->setInputTableResult($inputTableResult1);
+
         $output2 = new Output();
         $output2->setImages(['c' => 'd']);
         $output2->setInputVariableValues(['vault.foo' => 'vault bar']);
+
+        $inputTableResult2 = new Result();
+        $inputTableResult2->addTable(new TableInfo([
+            'id' => 'in.c-main.my-second-table',
+            'displayName' => 'My second table',
+            'name' => 'my-second-table',
+            'lastImportDate' => '2024-01-11T10:36:15+0100',
+            'lastChangeDate' => '2024-01-11T10:36:15+0100',
+            'columns' => [
+                'dummyColumn',
+            ],
+        ]));
+
+        $output2->setInputTableResult($inputTableResult2);
 
         $result = ExceptionConverter::convertExceptionToResult(
             $logger,
@@ -126,6 +161,37 @@ class ExceptionConverterTest extends TestCase
                 ],
             ],
             $variables->jsonSerialize(),
+        );
+
+        $inputTables = $result->getInputTables();
+        self::assertNotNull($inputTables);
+        self::assertSame(
+            [
+                [
+                    'id' => 'in.c-main.my-first-table',
+                    'name' => 'my-first-table',
+                    'displayName' => 'My first table',
+                    'columns' => [
+                        [
+                            'name' => 'first',
+                        ],
+                        [
+                            'name' => 'second',
+                        ],
+                    ],
+                ],
+                [
+                    'id' => 'in.c-main.my-second-table',
+                    'name' => 'my-second-table',
+                    'displayName' => 'My second table',
+                    'columns' => [
+                        [
+                            'name' => 'dummyColumn',
+                        ],
+                    ],
+                ],
+            ],
+            $inputTables->jsonSerialize(),
         );
     }
 }
