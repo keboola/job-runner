@@ -1832,16 +1832,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "18.9.0",
+            "version": "18.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "42be1c376d8cd3ab35fb793f30c6fc9796fd6474"
+                "reference": "4e62724040ddc3e3f334ccb509a2274ebb833c69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/42be1c376d8cd3ab35fb793f30c6fc9796fd6474",
-                "reference": "42be1c376d8cd3ab35fb793f30c6fc9796fd6474",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/4e62724040ddc3e3f334ccb509a2274ebb833c69",
+                "reference": "4e62724040ddc3e3f334ccb509a2274ebb833c69",
                 "shasum": ""
             },
             "require": {
@@ -1891,9 +1891,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/dev-miro-pst-1967"
+                "source": "https://github.com/keboola/input-mapping/tree/18.9.1"
             },
-            "time": "2024-08-14T12:44:12+00:00"
+            "time": "2024-09-09T13:16:51+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
