@@ -597,7 +597,24 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame([], $result['output']['tables']);
         self::assertArrayHasKey('input', $result);
         self::assertArrayHasKey('tables', $result['input']);
-        self::assertSame([], $result['input']['tables']);
+        self::assertSame(
+            [
+                [
+                    'id' => 'in.c-main.someTable',
+                    'name' => 'someTable',
+                    'columns' => [
+                        [
+                            'name' => 'a',
+                        ],
+                        [
+                            'name' => 'b',
+                        ],
+                    ],
+                    'displayName' => 'someTable',
+                ],
+            ],
+            $result['input']['tables'],
+        );
 
         self::assertSame(
             [

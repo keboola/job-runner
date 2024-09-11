@@ -7,6 +7,7 @@ namespace App\Helper;
 use Keboola\CommonExceptions\UserExceptionInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\ErrorControl\Message\ExceptionTransformer;
+use Keboola\JobQueueInternalClient\Result\InputOutput\TableCollection;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\JobQueueInternalClient\Result\Variable\Variable;
 use Keboola\JobQueueInternalClient\Result\Variable\VariableCollection;
@@ -48,6 +49,7 @@ class ExceptionConverter
             ->setExceptionId($transformedException->getExceptionId());
 
         $variables = new VariableCollection();
+        $inputTables = new TableCollection();
 
         if ($outputs) {
             $result
@@ -58,10 +60,18 @@ class ExceptionConverter
                 foreach ($output->getInputVariableValues() as $variableName => $variableValue) {
                     $variables->addVariable(new Variable((string) $variableName, $variableValue));
                 }
+
+                $inputTableResult = $output->getInputTableResult();
+                if ($inputTableResult) {
+                    foreach ($inputTableResult->getTables() as $tableInfo) {
+                        $inputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
+                    }
+                }
             }
         }
 
         $result->setVariables($variables);
+        $result->setInputTables($inputTables);
         return $result;
     }
 }
