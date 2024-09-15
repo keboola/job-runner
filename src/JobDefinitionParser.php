@@ -93,7 +93,7 @@ class JobDefinitionParser
                 (bool) $row['isDisabled'],
                 $branchType,
             ),
-            $config['rows'],
+            (array) $config['rows'],
         );
     }
 
