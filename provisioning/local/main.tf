@@ -7,12 +7,12 @@ terraform {
 
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.68"
+      version = "~> 4.3.0"
     }
 
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.41"
+      version = "~> 2.53.1"
     }
 
     google = {
