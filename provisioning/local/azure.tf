@@ -23,8 +23,8 @@ resource "azuread_application" "job_runner" {
 }
 
 resource "azuread_service_principal" "job_runner" {
-  application_id = azuread_application.job_runner.application_id
-  owners         = [data.azuread_client_config.current.object_id]
+  client_id = azuread_application.job_runner.client_id
+  owners    = [data.azuread_client_config.current.object_id]
 }
 
 resource "azuread_service_principal_password" "job_runner" {
@@ -47,8 +47,8 @@ output "az_tenant_id" {
   value = local.az_tenant_id
 }
 
-output "az_application_id" {
-  value = azuread_application.job_runner.application_id
+output "az_client_id" {
+  value = azuread_application.job_runner.client_id
 }
 
 output "az_application_secret" {

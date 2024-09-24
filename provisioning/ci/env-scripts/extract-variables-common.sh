@@ -17,7 +17,7 @@ echo ''
 
 output_var 'AZURE_KEY_VAULT_URL' $(terraform_output 'az_key_vault_url')
 output_var 'TEST_AZURE_TENANT_ID' $(terraform_output 'az_tenant_id')
-output_var 'TEST_AZURE_CLIENT_ID' $(terraform_output 'az_application_id')
+output_var 'TEST_AZURE_CLIENT_ID' $(terraform_output 'az_client_id')
 output_var 'TEST_AZURE_CLIENT_SECRET' $(terraform_output 'az_application_secret')
 echo ''
 
