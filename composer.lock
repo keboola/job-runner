@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f32985b5128a0c4027642bf79a54998e",
+    "content-hash": "b9ad16972ee03ed47b4a47e65e1a76b1",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1689,7 +1689,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "0fc15a7f6698a2a009d447b38b854051c396dae9"
+                "reference": "e80f15f1fe9f38886881245cb277072c8d33aa14"
             },
             "require": {
                 "ext-json": "*",
@@ -1697,7 +1697,7 @@
                 "keboola/artifacts": "^3.1",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "^18.8",
+                "keboola/input-mapping": "^19.0.1",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
                 "keboola/output-mapping": "^24.17",
@@ -1780,7 +1780,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2024-09-19T15:27:50+00:00"
+            "time": "2024-09-25T07:46:35+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1839,16 +1839,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "18.9.1",
+            "version": "19.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "4e62724040ddc3e3f334ccb509a2274ebb833c69"
+                "reference": "7ab5313f6f96a67df7de186f73e6273ec5c1e5b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/4e62724040ddc3e3f334ccb509a2274ebb833c69",
-                "reference": "4e62724040ddc3e3f334ccb509a2274ebb833c69",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/7ab5313f6f96a67df7de186f73e6273ec5c1e5b2",
+                "reference": "7ab5313f6f96a67df7de186f73e6273ec5c1e5b2",
                 "shasum": ""
             },
             "require": {
@@ -1898,9 +1898,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/18.9.1"
+                "source": "https://github.com/keboola/input-mapping/tree/19.0.1"
             },
-            "time": "2024-09-09T13:16:51+00:00"
+            "time": "2024-09-23T12:24:36+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
