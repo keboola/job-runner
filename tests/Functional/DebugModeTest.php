@@ -547,6 +547,7 @@ class DebugModeTest extends BaseFunctionalTest
                 [
                     'definition' => [
                         'component' => 'keboola.processor-add-row-number-column',
+                        'tag' => '2.2.1',
                     ],
                 ],
             ],
@@ -570,7 +571,7 @@ class DebugModeTest extends BaseFunctionalTest
             'images' => [
                 'developer-portal-v2/keboola.python-transformation',
                 'developer-portal-v2/keboola.processor-create-manifest',
-                'developer-portal-v2/keboola.processor-add-row-number-column',
+                'developer-portal-v2/keboola.processor-add-row-number-column:2.2.1',
             ],
         ];
 
