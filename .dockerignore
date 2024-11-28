@@ -4,3 +4,4 @@ provisioning/
 var/
 vendor/
 bin/.phpunit
+.github/
