@@ -27,7 +27,7 @@
         "keboola/input-mapping": "^18.9",
         "keboola/job-queue-internal-api-php-client": "^23.4",
         "keboola/object-encryptor": "^2.8",
-        "keboola/output-mapping": "^24.29",
+        "keboola/output-mapping": "^24.30",
         "keboola/slicer": "^2.0.1",
         "keboola/storage-api-client": "^15.2",
         "keboola/storage-api-php-client-branch-wrapper": "^6.0",
