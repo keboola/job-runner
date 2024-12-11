@@ -1689,7 +1689,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "c7d25bedb812e455da1d21c9bbac0fca694e88d5"
+                "reference": "9e3086cd639429ce4a03d60e9a10f33d3595e679"
             },
             "require": {
                 "ext-json": "*",
@@ -1703,7 +1703,7 @@
                 "keboola/output-mapping": "^24.30",
                 "keboola/php-utils": "^5.0",
                 "keboola/sandboxes-api-php-client": "^6.7",
-                "keboola/staging-provider": "^8.0",
+                "keboola/staging-provider": "^9.0",
                 "keboola/storage-api-client": "^v15.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "monolog/monolog": "^2.5",
@@ -1780,7 +1780,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2024-12-03T17:29:39+00:00"
+            "time": "2024-12-10T11:22:04+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -2658,16 +2658,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "8.0.0",
+            "version": "9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "00b53889f7e9f00550f316b3ccdc932c16203bf3"
+                "reference": "4e36516eb1205ed805fd7b673d177cfd93360a62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/00b53889f7e9f00550f316b3ccdc932c16203bf3",
-                "reference": "00b53889f7e9f00550f316b3ccdc932c16203bf3",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/4e36516eb1205ed805fd7b673d177cfd93360a62",
+                "reference": "4e36516eb1205ed805fd7b673d177cfd93360a62",
                 "shasum": ""
             },
             "require": {
@@ -2708,9 +2708,9 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/8.0.0"
+                "source": "https://github.com/keboola/staging-provider/tree/9.0.0"
             },
-            "time": "2024-09-16T11:34:10+00:00"
+            "time": "2024-11-21T11:47:00+00:00"
         },
         {
             "name": "keboola/storage-api-client",
