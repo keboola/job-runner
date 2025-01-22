@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b54844b5d15f6e9516ea94485b9d0115",
+    "content-hash": "208fdb3cc87032e22d4fe2cdb6ad776f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2145,22 +2145,22 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.36.0",
+            "version": "24.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "3cb08034f7d7cee8aefd447ed5f7fa4c675bf17f"
+                "reference": "43807e1d083904d9cb4aceaff84d7985db196681"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/3cb08034f7d7cee8aefd447ed5f7fa4c675bf17f",
-                "reference": "3cb08034f7d7cee8aefd447ed5f7fa4c675bf17f",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/43807e1d083904d9cb4aceaff84d7985db196681",
+                "reference": "43807e1d083904d9cb4aceaff84d7985db196681",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/input-mapping": "*@dev",
-                "keboola/php-datatypes": "^7.7",
+                "keboola/php-datatypes": "^7.10",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/sanitizer": "^0.1.1",
                 "keboola/slicer": "*@dev",
@@ -2211,9 +2211,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.36.0"
+                "source": "https://github.com/keboola/output-mapping/tree/24.37.0"
             },
-            "time": "2025-01-17T11:31:17+00:00"
+            "time": "2025-01-22T12:20:57+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2269,16 +2269,16 @@
         },
         {
             "name": "keboola/php-datatypes",
-            "version": "7.8.0",
+            "version": "7.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-datatypes.git",
-                "reference": "cb3b828061c567a1abf490bb932d61f029d40b9e"
+                "reference": "17ada40225dd51932cf36a31189686d095985604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/cb3b828061c567a1abf490bb932d61f029d40b9e",
-                "reference": "cb3b828061c567a1abf490bb932d61f029d40b9e",
+                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/17ada40225dd51932cf36a31189686d095985604",
+                "reference": "17ada40225dd51932cf36a31189686d095985604",
                 "shasum": ""
             },
             "require": {
@@ -2311,9 +2311,9 @@
             "description": "PHP datatypes for databases",
             "support": {
                 "issues": "https://github.com/keboola/php-datatypes/issues",
-                "source": "https://github.com/keboola/php-datatypes/tree/7.8.0"
+                "source": "https://github.com/keboola/php-datatypes/tree/7.10.0"
             },
-            "time": "2024-08-07T14:12:39+00:00"
+            "time": "2025-01-22T08:42:10+00:00"
         },
         {
             "name": "keboola/php-file-storage-utils",
