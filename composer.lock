@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "208fdb3cc87032e22d4fe2cdb6ad776f",
+    "content-hash": "cdcaae544955b954bf1fd3c87ceedd1c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2145,16 +2145,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.37.0",
+            "version": "24.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "43807e1d083904d9cb4aceaff84d7985db196681"
+                "reference": "3d8e5a38951b752d68f6cadfe95e5a62b607aae2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/43807e1d083904d9cb4aceaff84d7985db196681",
-                "reference": "43807e1d083904d9cb4aceaff84d7985db196681",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/3d8e5a38951b752d68f6cadfe95e5a62b607aae2",
+                "reference": "3d8e5a38951b752d68f6cadfe95e5a62b607aae2",
                 "shasum": ""
             },
             "require": {
@@ -2211,9 +2211,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.37.0"
+                "source": "https://github.com/keboola/output-mapping/tree/24.38.0"
             },
-            "time": "2025-01-22T12:20:57+00:00"
+            "time": "2025-01-23T11:52:27+00:00"
         },
         {
             "name": "keboola/permission-checker",
