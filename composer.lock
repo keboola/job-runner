@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb5e09112ac5bb2f156344d3d70d3c94",
+    "content-hash": "535434247c7c8c159dfcc62c6c0ea8e7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2145,16 +2145,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.39.0",
+            "version": "dev-erik-PST-2398-workspace_id-optional",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "fa68f2fb8829e95d0cb53a4fbbfbe449524669f8"
+                "reference": "4b89781b598388fdbe7ff5454ad6189b0d029a7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/fa68f2fb8829e95d0cb53a4fbbfbe449524669f8",
-                "reference": "fa68f2fb8829e95d0cb53a4fbbfbe449524669f8",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/4b89781b598388fdbe7ff5454ad6189b0d029a7f",
+                "reference": "4b89781b598388fdbe7ff5454ad6189b0d029a7f",
                 "shasum": ""
             },
             "require": {
@@ -2211,9 +2211,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.39.0"
+                "source": "https://github.com/keboola/output-mapping/tree/build-2398.1"
             },
-            "time": "2025-01-30T07:50:40+00:00"
+            "time": "2025-01-30T12:02:19+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -11106,10 +11106,18 @@
             "time": "2024-03-03T12:36:25+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-erik-PST-2398-workspace_id-optional",
+            "alias": "24.39",
+            "alias_normalized": "24.39.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/output-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
