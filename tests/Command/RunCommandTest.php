@@ -16,6 +16,7 @@ use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
+use Keboola\OutputMapping\OutputMappingSettings;
 use Keboola\OutputMapping\Writer\TableWriter;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\Client as StorageClient;
@@ -1260,7 +1261,7 @@ class RunCommandTest extends AbstractCommandTest
         $storageApiTokenMock->expects(self::atLeastOnce())
             ->method('hasFeature')
             ->willReturnCallback(function (string $feature): bool {
-                return $feature === TableWriter::OUTPUT_MAPPING_SLICE_FEATURE;
+                return $feature === OutputMappingSettings::OUTPUT_MAPPING_SLICE_FEATURE;
             })
         ;
 
