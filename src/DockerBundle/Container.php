@@ -156,6 +156,7 @@ class Container
      * @return Process
      * @throws ApplicationException
      */
+    #[\DDTrace\Trace]
     public function run()
     {
         // create container

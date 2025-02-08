@@ -191,6 +191,7 @@ class Runner
         $this->currentlyUsedDataLoader?->cleanWorkspace();
     }
 
+    #[\DDTrace\Trace]
     private function runRow(
         JobDefinition $jobDefinition,
         string $action,

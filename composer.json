@@ -75,7 +75,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/"
-        }
+        },
+        "files": [
+            "config/instrumentation.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
