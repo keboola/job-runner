@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\DockerBundle\Runner;
 use App\Helper\BuildBranchClientOptionsHelper;
 use App\Helper\ExceptionConverter;
 use App\Helper\OutputResultConverter;
@@ -13,7 +14,6 @@ use App\StorageApiHandler;
 use App\UsageFile;
 use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
-use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
