@@ -59,6 +59,7 @@ stages:
                 - build-$(Build.SourceVersion)
                 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
                     - latest
+                    - production-$(Build.SourceVersion)
 
   # push to production (dev-* tags)
   - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-') }}:
