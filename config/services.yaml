@@ -60,6 +60,9 @@ services:
     Keboola\ObjectEncryptor\ObjectEncryptor:
         class: Keboola\ObjectEncryptor\ObjectEncryptor
         factory: ['Keboola\ObjectEncryptor\ObjectEncryptorFactory', 'getEncryptor']
+        arguments:
+            $encryptorOptions: '@Keboola\ObjectEncryptor\EncryptorOptions'
+            $logger: '@logger'
 
     Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor:
 
