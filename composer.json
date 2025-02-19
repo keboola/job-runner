@@ -24,7 +24,7 @@
         "keboola/api-error-control": "^4.2",
         "keboola/configuration-variables-resolver": "^5.1",
         "keboola/dockerbundle": "dev-main",
-        "keboola/input-mapping": "^18.9",
+        "keboola/input-mapping": "^18.10",
         "keboola/job-queue-internal-api-php-client": "^23.4",
         "keboola/object-encryptor": "^2.11",
         "keboola/output-mapping": "^24.40",
