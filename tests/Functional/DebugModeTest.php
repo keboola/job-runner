@@ -216,7 +216,7 @@ class DebugModeTest extends BaseFunctionalTest
             ],
         ];
         $expectedJobResult = [
-            'message' => 'Intentional error',
+            'message' => "Intentional error\nexit status 1",
             'configVersion' => '',
             'images' => [],
         ];
