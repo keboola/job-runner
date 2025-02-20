@@ -43,7 +43,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-cache policy docker-ce \
-    && apt-get -y install docker-ce=${DOCKER_PACKAGE_VERSION} \
+    && apt-get -y install docker-ce=${DOCKER_PACKAGE_VERSION} docker-ce-cli=${DOCKER_PACKAGE_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
 # Datadog
