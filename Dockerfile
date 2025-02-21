@@ -8,6 +8,7 @@ ARG APP_USER_UID
 ARG APP_USER_GID
 
 ENV DD_PHP_TRACER_VERSION=0.83.1
+ENV DOCKER_PACKAGE_VERSION=5:27.5.1-1~debian.12~bookworm
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
@@ -42,7 +43,7 @@ RUN wget https://download.docker.com/linux/debian/gpg \
     && echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-cache policy docker-ce \
-    && apt-get -y install docker-ce \
+    && apt-get -y install docker-ce=${DOCKER_PACKAGE_VERSION} docker-ce-cli=${DOCKER_PACKAGE_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
 # Datadog
