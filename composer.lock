@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0e08302c2fa2cfb01c7eb5d42c5b504",
+    "content-hash": "058c4448ab5d191697115d68d4773523",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2076,16 +2076,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "2.11.0",
+            "version": "2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "3b6724a58164def3916643d8b554b1d9715fddae"
+                "reference": "d4b7974231312a93d8041291010bb7e2ac3c8713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/3b6724a58164def3916643d8b554b1d9715fddae",
-                "reference": "3b6724a58164def3916643d8b554b1d9715fddae",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/d4b7974231312a93d8041291010bb7e2ac3c8713",
+                "reference": "d4b7974231312a93d8041291010bb7e2ac3c8713",
                 "shasum": ""
             },
             "require": {
@@ -2137,9 +2137,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/2.11.0"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.11.1"
             },
-            "time": "2025-02-10T15:11:37+00:00"
+            "time": "2025-02-21T09:57:19+00:00"
         },
         {
             "name": "keboola/output-mapping",
