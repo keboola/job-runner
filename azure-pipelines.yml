@@ -86,6 +86,18 @@ stages:
                   tags:
                     - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
 
+              - task: DownloadSecureFile@1
+                name: downloadPrivateKey
+                inputs:
+                  secureFile: "keboola-kbc-stacks-trigger-241022-pvk.pem"
+                displayName: 'Download "Keboola - kbc-stacks trigger" GitHub App Private Key for updating Helm charts'
+
+              - template: azure-pipelines/steps/update-helm-chart.yml
+                parameters:
+                  helm_chart: job-queue-daemon
+                  extra-tag1: jobQueueRunnerImage.tag:${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+                  multi_stage: "false"
+
   # push to production (main branch)
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
       - stage: publishImages_production
@@ -117,3 +129,15 @@ stages:
                 inputs:
                   targetPath: artifact
                   artifact: keboola.job-runner.latest-build
+
+              - task: DownloadSecureFile@1
+                name: downloadPrivateKey
+                inputs:
+                  secureFile: "keboola-kbc-stacks-trigger-241022-pvk.pem"
+                displayName: 'Download "Keboola - kbc-stacks trigger" GitHub App Private Key for updating Helm charts'
+
+              - template: azure-pipelines/steps/update-helm-chart.yml
+                parameters:
+                  helm_chart: job-queue-daemon
+                  extra-tag1: jobQueueRunnerImage.tag:production-$(Build.SourceVersion)
+                  multi_stage: "true"

@@ -1,0 +1,112 @@
+parameters:
+  - name: helm_chart
+    type: string
+  - name: image_tag
+    type: string
+    default: ""
+  - name: multi_stage
+    type: string
+    default: "false"
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.x"
+    displayName: "Use Python 3.x"
+
+  - script: |
+      pip install PyGithub
+    displayName: "Install dependencies"
+
+  - task: PythonScript@0
+    inputs:
+      scriptSource: "inline"
+      script: |
+        """
+        This module triggers a GitHub Actions workflow in the keboola/kbc-stacks repository.
+        It authenticates as a GitHub App using an installation ID, and dispatches a workflow
+        with specified inputs for updating image tags in Helm charts.
+        """
+
+        import os
+        import json
+        import base64
+        import datetime
+        import traceback
+        from github import Github, GithubIntegration
+
+        # Get environment variables
+        app_id = "1032801"
+        installation_id = 56269262
+        private_key_path = os.environ["DOWNLOADPRIVATEKEY_SECUREFILEPATH"]
+        helm_chart = os.environ["HELM_CHART"]
+        image_tag = os.environ["IMAGE_TAG"]
+        multi_stage = os.environ["MULTI_STAGE"]
+
+        # Get Azure DevOps specific variables
+        build_repository_name = os.environ["BUILD_REPOSITORY_NAME"]
+        build_repository_uri = os.environ["BUILD_REPOSITORY_URI"]
+        build_source_version = os.environ["BUILD_SOURCEVERSION"]
+        build_requested_for = os.environ["BUILD_REQUESTEDFOR"]
+        build_build_id = os.environ["BUILD_BUILDID"]
+        system_team_foundation_collection_uri = os.environ["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"]
+        system_team_project = os.environ["SYSTEM_TEAMPROJECT"]
+        build_definition_name = os.environ["BUILD_DEFINITIONNAME"]
+
+        # Create metadata similar to GitHub Actions
+        metadata = {
+            "source": {
+                "repository": build_repository_name,
+                "repository_url": build_repository_uri,
+                "sha": build_source_version,
+                "actor": build_requested_for,
+                "workflow_url": f"{system_team_foundation_collection_uri}{system_team_project}/_build/results?buildId={build_build_id}&view=results",
+                "ref": os.environ.get("BUILD_SOURCEBRANCH", "Unknown"),
+                "timestamp": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+
+        # Convert metadata to base64
+        encoded_metadata = base64.b64encode(json.dumps(metadata).encode()).decode()
+
+        try:
+            # Read the private key
+            with open(private_key_path, "r", encoding="utf-8") as key_file:
+                private_key = key_file.read()
+
+            # Create a GitHub integration object
+            git_integration = GithubIntegration(app_id, private_key)
+
+            # Get an access token for the installation
+            access_token = git_integration.get_access_token(installation_id).token
+
+            # Create a Github instance with the access token
+            g = Github(access_token)
+
+            # Use the client to dispatch the workflow
+            repo = g.get_repo("keboola/kbc-stacks")
+            workflow = repo.get_workflow("update-image-tag.yaml")
+            dispatch_inputs = {
+                "helm-chart": helm_chart,
+                "image-tag": image_tag,
+                "automerge": "true",
+                "dry-run": "false",
+                "multi-stage": multi_stage,
+                "metadata": encoded_metadata
+            }
+            print(f"Dispatching workflow with inputs: {dispatch_inputs}")
+            workflow.create_dispatch("main", dispatch_inputs)
+
+            print("Workflow dispatched successfully")
+
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            print(traceback.format_exc())
+        finally:
+            if "g" in locals():
+                g.close()
+    displayName: "Trigger image tag update workflow"
+    env:
+      HELM_CHART: ${{ parameters.helm_chart }}
+      IMAGE_TAG: ${{ parameters.image_tag }}
+      MULTI_STAGE: ${{ parameters.multi_stage }}
