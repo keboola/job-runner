@@ -62,10 +62,10 @@ stages:
                     - latest
                     - production-$(Build.SourceVersion)
 
-  # push to production (dev-* and canary-* tags)
-  - ${{ if or(startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-'), startsWith(variables['Build.SourceBranch'], 'refs/tags/canary-')) }}:
+  # push to production (dev-* tags)
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-') }}:
       - stage: publishImages_production
-        displayName: Publish Production Images (dev/canary tag)
+        displayName: Publish Production Images (dev tag)
         dependsOn: [build, tests]
         jobs:
           - job:
@@ -86,6 +86,31 @@ stages:
                   targetImage: job-runner
                   tags:
                     - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+
+  # push to production (canary-* tags)
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/canary-') }}:
+    - stage: publishImages_production
+      displayName: Publish Production Images (canary tag)
+      dependsOn: [build, tests]
+      jobs:
+        - job:
+          displayName: Publish Docker Images
+          steps:
+            - template: azure-pipelines/steps/restore-docker-artifact.yml
+            - template: azure-pipelines/steps/push-docker-image.yml
+              parameters:
+                displayName: Production
+                awsCredentials: Production - ECR Distribution
+                awsRegionName: us-east-1
+                acrRegistry: keboola.azurecr.io
+                garPushEnabled: True
+                garRegistry: Keboola GAR
+                garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
+                garRepositoryProjectId: keboola-prod-artifacts
+                sourceImage: keboola/job-runner
+                targetImage: job-runner
+                tags:
+                  - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
 
               - task: DownloadSecureFile@1
                 name: downloadPrivateKey
