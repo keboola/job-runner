@@ -115,7 +115,7 @@ stages:
             - template: azure-pipelines/steps/update-helm-chart.yml
               parameters:
                 helm_chart: job-queue-daemon
-                extra-tag1: jobQueueRunnerImage.tag:${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+                extra_tag1: jobQueueRunnerImage.tag:${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
                 multi_stage: "false"
 
   # push to production (main branch)
@@ -153,5 +153,5 @@ stages:
               - template: azure-pipelines/steps/update-helm-chart.yml
                 parameters:
                   helm_chart: job-queue-daemon
-                  extra-tag1: jobQueueRunnerImage.tag:production-$(Build.SourceVersion)
+                  extra_tag1: jobQueueRunnerImage.tag:production-$(Build.SourceVersion)
                   multi_stage: "true"
