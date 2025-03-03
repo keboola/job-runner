@@ -112,12 +112,6 @@ stages:
                 tags:
                   - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
 
-            - task: DownloadSecureFile@1
-              name: downloadPrivateKey
-              inputs:
-                secureFile: "keboola-kbc-stacks-trigger-241022-pvk.pem"
-              displayName: 'Download "Keboola - kbc-stacks trigger" GitHub App Private Key for updating Helm charts'
-
             - template: azure-pipelines/steps/update-helm-chart.yml
               parameters:
                 helm_chart: job-queue-daemon
@@ -155,12 +149,6 @@ stages:
                 inputs:
                   targetPath: artifact
                   artifact: keboola.job-runner.latest-build
-
-              - task: DownloadSecureFile@1
-                name: downloadPrivateKey
-                inputs:
-                  secureFile: "keboola-kbc-stacks-trigger-241022-pvk.pem"
-                displayName: 'Download "Keboola - kbc-stacks trigger" GitHub App Private Key for updating Helm charts'
 
               - template: azure-pipelines/steps/update-helm-chart.yml
                 parameters:

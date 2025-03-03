@@ -14,6 +14,12 @@ steps:
       versionSpec: "3.x"
     displayName: "Use Python 3.x"
 
+  - task: DownloadSecureFile@1
+    name: downloadPrivateKey
+    inputs:
+      secureFile: "keboola-kbc-stacks-trigger-241022-pvk.pem"
+    displayName: 'Download "Keboola - kbc-stacks trigger" GitHub App Private Key for updating Helm charts'
+
   - script: |
       pip install PyGithub
     displayName: "Install dependencies"
