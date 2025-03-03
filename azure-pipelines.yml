@@ -7,6 +7,7 @@ trigger:
   tags:
     include:
       - 'dev-*'
+      - 'canary-*'
 
 pool:
   vmImage: ubuntu-latest
@@ -86,6 +87,37 @@ stages:
                   tags:
                     - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
 
+  # push to production (canary-* tags)
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/canary-') }}:
+    - stage: publishImages_production
+      displayName: Publish Production Images (canary tag)
+      dependsOn: [build, tests]
+      jobs:
+        - job:
+          displayName: Publish Docker Images
+          steps:
+            - template: azure-pipelines/steps/restore-docker-artifact.yml
+            - template: azure-pipelines/steps/push-docker-image.yml
+              parameters:
+                displayName: Production
+                awsCredentials: Production - ECR Distribution
+                awsRegionName: us-east-1
+                acrRegistry: keboola.azurecr.io
+                garPushEnabled: True
+                garRegistry: Keboola GAR
+                garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
+                garRepositoryProjectId: keboola-prod-artifacts
+                sourceImage: keboola/job-runner
+                targetImage: job-runner
+                tags:
+                  - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+
+            - template: azure-pipelines/steps/update-helm-chart.yml
+              parameters:
+                helm_chart: job-queue-daemon
+                extra-tag1: jobQueueRunnerImage.tag:${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
+                multi_stage: "false"
+
   # push to production (main branch)
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
       - stage: publishImages_production
@@ -117,3 +149,9 @@ stages:
                 inputs:
                   targetPath: artifact
                   artifact: keboola.job-runner.latest-build
+
+              - template: azure-pipelines/steps/update-helm-chart.yml
+                parameters:
+                  helm_chart: job-queue-daemon
+                  extra-tag1: jobQueueRunnerImage.tag:production-$(Build.SourceVersion)
+                  multi_stage: "true"
