@@ -50,6 +50,7 @@ steps:
         private_key_path = os.environ["DOWNLOADPRIVATEKEY_SECUREFILEPATH"]
         helm_chart = os.environ["HELM_CHART"]
         image_tag = os.environ["IMAGE_TAG"]
+        extra_tag1 = os.environ["EXTRA_TAG1"]
         multi_stage = os.environ["MULTI_STAGE"]
 
         # Get Azure DevOps specific variables
@@ -119,4 +120,5 @@ steps:
     env:
       HELM_CHART: ${{ parameters.helm_chart }}
       IMAGE_TAG: ${{ parameters.image_tag }}
+      EXTRA_TAG1: ${{ parameters.extra_tag1 }}
       MULTI_STAGE: ${{ parameters.multi_stage }}
