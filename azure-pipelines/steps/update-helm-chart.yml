@@ -4,6 +4,9 @@ parameters:
   - name: image_tag
     type: string
     default: ""
+  - name: extra_tag1
+    type: string
+    default: ""
   - name: multi_stage
     type: string
     default: "false"
@@ -95,6 +98,7 @@ steps:
             dispatch_inputs = {
                 "helm-chart": helm_chart,
                 "image-tag": image_tag,
+                "extra-tag1": extra_tag1,
                 "automerge": "true",
                 "dry-run": "false",
                 "multi-stage": multi_stage,
