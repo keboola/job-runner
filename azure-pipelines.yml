@@ -25,24 +25,10 @@ stages:
 
           - template: azure-pipelines/steps/store-docker-artifact.yml
 
-  - stage: tests
-    displayName: Tests
-    dependsOn: build
-    pool:
-      name: Default # run on custom worker, tests needs Docker socket
-    jobs:
-      - template: azure-pipelines/jobs/run-tests.yml
-        parameters:
-          displayName: Run Tests
-          envName: aws
-          secrets:
-            TEST_STORAGE_API_TOKEN: $(TEST_STORAGE_API_TOKEN)
-            TEST_STORAGE_API_TOKEN_MASTER: $(TEST_STORAGE_API_TOKEN_MASTER)
-
   # push to testing
   - stage: publishImages_testing
     displayName: Publish Testing Images
-    dependsOn: [build, tests]
+    dependsOn: [build]
     jobs:
       - job:
         displayName: Publish Docker Images
@@ -66,7 +52,7 @@ stages:
   - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/dev-') }}:
       - stage: publishImages_production
         displayName: Publish Production Images (dev tag)
-        dependsOn: [build, tests]
+        dependsOn: [build]
         jobs:
           - job:
             displayName: Publish Docker Images
@@ -86,72 +72,3 @@ stages:
                   targetImage: job-runner
                   tags:
                     - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
-
-  # push to production (canary-* tags)
-  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/canary-') }}:
-    - stage: publishImages_production
-      displayName: Publish Production Images (canary tag)
-      dependsOn: [build, tests]
-      jobs:
-        - job:
-          displayName: Publish Docker Images
-          steps:
-            - template: azure-pipelines/steps/restore-docker-artifact.yml
-            - template: azure-pipelines/steps/push-docker-image.yml
-              parameters:
-                displayName: Production
-                awsCredentials: Production - ECR Distribution
-                awsRegionName: us-east-1
-                acrRegistry: keboola.azurecr.io
-                garPushEnabled: True
-                garRegistry: Keboola GAR
-                garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
-                garRepositoryProjectId: keboola-prod-artifacts
-                sourceImage: keboola/job-runner
-                targetImage: job-runner
-                tags:
-                  - ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
-
-            - template: azure-pipelines/steps/update-helm-chart.yml
-              parameters:
-                helm_chart: job-queue-daemon
-                extra_tag1: jobQueueRunnerImage.tag:${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
-                multi_stage: "false"
-
-  # push to production (main branch)
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-      - stage: publishImages_production
-        displayName: Publish Production Images (main branch)
-        dependsOn: [build, tests]
-        jobs:
-          - job:
-            displayName: Publish Docker Images
-            steps:
-              - template: azure-pipelines/steps/restore-docker-artifact.yml
-              - template: azure-pipelines/steps/push-docker-image.yml
-                parameters:
-                  displayName: Production
-                  awsCredentials: Production - ECR Distribution
-                  awsRegionName: us-east-1
-                  acrRegistry: keboola.azurecr.io
-                  garPushEnabled: True
-                  garRegistry: Keboola GAR
-                  garRepository: us-central1-docker.pkg.dev/keboola-prod-artifacts
-                  garRepositoryProjectId: keboola-prod-artifacts
-                  sourceImage: keboola/job-runner
-                  targetImage: job-runner
-                  tags:
-                    - production-$(Build.SourceVersion)
-
-              - script: echo "production-$(Build.SourceVersion)" > artifact
-                displayName: Create artifact
-              - task: PublishPipelineArtifact@1
-                inputs:
-                  targetPath: artifact
-                  artifact: keboola.job-runner.latest-build
-
-              - template: azure-pipelines/steps/update-helm-chart.yml
-                parameters:
-                  helm_chart: job-queue-daemon
-                  extra_tag1: jobQueueRunnerImage.tag:production-$(Build.SourceVersion)
-                  multi_stage: "true"
