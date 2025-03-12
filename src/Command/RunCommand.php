@@ -30,6 +30,7 @@ use Keboola\JobQueueInternalClient\Result\JobMetrics;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Event;
 use Keboola\StorageApiBranch\ClientWrapper;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
@@ -167,8 +168,20 @@ class RunCommand extends Command
     {
         $clientWithoutLogger = $this->storageClientFactory->createClientWrapper($options)
             ->getBranchClient();
-        $handler = new StorageApiHandler('job-runner', $clientWithoutLogger);
+
+        $storageEventsSamplingRate = ((float) getenv('STORAGE_EVENTS_SAMPLING_RATE')) ?: 1;
+        $handler = new StorageApiHandler('job-runner', $clientWithoutLogger, $storageEventsSamplingRate);
         $this->logger->pushHandler($handler);
+
+        if ($storageEventsSamplingRate < 1) {
+            $event = new Event();
+            $event->setMessage('Job events are being sampled. Not all events will be logged.');
+            $event->setRunId($clientWithoutLogger->getRunId());
+            $event->setType(Event::TYPE_WARN);
+            $event->setComponent('job-runner');
+
+            $clientWithoutLogger->createEvent($event);
+        }
 
         /* intentionally leaving this commented out, it's useful for debugging
         $h2 = new StreamHandler('/code/job.log', Logger::DEBUG);

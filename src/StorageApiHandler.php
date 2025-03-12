@@ -20,6 +20,7 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
     public function __construct(
         private readonly string $appName,
         private readonly Client $storageApiClient,
+        private readonly float $samplingRate = 1.0,
     ) {
         parent::__construct();
         $this->verbosity[Logger::DEBUG] = self::VERBOSITY_NONE;
@@ -96,6 +97,10 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
                 break;
         }
         $event->setType($type);
+
+        if ($this->samplingRate < 1.0 && (mt_rand(0, 100) / 100) > $this->samplingRate) {
+            return false;
+        }
 
         $this->storageApiClient->createEvent($event);
         return false;
