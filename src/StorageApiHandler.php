@@ -98,7 +98,7 @@ class StorageApiHandler extends AbstractHandler implements StorageApiHandlerInte
         $event->setType($type);
 
         // decrease the amount of info events
-        if ($type === Event::TYPE_INFO && time() % 2 === 0) {
+        if ($type === Event::TYPE_INFO && time() % 3 === 0) {
             return false;
         }
 
