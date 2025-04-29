@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "058c4448ab5d191697115d68d4773523",
+    "content-hash": "bb84894f857b903b9f94e9d0c9bdd603",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2084,16 +2084,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "2.12.0",
+            "version": "2.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "9251426139652862183f5e370275843e74d6bf31"
+                "reference": "3b9546cae8f0def47d089adf4aa21977befc8847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/9251426139652862183f5e370275843e74d6bf31",
-                "reference": "9251426139652862183f5e370275843e74d6bf31",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/3b9546cae8f0def47d089adf4aa21977befc8847",
+                "reference": "3b9546cae8f0def47d089adf4aa21977befc8847",
                 "shasum": ""
             },
             "require": {
@@ -2105,11 +2105,13 @@
                 "keboola/azure-key-vault-client": "^4.1",
                 "keboola/common-exceptions": "^1.2",
                 "php": ">=8.2",
+                "symfony/uid": "^7.2",
                 "vkartaviy/retry": "^0.2"
             },
             "require-dev": {
                 "infection/infection": "^0.26",
                 "keboola/coding-standard": "^15.0",
+                "monolog/monolog": "^3.9",
                 "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5",
@@ -2145,9 +2147,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/2.12.0"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.13.1"
             },
-            "time": "2025-04-04T07:53:30+00:00"
+            "time": "2025-04-29T11:16:13+00:00"
         },
         {
             "name": "keboola/output-mapping",
