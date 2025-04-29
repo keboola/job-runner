@@ -15,8 +15,9 @@ use Keboola\InputMapping\Table\Result;
 use Keboola\InputMapping\Table\Result\TableInfo;
 use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\Exception\UserException as EncryptionUserException;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\Test\TestLogger;
 use Throwable;
 
 class ExceptionConverterTest extends TestCase
@@ -31,14 +32,16 @@ class ExceptionConverterTest extends TestCase
         string $expectedLog,
         string $method,
     ): void {
-        $logger = new TestLogger();
+        $logsHandler = new TestHandler();
+        $logger = new Logger('test', [$logsHandler]);
+
         $result = ExceptionConverter::convertExceptionToResult($logger, $exception, '123', []);
         self::assertEquals($expectedMessage, $result->getMessage());
         self::assertEquals($expectedErrorType, $result->getErrorType());
         self::assertStringStartsWith('exception-', (string) $result->getExceptionId());
         self::assertNull($result->getConfigVersion());
         self::assertSame([], $result->getImages());
-        self::assertTrue($logger->$method($expectedLog));
+        self::assertTrue($logsHandler->$method($expectedLog));
 
         $variables = $result->getVariables();
         self::assertNotNull($variables);
@@ -90,7 +93,9 @@ class ExceptionConverterTest extends TestCase
 
     public function testExceptionConversionOutputs(): void
     {
-        $logger = new TestLogger();
+        $logsHandler = new TestHandler();
+        $logger = new Logger('test', [$logsHandler]);
+
         $output1 = new Output();
         $output1->setImages(['a' => 'b']);
         $output1->setConfigVersion('123');
