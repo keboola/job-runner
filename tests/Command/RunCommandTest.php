@@ -861,7 +861,9 @@ class RunCommandTest extends AbstractCommandTest
                     'variables_id' => $variablesId,
                     'shared_code_id' => $sharedCodeId,
                     'shared_code_row_ids' => ['code-id'],
-                    'image_parameters' => [],
+                    'image_parameters' => [
+                        'testParam' => 'test value',
+                    ],
                     'action' => 'run',
                     'storage' => [],
                     'authorization' => [

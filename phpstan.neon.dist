@@ -1,10 +1,10 @@
 parameters:
-    checkMissingIterableValueType: false
     level: max
     paths:
         - src
         - tests
     ignoreErrors:
+        - identifier: missingType.iterableValue
         - '#Unreachable statement \- code above always terminates\.#'
     symfony:
         consoleApplicationLoader: tests/console-application.php
