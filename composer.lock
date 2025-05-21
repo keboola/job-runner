@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcf52f33bff9a6a1ffeda7fb5cdbba77",
+    "content-hash": "1608f0e363b286d3cedc80c8c986975a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.343.10",
+            "version": "3.343.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "473d632d03a78b19f9f75a2126c5ba8c21f09346"
+                "reference": "138f07d30607af225aefbb794b90d76ea3a67831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/473d632d03a78b19f9f75a2126c5ba8c21f09346",
-                "reference": "473d632d03a78b19f9f75a2126c5ba8c21f09346",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/138f07d30607af225aefbb794b90d76ea3a67831",
+                "reference": "138f07d30607af225aefbb794b90d76ea3a67831",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.10"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.16"
             },
-            "time": "2025-05-13T18:09:50+00:00"
+            "time": "2025-05-21T18:03:53+00:00"
         },
         {
             "name": "brick/math",
@@ -216,6 +216,85 @@
                 }
             ],
             "time": "2025-02-28T13:11:00+00:00"
+        },
+        {
+            "name": "colinodell/psr-testlogger",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinodell/psr-testlogger.git",
+                "reference": "291f5b70ea0d3139787d18f442365a8e2784a462"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinodell/psr-testlogger/zipball/291f5b70ea0d3139787d18f442365a8e2784a462",
+                "reference": "291f5b70ea0d3139787d18f442365a8e2784a462",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0 || 2.0.0 || 3.0.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.9.2",
+                "phpunit/phpunit": "^9.5.5",
+                "scrutinizer/ocular": "^1.8.1",
+                "unleashedtech/php-coding-standard": "^3.1",
+                "vimeo/psalm": "^4.30.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ColinODell\\PsrTestLogger\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin O'Dell",
+                    "email": "colinodell@gmail.com",
+                    "homepage": "https://www.colinodell.com",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "PSR-3 compliant test logger based on psr/log v1's, but compatible with v2 and v3 too!",
+            "homepage": "https://github.com/colinodell/psr-testlogger",
+            "keywords": [
+                "log",
+                "logger",
+                "logging",
+                "mock",
+                "phpunit",
+                "psr",
+                "test",
+                "unit"
+            ],
+            "support": {
+                "issues": "https://github.com/colinodell/psr-testlogger/issues",
+                "rss": "https://github.com/colinodell/psr-testlogger/releases.atom",
+                "source": "https://github.com/colinodell/psr-testlogger"
+            },
+            "funding": [
+                {
+                    "url": "https://www.colinodell.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.paypal.me/colinpodell/10.00",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/colinodell",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-11-29T23:03:34+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -507,16 +586,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.62.2",
+            "version": "v1.62.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "506b69e9e13eaac1656edd0bfc7ea5d81cf870d9"
+                "reference": "0c19d76e7f3b6810c4f2cc1330c693af2681c601"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/506b69e9e13eaac1656edd0bfc7ea5d81cf870d9",
-                "reference": "506b69e9e13eaac1656edd0bfc7ea5d81cf870d9",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/0c19d76e7f3b6810c4f2cc1330c693af2681c601",
+                "reference": "0c19d76e7f3b6810c4f2cc1330c693af2681c601",
                 "shasum": ""
             },
             "require": {
@@ -567,9 +646,9 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.62.2"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.62.3"
             },
-            "time": "2025-05-09T21:18:44+00:00"
+            "time": "2025-05-20T19:49:54+00:00"
         },
         {
             "name": "google/cloud-kms",
@@ -624,16 +703,16 @@
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.48.0",
+            "version": "v1.48.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "e2d7a59290ab7fb69208c45058efa3946edbb793"
+                "reference": "509b095c3ea44db92c9e62a94b5773563c831821"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/e2d7a59290ab7fb69208c45058efa3946edbb793",
-                "reference": "e2d7a59290ab7fb69208c45058efa3946edbb793",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/509b095c3ea44db92c9e62a94b5773563c831821",
+                "reference": "509b095c3ea44db92c9e62a94b5773563c831821",
                 "shasum": ""
             },
             "require": {
@@ -675,22 +754,22 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.48.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.48.1"
             },
-            "time": "2025-04-18T20:49:28+00:00"
+            "time": "2025-05-20T19:49:54+00:00"
         },
         {
             "name": "google/common-protos",
-            "version": "4.12.0",
+            "version": "4.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/common-protos-php.git",
-                "reference": "96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0"
+                "reference": "70c4eb1abab5484a23c17a43b0d455259f5d8c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/common-protos-php/zipball/96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0",
-                "reference": "96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0",
+                "url": "https://api.github.com/repos/googleapis/common-protos-php/zipball/70c4eb1abab5484a23c17a43b0d455259f5d8c1b",
+                "reference": "70c4eb1abab5484a23c17a43b0d455259f5d8c1b",
                 "shasum": ""
             },
             "require": {
@@ -734,22 +813,22 @@
                 "google"
             ],
             "support": {
-                "source": "https://github.com/googleapis/common-protos-php/tree/v4.12.0"
+                "source": "https://github.com/googleapis/common-protos-php/tree/v4.12.1"
             },
-            "time": "2025-04-18T20:49:28+00:00"
+            "time": "2025-05-20T19:49:54+00:00"
         },
         {
             "name": "google/gax",
-            "version": "v1.36.0",
+            "version": "v1.36.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "140599cf5eae2432363ce6198e9fdff851625a7a"
+                "reference": "afdac3bc38a3b17d70668115d7b1a97289ac4d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/140599cf5eae2432363ce6198e9fdff851625a7a",
-                "reference": "140599cf5eae2432363ce6198e9fdff851625a7a",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/afdac3bc38a3b17d70668115d7b1a97289ac4d72",
+                "reference": "afdac3bc38a3b17d70668115d7b1a97289ac4d72",
                 "shasum": ""
             },
             "require": {
@@ -791,9 +870,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.36.0"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.36.1"
             },
-            "time": "2024-12-11T02:47:43+00:00"
+            "time": "2025-05-20T19:50:43+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -886,16 +965,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v4.30.2",
+            "version": "v4.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "a4c4d8565b40b9f76debc9dfeb221412eacb8ced"
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/a4c4d8565b40b9f76debc9dfeb221412eacb8ced",
-                "reference": "a4c4d8565b40b9f76debc9dfeb221412eacb8ced",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/d59e31ce4bf0e4b48728e90c4d880839edb5be07",
+                "reference": "d59e31ce4bf0e4b48728e90c4d880839edb5be07",
                 "shasum": ""
             },
             "require": {
@@ -924,9 +1003,9 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.30.2"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v4.31.0"
             },
-            "time": "2025-03-26T18:01:50+00:00"
+            "time": "2025-05-14T16:17:23+00:00"
         },
         {
             "name": "graylog2/gelf-php",
@@ -1690,11 +1769,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-main",
+            "version": "dev-pepa_stagingRework_2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "cc9b511e267992afa68ddf110b8f1d4c09fbdc4f"
+                "reference": "7fac2df9ed915b87e65c4b96979ede5c3878d876"
             },
             "require": {
                 "ext-json": "*",
@@ -1702,13 +1781,14 @@
                 "keboola/artifacts": "^3.1",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "^19.3",
+                "keboola/input-mapping": "dev-pepa_invertStaging as 20.1.0",
+                "keboola/job-queue-job-configuration": "dev-pepa_PAT-317_workspaceManager",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "^24.42",
+                "keboola/output-mapping": "dev-pepa_invertStaging as 25.1.0",
                 "keboola/php-temp": "^2.0",
                 "keboola/php-utils": "^5.0",
-                "keboola/staging-provider": "^10.0.1",
+                "keboola/staging-provider": "dev-pepa_invertStaging as 11.1.0",
                 "keboola/storage-api-client": "^18.1",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "monolog/monolog": "^2.5",
@@ -1728,7 +1808,6 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^6.4|^7.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "aws/aws-sdk-php": [
@@ -1785,7 +1864,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2025-05-14T09:26:05+00:00"
+            "time": "2025-05-21T21:15:44+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1844,21 +1923,23 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "19.3.0",
+            "version": "dev-pepa_invertStaging",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "002584112c075471c06a18dea66c509c8bc8db4d"
+                "reference": "bf239d4394bf7560a8ac44627cde0318ea612fa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/002584112c075471c06a18dea66c509c8bc8db4d",
-                "reference": "002584112c075471c06a18dea66c509c8bc8db4d",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/bf239d4394bf7560a8ac44627cde0318ea612fa7",
+                "reference": "bf239d4394bf7560a8ac44627cde0318ea612fa7",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
+                "keboola/key-generator": "*@dev",
                 "keboola/php-file-storage-utils": "^0.2",
+                "keboola/staging-provider": "*@dev",
                 "keboola/storage-api-client": "^18.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "php": ">=8.2",
@@ -1871,7 +1952,7 @@
                 "brianium/paratest": "^6.11",
                 "keboola/coding-standard": ">=14.0",
                 "keboola/php-temp": "^2.0",
-                "keboola/settle": "^1.0",
+                "keboola/settle": "*@dev",
                 "monolog/monolog": "^3.0",
                 "phpstan/phpstan": "^1.9",
                 "phpstan/phpstan-phpunit": "^1.3",
@@ -1905,22 +1986,22 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/19.3.0"
+                "source": "https://github.com/keboola/input-mapping/tree/pepa_invertStaging"
             },
-            "time": "2025-05-07T05:10:55+00:00"
+            "time": "2025-05-16T11:37:13+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "23.10.1",
+            "version": "23.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "e476cba783c833add65c99dc601ac9de601388aa"
+                "reference": "017c3a3d941c9f6fe3c8ed05701cf2125d39592d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/e476cba783c833add65c99dc601ac9de601388aa",
-                "reference": "e476cba783c833add65c99dc601ac9de601388aa",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/017c3a3d941c9f6fe3c8ed05701cf2125d39592d",
+                "reference": "017c3a3d941c9f6fe3c8ed05701cf2125d39592d",
                 "shasum": ""
             },
             "require": {
@@ -1980,9 +2061,59 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.10.1"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.12.0"
             },
-            "time": "2025-04-28T08:00:19+00:00"
+            "time": "2025-05-14T13:02:10+00:00"
+        },
+        {
+            "name": "keboola/job-queue-job-configuration",
+            "version": "dev-pepa_PAT-317_workspaceManager",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/job-queue-job-configuration.git",
+                "reference": "f28606a9234665e9d2b978d8b51b0346d1ba3bb9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/f28606a9234665e9d2b978d8b51b0346d1ba3bb9",
+                "reference": "f28606a9234665e9d2b978d8b51b0346d1ba3bb9",
+                "shasum": ""
+            },
+            "require": {
+                "colinodell/psr-testlogger": "^1.3",
+                "keboola/common-exceptions": "^1.2",
+                "keboola/input-mapping": "dev-pepa_invertStaging",
+                "keboola/output-mapping": "dev-pepa_invertStaging",
+                "keboola/staging-provider": "dev-pepa_invertStaging",
+                "keboola/storage-api-client": "^18.1",
+                "php": "^8.2",
+                "psr/log": "^3.0",
+                "symfony/config": "^6.4|^7.0"
+            },
+            "require-dev": {
+                "keboola/coding-standard": ">=15.0",
+                "keboola/php-temp": "^2.0",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan-symfony": "^1.2",
+                "phpunit/phpunit": "^10.0",
+                "symfony/dotenv": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\JobQueue\\JobConfiguration\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "support": {
+                "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/pepa_PAT-317_workspaceManager"
+            },
+            "time": "2025-05-21T15:29:53+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2203,25 +2334,27 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "24.42.0",
+            "version": "dev-pepa_invertStaging",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "da322ea6f4a80103a6003516aa894696cfaa2f2a"
+                "reference": "f62e8ed3529a4a563eb9855bedee827de35f98d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/da322ea6f4a80103a6003516aa894696cfaa2f2a",
-                "reference": "da322ea6f4a80103a6003516aa894696cfaa2f2a",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/f62e8ed3529a4a563eb9855bedee827de35f98d6",
+                "reference": "f62e8ed3529a4a563eb9855bedee827de35f98d6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/input-mapping": "*@dev",
+                "keboola/key-generator": "*@dev",
                 "keboola/php-datatypes": "^7.10",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/sanitizer": "^0.1.1",
                 "keboola/slicer": "*@dev",
+                "keboola/staging-provider": "*@dev",
                 "keboola/storage-api-client": "^18.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "microsoft/azure-storage-blob": "^1.5",
@@ -2269,9 +2402,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/24.42.0"
+                "source": "https://github.com/keboola/output-mapping/tree/pepa_invertStaging"
             },
-            "time": "2025-05-07T05:10:55+00:00"
+            "time": "2025-05-16T11:37:13+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2710,24 +2843,21 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "10.0.1",
+            "version": "dev-pepa_invertStaging",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "fa15188a1750af8b2680212b9dda7b56702e1e97"
+                "reference": "ddd7a9865d851707e974684f10441edecb6f1916"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/fa15188a1750af8b2680212b9dda7b56702e1e97",
-                "reference": "fa15188a1750af8b2680212b9dda7b56702e1e97",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/ddd7a9865d851707e974684f10441edecb6f1916",
+                "reference": "ddd7a9865d851707e974684f10441edecb6f1916",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "keboola/input-mapping": "*@dev",
                 "keboola/key-generator": "*@dev",
-                "keboola/output-mapping": "*@dev",
-                "keboola/slicer": "*@dev",
                 "keboola/storage-api-client": "^18.1",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "php": ">=8.2"
@@ -2738,7 +2868,7 @@
                 "phpstan/phpstan-phpunit": "^1.1",
                 "phpunit/phpunit": "^9.5",
                 "sempro/phpunit-pretty-print": "^1.4",
-                "symfony/dotenv": "^5.2|^6.0|^7.0"
+                "symfony/dotenv": "^6.4|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -2761,22 +2891,22 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/10.0.1"
+                "source": "https://github.com/keboola/staging-provider/tree/pepa_invertStaging"
             },
-            "time": "2025-05-07T14:41:33+00:00"
+            "time": "2025-05-21T21:03:08+00:00"
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.2.0",
+            "version": "v18.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "06fee4a8854d0e21f820990d14ef70e5efd20a1d"
+                "reference": "1d419eee00f023d2c308957828a67b20f8e01da4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/06fee4a8854d0e21f820990d14ef70e5efd20a1d",
-                "reference": "06fee4a8854d0e21f820990d14ef70e5efd20a1d",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/1d419eee00f023d2c308957828a67b20f8e01da4",
+                "reference": "1d419eee00f023d2c308957828a67b20f8e01da4",
                 "shasum": ""
             },
             "require": {
@@ -2827,9 +2957,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.2.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.2.1"
             },
-            "time": "2025-05-12T12:49:08+00:00"
+            "time": "2025-05-20T14:40:54+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -5474,16 +5604,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.5.1",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "62d5c38c7af6280d8605b725364680838b475641"
+                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/62d5c38c7af6280d8605b725364680838b475641",
-                "reference": "62d5c38c7af6280d8605b725364680838b475641",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ccc4d2dc15e90f0fed555d6078c3698396306cdd",
+                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd",
                 "shasum": ""
             },
             "require": {
@@ -5522,7 +5652,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.5.1"
+                "source": "https://github.com/symfony/flex/tree/v2.6.0"
             },
             "funding": [
                 {
@@ -5538,7 +5668,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-10T14:05:03+00:00"
+            "time": "2025-05-21T07:23:28+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -8791,16 +8921,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.25",
+            "version": "1.12.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e310849a19e02b8bfcbb63147f495d8f872dd96f"
+                "reference": "3a6e423c076ab39dfedc307e2ac627ef579db162"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e310849a19e02b8bfcbb63147f495d8f872dd96f",
-                "reference": "e310849a19e02b8bfcbb63147f495d8f872dd96f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3a6e423c076ab39dfedc307e2ac627ef579db162",
+                "reference": "3a6e423c076ab39dfedc307e2ac627ef579db162",
                 "shasum": ""
             },
             "require": {
@@ -8845,7 +8975,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-27T12:20:45+00:00"
+            "time": "2025-05-21T20:51:45+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -11169,7 +11299,11 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20,
+        "keboola/job-queue-job-configuration": 20,
+        "keboola/output-mapping": 20,
+        "keboola/staging-provider": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
