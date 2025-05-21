@@ -6,9 +6,9 @@ namespace App\Tests;
 
 use App\JobDefinitionFactory;
 use Keboola\ConfigurationVariablesResolver\ComponentsClientHelper;
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
@@ -38,7 +38,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     private const SHARED_CODE_ROW_ID = self::TEST_NAME;
 
     private readonly ClientWrapper $clientWrapper;
-    private readonly Component $component;
+    private readonly ComponentSpecification $component;
     private readonly JobDefinitionFactory $factory;
     private readonly VariablesApiClient $vaultVariablesMasterApiClient;
 
@@ -52,7 +52,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
             token: self::getRequiredEnv('STORAGE_API_TOKEN'),
         ));
 
-        $this->component = new Component([
+        $this->component = new ComponentSpecification([
             'id' => 'keboola.runner-config-test',
             'data' => [
                 'definition' => [
