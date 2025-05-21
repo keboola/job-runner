@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 
 class JobDefinitionParser
@@ -16,7 +16,7 @@ class JobDefinitionParser
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
      */
     public function parseConfigData(
-        Component $component,
+        ComponentSpecification $component,
         array $configData,
         ?string $configId,
         string $branchType,
@@ -34,7 +34,7 @@ class JobDefinitionParser
      * @return JobDefinition[]
      */
     public function parseConfig(
-        Component $component,
+        ComponentSpecification $component,
         array $config,
         string $branchType,
         LoggersService $loggersService,
