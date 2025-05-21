@@ -205,14 +205,14 @@ class OutputResultConverterTest extends TestCase
 
         $stagingWorkspace = self::createMock(StagingWorkspaceFacade::class);
         $stagingWorkspace->expects(self::once())
-            ->method('getWorkspaceBackendSize')
+            ->method('getBackendSize')
             ->willReturn('large')
         ;
         $output1->setStagingWorkspace($stagingWorkspace);
 
         $stagingWorkspace = self::createMock(StagingWorkspaceFacade::class);
         $stagingWorkspace->expects(self::once())
-            ->method('getWorkspaceBackendSize')
+            ->method('getBackendSize')
             ->willReturn(null)
         ;
         $output2->setStagingWorkspace($stagingWorkspace);

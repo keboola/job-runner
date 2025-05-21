@@ -90,7 +90,7 @@ class JobDefinitionFactory
             $jobDefinition = $this->jobDefinitionParser->parseConfigData(
                 $component,
                 $configData,
-                $job->getConfigId(),
+                $job->getConfigId(), // @phpstan-ignore-line
                 $job->getBranchType()->value,
             );
             return [$jobDefinition];

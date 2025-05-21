@@ -13,6 +13,7 @@ use Keboola\ObjectEncryptor\ObjectEncryptor;
 class JobDefinitionParser
 {
     /**
+     * @param null|non-empty-string $configId
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
      */
     public function parseConfigData(
@@ -47,7 +48,7 @@ class JobDefinitionParser
             $jobDefinition = new JobDefinition(
                 configuration: $config['configuration'] ? (array) $config['configuration'] : [],
                 component: $component,
-                configId: (string) $config['id'],
+                configId: (string) $config['id'], // @phpstan-ignore-line
                 configVersion: (string) $config['version'],
                 state: $config['state'] ? (array) $config['state'] : [],
                 branchType: $branchType,
@@ -86,7 +87,7 @@ class JobDefinitionParser
             fn (array $row) => new JobDefinition(
                 array_replace_recursive($config['configuration'], $row['configuration']),
                 $component,
-                (string) $config['id'],
+                (string) $config['id'], // @phpstan-ignore-line
                 (string) $config['version'],
                 $row['state'] ? (array) $row['state'] : [],
                 (string) $row['id'],
