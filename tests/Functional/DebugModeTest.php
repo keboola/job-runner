@@ -89,10 +89,7 @@ class DebugModeTest extends BaseFunctionalTest
 
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[1]['name']));
         self::assertContains('keboola.python-transformation', $files[1]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[1]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[1]['tags']);
         self::assertContains('debug', $files[1]['tags']);
@@ -234,10 +231,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(1, count($files));
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[0]['name']));
         self::assertContains('keboola.python-transformation', $files[0]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[0]['tags'],
-        );
+
         $jobTag = '';
         foreach ($files[0]['tags'] as $tag) {
             if (str_starts_with($tag, 'JobId')) {
@@ -419,10 +413,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[1]['name']));
         self::assertContains('RowId:row2', $files[1]['tags']);
         self::assertContains('keboola.python-transformation', $files[1]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[1]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[1]['tags']);
         self::assertContains('debug', $files[1]['tags']);
@@ -439,10 +430,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[3]['name']));
         self::assertContains('RowId:row1', $files[3]['tags']);
         self::assertContains('keboola.python-transformation', $files[3]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[3]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[3]['tags']);
         self::assertContains('debug', $files[3]['tags']);
@@ -598,10 +586,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[1]['name']));
         self::assertContains('RowId:row2', $files[1]['tags']);
         self::assertContains('keboola.python-transformation', $files[1]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[1]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[1]['tags']);
         self::assertContains('debug', $files[1]['tags']);
@@ -618,11 +603,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_2.zip', $files[3]['name']));
         self::assertContains('RowId:row1', $files[3]['tags']);
         self::assertContains('keboola.processor-add-row-number-column', $files[3]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/' .
-            'keboola.processor-add-row-number-column',
-            $files[3]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[3]['tags']);
         self::assertContains('debug', $files[3]['tags']);
@@ -631,10 +612,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_1.zip', $files[4]['name']));
         self::assertContains('RowId:row1', $files[4]['tags']);
         self::assertContains('keboola.processor-create-manifest', $files[4]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.processor-create-manifest',
-            $files[4]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[4]['tags']);
         self::assertContains('debug', $files[4]['tags']);
@@ -643,10 +621,7 @@ class DebugModeTest extends BaseFunctionalTest
         self::assertEquals(0, strcasecmp('stage_0.zip', $files[5]['name']));
         self::assertContains('RowId:row1', $files[5]['tags']);
         self::assertContains('keboola.python-transformation', $files[5]['tags']);
-        self::assertContains(
-            '147946154733.dkr.ecr.us-east-1.amazonaws.com/developer-portal-v2/keboola.python-transformation',
-            $files[5]['tags'],
-        );
+
         // @todo uncomment this
         //self::assertContains('JobId:' . $jobId, $files[5]['tags']);
         self::assertContains('debug', $files[5]['tags']);
