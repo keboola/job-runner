@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1608f0e363b286d3cedc80c8c986975a",
+    "content-hash": "652a362ea68eca443fcbced3ef214ccf",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.343.16",
+            "version": "3.343.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "138f07d30607af225aefbb794b90d76ea3a67831"
+                "reference": "00b44b1a9d570bc945d223b20886c1ac13b54641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/138f07d30607af225aefbb794b90d76ea3a67831",
-                "reference": "138f07d30607af225aefbb794b90d76ea3a67831",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/00b44b1a9d570bc945d223b20886c1ac13b54641",
+                "reference": "00b44b1a9d570bc945d223b20886c1ac13b54641",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.16"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.19"
             },
-            "time": "2025-05-21T18:03:53+00:00"
+            "time": "2025-05-27T18:10:12+00:00"
         },
         {
             "name": "brick/math",
@@ -1773,7 +1773,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "7fac2df9ed915b87e65c4b96979ede5c3878d876"
+                "reference": "b755109f01129235550063548271485ea5b39bab"
             },
             "require": {
                 "ext-json": "*",
@@ -1781,14 +1781,14 @@
                 "keboola/artifacts": "^3.1",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "dev-pepa_invertStaging as 20.1.0",
-                "keboola/job-queue-job-configuration": "dev-pepa_PAT-317_workspaceManager",
+                "keboola/input-mapping": "^21.0",
+                "keboola/job-queue-job-configuration": "^2.0",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "dev-pepa_invertStaging as 25.1.0",
+                "keboola/output-mapping": "^26.0",
                 "keboola/php-temp": "^2.0",
                 "keboola/php-utils": "^5.0",
-                "keboola/staging-provider": "dev-pepa_invertStaging as 11.1.0",
+                "keboola/staging-provider": "^12.0",
                 "keboola/storage-api-client": "^18.1",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "monolog/monolog": "^2.5",
@@ -1864,7 +1864,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2025-05-21T21:15:44+00:00"
+            "time": "2025-05-28T10:08:49+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1923,16 +1923,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-pepa_invertStaging",
+            "version": "21.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "bf239d4394bf7560a8ac44627cde0318ea612fa7"
+                "reference": "4d92ed887649f11aaf6e88d817e87680a1edcffe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/bf239d4394bf7560a8ac44627cde0318ea612fa7",
-                "reference": "bf239d4394bf7560a8ac44627cde0318ea612fa7",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/4d92ed887649f11aaf6e88d817e87680a1edcffe",
+                "reference": "4d92ed887649f11aaf6e88d817e87680a1edcffe",
                 "shasum": ""
             },
             "require": {
@@ -1986,9 +1986,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/pepa_invertStaging"
+                "source": "https://github.com/keboola/input-mapping/tree/21.0.0"
             },
-            "time": "2025-05-16T11:37:13+00:00"
+            "time": "2025-05-26T11:25:20+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -2067,24 +2067,25 @@
         },
         {
             "name": "keboola/job-queue-job-configuration",
-            "version": "dev-pepa_PAT-317_workspaceManager",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-job-configuration.git",
-                "reference": "f28606a9234665e9d2b978d8b51b0346d1ba3bb9"
+                "reference": "868ab3540d827913b92650d383edf80b50ccef58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/f28606a9234665e9d2b978d8b51b0346d1ba3bb9",
-                "reference": "f28606a9234665e9d2b978d8b51b0346d1ba3bb9",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/868ab3540d827913b92650d383edf80b50ccef58",
+                "reference": "868ab3540d827913b92650d383edf80b50ccef58",
                 "shasum": ""
             },
             "require": {
                 "colinodell/psr-testlogger": "^1.3",
+                "ext-zip": "*",
                 "keboola/common-exceptions": "^1.2",
-                "keboola/input-mapping": "dev-pepa_invertStaging",
-                "keboola/output-mapping": "dev-pepa_invertStaging",
-                "keboola/staging-provider": "dev-pepa_invertStaging",
+                "keboola/input-mapping": "^21.0",
+                "keboola/output-mapping": "^26.0",
+                "keboola/staging-provider": "^12.0",
                 "keboola/storage-api-client": "^18.1",
                 "php": "^8.2",
                 "psr/log": "^3.0",
@@ -2111,9 +2112,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
-                "source": "https://github.com/keboola/job-queue-job-configuration/tree/pepa_PAT-317_workspaceManager"
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/2.0.1"
             },
-            "time": "2025-05-21T15:29:53+00:00"
+            "time": "2025-05-28T06:50:35+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2334,16 +2335,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-pepa_invertStaging",
+            "version": "26.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "f62e8ed3529a4a563eb9855bedee827de35f98d6"
+                "reference": "e7f3b4d9621c88fd77f1acd3b94f65490236eff5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/f62e8ed3529a4a563eb9855bedee827de35f98d6",
-                "reference": "f62e8ed3529a4a563eb9855bedee827de35f98d6",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/e7f3b4d9621c88fd77f1acd3b94f65490236eff5",
+                "reference": "e7f3b4d9621c88fd77f1acd3b94f65490236eff5",
                 "shasum": ""
             },
             "require": {
@@ -2402,9 +2403,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/pepa_invertStaging"
+                "source": "https://github.com/keboola/output-mapping/tree/26.0.0"
             },
-            "time": "2025-05-16T11:37:13+00:00"
+            "time": "2025-05-26T11:25:20+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2738,28 +2739,27 @@
         },
         {
             "name": "keboola/service-client",
-            "version": "1.1.2",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/service-client.git",
-                "reference": "aa78453f8a28831da7fb610f143b641195d4c162"
+                "reference": "656b9be0914454fb3729b234a5c16efa07d58ff6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/service-client/zipball/aa78453f8a28831da7fb610f143b641195d4c162",
-                "reference": "aa78453f8a28831da7fb610f143b641195d4c162",
+                "url": "https://api.github.com/repos/keboola/service-client/zipball/656b9be0914454fb3729b234a5c16efa07d58ff6",
+                "reference": "656b9be0914454fb3729b234a5c16efa07d58ff6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "infection/infection": "^0.27.10",
+                "infection/infection": "^0.29",
                 "keboola/coding-standard": "^15.0.1",
                 "monolog/monolog": "^3.5.0",
-                "phpstan/phpstan": "^1.10.59",
-                "phpunit/phpunit": "^9.6.17",
-                "sempro/phpunit-pretty-print": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.1",
                 "symfony/dotenv": "^6.4.4|^7.0"
             },
             "type": "library",
@@ -2781,9 +2781,9 @@
             "description": "Service Client provides easy way to get Keboola services URLs",
             "support": {
                 "issues": "https://github.com/keboola/service-client/issues",
-                "source": "https://github.com/keboola/service-client/tree/1.1.2"
+                "source": "https://github.com/keboola/service-client/tree/1.3.2"
             },
-            "time": "2025-04-24T16:01:55+00:00"
+            "time": "2025-05-27T08:40:43+00:00"
         },
         {
             "name": "keboola/slicer",
@@ -2843,16 +2843,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "dev-pepa_invertStaging",
+            "version": "12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "ddd7a9865d851707e974684f10441edecb6f1916"
+                "reference": "433f0f092f01927685425bfa646bf210fb8434fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/ddd7a9865d851707e974684f10441edecb6f1916",
-                "reference": "ddd7a9865d851707e974684f10441edecb6f1916",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/433f0f092f01927685425bfa646bf210fb8434fd",
+                "reference": "433f0f092f01927685425bfa646bf210fb8434fd",
                 "shasum": ""
             },
             "require": {
@@ -2891,22 +2891,22 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/pepa_invertStaging"
+                "source": "https://github.com/keboola/staging-provider/tree/12.0.0"
             },
-            "time": "2025-05-21T21:03:08+00:00"
+            "time": "2025-05-26T11:47:52+00:00"
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.2.1",
+            "version": "v18.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "1d419eee00f023d2c308957828a67b20f8e01da4"
+                "reference": "b0793e6a732d84d037c70d8e9f12edae28aea9da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/1d419eee00f023d2c308957828a67b20f8e01da4",
-                "reference": "1d419eee00f023d2c308957828a67b20f8e01da4",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/b0793e6a732d84d037c70d8e9f12edae28aea9da",
+                "reference": "b0793e6a732d84d037c70d8e9f12edae28aea9da",
                 "shasum": ""
             },
             "require": {
@@ -2957,9 +2957,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.2.1"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.2.2"
             },
-            "time": "2025-05-20T14:40:54+00:00"
+            "time": "2025-05-26T06:56:31+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -4777,16 +4777,16 @@
         },
         {
             "name": "symfony/cache-contracts",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache-contracts.git",
-                "reference": "15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b"
+                "reference": "5d68a57d66910405e5c0b63d6f0af941e66fc868"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
-                "reference": "15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/5d68a57d66910405e5c0b63d6f0af941e66fc868",
+                "reference": "5d68a57d66910405e5c0b63d6f0af941e66fc868",
                 "shasum": ""
             },
             "require": {
@@ -4800,7 +4800,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -4833,7 +4833,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -4849,7 +4849,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2025-03-13T15:25:07+00:00"
         },
         {
             "name": "symfony/config",
@@ -5102,16 +5102,16 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6"
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
-                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/63afe740e99a13ba87ec199bb07bbdee937a5b62",
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62",
                 "shasum": ""
             },
             "require": {
@@ -5124,7 +5124,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -5149,7 +5149,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -5165,7 +5165,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2024-09-25T14:21:43+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -5398,16 +5398,16 @@
         },
         {
             "name": "symfony/event-dispatcher-contracts",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher-contracts.git",
-                "reference": "7642f5e970b672283b7823222ae8ef8bbc160b9f"
+                "reference": "59eb412e93815df44f05f342958efa9f46b1e586"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/7642f5e970b672283b7823222ae8ef8bbc160b9f",
-                "reference": "7642f5e970b672283b7823222ae8ef8bbc160b9f",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/59eb412e93815df44f05f342958efa9f46b1e586",
+                "reference": "59eb412e93815df44f05f342958efa9f46b1e586",
                 "shasum": ""
             },
             "require": {
@@ -5421,7 +5421,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -5454,7 +5454,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -5470,7 +5470,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2024-09-25T14:21:43+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -5604,16 +5604,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd"
+                "reference": "5d743b3b78fabe9f3146586d77b0a1f9292851fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/ccc4d2dc15e90f0fed555d6078c3698396306cdd",
-                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/5d743b3b78fabe9f3146586d77b0a1f9292851fc",
+                "reference": "5d743b3b78fabe9f3146586d77b0a1f9292851fc",
                 "shasum": ""
             },
             "require": {
@@ -5652,7 +5652,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.6.0"
+                "source": "https://github.com/symfony/flex/tree/v2.7.0"
             },
             "funding": [
                 {
@@ -5668,7 +5668,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-21T07:23:28+00:00"
+            "time": "2025-05-23T11:41:40+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -6887,16 +6887,16 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "e53260aabf78fb3d63f8d79d69ece59f80d5eda0"
+                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
-                "reference": "e53260aabf78fb3d63f8d79d69ece59f80d5eda0",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
+                "reference": "f021b05a130d35510bd6b25fe9053c2a8a15d5d4",
                 "shasum": ""
             },
             "require": {
@@ -6914,7 +6914,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -6950,7 +6950,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/service-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -6966,7 +6966,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2025-04-25T09:37:31+00:00"
         },
         {
             "name": "symfony/string",
@@ -7057,16 +7057,16 @@
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v3.5.1",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "4667ff3bd513750603a09c8dedbea942487fb07c"
+                "reference": "df210c7a2573f1913b2d17cc95f90f53a73d8f7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/4667ff3bd513750603a09c8dedbea942487fb07c",
-                "reference": "4667ff3bd513750603a09c8dedbea942487fb07c",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/df210c7a2573f1913b2d17cc95f90f53a73d8f7d",
+                "reference": "df210c7a2573f1913b2d17cc95f90f53a73d8f7d",
                 "shasum": ""
             },
             "require": {
@@ -7079,7 +7079,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -7115,7 +7115,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/translation-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -7131,7 +7131,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2024-09-27T08:32:26+00:00"
         },
         {
             "name": "symfony/uid",
@@ -9597,16 +9597,16 @@
         },
         {
             "name": "sanmai/pipeline",
-            "version": "6.13",
+            "version": "6.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/pipeline.git",
-                "reference": "b6d79d88d98680a823c38d63d4e8028254246cfd"
+                "reference": "9c3c373bf4f92fe42bc2564e645c3ad1b3646f2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/b6d79d88d98680a823c38d63d4e8028254246cfd",
-                "reference": "b6d79d88d98680a823c38d63d4e8028254246cfd",
+                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/9c3c373bf4f92fe42bc2564e645c3ad1b3646f2f",
+                "reference": "9c3c373bf4f92fe42bc2564e645c3ad1b3646f2f",
                 "shasum": ""
             },
             "require": {
@@ -9650,7 +9650,7 @@
             "description": "General-purpose collections pipeline",
             "support": {
                 "issues": "https://github.com/sanmai/pipeline/issues",
-                "source": "https://github.com/sanmai/pipeline/tree/6.13"
+                "source": "https://github.com/sanmai/pipeline/tree/6.14"
             },
             "funding": [
                 {
@@ -9658,7 +9658,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-13T23:25:07+00:00"
+            "time": "2025-05-23T09:49:33+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10663,32 +10663,32 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.18.0",
+            "version": "8.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "f3b23cb9b26301b8c3c7bb03035a1bee23974593"
+                "reference": "06b18b3f64979ab31d27c37021838439f3ed5919"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/f3b23cb9b26301b8c3c7bb03035a1bee23974593",
-                "reference": "f3b23cb9b26301b8c3c7bb03035a1bee23974593",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/06b18b3f64979ab31d27c37021838439f3ed5919",
+                "reference": "06b18b3f64979ab31d27c37021838439f3ed5919",
                 "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7 || ^1.0",
                 "php": "^7.4 || ^8.0",
                 "phpstan/phpdoc-parser": "^2.1.0",
-                "squizlabs/php_codesniffer": "^3.12.2"
+                "squizlabs/php_codesniffer": "^3.13.0"
             },
             "require-dev": {
                 "phing/phing": "3.0.1",
                 "php-parallel-lint/php-parallel-lint": "1.4.0",
-                "phpstan/phpstan": "2.1.13",
-                "phpstan/phpstan-deprecation-rules": "2.0.2",
+                "phpstan/phpstan": "2.1.17",
+                "phpstan/phpstan-deprecation-rules": "2.0.3",
                 "phpstan/phpstan-phpunit": "2.0.6",
                 "phpstan/phpstan-strict-rules": "2.0.4",
-                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.17|12.1.3"
+                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.21|12.1.3"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -10712,7 +10712,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.18.0"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.18.1"
             },
             "funding": [
                 {
@@ -10724,7 +10724,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-01T09:40:50+00:00"
+            "time": "2025-05-22T14:32:30+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -11299,11 +11299,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20,
-        "keboola/input-mapping": 20,
-        "keboola/job-queue-job-configuration": 20,
-        "keboola/output-mapping": 20,
-        "keboola/staging-provider": 20
+        "keboola/dockerbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

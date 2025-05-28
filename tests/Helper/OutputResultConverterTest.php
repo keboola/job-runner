@@ -6,10 +6,10 @@ namespace App\Tests\Helper;
 
 use App\Helper\OutputResultConverter;
 use Keboola\Artifacts\Result;
-use Keboola\DockerBundle\Docker\Runner\DataLoader\StagingWorkspaceFacade;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
+use Keboola\JobQueue\JobConfiguration\Mapping\StagingWorkspace\StagingWorkspaceFacade;
 use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
 use Keboola\OutputMapping\DeferredTasks\LoadTableQueue;
 use Keboola\OutputMapping\Table\Result as OutputResult;
