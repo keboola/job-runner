@@ -7,10 +7,10 @@ namespace App\Tests;
 use App\JobDefinitionFactory;
 use App\JobDefinitionParser;
 use Generator;
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
@@ -28,8 +28,8 @@ class JobDefinitionFactoryTest extends TestCase
     private function createComponent(
         array $features = [],
         string $componentId = 'my-component',
-    ): Component {
-        return new Component([
+    ): ComponentSpecification {
+        return new ComponentSpecification([
             'id' => $componentId,
             'data' => [
                 'definition' => [

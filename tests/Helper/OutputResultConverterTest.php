@@ -6,10 +6,10 @@ namespace App\Tests\Helper;
 
 use App\Helper\OutputResultConverter;
 use Keboola\Artifacts\Result;
-use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoader;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result as InputResult;
 use Keboola\InputMapping\Table\Result\TableInfo;
+use Keboola\JobQueue\JobConfiguration\Mapping\StagingWorkspace\StagingWorkspaceFacade;
 use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
 use Keboola\OutputMapping\DeferredTasks\LoadTableQueue;
 use Keboola\OutputMapping\Table\Result as OutputResult;
@@ -203,19 +203,19 @@ class OutputResultConverterTest extends TestCase
             'foo' => 'bar',
         ]);
 
-        $dataLoaderMock = self::createMock(DataLoader::class);
-        $dataLoaderMock->expects(self::once())
-            ->method('getWorkspaceBackendSize')
+        $stagingWorkspace = self::createMock(StagingWorkspaceFacade::class);
+        $stagingWorkspace->expects(self::once())
+            ->method('getBackendSize')
             ->willReturn('large')
         ;
-        $output1->setDataLoader($dataLoaderMock);
+        $output1->setStagingWorkspace($stagingWorkspace);
 
-        $dataLoaderMock = self::createMock(DataLoader::class);
-        $dataLoaderMock->expects(self::once())
-            ->method('getWorkspaceBackendSize')
+        $stagingWorkspace = self::createMock(StagingWorkspaceFacade::class);
+        $stagingWorkspace->expects(self::once())
+            ->method('getBackendSize')
             ->willReturn(null)
         ;
-        $output2->setDataLoader($dataLoaderMock);
+        $output2->setStagingWorkspace($stagingWorkspace);
 
         $outputs = [$output1, $output2];
         $jobResult = OutputResultConverter::convertOutputsToResult($outputs);

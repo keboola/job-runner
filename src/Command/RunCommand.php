@@ -11,7 +11,6 @@ use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
@@ -19,6 +18,7 @@ use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Monolog\ContainerLogger;
 use Keboola\DockerBundle\Service\LoggersService;
 use Keboola\ErrorControl\Monolog\LogProcessor;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\Exception\ClientException;
 use Keboola\JobQueueInternalClient\Exception\StateTargetEqualsCurrentException;
@@ -332,13 +332,13 @@ class RunCommand extends Command
         }
     }
 
-    private function getComponentClass(ClientWrapper $clientWrapper, JobInterface $job): Component
+    private function getComponentClass(ClientWrapper $clientWrapper, JobInterface $job): ComponentSpecification
     {
         $component = $this->getComponent($clientWrapper, $job->getComponentId());
         if (!empty($job->getTag())) {
             $component['data']['definition']['tag'] = $job->getTag();
         }
-        return new Component($component);
+        return new ComponentSpecification($component);
     }
 
     private function getComponent(ClientWrapper $clientWrapper, string $id): array

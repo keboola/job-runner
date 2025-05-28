@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\JobDefinitionParser;
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use PHPUnit\Framework\TestCase;
 
 class JobDefinitionParserTest extends TestCase
 {
-    private function getComponent(): Component
+    private function getComponent(): ComponentSpecification
     {
-        return new Component(
+        return new ComponentSpecification(
             [
                 'id' => 'keboola.r-transformation',
                 'data' => [

@@ -6,10 +6,10 @@ namespace App;
 
 use Keboola\ConfigurationVariablesResolver\SharedCodeResolver;
 use Keboola\ConfigurationVariablesResolver\VariablesResolver;
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\JobQueueInternalClient\JobFactory;
 use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
@@ -34,7 +34,7 @@ class JobDefinitionFactory
      * @return array<JobDefinition>
      */
     public function createFromJob(
-        Component $component,
+        ComponentSpecification $component,
         JobInterface $job,
         ClientWrapper $clientWrapper,
         LoggersService $loggersService,
@@ -64,7 +64,7 @@ class JobDefinitionFactory
      */
     public function createJobDefinitionsForJob(
         ClientWrapper $clientWrapper,
-        Component $component,
+        ComponentSpecification $component,
         JobInterface $job,
         LoggersService $loggersService,
     ): array {
@@ -90,7 +90,7 @@ class JobDefinitionFactory
             $jobDefinition = $this->jobDefinitionParser->parseConfigData(
                 $component,
                 $configData,
-                $job->getConfigId(),
+                $job->getConfigId(), // @phpstan-ignore-line
                 $job->getBranchType()->value,
             );
             return [$jobDefinition];
@@ -234,8 +234,11 @@ class JobDefinitionFactory
         return $config;
     }
 
-    private function checkUnsafeConfiguration(Component $component, array $configuration, BranchType $branchType): void
-    {
+    private function checkUnsafeConfiguration(
+        ComponentSpecification $component,
+        array $configuration,
+        BranchType $branchType,
+    ): void {
         if ($component->branchConfigurationsAreUnsafe() && $branchType === BranchType::DEV) {
             if (empty($configuration['configuration']['runtime']['safe'])) {
                 throw new UserException(
