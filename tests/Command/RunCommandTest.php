@@ -17,7 +17,6 @@ use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\OutputMapping\OutputMappingSettings;
-use Keboola\OutputMapping\Writer\TableWriter;
 use Keboola\PermissionChecker\BranchType;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
