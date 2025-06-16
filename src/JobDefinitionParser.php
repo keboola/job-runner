@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace App;
 
-use Keboola\DockerBundle\Docker\Component;
 use Keboola\DockerBundle\Docker\JobDefinition;
 use Keboola\DockerBundle\Exception\UserException;
 use Keboola\DockerBundle\Service\LoggersService;
+use Keboola\JobQueue\JobConfiguration\JobDefinition\Component\ComponentSpecification;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 
 class JobDefinitionParser
 {
     /**
+     * @param null|non-empty-string $configId
      * @param ObjectEncryptor::BRANCH_TYPE_DEV|ObjectEncryptor::BRANCH_TYPE_DEFAULT $branchType
      */
     public function parseConfigData(
-        Component $component,
+        ComponentSpecification $component,
         array $configData,
         ?string $configId,
         string $branchType,
@@ -34,7 +35,7 @@ class JobDefinitionParser
      * @return JobDefinition[]
      */
     public function parseConfig(
-        Component $component,
+        ComponentSpecification $component,
         array $config,
         string $branchType,
         LoggersService $loggersService,
@@ -47,7 +48,7 @@ class JobDefinitionParser
             $jobDefinition = new JobDefinition(
                 configuration: $config['configuration'] ? (array) $config['configuration'] : [],
                 component: $component,
-                configId: (string) $config['id'],
+                configId: (string) $config['id'], // @phpstan-ignore-line
                 configVersion: (string) $config['version'],
                 state: $config['state'] ? (array) $config['state'] : [],
                 branchType: $branchType,
@@ -86,7 +87,7 @@ class JobDefinitionParser
             fn (array $row) => new JobDefinition(
                 array_replace_recursive($config['configuration'], $row['configuration']),
                 $component,
-                (string) $config['id'],
+                (string) $config['id'], // @phpstan-ignore-line
                 (string) $config['version'],
                 $row['state'] ? (array) $row['state'] : [],
                 (string) $row['id'],

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
-use Keboola\DockerBundle\Docker\Runner\DataLoader\DataLoaderInterface;
 use Keboola\DockerBundle\Docker\Runner\Output;
 use Keboola\InputMapping\Table\Result\TableMetrics as InputTableMetrics;
 use Keboola\JobQueueInternalClient\JobFactory\Runtime\Backend;
@@ -101,13 +100,12 @@ class OutputResultConverter
                 }
             }
 
-            /** @var ?DataLoaderInterface $dataLoader */
-            $dataLoader = $output->getDataLoader();
-            if (!$dataLoader) {
+            $stagingWorkspace = $output->getStagingWorkspace();
+            if (!$stagingWorkspace) {
                 continue;
             }
 
-            $workspaceBackendSize = $dataLoader->getWorkspaceBackendSize();
+            $workspaceBackendSize = $stagingWorkspace->getBackendSize();
             if ($workspaceBackendSize) {
                 $jobMetrics->setBackendSize($workspaceBackendSize);
             }
