@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9c4e390904c8e4bab5a43d92c8439bb",
+    "content-hash": "07ab5ed232e4a13a957659a1d51380cd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1773,7 +1773,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "acee130ad30e5ff6507b3fa84a35b77b23de3e35"
+                "reference": "0565a360637a5e28a39d0fd7831e1f699cf3558f"
             },
             "require": {
                 "ext-json": "*",
@@ -1782,10 +1782,10 @@
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
                 "keboola/input-mapping": "^21.0",
-                "keboola/job-queue-job-configuration": "^2.0",
+                "keboola/job-queue-job-configuration": "^2.1",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "^26.0",
+                "keboola/output-mapping": "^27.0",
                 "keboola/php-temp": "^2.0",
                 "keboola/php-utils": "^5.0",
                 "keboola/staging-provider": "^12.0",
@@ -1865,7 +1865,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2025-06-16T09:11:56+00:00"
+            "time": "2025-06-19T08:26:48+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -2068,16 +2068,16 @@
         },
         {
             "name": "keboola/job-queue-job-configuration",
-            "version": "2.0.2",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-job-configuration.git",
-                "reference": "f7b1d87cb3d398e017b41138b29fcfa97a373c64"
+                "reference": "6c6fd99c2b95763136ab6b3048d38c355fdee7c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/f7b1d87cb3d398e017b41138b29fcfa97a373c64",
-                "reference": "f7b1d87cb3d398e017b41138b29fcfa97a373c64",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/6c6fd99c2b95763136ab6b3048d38c355fdee7c5",
+                "reference": "6c6fd99c2b95763136ab6b3048d38c355fdee7c5",
                 "shasum": ""
             },
             "require": {
@@ -2085,7 +2085,7 @@
                 "ext-zip": "*",
                 "keboola/common-exceptions": "^1.2",
                 "keboola/input-mapping": "^21.0",
-                "keboola/output-mapping": "^26.0",
+                "keboola/output-mapping": "^27.0",
                 "keboola/staging-provider": "^12.0",
                 "keboola/storage-api-client": "^18.1",
                 "php": "^8.2",
@@ -2113,9 +2113,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
-                "source": "https://github.com/keboola/job-queue-job-configuration/tree/2.0.2"
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/2.1.0"
             },
-            "time": "2025-06-02T11:23:42+00:00"
+            "time": "2025-06-17T13:28:42+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2336,16 +2336,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "26.0.0",
+            "version": "27.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "e7f3b4d9621c88fd77f1acd3b94f65490236eff5"
+                "reference": "e57f00bb430311d095d0f2b7f1e16ab41d47b57b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/e7f3b4d9621c88fd77f1acd3b94f65490236eff5",
-                "reference": "e7f3b4d9621c88fd77f1acd3b94f65490236eff5",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/e57f00bb430311d095d0f2b7f1e16ab41d47b57b",
+                "reference": "e57f00bb430311d095d0f2b7f1e16ab41d47b57b",
                 "shasum": ""
             },
             "require": {
@@ -2404,9 +2404,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/26.0.0"
+                "source": "https://github.com/keboola/output-mapping/tree/27.0.0"
             },
-            "time": "2025-05-26T11:25:20+00:00"
+            "time": "2025-06-17T08:03:52+00:00"
         },
         {
             "name": "keboola/permission-checker",
