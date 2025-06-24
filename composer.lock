@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07ab5ed232e4a13a957659a1d51380cd",
+    "content-hash": "d330f9885f7d06150c09a9ab59d2c961",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2267,16 +2267,16 @@
         },
         {
             "name": "keboola/object-encryptor",
-            "version": "2.13.1",
+            "version": "2.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/object-encryptor.git",
-                "reference": "3b9546cae8f0def47d089adf4aa21977befc8847"
+                "reference": "567c9b7d3d7c93450192cc6b49d99aaa8c12d047"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/3b9546cae8f0def47d089adf4aa21977befc8847",
-                "reference": "3b9546cae8f0def47d089adf4aa21977befc8847",
+                "url": "https://api.github.com/repos/keboola/object-encryptor/zipball/567c9b7d3d7c93450192cc6b49d99aaa8c12d047",
+                "reference": "567c9b7d3d7c93450192cc6b49d99aaa8c12d047",
                 "shasum": ""
             },
             "require": {
@@ -2288,7 +2288,7 @@
                 "keboola/azure-key-vault-client": "^4.1",
                 "keboola/common-exceptions": "^1.2",
                 "php": ">=8.2",
-                "symfony/uid": "^7.2",
+                "symfony/uid": "^6.4||^7.0",
                 "vkartaviy/retry": "^0.2"
             },
             "require-dev": {
@@ -2330,9 +2330,9 @@
                 "json"
             ],
             "support": {
-                "source": "https://github.com/keboola/object-encryptor/tree/2.13.1"
+                "source": "https://github.com/keboola/object-encryptor/tree/2.14.1"
             },
-            "time": "2025-04-29T11:16:13+00:00"
+            "time": "2025-06-19T12:18:56+00:00"
         },
         {
             "name": "keboola/output-mapping",
