@@ -36,6 +36,7 @@ use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -45,7 +46,7 @@ use Throwable;
 use function DDTrace\root_span;
 
 #[AsCommand(name: 'app:run')]
-class RunCommand extends Command
+class RunCommand extends Command implements SignalableCommandInterface
 {
     private ?Runner $runner = null;
 
@@ -61,22 +62,23 @@ class RunCommand extends Command
         private readonly array $instanceLimits,
     ) {
         parent::__construct();
-
-        pcntl_signal(SIGTERM, [$this, 'terminationHandler']);
-        pcntl_signal(SIGINT, [$this, 'terminationHandler']);
-        pcntl_async_signals(true);
     }
 
-    public function terminationHandler(int $signalNumber): void
+    public function getSubscribedSignals(): array
     {
-        $this->logger->notice(sprintf('Received signal "%s"', $signalNumber));
+        return [SIGTERM, SIGINT];
+    }
+
+    public function handleSignal(int $signal): false|int
+    {
+        $this->logger->notice(sprintf('Received signal "%s"', $signal));
         $this->logProcessor->setLogInfo(new LogInfo($this->jobId, '', ''));
         try {
             $job = $this->queueClient->getJob($this->jobId);
         } catch (ClientException $e) {
             $this->logger->error(sprintf('Failed to get job "%s" for cleanup: ' . $e->getMessage(), $this->jobId));
             // we don't want the handler to crash
-            return;
+            return false;
         }
 
         $jobStatus = $job->getStatus();
@@ -84,7 +86,7 @@ class RunCommand extends Command
             $this->logger->info(
                 sprintf('Job "%s" is in status "%s", letting the job to finish.', $this->jobId, $jobStatus),
             );
-            return;
+            return false;
         }
 
         // set up logging to storage API
@@ -107,7 +109,7 @@ class RunCommand extends Command
             $this->logger->info(sprintf('Finished cleanup for job "%s".', $this->jobId));
         }
 
-        exit;
+        return Command::SUCCESS;
     }
 
     private function getContainerIds(): array
