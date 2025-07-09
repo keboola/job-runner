@@ -142,6 +142,7 @@ stages:
                   targetImage: job-runner
                   tags:
                     - production-$(Build.SourceVersion)
+                    - latest
 
               - script: echo "production-$(Build.SourceVersion)" > artifact
                 displayName: Create artifact
