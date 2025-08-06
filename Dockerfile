@@ -13,15 +13,14 @@ ENV DOCKER_PACKAGE_VERSION=5:27.5.1-1~debian.12~bookworm
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
 
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
 RUN apt-get update -q \
     && apt-get install -y --no-install-recommends \
         apt-transport-https \
         ca-certificates \
         git \
         gnupg2 \
-        libmcrypt-dev \
-        libpq-dev \
-        libzip-dev \
         locales \
         openssh-server \
         software-properties-common \
@@ -31,7 +30,8 @@ RUN apt-get update -q \
         iproute2 \
     && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && install-php-extensions @composer pcntl zip
 
 ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
@@ -59,9 +59,6 @@ RUN groupadd -g $APP_USER_GID $APP_USER_NAME \
 
 COPY ./docker/php.ini /usr/local/etc/php/php.ini
 
-RUN docker-php-ext-install pcntl zip \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
-
 WORKDIR /code
 COPY composer.* symfony.lock ./
 RUN composer install $COMPOSER_FLAGS --no-scripts --no-autoloader
@@ -83,8 +80,7 @@ ENV APP_ENV dev
 ENV PHPUNIT_RESULT_CACHE /tmp/ #does not work, but should https://github.com/sebastianbergmann/phpunit/issues/3714
 
 # install extensions
-RUN pecl install xdebug \
- && docker-php-ext-enable xdebug
+RUN install-php-extensions xdebug
 
 USER $APP_USER_NAME
 
