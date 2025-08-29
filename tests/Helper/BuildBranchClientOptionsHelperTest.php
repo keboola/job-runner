@@ -91,5 +91,4 @@ class BuildBranchClientOptionsHelperTest extends TestCase
 
         self::assertTrue($options->useBranchStorage());
     }
-
 }
