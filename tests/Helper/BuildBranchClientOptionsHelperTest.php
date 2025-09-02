@@ -74,4 +74,21 @@ class BuildBranchClientOptionsHelperTest extends TestCase
         self::assertSame(5, $closure(30));
         self::assertSame(5, $closure(1000));
     }
+    public function testUseBranchStorageWithStorageBranchesFeature(): void
+    {
+        $backend = $this->createMock(Backend::class);
+        $backend->method('getType')->willReturn('small');
+        $backend->method('getContext')->willReturn('123-transformation');
+
+        $jobMock = $this->createMock(Job::class);
+        $jobMock->method('getComponentId')->willReturn('dummy-component');
+        $jobMock->method('getBranchId')->willReturn('dummy-branch');
+        $jobMock->method('getId')->willReturn('124');
+        $jobMock->method('getBackend')->willReturn($backend);
+        $jobMock->method('getProjectFeatures')->willReturn(['storage-branches']);
+
+        $options = BuildBranchClientOptionsHelper::buildFromJob($jobMock);
+
+        self::assertTrue($options->useBranchStorage());
+    }
 }

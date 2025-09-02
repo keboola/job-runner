@@ -12,6 +12,7 @@ use Keboola\StorageApiBranch\Factory\ClientOptions;
 class BuildBranchClientOptionsHelper
 {
     private const PROTECTED_DEFAULT_BRANCH_FEATURE = 'protected-default-branch';
+    private const STORAGE_BRANCHES_FEATURE = 'storage-branches';
 
     public static function buildFromJob(JobInterface $job): ClientOptions
     {
@@ -32,7 +33,8 @@ class BuildBranchClientOptionsHelper
                 $job->getBackend()->getType(),
             ))
             ->setUseBranchStorage(
-                in_array(self::PROTECTED_DEFAULT_BRANCH_FEATURE, $job->getProjectFeatures(), true),
+                in_array(self::PROTECTED_DEFAULT_BRANCH_FEATURE, $job->getProjectFeatures(), true)
+                || in_array(self::STORAGE_BRANCHES_FEATURE, $job->getProjectFeatures(), true),
             )
         ;
     }
