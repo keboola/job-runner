@@ -193,7 +193,7 @@ class RunCommand extends Command implements SignalableCommandInterface
         if (function_exists('\DDTrace\root_span')) {
             $span = root_span();
             if ($span) {
-                $span->meta['job.id'] = $this->jobId;
+                $span->meta['job.jobId'] = $this->jobId;
             }
         }
 
@@ -214,7 +214,10 @@ class RunCommand extends Command implements SignalableCommandInterface
             if (function_exists('\DDTrace\root_span')) {
                 $span = root_span();
                 if ($span) {
+                    $span->meta['job.projectId'] = $job->getProjectId();
+                    $span->meta['job.branchId'] = $job->getBranchId();
                     $span->meta['job.componentId'] = $job->getComponentId();
+                    $span->meta['job.configId'] = $job->getConfigId();
                 }
             }
 
