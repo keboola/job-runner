@@ -88,7 +88,8 @@ class RunCommandTest extends AbstractCommandTest
                 $errorRecord = $record;
             }
         }
-        self::assertArrayHasKey('context', $errorRecord, print_r($records, true));
+
+        self::assertArrayHasKey('context', $errorRecord);
         self::assertTrue($testHandler->hasErrorThatContains('Failed to save result for job ""'));
         self::assertEquals(0, $ret);
     }

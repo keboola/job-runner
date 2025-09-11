@@ -1,6 +1,4 @@
-version: '3.4'
 # for development purposes only
-
 services:
   dev:
     build:
