@@ -1168,8 +1168,12 @@ class RunCommandTest extends AbstractCommandTest
         self::assertFalse($testHandler->hasErrorRecords());
         self::assertFalse(
             $testHandler->hasCriticalRecords(),
-            implode("\n", array_map(fn($r) => $r['message'], $testHandler->getRecords())),
+            implode("\n", array_map(
+                fn($r) => "[{$r['level_name']}] {$r['message']}",
+                $testHandler->getRecords(),
+            )),
         );
+
         self::assertFalse($testHandler->hasWarningRecords());
 
         self::assertTrue($testHandler->hasInfoThatContains(
