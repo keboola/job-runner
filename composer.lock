@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d330f9885f7d06150c09a9ab59d2c961",
+    "content-hash": "d27e8bda46f0b0b780b49eeea4901c5d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1773,7 +1773,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "0565a360637a5e28a39d0fd7831e1f699cf3558f"
+                "reference": "f4b8bc09993d7f0471af4d24da31b91b694cf237"
             },
             "require": {
                 "ext-json": "*",
@@ -1781,8 +1781,8 @@
                 "keboola/artifacts": "^3.1",
                 "keboola/common-exceptions": "^1.0",
                 "keboola/gelf-server": "^4.0",
-                "keboola/input-mapping": "^21.0",
-                "keboola/job-queue-job-configuration": "^2.1",
+                "keboola/input-mapping": "^22.0",
+                "keboola/job-queue-job-configuration": "^3",
                 "keboola/oauth-v2-php-client": "^4.0",
                 "keboola/object-encryptor": "^2.2",
                 "keboola/output-mapping": "^27.0",
@@ -1865,7 +1865,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2025-06-19T08:26:48+00:00"
+            "time": "2025-09-10T11:00:08+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -1924,16 +1924,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "21.0.0",
+            "version": "22.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "4d92ed887649f11aaf6e88d817e87680a1edcffe"
+                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/4d92ed887649f11aaf6e88d817e87680a1edcffe",
-                "reference": "4d92ed887649f11aaf6e88d817e87680a1edcffe",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/d90bb61e29abac4a82f3707b68c1754725c1ad6f",
+                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f",
                 "shasum": ""
             },
             "require": {
@@ -1941,7 +1941,7 @@
                 "keboola/key-generator": "*@dev",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/staging-provider": "*@dev",
-                "keboola/storage-api-client": "^18.0",
+                "keboola/storage-api-client": "^18.3.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "php": ">=8.2",
                 "symfony/config": "^5.4|^6.0|^7.0",
@@ -1951,6 +1951,9 @@
             },
             "require-dev": {
                 "brianium/paratest": "^6.11",
+                "flow-php/filesystem": "^0.22.0",
+                "flow-php/parquet": "^0.22.0",
+                "flow-php/types": "^0.22.0",
                 "keboola/coding-standard": ">=14.0",
                 "keboola/php-temp": "^2.0",
                 "keboola/settle": "*@dev",
@@ -1987,9 +1990,9 @@
             ],
             "description": "Shared component for processing SAPI input mapping and exporting to files",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/21.0.0"
+                "source": "https://github.com/keboola/input-mapping/tree/22.0.0"
             },
-            "time": "2025-05-26T11:25:20+00:00"
+            "time": "2025-08-15T06:07:45+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -2068,26 +2071,26 @@
         },
         {
             "name": "keboola/job-queue-job-configuration",
-            "version": "2.1.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-job-configuration.git",
-                "reference": "6c6fd99c2b95763136ab6b3048d38c355fdee7c5"
+                "reference": "350b85bfd2957fcbeeb0e4c6ae1335a2299a418a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/6c6fd99c2b95763136ab6b3048d38c355fdee7c5",
-                "reference": "6c6fd99c2b95763136ab6b3048d38c355fdee7c5",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/350b85bfd2957fcbeeb0e4c6ae1335a2299a418a",
+                "reference": "350b85bfd2957fcbeeb0e4c6ae1335a2299a418a",
                 "shasum": ""
             },
             "require": {
                 "colinodell/psr-testlogger": "^1.3",
                 "ext-zip": "*",
                 "keboola/common-exceptions": "^1.2",
-                "keboola/input-mapping": "^21.0",
-                "keboola/output-mapping": "^27.0",
-                "keboola/staging-provider": "^12.0",
-                "keboola/storage-api-client": "^18.1",
+                "keboola/input-mapping": "^21.0|^22.0",
+                "keboola/output-mapping": "^27.0.1",
+                "keboola/staging-provider": "^12.2",
+                "keboola/storage-api-client": "^18.2.5",
                 "php": "^8.2",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4|^7.0"
@@ -2113,9 +2116,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
-                "source": "https://github.com/keboola/job-queue-job-configuration/tree/2.1.0"
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/3.1.0"
             },
-            "time": "2025-06-17T13:28:42+00:00"
+            "time": "2025-09-05T08:09:39+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2336,16 +2339,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.0.1",
+            "version": "27.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "b3036b1d711a32e8b4396300405667d4b15ba247"
+                "reference": "5069804ff171b471b531ce7a721f312c37a994db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b3036b1d711a32e8b4396300405667d4b15ba247",
-                "reference": "b3036b1d711a32e8b4396300405667d4b15ba247",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/5069804ff171b471b531ce7a721f312c37a994db",
+                "reference": "5069804ff171b471b531ce7a721f312c37a994db",
                 "shasum": ""
             },
             "require": {
@@ -2404,9 +2407,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.0.1"
+                "source": "https://github.com/keboola/output-mapping/tree/27.1.0"
             },
-            "time": "2025-07-21T09:03:38+00:00"
+            "time": "2025-08-28T05:12:55+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2844,16 +2847,16 @@
         },
         {
             "name": "keboola/staging-provider",
-            "version": "12.1.0",
+            "version": "12.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/staging-provider.git",
-                "reference": "cad13fefdd7724b2bac9cc5b5ea2e36f2b38d18c"
+                "reference": "34b48fe31f6da3ada91a652dec0dee0f0906999b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/cad13fefdd7724b2bac9cc5b5ea2e36f2b38d18c",
-                "reference": "cad13fefdd7724b2bac9cc5b5ea2e36f2b38d18c",
+                "url": "https://api.github.com/repos/keboola/staging-provider/zipball/34b48fe31f6da3ada91a652dec0dee0f0906999b",
+                "reference": "34b48fe31f6da3ada91a652dec0dee0f0906999b",
                 "shasum": ""
             },
             "require": {
@@ -2892,22 +2895,22 @@
                 "staging-provider"
             ],
             "support": {
-                "source": "https://github.com/keboola/staging-provider/tree/12.1.0"
+                "source": "https://github.com/keboola/staging-provider/tree/12.2.0"
             },
-            "time": "2025-06-05T12:31:11+00:00"
+            "time": "2025-07-02T08:12:12+00:00"
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.2.3",
+            "version": "v18.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "86537bed335fa3a1842917da7d91abb7a49aad01"
+                "reference": "c0d909607b9238e143164dff5c10be1801f94d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/86537bed335fa3a1842917da7d91abb7a49aad01",
-                "reference": "86537bed335fa3a1842917da7d91abb7a49aad01",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/c0d909607b9238e143164dff5c10be1801f94d92",
+                "reference": "c0d909607b9238e143164dff5c10be1801f94d92",
                 "shasum": ""
             },
             "require": {
@@ -2919,17 +2922,22 @@
                 "keboola/csv": "^1",
                 "keboola/php-datatypes": "^7.0",
                 "microsoft/azure-storage-blob": "^1.5",
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "psr/log": "^1.1|^2.0|^3.0",
                 "symfony/filesystem": "^7.0||^6.0||^5.0||^4.0",
                 "symfony/process": "^7.0||^6.0||^5.0||^4.0"
             },
             "require-dev": {
                 "brianium/paratest": "2.*|6.*",
+                "ext-bcmath": "*",
                 "ext-curl": "*",
                 "ext-pdo": "*",
                 "ext-pdo_pgsql": "*",
+                "flow-php/filesystem": "^0.21.0",
+                "flow-php/parquet": "^0.21.0",
+                "flow-php/types": "^0.21.0",
                 "keboola/coding-standard": "^15.0",
+                "keboola/kbc-manage-api-php-client": "^9.0",
                 "keboola/php-csv-db-import": "^6",
                 "keboola/phpunit-retry-annotations": "^0.5",
                 "keboola/retry": "^0.5.0",
@@ -2958,9 +2966,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.2.3"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.3.0"
             },
-            "time": "2025-06-03T06:46:18+00:00"
+            "time": "2025-08-14T10:06:00+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",

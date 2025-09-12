@@ -4,12 +4,17 @@ Symfony console application which is used inside an ECS task and wraps Docker ru
 
 ## Development
 Prerequisites:
-* configured `az` and `aws` CLI tools (run `az login` and `aws configure --profile Keboola-CI-Platform-Services-Team-AWSAdministratorAccess`)
+* configured `az`, `aws` and `gcloud` CLI tools (run `az login`, `aws configure --profile Keboola-CI-Platform-Services-Team-AWSAdministratorAccess`, gcloud auth)
+  * Activate PIM `AAD App Administrator` in https://portal.azure.com/#view/Microsoft_Azure_PIMCommon/ActivationMenuBlade/~/aadgroup
+  * You must have Contributor and User Access Administrator role assignet to `Keboola DEV Platform Services Team` subscription in Azure cloud
+  * You must have access to `Keboola-Dev-Platform-Services-AWSAdministratorAccess` profile in AWS
+  * You must have access to `kbc-dev-platform-services` folder in GCP
 * installed `terraform` (https://www.terraform.io) and `jq` (https://stedolan.github.io/jq) to setup local env
 * intalled `docker` and `docker-compose` to run & develop the app
 
 TL;DR:
 ```
+export AWS_PROFILE=Keboola-Dev-Platform-Services-AWSAdministratorAccess
 export NAME_PREFIX= # your name/nickname to make your resource unique & recognizable
 
 cat <<EOF > ./provisioning/local/terraform.tfvars

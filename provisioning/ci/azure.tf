@@ -27,8 +27,15 @@ resource "azuread_service_principal" "job_runner" {
   owners    = [data.azuread_client_config.current.object_id]
 }
 
+resource "time_rotating" "job_runner" {
+  rotation_days = 7
+}
+
 resource "azuread_service_principal_password" "job_runner" {
   service_principal_id = azuread_service_principal.job_runner.id
+  rotate_when_changed = {
+    rotation = time_rotating.job_runner.id
+  }
 }
 
 // resource group
