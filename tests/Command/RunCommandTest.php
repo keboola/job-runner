@@ -1171,8 +1171,7 @@ class RunCommandTest extends AbstractCommandTest
             implode("\n", array_map(
                 fn($r, $i) => "[$i] " . ($r['message'] ?? '[no message]'),
                 $testHandler->getRecords(),
-            ))
-
+            )),
         );
         self::assertFalse($testHandler->hasWarningRecords());
 
