@@ -1094,7 +1094,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [
                 'parameters' => [
                     'operation' => 'unsafe-dump-config',
