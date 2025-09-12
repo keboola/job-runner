@@ -1094,7 +1094,6 @@ class RunCommandTest extends AbstractCommandTest
             'componentId' => 'keboola.runner-config-test',
             '#tokenString' => getenv('TEST_STORAGE_API_TOKEN'),
             'mode' => 'run',
-            'configId' => 'dummy',
             'configData' => [
                 'parameters' => [
                     'operation' => 'unsafe-dump-config',
@@ -1166,7 +1165,14 @@ class RunCommandTest extends AbstractCommandTest
         ]);
 
         self::assertFalse($testHandler->hasErrorRecords());
-        self::assertFalse($testHandler->hasCriticalRecords());
+        self::assertFalse(
+            $testHandler->hasCriticalRecords(),
+            implode("\n", array_map(
+                fn($r) => "[{$r['level_name']}] {$r['message']}",
+                $testHandler->getRecords(),
+            )),
+        );
+
         self::assertFalse($testHandler->hasWarningRecords());
 
         self::assertTrue($testHandler->hasInfoThatContains(
