@@ -535,56 +535,6 @@
             "time": "2025-04-15T21:47:20+00:00"
         },
         {
-            "name": "google/cloud-bigquery-analyticshub",
-            "version": "v0.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/googleapis/google-cloud-php-bigquery-analyticshub.git",
-                "reference": "90609322f03c9d95b7ac56abd0a786255e10a4cd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery-analyticshub/zipball/90609322f03c9d95b7ac56abd0a786255e10a4cd",
-                "reference": "90609322f03c9d95b7ac56abd0a786255e10a4cd",
-                "shasum": ""
-            },
-            "require": {
-                "google/gax": "^1.19.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.0"
-            },
-            "suggest": {
-                "ext-grpc": "Enables use of gRPC, a universal high-performance RPC framework created by Google.",
-                "ext-protobuf": "Provides a significant increase in throughput over the pure PHP protobuf implementation. See https://cloud.google.com/php/grpc for installation instructions."
-            },
-            "type": "library",
-            "extra": {
-                "component": {
-                    "id": "cloud-bigquery-analyticshub",
-                    "path": "BigQueryAnalyticsHub",
-                    "entry": null,
-                    "target": "googleapis/google-cloud-php-bigquery-analyticshub.git"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Google\\Cloud\\BigQuery\\AnalyticsHub\\": "src",
-                    "GPBMetadata\\Google\\Cloud\\Bigquery\\Analyticshub\\": "metadata"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Google Cloud BigQuery Analytics Hub Client for PHP",
-            "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-bigquery-analyticshub/tree/v0.2.2"
-            },
-            "time": "2023-07-07T20:46:38+00:00"
-        },
-        {
             "name": "google/cloud-core",
             "version": "v1.63.0",
             "source": {
@@ -2339,23 +2289,23 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.1.0",
+            "version": "27.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "5069804ff171b471b531ce7a721f312c37a994db"
+                "reference": "74bcf636407639c5f0099bfb50542cb683a9966a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/5069804ff171b471b531ce7a721f312c37a994db",
-                "reference": "5069804ff171b471b531ce7a721f312c37a994db",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/74bcf636407639c5f0099bfb50542cb683a9966a",
+                "reference": "74bcf636407639c5f0099bfb50542cb683a9966a",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "keboola/input-mapping": "*@dev",
                 "keboola/key-generator": "*@dev",
-                "keboola/php-datatypes": "^7.10",
+                "keboola/php-datatypes": "^8.0",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/sanitizer": "^0.1.1",
                 "keboola/slicer": "*@dev",
@@ -2407,9 +2357,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.1.0"
+                "source": "https://github.com/keboola/output-mapping/tree/27.3.0"
             },
-            "time": "2025-08-28T05:12:55+00:00"
+            "time": "2025-10-06T11:15:04+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2465,20 +2415,20 @@
         },
         {
             "name": "keboola/php-datatypes",
-            "version": "7.10.0",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-datatypes.git",
-                "reference": "17ada40225dd51932cf36a31189686d095985604"
+                "reference": "21d4d87f6439102b946a1ee45d83a59babff917d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/17ada40225dd51932cf36a31189686d095985604",
-                "reference": "17ada40225dd51932cf36a31189686d095985604",
+                "url": "https://api.github.com/repos/keboola/php-datatypes/zipball/21d4d87f6439102b946a1ee45d83a59babff917d",
+                "reference": "21d4d87f6439102b946a1ee45d83a59babff917d",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.1"
+                "php": "^8.2"
             },
             "require-dev": {
                 "keboola/coding-standard": "^15",
@@ -2507,9 +2457,9 @@
             "description": "PHP datatypes for databases",
             "support": {
                 "issues": "https://github.com/keboola/php-datatypes/issues",
-                "source": "https://github.com/keboola/php-datatypes/tree/7.10.0"
+                "source": "https://github.com/keboola/php-datatypes/tree/8.2.0"
             },
-            "time": "2025-01-22T08:42:10+00:00"
+            "time": "2025-08-27T11:12:26+00:00"
         },
         {
             "name": "keboola/php-file-storage-utils",
@@ -2901,26 +2851,25 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.3.0",
+            "version": "v18.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "c0d909607b9238e143164dff5c10be1801f94d92"
+                "reference": "acc47f2590acdce454f6455ef37459c42b76fd73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/c0d909607b9238e143164dff5c10be1801f94d92",
-                "reference": "c0d909607b9238e143164dff5c10be1801f94d92",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/acc47f2590acdce454f6455ef37459c42b76fd73",
+                "reference": "acc47f2590acdce454f6455ef37459c42b76fd73",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "~3.2",
                 "ext-json": "*",
-                "google/cloud-bigquery-analyticshub": "^0.2.2",
                 "google/cloud-storage": "^1.27",
                 "guzzlehttp/guzzle": "~7.0",
                 "keboola/csv": "^1",
-                "keboola/php-datatypes": "^7.0",
+                "keboola/php-datatypes": "^8.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "php": ">=8.2",
                 "psr/log": "^1.1|^2.0|^3.0",
@@ -2936,6 +2885,7 @@
                 "flow-php/filesystem": "^0.21.0",
                 "flow-php/parquet": "^0.21.0",
                 "flow-php/types": "^0.21.0",
+                "google/cloud-bigquery-analyticshub": "^0.1.0",
                 "keboola/coding-standard": "^15.0",
                 "keboola/kbc-manage-api-php-client": "^9.0",
                 "keboola/php-csv-db-import": "^6",
@@ -2966,9 +2916,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.3.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.4.0"
             },
-            "time": "2025-08-14T10:06:00+00:00"
+            "time": "2025-09-03T07:01:18+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
