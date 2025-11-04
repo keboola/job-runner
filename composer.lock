@@ -2289,16 +2289,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.3.0",
+            "version": "27.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "74bcf636407639c5f0099bfb50542cb683a9966a"
+                "reference": "ff22e8e4a625acc126be28a13d6ff8155dcef731"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/74bcf636407639c5f0099bfb50542cb683a9966a",
-                "reference": "74bcf636407639c5f0099bfb50542cb683a9966a",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/ff22e8e4a625acc126be28a13d6ff8155dcef731",
+                "reference": "ff22e8e4a625acc126be28a13d6ff8155dcef731",
                 "shasum": ""
             },
             "require": {
@@ -2357,9 +2357,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.3.0"
+                "source": "https://github.com/keboola/output-mapping/tree/27.4.0"
             },
-            "time": "2025-10-06T11:15:04+00:00"
+            "time": "2025-10-31T09:01:04+00:00"
         },
         {
             "name": "keboola/permission-checker",
