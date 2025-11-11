@@ -28,7 +28,7 @@
         "keboola/job-queue-internal-api-php-client": "^23.4",
         "keboola/job-queue-job-configuration": "^3.1",
         "keboola/object-encryptor": "^2.14",
-        "keboola/output-mapping": "^27.0",
+        "keboola/output-mapping": "dev-AJDA-1928-ondra-v2 as 27.5.0",
         "keboola/slicer": "^2.0.1",
         "keboola/storage-api-client": "^18.3",
         "keboola/storage-api-php-client-branch-wrapper": "^6.0",
@@ -44,6 +44,10 @@
         {
             "type": "git",
             "url": "https://github.com/keboola/docker-bundle"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/keboola/php-storage-names-sanitizer"
         }
     ],
     "require-dev": {
