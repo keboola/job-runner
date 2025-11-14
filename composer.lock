@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25c00a783697f4d97872fe976e099972",
+    "content-hash": "4ad0944586523dda275c8cbd9f96eaa4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2526,11 +2526,11 @@
         },
         {
             "name": "keboola/php-storage-names-sanitizer",
-            "version": "1.0.0",
+            "version": "dev-ondra/AJDA-1951",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-storage-names-sanitizer",
-                "reference": "a9ae38775f5714614c7045f19ce192c760785005"
+                "reference": "49548ba00391ed59f3968fafa115dacea94959a9"
             },
             "require": {
                 "php": "^8.2",
@@ -2588,7 +2588,7 @@
                 }
             ],
             "description": "Storage column name sanitizer",
-            "time": "2025-11-05T11:47:59+00:00"
+            "time": "2025-11-12T13:02:55+00:00"
         },
         {
             "name": "keboola/php-temp",
@@ -11438,7 +11438,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/php-storage-names-sanitizer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
