@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b4b4dbbb4a3f0a486fde3339c5c678b",
+    "content-hash": "fca7b10348da0f911242b89bcfe2b569",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1874,16 +1874,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "22.0.0",
+            "version": "dev-devin/AJDA-1996-1764672851",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f"
+                "reference": "7d01fa304681aee4db9eca59625b404ecc2dd47a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/d90bb61e29abac4a82f3707b68c1754725c1ad6f",
-                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/7d01fa304681aee4db9eca59625b404ecc2dd47a",
+                "reference": "7d01fa304681aee4db9eca59625b404ecc2dd47a",
                 "shasum": ""
             },
             "require": {
@@ -1938,11 +1938,11 @@
                     "email": "devel@keboola.com"
                 }
             ],
-            "description": "Shared component for processing SAPI input mapping and exporting to files",
+            "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/22.0.0"
+                "source": "https://github.com/keboola/input-mapping/tree/devin/AJDA-1996-1764672851"
             },
-            "time": "2025-08-15T06:07:45+00:00"
+            "time": "2025-12-08T08:46:04+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -11312,10 +11312,18 @@
             "time": "2024-03-03T12:36:25+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-devin/AJDA-1996-1764672851",
+            "alias": "22.0.0",
+            "alias_normalized": "22.0.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -11329,5 +11337,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
