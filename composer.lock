@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e4e14edfa8ecdef9d2ff1c8d3227081",
+    "content-hash": "cfc7b949d29c3d946209eeb9912dcbff",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1874,16 +1874,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "dev-devin/AJDA-1996-1764672851",
+            "version": "dev-ondra/AJDA-2078",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "358cd9c696b15eb4578c52691857d0fb12be56af"
+                "reference": "1345e48b622d4305cc559cb4838714e9f72e6a7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/358cd9c696b15eb4578c52691857d0fb12be56af",
-                "reference": "358cd9c696b15eb4578c52691857d0fb12be56af",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/1345e48b622d4305cc559cb4838714e9f72e6a7a",
+                "reference": "1345e48b622d4305cc559cb4838714e9f72e6a7a",
                 "shasum": ""
             },
             "require": {
@@ -1940,9 +1940,9 @@
             ],
             "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/devin/AJDA-1996-1764672851"
+                "source": "https://github.com/keboola/input-mapping/tree/ondra/AJDA-2078"
             },
-            "time": "2025-12-05T14:26:57+00:00"
+            "time": "2025-12-12T13:10:43+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
@@ -11315,7 +11315,7 @@
     "aliases": [
         {
             "package": "keboola/input-mapping",
-            "version": "dev-devin/AJDA-1996-1764672851",
+            "version": "dev-ondra/AJDA-2078",
             "alias": "22.3.0",
             "alias_normalized": "22.3.0.0"
         }
