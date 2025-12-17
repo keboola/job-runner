@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b4b4dbbb4a3f0a486fde3339c5c678b",
+    "content-hash": "e961cc38db86635ac3e190fe6a032fc8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2289,16 +2289,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.5.0",
+            "version": "27.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "999d1d82caa5d073d2cdba0fb3d6e778f0feb034"
+                "reference": "253003c629ca33dd8897873e60e32c5918df01a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/999d1d82caa5d073d2cdba0fb3d6e778f0feb034",
-                "reference": "999d1d82caa5d073d2cdba0fb3d6e778f0feb034",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/253003c629ca33dd8897873e60e32c5918df01a1",
+                "reference": "253003c629ca33dd8897873e60e32c5918df01a1",
                 "shasum": ""
             },
             "require": {
@@ -2310,7 +2310,7 @@
                 "keboola/php-storage-names-sanitizer": "*@dev",
                 "keboola/slicer": "*@dev",
                 "keboola/staging-provider": "*@dev",
-                "keboola/storage-api-client": "^18.0",
+                "keboola/storage-api-client": "^18.5",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "php": ">=8.2",
@@ -2357,9 +2357,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.5.0"
+                "source": "https://github.com/keboola/output-mapping/tree/27.6.0"
             },
-            "time": "2025-11-12T13:02:55+00:00"
+            "time": "2025-12-16T09:31:52+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -2898,16 +2898,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.4.0",
+            "version": "v18.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "acc47f2590acdce454f6455ef37459c42b76fd73"
+                "reference": "19392a3ea9f97bee52999fcb43327482d4edeeb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/acc47f2590acdce454f6455ef37459c42b76fd73",
-                "reference": "acc47f2590acdce454f6455ef37459c42b76fd73",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/19392a3ea9f97bee52999fcb43327482d4edeeb1",
+                "reference": "19392a3ea9f97bee52999fcb43327482d4edeeb1",
                 "shasum": ""
             },
             "require": {
@@ -2924,24 +2924,11 @@
                 "symfony/process": "^7.0||^6.0||^5.0||^4.0"
             },
             "require-dev": {
-                "brianium/paratest": "2.*|6.*",
-                "ext-bcmath": "*",
                 "ext-curl": "*",
-                "ext-pdo": "*",
-                "ext-pdo_pgsql": "*",
-                "flow-php/filesystem": "^0.21.0",
-                "flow-php/parquet": "^0.21.0",
-                "flow-php/types": "^0.21.0",
-                "google/cloud-bigquery-analyticshub": "^0.1.0",
                 "keboola/coding-standard": "^15.0",
-                "keboola/kbc-manage-api-php-client": "^9.0",
-                "keboola/php-csv-db-import": "^6",
-                "keboola/phpunit-retry-annotations": "^0.5",
-                "keboola/retry": "^0.5.0",
-                "keboola/table-backend-utils": ">=2.9.0",
                 "phpstan/phpstan": "^1",
                 "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^9.0|^10",
                 "rector/rector": "^0.12.23",
                 "squizlabs/php_codesniffer": "^3",
                 "tomasfejfar/phpstan-phpunit": "^0.1.0"
@@ -2951,8 +2938,8 @@
                 "files": [
                     "src/Keboola/StorageApi/createSimpleJobPollDelay.php"
                 ],
-                "psr-0": {
-                    "Keboola\\StorageApi": "src/"
+                "psr-4": {
+                    "Keboola\\StorageApi\\": "src/Keboola/StorageApi/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2963,9 +2950,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.4.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.5.0"
             },
-            "time": "2025-09-03T07:01:18+00:00"
+            "time": "2025-10-24T10:16:29+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -11329,5 +11316,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
