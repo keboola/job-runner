@@ -123,8 +123,8 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
         $components = new Components($this->getClient());
         $configId = $components->addConfiguration($configuration)['id'];
         $client = new Client([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN_MASTER'),
+            'url' => (string) getenv('STORAGE_API_URL'),
+            'token' => (string) getenv('TEST_STORAGE_API_TOKEN_MASTER'),
         ]);
         $branchApi = new DevBranches($client);
         $branchId = $branchApi->createBranch(uniqid('runner-test-branch'))['id'];

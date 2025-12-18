@@ -46,7 +46,7 @@ services:
         arguments:
             $appName: "%app_name%"
         tags:
-            - { name: monolog.processor, handler: main }
+            - { name: monolog.processor }
 
     Keboola\ObjectEncryptor\EncryptorOptions:
         $stackId: '%env(ENCRYPTOR_STACK_ID)%'
