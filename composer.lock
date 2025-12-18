@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e961cc38db86635ac3e190fe6a032fc8",
+    "content-hash": "145c8f7458491d417159d2ed640131a9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1874,16 +1874,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "22.0.0",
+            "version": "22.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f"
+                "reference": "2f1022c2748405a06c15e77aed6b593ff2c8e701"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/d90bb61e29abac4a82f3707b68c1754725c1ad6f",
-                "reference": "d90bb61e29abac4a82f3707b68c1754725c1ad6f",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/2f1022c2748405a06c15e77aed6b593ff2c8e701",
+                "reference": "2f1022c2748405a06c15e77aed6b593ff2c8e701",
                 "shasum": ""
             },
             "require": {
@@ -1938,11 +1938,11 @@
                     "email": "devel@keboola.com"
                 }
             ],
-            "description": "Shared component for processing SAPI input mapping and exporting to files",
+            "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/22.0.0"
+                "source": "https://github.com/keboola/input-mapping/tree/22.3.0"
             },
-            "time": "2025-08-15T06:07:45+00:00"
+            "time": "2025-12-15T09:54:23+00:00"
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
