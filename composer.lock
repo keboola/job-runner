@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "145c8f7458491d417159d2ed640131a9",
+    "content-hash": "5685850397bf1dfbdb6c4c6c1c27e7d8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2898,16 +2898,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.5.1",
+            "version": "v18.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "98ae8282aecc98210315acf8de8907763c2995c8"
+                "reference": "cb24cb53b7279fa831bf616e8b35033ffe60f02c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/98ae8282aecc98210315acf8de8907763c2995c8",
-                "reference": "98ae8282aecc98210315acf8de8907763c2995c8",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/cb24cb53b7279fa831bf616e8b35033ffe60f02c",
+                "reference": "cb24cb53b7279fa831bf616e8b35033ffe60f02c",
                 "shasum": ""
             },
             "require": {
@@ -2916,7 +2916,6 @@
                 "google/cloud-storage": "^1.27",
                 "guzzlehttp/guzzle": "~7.0",
                 "keboola/csv": "^1",
-                "keboola/php-datatypes": "^8.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "php": ">=8.2",
                 "psr/log": "^1.1|^2.0|^3.0",
@@ -2925,13 +2924,7 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "keboola/coding-standard": "^15.0",
-                "phpstan/phpstan": "^1",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.0|^10",
-                "rector/rector": "^0.12.23",
-                "squizlabs/php_codesniffer": "^3",
-                "tomasfejfar/phpstan-phpunit": "^0.1.0"
+                "phpunit/phpunit": "^9.0|^10"
             },
             "type": "library",
             "autoload": {
@@ -2950,9 +2943,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.5.1"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.5.4"
             },
-            "time": "2025-12-17T08:08:42+00:00"
+            "time": "2026-01-05T14:14:15+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -11316,5 +11309,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

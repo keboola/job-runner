@@ -30,7 +30,7 @@
         "keboola/object-encryptor": "^2.14",
         "keboola/output-mapping": "^27.6",
         "keboola/slicer": "^2.0.1",
-        "keboola/storage-api-client": "^18.5",
+        "keboola/storage-api-client": "^18.5.4",
         "keboola/storage-api-php-client-branch-wrapper": "^6.0",
         "symfony/console": "^6.2",
         "symfony/dotenv": "^6.2",
