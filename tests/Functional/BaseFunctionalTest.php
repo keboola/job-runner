@@ -67,8 +67,8 @@ abstract class BaseFunctionalTest extends TestCase
             }
         }
         $this->storageClient = new StorageClient([
-            'url' => getenv('STORAGE_API_URL'),
-            'token' => getenv('TEST_STORAGE_API_TOKEN'),
+            'url' => (string) getenv('STORAGE_API_URL'),
+            'token' => (string) getenv('TEST_STORAGE_API_TOKEN'),
         ]);
         $this->vaultVariablesApiClient = new VariablesApiClient(
             self::getRequiredEnv('VAULT_API_URL'),
