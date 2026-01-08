@@ -1726,7 +1726,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "2f52c3c6a7a800946c208804deadea7093375411"
+                "reference": "9c4c8759f88e7f774fc481746c93852f10f934c6"
             },
             "require": {
                 "ext-json": "*",
@@ -1736,7 +1736,7 @@
                 "keboola/gelf-server": "^4.0",
                 "keboola/input-mapping": "^22.0",
                 "keboola/job-queue-job-configuration": "^3",
-                "keboola/oauth-v2-php-client": "^4.0",
+                "keboola/oauth-v2-php-client": "^5.0",
                 "keboola/object-encryptor": "^2.2",
                 "keboola/output-mapping": "^27.0",
                 "keboola/php-temp": "^2.0",
@@ -2173,16 +2173,16 @@
         },
         {
             "name": "keboola/oauth-v2-php-client",
-            "version": "4.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/oauth-v2-php-client.git",
-                "reference": "4b9f05db742c72d837a7c02fbefc76d541782b58"
+                "reference": "a04f841107b61f9eac59bef6ed227ca8906d0149"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/oauth-v2-php-client/zipball/4b9f05db742c72d837a7c02fbefc76d541782b58",
-                "reference": "4b9f05db742c72d837a7c02fbefc76d541782b58",
+                "url": "https://api.github.com/repos/keboola/oauth-v2-php-client/zipball/a04f841107b61f9eac59bef6ed227ca8906d0149",
+                "reference": "a04f841107b61f9eac59bef6ed227ca8906d0149",
                 "shasum": ""
             },
             "require": {
@@ -2217,9 +2217,9 @@
             "description": "Keboola OAuth v2 API Client",
             "support": {
                 "issues": "https://github.com/keboola/oauth-v2-php-client/issues",
-                "source": "https://github.com/keboola/oauth-v2-php-client/tree/4.0.1"
+                "source": "https://github.com/keboola/oauth-v2-php-client/tree/5.0.2"
             },
-            "time": "2023-03-23T11:25:30+00:00"
+            "time": "2025-06-18T08:42:05+00:00"
         },
         {
             "name": "keboola/object-encryptor",
