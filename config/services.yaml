@@ -19,6 +19,10 @@ parameters:
     'env(ENCRYPTOR_STACK_ID)': ''
     'env(STORAGE_API_TOKEN)': ''
     'env(JOB_ID)': ''
+    'env(USE_REPLICATED_REGISTRY)': ''
+    'env(REPLICATED_REGISTRY_URL)': ''
+    'env(REPLICATED_REGISTRY_USERNAME)': ''
+    'env(REPLICATED_REGISTRY_PASSWORD)': ''
 
 services:
     # default configuration for services in *this* file
@@ -31,6 +35,15 @@ services:
     App\:
         resource: '../src/*'
         exclude: '../src/{Kernel.php}'
+
+    Keboola\DockerBundle\Docker\Image\ReplicatedRegistry:
+        arguments:
+            $useReplicatedRegistry: '%env(bool:USE_REPLICATED_REGISTRY)%'
+            $replicatedRegistryUrl: '%env(REPLICATED_REGISTRY_URL)%'
+            $loginUsername: '%env(REPLICATED_REGISTRY_USERNAME)%'
+            $loginPassword: '%env(REPLICATED_REGISTRY_PASSWORD)%'
+
+    Keboola\DockerBundle\Docker\ImageFactory:
 
     App\Command\RunCommand:
         arguments:
