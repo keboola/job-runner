@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08b6367a7f6f57316ecff408b7fd8388",
+    "content-hash": "145c8f7458491d417159d2ed640131a9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1722,11 +1722,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-pepa/PAT-1342_replicatedRegistry",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "881b7ada8bca31be8b5aff5ad749eaa1ef828f92"
+                "reference": "7014ed3d903511b9a3cae17cc0a150b48207e04f"
             },
             "require": {
                 "ext-json": "*",
@@ -1761,6 +1761,7 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^6.4|^7.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "aws/aws-sdk-php": [
@@ -1817,7 +1818,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2026-01-27T13:31:00+00:00"
+            "time": "2026-01-29T08:54:34+00:00"
         },
         {
             "name": "keboola/gelf-server",
