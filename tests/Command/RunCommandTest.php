@@ -9,6 +9,8 @@ use App\JobDefinitionFactory;
 use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
+use Keboola\DockerBundle\Docker\Image\ReplicatedRegistry;
+use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\StateTransitionForbiddenException;
@@ -1145,6 +1147,10 @@ class RunCommandTest extends AbstractCommandTest
 
         $kernel = static::createKernel();
         $application = new Application($kernel);
+        $imageFactory = new ImageFactory(
+            $logger,
+            new ReplicatedRegistry(false, '', '', ''),
+        );
         $application->add(new RunCommand(
             $logger,
             $logProcessor,
@@ -1152,6 +1158,7 @@ class RunCommandTest extends AbstractCommandTest
             $storageApiFactory,
             $jobDefinitionFactory,
             $objectEncryptor,
+            $imageFactory,
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             [],

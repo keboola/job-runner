@@ -11,6 +11,7 @@ use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
 use App\UsageFile;
+use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
 use Keboola\DockerBundle\Docker\Runner\Output;
@@ -57,6 +58,7 @@ class RunCommand extends Command implements SignalableCommandInterface
         private readonly StorageClientPlainFactory $storageClientFactory,
         private readonly JobDefinitionFactory $jobDefinitionFactory,
         private readonly ObjectEncryptor $objectEncryptor,
+        private readonly ImageFactory $imageFactory,
         private readonly string $jobId,
         private readonly string $storageApiToken,
         private readonly array $instanceLimits,
@@ -258,6 +260,7 @@ class RunCommand extends Command implements SignalableCommandInterface
                 $loggerService,
                 new OutputFilter(60000),
                 $this->instanceLimits,
+                $this->imageFactory,
             );
             $usageFile = new UsageFile();
             $usageFile->setQueueClient($this->queueClient);

@@ -31,7 +31,7 @@ class RunnerStoredConfigMultipleRowsTest extends BaseFunctionalTest
 
         self::assertEquals(0, $return);
         self::assertTrue($this->getClient()->tableExists('out.c-executor-test.output'));
-        self::assertTrue($this->getClient()->tableExists('out.c-executor-test.output-2 '));
+        self::assertTrue($this->getClient()->tableExists('out.c-executor-test.output-2'));
 
         $csvData = $this->getClient()->getTableDataPreview(
             'out.c-executor-test.output',

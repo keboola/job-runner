@@ -11,6 +11,8 @@ use App\Tests\EncryptorOptionsTrait;
 use App\Tests\TestEnvVarsTrait;
 use Exception;
 use Keboola\Csv\CsvFile;
+use Keboola\DockerBundle\Docker\Image\ReplicatedRegistry;
+use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
@@ -195,6 +197,10 @@ abstract class BaseFunctionalTest extends TestCase
                 $this->logger,
             ),
             $this->objectEncryptor,
+            new ImageFactory(
+                $this->logger,
+                new ReplicatedRegistry(false, '', '', ''),
+            ),
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1],
