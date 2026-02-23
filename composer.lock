@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "145c8f7458491d417159d2ed640131a9",
+    "content-hash": "eabf67b40eaeb56a812d3ae7ecc080ab",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1948,24 +1948,91 @@
             "time": "2026-02-02T13:15:18+00:00"
         },
         {
-            "name": "keboola/job-queue-internal-api-php-client",
-            "version": "23.13.0",
+            "name": "keboola/job-queue-artifacts",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "be03be62063acc26f37b14a580126a4af5cdd135"
+                "url": "https://github.com/keboola/job-queue-artifacts.git",
+                "reference": "baffb98b58dfd2fb9ad495b972b47023569acd13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/be03be62063acc26f37b14a580126a4af5cdd135",
-                "reference": "be03be62063acc26f37b14a580126a4af5cdd135",
+                "url": "https://api.github.com/repos/keboola/job-queue-artifacts/zipball/baffb98b58dfd2fb9ad495b972b47023569acd13",
+                "reference": "baffb98b58dfd2fb9ad495b972b47023569acd13",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "keboola/job-queue-job-configuration": "^3.0.0|*@dev",
+                "keboola/storage-api-client": "^15.1|^16.0|^17.0|^18.0",
+                "keboola/storage-api-php-client-branch-wrapper": "^6.0",
+                "php": ">=8.2",
+                "symfony/filesystem": "^6.2|^7.0",
+                "symfony/finder": "^6.2|^7.0"
+            },
+            "require-dev": {
+                "keboola/coding-standard": ">=14.0",
+                "keboola/php-temp": "^2.0",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan-symfony": "^1.2",
+                "phpunit/phpunit": "^10.3",
+                "symfony/dotenv": "^6.0|^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "aws/aws-sdk-php": [
+                    "S3",
+                    "Kms",
+                    "Sts"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Artifacts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Library for working with artifacts in Job Runner",
+            "keywords": [
+                "artifacts",
+                "job",
+                "keboola",
+                "queue"
+            ],
+            "support": {
+                "source": "https://github.com/keboola/job-queue-artifacts/tree/4.0.3"
+            },
+            "time": "2025-09-12T14:51:07+00:00"
+        },
+        {
+            "name": "keboola/job-queue-internal-api-php-client",
+            "version": "25.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
+                "reference": "dca5256ac2b17990daddebe31f6f437ab51c9c58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/dca5256ac2b17990daddebe31f6f437ab51c9c58",
+                "reference": "dca5256ac2b17990daddebe31f6f437ab51c9c58",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3|^7.0",
-                "keboola/artifacts": "^3.0",
-                "keboola/kbc-manage-api-php-client": "^5.2|^6.0|^7.0",
+                "keboola/job-queue-artifacts": "^4.0.3|*@dev",
+                "keboola/kbc-manage-api-php-client": "^5.2|^6.0|^7.0|^8.0|^9.0",
                 "keboola/object-encryptor": "^2.12",
                 "keboola/permission-checker": "^2.0",
                 "keboola/storage-api-client": "^15.2|^16.0|^17.0|^18.0",
@@ -1980,12 +2047,12 @@
             "require-dev": {
                 "infection/infection": "^0.27",
                 "keboola/coding-standard": ">=14.0",
-                "phpstan/phpstan": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpstan/phpstan-symfony": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-symfony": "^2.0",
                 "phpunit/phpunit": "^9.5",
                 "sempro/phpunit-pretty-print": "^1.4",
-                "symfony/dotenv": "^6.3"
+                "symfony/dotenv": "^6.3|^7.0"
             },
             "type": "library",
             "extra": {
@@ -2018,22 +2085,22 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/23.13.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/25.2.0"
             },
-            "time": "2025-07-07T09:23:23+00:00"
+            "time": "2026-02-20T13:34:13+00:00"
         },
         {
             "name": "keboola/job-queue-job-configuration",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-job-configuration.git",
-                "reference": "85dfa258afcca2835eba9e7d55e8b917e769d1c5"
+                "reference": "5e670fca60c14ac1d34d9b366d61ba65aec85c62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/85dfa258afcca2835eba9e7d55e8b917e769d1c5",
-                "reference": "85dfa258afcca2835eba9e7d55e8b917e769d1c5",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/5e670fca60c14ac1d34d9b366d61ba65aec85c62",
+                "reference": "5e670fca60c14ac1d34d9b366d61ba65aec85c62",
                 "shasum": ""
             },
             "require": {
@@ -2069,9 +2136,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
-                "source": "https://github.com/keboola/job-queue-job-configuration/tree/3.2.0"
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/3.3.0"
             },
-            "time": "2025-09-12T11:47:40+00:00"
+            "time": "2026-02-20T10:29:56+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
