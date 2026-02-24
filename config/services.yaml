@@ -78,6 +78,8 @@ services:
 
     Keboola\JobQueueInternalClient\ExistingJobFactory:
 
+    Keboola\JobQueueInternalClient\ExistingJobFactoryInterface: '@Keboola\JobQueueInternalClient\ExistingJobFactory'
+
     Keboola\JobQueueInternalClient\Client:
         arguments:
             $internalQueueApiUrl: '%env(JOB_QUEUE_URL)%'
