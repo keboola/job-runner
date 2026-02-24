@@ -8,6 +8,7 @@
 /docker/db-data
 /set-env.sh
 /provisioning/dev/environments.yaml
+/.claude/*.local.*
 
 ###> phpunit/phpunit ###
 /phpunit.xml
