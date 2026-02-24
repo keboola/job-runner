@@ -8,6 +8,7 @@ use App\UsageFile;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\Exception\ClientException;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\Temp\Temp;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -46,7 +47,7 @@ class UsageFileTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Client $client */
+        /** @var Client<JobInterface> $client */
         $usageFile = new UsageFile();
         $usageFile->setDataDir($this->dataDir);
         $usageFile->setFormat('json');
@@ -71,7 +72,7 @@ YAML;
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Client $client */
+        /** @var Client<JobInterface> $client */
         $usageFile = new UsageFile();
         $usageFile->setDataDir($this->dataDir);
         $usageFile->setFormat('yaml');
@@ -103,7 +104,7 @@ YAML;
                     return $actualUsage === json_decode($usage, true);
                 }),
             );
-        /** @var Client $client */
+        /** @var Client<JobInterface> $client */
         $usageFile = new UsageFile();
         $usageFile->setDataDir($this->dataDir);
         $usageFile->setFormat('json');
@@ -129,7 +130,7 @@ YAML;
             ->method('addJobUsage')
             ->willThrowException(new ClientException('Job "1" not found.'));
 
-        /** @var Client $client */
+        /** @var Client<JobInterface> $client */
         $usageFile = new UsageFile();
         $usageFile->setDataDir($this->dataDir);
         $usageFile->setFormat('json');
@@ -159,7 +160,7 @@ YAML;
                 }),
             );
 
-        /** @var Client $client */
+        /** @var Client<JobInterface> $client */
         $usageFile = new UsageFile();
         $usageFile->setDataDir($this->dataDir);
         $usageFile->setFormat('json');

@@ -8,6 +8,7 @@ use Keboola\DockerBundle\Docker\Configuration\Usage\Adapter;
 use Keboola\DockerBundle\Docker\Runner\UsageFile\UsageFileInterface;
 use Keboola\DockerBundle\Exception\ApplicationException;
 use Keboola\JobQueueInternalClient\Client;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
 
@@ -17,12 +18,14 @@ class UsageFile implements UsageFileInterface
     private ?string $format = null;
     private Adapter $adapter;
     private ?string $jobId = null;
+    /** @var Client<JobInterface> */
     private Client $queueClient;
 
     public function __construct()
     {
     }
 
+    /** @param Client<JobInterface> $queueClient */
     public function setQueueClient(Client $queueClient): void
     {
         $this->queueClient = $queueClient;

@@ -51,6 +51,9 @@ class RunCommand extends Command implements SignalableCommandInterface
 {
     private ?Runner $runner = null;
 
+    /**
+     * @param QueueClient<JobInterface> $queueClient
+     */
     public function __construct(
         private readonly Logger $logger,
         private readonly LogProcessor $logProcessor,

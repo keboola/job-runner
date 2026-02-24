@@ -339,6 +339,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         return new Job(
             $objectEncryptor,
             $storageClientPlainFactory,
+            // @phpstan-ignore-next-line
             [
                 'id' => '1234',
                 'runId' => '1234',
