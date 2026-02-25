@@ -16,6 +16,7 @@ use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\ErrorControl\Monolog\LogProcessor;
 use Keboola\JobQueueInternalClient\Client as QueueClient;
 use Keboola\JobQueueInternalClient\JobFactory\Job;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\NewJobFactory;
@@ -122,6 +123,7 @@ abstract class BaseFunctionalTest extends TestCase
                 new Job(
                     $jobObjectEncryptor,
                     $storageClientFactory,
+                    // @phpstan-ignore-next-line
                     array_merge($job->jsonSerialize(), ['status' => 'processing']),
                 ),
             );
@@ -151,6 +153,7 @@ abstract class BaseFunctionalTest extends TestCase
                     new Job(
                         $jobObjectEncryptor,
                         $storageClientFactory,
+                        // @phpstan-ignore-next-line
                         array_merge($job->jsonSerialize(), ['status' => 'processing']),
                     ),
                 );
@@ -161,6 +164,7 @@ abstract class BaseFunctionalTest extends TestCase
                     new Job(
                         $jobObjectEncryptor,
                         $storageClientFactory,
+                        // @phpstan-ignore-next-line
                         array_merge($job->jsonSerialize(), ['status' => 'processing']),
                     ),
                 );
@@ -184,7 +188,7 @@ abstract class BaseFunctionalTest extends TestCase
             $storageClientFactory->method('createClientWrapper')->willReturn($mockClientWrapper);
         }
 
-        /** @var QueueClient $mockQueueClient */
+        /** @var QueueClient<JobInterface> $mockQueueClient */
         return new RunCommand(
             $this->logger,
             new LogProcessor('test-runner'),

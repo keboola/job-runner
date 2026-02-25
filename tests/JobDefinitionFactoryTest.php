@@ -49,6 +49,7 @@ class JobDefinitionFactoryTest extends TestCase
         $jobStorageClientFactory = $this->createMock(StorageClientPlainFactory::class);
         $jobStorageClientFactory->expects(self::never())->method(self::anything());
 
+        // @phpstan-ignore-next-line
         return new Job($encryptor, $jobStorageClientFactory, $jobData);
     }
 
@@ -632,6 +633,7 @@ class JobDefinitionFactoryTest extends TestCase
         ;
 
         $jobData = [
+            'id' => 'test-job-id',
             'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
@@ -644,6 +646,7 @@ class JobDefinitionFactoryTest extends TestCase
             '#tokenString' => 'encrypted-token',
         ];
 
+        // @phpstan-ignore-next-line
         $job = new Job($encryptor, $jobStorageClientFactory, $jobData);
 
         $factory = new JobDefinitionFactory(
@@ -686,6 +689,7 @@ class JobDefinitionFactoryTest extends TestCase
         $component = $this->createComponent(componentId: $componentId);
 
         $jobData = [
+            'id' => 'test-job-id',
             'status' => JobInterface::STATUS_CREATED,
             'runId' => '1234',
             'projectId' => 'my-project',
@@ -698,6 +702,7 @@ class JobDefinitionFactoryTest extends TestCase
             '#tokenString' => 'encrypted-token',
         ];
 
+        // @phpstan-ignore-next-line
         $job = new Job($encryptor, $jobStorageClientFactory, $jobData);
 
         $factory = new JobDefinitionFactory(

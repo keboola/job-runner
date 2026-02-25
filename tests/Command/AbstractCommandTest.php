@@ -7,6 +7,7 @@ namespace App\Tests\Command;
 use App\Tests\EncryptorOptionsTrait;
 use Keboola\JobQueueInternalClient\Client;
 use Keboola\JobQueueInternalClient\ExistingJobFactory;
+use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobFactory\JobRuntimeResolver;
 use Keboola\JobQueueInternalClient\NewJobFactory;
@@ -26,7 +27,7 @@ abstract class AbstractCommandTest extends KernelTestCase
      *     newJobFactory: NewJobFactory,
      *     existingJobFactory: ExistingJobFactory,
      *     objectEncryptor: ObjectEncryptor,
-     *     client: Client,
+     *     client: Client<JobInterface>,
      * }
      */
     protected function getJobFactoryAndClient(): array
