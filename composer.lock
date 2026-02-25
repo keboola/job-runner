@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eabf67b40eaeb56a812d3ae7ecc080ab",
+    "content-hash": "a474eb8c9565842d83c026320ce27be5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2291,16 +2291,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.6.0",
+            "version": "dev-ondra/AJDA-2302",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "253003c629ca33dd8897873e60e32c5918df01a1"
+                "reference": "b1d89e5588d314169a5513fe4a785af0f8ea4516"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/253003c629ca33dd8897873e60e32c5918df01a1",
-                "reference": "253003c629ca33dd8897873e60e32c5918df01a1",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b1d89e5588d314169a5513fe4a785af0f8ea4516",
+                "reference": "b1d89e5588d314169a5513fe4a785af0f8ea4516",
                 "shasum": ""
             },
             "require": {
@@ -2359,9 +2359,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.6.0"
+                "source": "https://github.com/keboola/output-mapping/tree/ondra/AJDA-2302"
             },
-            "time": "2025-12-16T09:31:52+00:00"
+            "time": "2026-02-25T22:06:33+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -11692,10 +11692,18 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-ondra/AJDA-2302",
+            "alias": "27.6.0",
+            "alias_normalized": "27.6.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/output-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
