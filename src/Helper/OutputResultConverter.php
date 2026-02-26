@@ -38,17 +38,18 @@ class OutputResultConverter
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
-                foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
+                $tableResult = $tableQueue->getTableResult();
+                foreach ($tableResult->getTables() as $tableInfo) {
                     $outputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
                 }
 
-                foreach ($tableQueue->getTableResult()->getGenericVariables() as $tableName => $data) {
+                foreach ($tableResult->getGenericVariables() as $tableName => $data) {
                     $variables->addVariable(
                         new Variable("{$tableName}-columns", (string) json_encode($data['columns'])),
                     );
                 }
 
-                foreach ($tableQueue->getTableResult()->getCustomVariables() as $name => $value) {
+                foreach ($tableResult->getCustomVariables() as $name => $value) {
                     $variables->addVariable(
                         new Variable((string) $name, is_scalar($value) ? (string) $value : ''),
                     );
