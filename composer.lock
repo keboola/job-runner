@@ -2295,12 +2295,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "f5bab99dc3d0219a3e4f6d8715847066f75367f1"
+                "reference": "c89c7911967ae678c6c2f378ee56a9f3e37b0151"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/f5bab99dc3d0219a3e4f6d8715847066f75367f1",
-                "reference": "f5bab99dc3d0219a3e4f6d8715847066f75367f1",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/c89c7911967ae678c6c2f378ee56a9f3e37b0151",
+                "reference": "c89c7911967ae678c6c2f378ee56a9f3e37b0151",
                 "shasum": ""
             },
             "require": {
@@ -2361,7 +2361,7 @@
             "support": {
                 "source": "https://github.com/keboola/output-mapping/tree/ondra/AJDA-2302"
             },
-            "time": "2026-02-26T08:35:52+00:00"
+            "time": "2026-02-26T11:07:04+00:00"
         },
         {
             "name": "keboola/permission-checker",
