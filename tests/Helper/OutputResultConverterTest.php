@@ -440,10 +440,9 @@ class OutputResultConverterTest extends TestCase
         );
     }
 
-    public function testFlowVariablesGenericAndCustomAddedToVariables(): void
+    public function testCustomVariablesGoToOutputVariables(): void
     {
         $outputTableResult = new OutputResult();
-        $outputTableResult->addGenericVariable('myTable', ['col1', 'col2']);
         $outputTableResult->setCustomVariables(['my_var' => 'hello', 'count' => 42]);
 
         $loadQueueMock = self::createMock(LoadTableQueue::class);
@@ -460,49 +459,21 @@ class OutputResultConverterTest extends TestCase
         $output->setInputVariableValues([]);
         $output->setTableQueue($loadQueueMock);
 
-        $jobResult = OutputResultConverter::convertOutputsToResult([$output]);
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
 
+        self::assertSame([], $result['variables']);
         self::assertSame(
             [
-                ['name' => 'myTable-columns', 'value' => '["col1","col2"]'],
                 ['name' => 'my_var', 'value' => 'hello'],
                 ['name' => 'count', 'value' => '42'],
             ],
-            $jobResult->jsonSerialize()['variables'],
+            $result['output']['variables'],
         );
     }
 
-    public function testFlowVariablesGenericWithEmptyColumnsSerializesAsEmptyArray(): void
+    public function testInputAndOutputVariablesAreSeparated(): void
     {
         $outputTableResult = new OutputResult();
-        $outputTableResult->addGenericVariable('emptyTable', []);
-
-        $loadQueueMock = self::createMock(LoadTableQueue::class);
-        $loadQueueMock->expects(self::once())
-            ->method('getTableResult')
-            ->willReturn($outputTableResult)
-        ;
-
-        $output = new Output();
-        $output->setConfigVersion('1');
-        $output->setImages([]);
-        $output->setArtifactsUploaded([]);
-        $output->setArtifactsDownloaded([]);
-        $output->setInputVariableValues([]);
-        $output->setTableQueue($loadQueueMock);
-
-        $jobResult = OutputResultConverter::convertOutputsToResult([$output]);
-
-        self::assertSame(
-            [['name' => 'emptyTable-columns', 'value' => '[]']],
-            $jobResult->jsonSerialize()['variables'],
-        );
-    }
-
-    public function testFlowVariablesAndInputVariablesCombined(): void
-    {
-        $outputTableResult = new OutputResult();
-        $outputTableResult->addGenericVariable('orders', ['id', 'name']);
         $outputTableResult->setCustomVariables(['run_id' => '99']);
 
         $loadQueueMock = self::createMock(LoadTableQueue::class);
@@ -519,16 +490,40 @@ class OutputResultConverterTest extends TestCase
         $output->setInputVariableValues(['vault.token' => 'secret']);
         $output->setTableQueue($loadQueueMock);
 
-        $jobResult = OutputResultConverter::convertOutputsToResult([$output]);
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
 
         self::assertSame(
-            [
-                ['name' => 'orders-columns', 'value' => '["id","name"]'],
-                ['name' => 'run_id', 'value' => '99'],
-                ['name' => 'vault.token', 'value' => 'secret'],
-            ],
-            $jobResult->jsonSerialize()['variables'],
+            [['name' => 'vault.token', 'value' => 'secret']],
+            $result['variables'],
         );
+        self::assertSame(
+            [['name' => 'run_id', 'value' => '99']],
+            $result['output']['variables'],
+        );
+    }
+
+    public function testNoOutputVariablesKeyWhenNoCustomVariables(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addGenericVariable('orders', ['id', 'name']);
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->expects(self::once())
+            ->method('getTableResult')
+            ->willReturn($outputTableResult)
+        ;
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues([]);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertArrayNotHasKey('variables', $result['output']);
     }
 
     private function getTableInfo(): array
