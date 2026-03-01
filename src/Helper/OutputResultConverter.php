@@ -34,7 +34,8 @@ class OutputResultConverter
         $jobArtifacts = new JobArtifacts();
         $uploadedArtifacts = [];
         $downloadedArtifacts = [];
-        $variables = new VariableCollection();
+        $inputVariables = new VariableCollection();
+        $outputVariables = new VariableCollection();
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
@@ -43,14 +44,8 @@ class OutputResultConverter
                     $outputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
                 }
 
-                foreach ($tableResult->getGenericVariables() as $tableName => $data) {
-                    $variables->addVariable(
-                        new Variable("{$tableName}-columns", (string) json_encode($data['columns'])),
-                    );
-                }
-
                 foreach ($tableResult->getCustomVariables() as $name => $value) {
-                    $variables->addVariable(
+                    $outputVariables->addVariable(
                         new Variable((string) $name, is_scalar($value) ? (string) $value : ''),
                     );
                 }
@@ -69,7 +64,7 @@ class OutputResultConverter
             array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
 
             foreach ($output->getInputVariableValues() as $variableName => $variableValue) {
-                $variables->addVariable(new Variable((string) $variableName, $variableValue));
+                $inputVariables->addVariable(new Variable((string) $variableName, $variableValue));
             }
         }
         $jobResult
@@ -82,8 +77,11 @@ class OutputResultConverter
                     ->setUploaded($uploadedArtifacts)
                     ->setDownloaded($downloadedArtifacts),
             )
-            ->setVariables($variables)
+            ->setVariables($inputVariables)
         ;
+        if ($outputVariables->count() > 0) {
+            $jobResult->setOutputVariables($outputVariables);
+        }
         return $jobResult;
     }
 

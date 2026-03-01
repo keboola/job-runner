@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a474eb8c9565842d83c026320ce27be5",
+    "content-hash": "2d116e466ad8f105e2de69a7279a6967",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1948,16 +1948,16 @@
         },
         {
             "name": "keboola/job-queue-internal-api-php-client",
-            "version": "25.2.0",
+            "version": "dev-ondra/AJDA-2301",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "dca5256ac2b17990daddebe31f6f437ab51c9c58"
+                "reference": "ced98ede328b1e9c2d18b722cb437228d43414bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/dca5256ac2b17990daddebe31f6f437ab51c9c58",
-                "reference": "dca5256ac2b17990daddebe31f6f437ab51c9c58",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ced98ede328b1e9c2d18b722cb437228d43414bd",
+                "reference": "ced98ede328b1e9c2d18b722cb437228d43414bd",
                 "shasum": ""
             },
             "require": {
@@ -2017,9 +2017,9 @@
                 "queue"
             ],
             "support": {
-                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/25.2.0"
+                "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/ondra/AJDA-2301"
             },
-            "time": "2026-02-20T13:34:13+00:00"
+            "time": "2026-03-01T20:13:27+00:00"
         },
         {
             "name": "keboola/job-queue-job-configuration",
@@ -11695,6 +11695,12 @@
     ],
     "aliases": [
         {
+            "package": "keboola/job-queue-internal-api-php-client",
+            "version": "dev-ondra/AJDA-2301",
+            "alias": "25.3.0",
+            "alias_normalized": "25.3.0.0"
+        },
+        {
             "package": "keboola/output-mapping",
             "version": "dev-ondra/AJDA-2302",
             "alias": "27.6.0",
@@ -11704,6 +11710,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
+        "keboola/job-queue-internal-api-php-client": 20,
         "keboola/output-mapping": 20
     },
     "prefer-stable": false,
