@@ -23,7 +23,7 @@
         "aws/aws-sdk-php": "^3.258",
         "keboola/api-error-control": "^4.2",
         "keboola/configuration-variables-resolver": "^5.3",
-        "keboola/dockerbundle": "dev-main",
+        "keboola/dockerbundle": "dev-roman-pat-1529-fallback-for-undefined-name",
         "keboola/input-mapping": "^22.3",
         "keboola/job-queue-internal-api-php-client": "^25.2",
         "keboola/job-queue-job-configuration": "^3.3",
