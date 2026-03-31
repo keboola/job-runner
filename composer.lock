@@ -1952,12 +1952,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "ced98ede328b1e9c2d18b722cb437228d43414bd"
+                "reference": "d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/ced98ede328b1e9c2d18b722cb437228d43414bd",
-                "reference": "ced98ede328b1e9c2d18b722cb437228d43414bd",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78",
+                "reference": "d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +2019,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/ondra/AJDA-2301"
             },
-            "time": "2026-03-01T20:13:27+00:00"
+            "time": "2026-03-31T13:28:53+00:00"
         },
         {
             "name": "keboola/job-queue-job-configuration",
@@ -2295,12 +2295,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "c89c7911967ae678c6c2f378ee56a9f3e37b0151"
+                "reference": "b5e13cc201860fa569e284fa5e89c9bd7c5996bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/c89c7911967ae678c6c2f378ee56a9f3e37b0151",
-                "reference": "c89c7911967ae678c6c2f378ee56a9f3e37b0151",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b5e13cc201860fa569e284fa5e89c9bd7c5996bd",
+                "reference": "b5e13cc201860fa569e284fa5e89c9bd7c5996bd",
                 "shasum": ""
             },
             "require": {
@@ -2361,7 +2361,7 @@
             "support": {
                 "source": "https://github.com/keboola/output-mapping/tree/ondra/AJDA-2302"
             },
-            "time": "2026-02-26T11:07:04+00:00"
+            "time": "2026-03-31T13:39:39+00:00"
         },
         {
             "name": "keboola/permission-checker",

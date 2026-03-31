@@ -40,8 +40,14 @@ class OutputResultConverter
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
                 $tableResult = $tableQueue->getTableResult();
+                $genericVariables = $tableResult->getGenericVariables();
                 foreach ($tableResult->getTables() as $tableInfo) {
-                    $outputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
+                    $table = TableInfoConverter::convertTableInfoToTableResult($tableInfo);
+                    $importedRowsCount = $genericVariables[$tableInfo->getId()]['importedRowsCount'] ?? null;
+                    if ($importedRowsCount !== null) {
+                        $table->setImportedRowsCount((int) $importedRowsCount);
+                    }
+                    $outputTables->addTable($table);
                 }
 
                 foreach ($tableResult->getCustomVariables() as $name => $value) {

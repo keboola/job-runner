@@ -505,7 +505,7 @@ class OutputResultConverterTest extends TestCase
     public function testNoOutputVariablesKeyWhenNoCustomVariables(): void
     {
         $outputTableResult = new OutputResult();
-        $outputTableResult->addGenericVariable('orders', ['id', 'name']);
+        $outputTableResult->addGenericVariable('orders', 'importedRowsCount', 42);
 
         $loadQueueMock = self::createMock(LoadTableQueue::class);
         $loadQueueMock->expects(self::once())
@@ -524,6 +524,30 @@ class OutputResultConverterTest extends TestCase
         $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
 
         self::assertArrayNotHasKey('variables', $result['output']);
+    }
+
+    public function testImportedRowsCountFromGenericVariables(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addTable($this->getTableInfo()['first']);
+        $outputTableResult->addTable($this->getTableInfo()['second']);
+        $outputTableResult->addGenericVariable('in.c-main.my-first-table', 'importedRowsCount', 123);
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->method('getTableResult')->willReturn($outputTableResult);
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues([]);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertSame(123, $result['output']['tables'][0]['importedRowsCount']);
+        self::assertArrayNotHasKey('importedRowsCount', $result['output']['tables'][1]);
     }
 
     private function getTableInfo(): array
