@@ -1952,12 +1952,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78"
+                "reference": "2563b2eeb6b4f4163bcb8a3571abf793755d4956"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78",
-                "reference": "d0c944242e4ea7bb4a0598722b1ae65bdbc8aa78",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/2563b2eeb6b4f4163bcb8a3571abf793755d4956",
+                "reference": "2563b2eeb6b4f4163bcb8a3571abf793755d4956",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +2019,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/ondra/AJDA-2301"
             },
-            "time": "2026-03-31T13:28:53+00:00"
+            "time": "2026-04-07T12:26:53+00:00"
         },
         {
             "name": "keboola/job-queue-job-configuration",
