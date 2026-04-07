@@ -730,6 +730,7 @@ class RunCommandTest extends AbstractCommandTest
                 ],
             ],
             'displayName' => 'someTable',
+            'importedRowsCount' => 1,
         ], $outputTable);
 
         self::assertArrayHasKey('input', $result);
