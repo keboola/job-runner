@@ -145,8 +145,9 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
             $return = $command->run(new StringInput(''), new NullOutput());
 
             self::assertEquals(0, $return);
-            self::assertTrue($this->getClient()->tableExists(sprintf('out.c-%s-executor-test.output', $branchId)));
-            $csvData = $this->getClient()->getTableDataPreview(sprintf('out.c-%s-executor-test.output', $branchId));
+            $branchStorageClient = $this->getBranchStorageClient((string) $branchId);
+            self::assertTrue($branchStorageClient->tableExists('out.c-executor-test.output'));
+            $csvData = $branchStorageClient->getTableDataPreview('out.c-executor-test.output');
             $data = Client::parseCsv($csvData);
             usort($data, function ($a, $b) {
                 return strcmp($a['name'], $b['name']);
