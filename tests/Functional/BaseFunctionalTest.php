@@ -263,18 +263,6 @@ abstract class BaseFunctionalTest extends TestCase
         return $this->storageClient;
     }
 
-    protected function getBranchStorageClient(string $branchId): Client
-    {
-        $factory = new StorageClientPlainFactory(new ClientOptions($this->storageClient->getApiUrl()));
-        $wrapper = $factory->createClientWrapper(
-            (new ClientOptions())
-                ->setToken((string) getenv('TEST_STORAGE_API_TOKEN'))
-                ->setBranchId($branchId)
-                ->setUseBranchStorage(true),
-        );
-        return $wrapper->getTableAndFileStorageClient();
-    }
-
     protected function createTable(string $bucketId, string $tableName): void
     {
         $csv = new CsvFile($this->getTemp()->getTmpFolder() . DIRECTORY_SEPARATOR . 'upload.csv');
