@@ -40,11 +40,11 @@ class OutputResultConverter
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
                 $tableResult = $tableQueue->getTableResult();
-                $allGenericVariables = $tableResult->getGenericVariables();
+                $genericVariables = $tableResult->getGenericVariables();
                 foreach ($tableResult->getTables() as $tableInfo) {
                     $table = TableInfoConverter::convertTableInfoToTableResult(
                         $tableInfo,
-                        $allGenericVariables[$tableInfo->getId()] ?? [],
+                        $genericVariables[$tableInfo->getId()] ?? [],
                     );
                     $outputTables->addTable($table);
                 }

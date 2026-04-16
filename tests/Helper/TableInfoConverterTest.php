@@ -43,4 +43,31 @@ class TableInfoConverterTest extends TestCase
             $tableResult->jsonSerialize(),
         );
     }
+
+    public function testConvertTableInfoToTableResultWithVariables(): void
+    {
+        $tableInfo = new TableInfo([
+            'id' => 'out.c-main.my-table',
+            'displayName' => 'My table',
+            'name' => 'my-table',
+            'lastImportDate' => '2021-02-12T10:36:15+0100',
+            'lastChangeDate' => '2021-12-12T10:36:15+0100',
+            'columns' => ['id'],
+        ]);
+
+        $tableResult = TableInfoConverter::convertTableInfoToTableResult($tableInfo, ['importedRowsCount' => 42]);
+
+        self::assertSame(
+            [
+                'id' => 'out.c-main.my-table',
+                'name' => 'my-table',
+                'displayName' => 'My table',
+                'columns' => [['name' => 'id']],
+                'variables' => [
+                    ['name' => 'importedRowsCount', 'value' => 42],
+                ],
+            ],
+            $tableResult->jsonSerialize(),
+        );
+    }
 }

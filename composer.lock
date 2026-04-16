@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d116e466ad8f105e2de69a7279a6967",
+    "content-hash": "c30deb409563015283e9ff6b663e22ec",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1952,12 +1952,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-internal-api-php-client.git",
-                "reference": "2563b2eeb6b4f4163bcb8a3571abf793755d4956"
+                "reference": "503207fc476eb9acd967e5e012d629cc3b5e1624"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/2563b2eeb6b4f4163bcb8a3571abf793755d4956",
-                "reference": "2563b2eeb6b4f4163bcb8a3571abf793755d4956",
+                "url": "https://api.github.com/repos/keboola/job-queue-internal-api-php-client/zipball/503207fc476eb9acd967e5e012d629cc3b5e1624",
+                "reference": "503207fc476eb9acd967e5e012d629cc3b5e1624",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +2019,7 @@
             "support": {
                 "source": "https://github.com/keboola/job-queue-internal-api-php-client/tree/ondra/AJDA-2301"
             },
-            "time": "2026-04-07T12:26:53+00:00"
+            "time": "2026-04-16T20:17:19+00:00"
         },
         {
             "name": "keboola/job-queue-job-configuration",
@@ -2291,16 +2291,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "dev-ondra/AJDA-2302",
+            "version": "27.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "b5e13cc201860fa569e284fa5e89c9bd7c5996bd"
+                "reference": "4f4409f7b0595b70f367e33ddd6207d7f5fe0524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/b5e13cc201860fa569e284fa5e89c9bd7c5996bd",
-                "reference": "b5e13cc201860fa569e284fa5e89c9bd7c5996bd",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/4f4409f7b0595b70f367e33ddd6207d7f5fe0524",
+                "reference": "4f4409f7b0595b70f367e33ddd6207d7f5fe0524",
                 "shasum": ""
             },
             "require": {
@@ -2359,9 +2359,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/ondra/AJDA-2302"
+                "source": "https://github.com/keboola/output-mapping/tree/27.7.0"
             },
-            "time": "2026-03-31T13:39:39+00:00"
+            "time": "2026-04-16T08:04:05+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -11699,19 +11699,12 @@
             "version": "dev-ondra/AJDA-2301",
             "alias": "25.3.0",
             "alias_normalized": "25.3.0.0"
-        },
-        {
-            "package": "keboola/output-mapping",
-            "version": "dev-ondra/AJDA-2302",
-            "alias": "27.6.0",
-            "alias_normalized": "27.6.0.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20,
-        "keboola/output-mapping": 20
+        "keboola/job-queue-internal-api-php-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
