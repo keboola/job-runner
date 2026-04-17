@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c30deb409563015283e9ff6b663e22ec",
+    "content-hash": "e4e919d88280fc97d8b64c484be6aba4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2291,17 +2291,11 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.7.0",
+            "version": "dev-ondra/AJDA-2302-fix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "4f4409f7b0595b70f367e33ddd6207d7f5fe0524"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/4f4409f7b0595b70f367e33ddd6207d7f5fe0524",
-                "reference": "4f4409f7b0595b70f367e33ddd6207d7f5fe0524",
-                "shasum": ""
+                "url": "https://github.com/keboola/output-mapping",
+                "reference": "5dbd2a9f7296ca92f4b96ecbb20c243c3f868ab5"
             },
             "require": {
                 "ext-json": "*",
@@ -2347,7 +2341,41 @@
                     "Keboola\\OutputMapping\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Keboola\\OutputMapping\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "pre-autoload-dump": [
+                    "Aws\\Script\\Composer\\Composer::removeUnusedServices",
+                    "Keboola\\Slicer\\Slicer::installSlicer"
+                ],
+                "tests": [
+                    "phpunit"
+                ],
+                "paratests": [
+                    "paratest --testdox --verbose"
+                ],
+                "phpstan": [
+                    "phpstan analyse --no-progress -c phpstan.neon"
+                ],
+                "phpcs": [
+                    "phpcs --extensions=php src tests"
+                ],
+                "phpcbf": [
+                    "phpcbf --extensions=php src tests"
+                ],
+                "check": [
+                    "@composer validate --no-check-all --strict",
+                    "@phpcs",
+                    "@phpstan"
+                ],
+                "ci": [
+                    "@check",
+                    "@tests"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2358,10 +2386,7 @@
                 }
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
-            "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.7.0"
-            },
-            "time": "2026-04-16T08:04:05+00:00"
+            "time": "2026-04-17T07:29:59+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -11699,12 +11724,19 @@
             "version": "dev-ondra/AJDA-2301",
             "alias": "25.3.0",
             "alias_normalized": "25.3.0.0"
+        },
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-ondra/AJDA-2302-fix",
+            "alias": "27.7.1",
+            "alias_normalized": "27.7.1.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "keboola/dockerbundle": 20,
-        "keboola/job-queue-internal-api-php-client": 20
+        "keboola/job-queue-internal-api-php-client": 20,
+        "keboola/output-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
