@@ -443,7 +443,8 @@ class OutputResultConverterTest extends TestCase
     public function testCustomVariablesGoToOutputVariables(): void
     {
         $outputTableResult = new OutputResult();
-        $outputTableResult->setCustomVariables(['my_var' => 'hello', 'count' => 42]);
+        $outputTableResult->addCustomVariable('my_var', 'hello');
+        $outputTableResult->addCustomVariable('count', 42);
 
         $loadQueueMock = self::createMock(LoadTableQueue::class);
         $loadQueueMock->expects(self::once())
@@ -474,7 +475,7 @@ class OutputResultConverterTest extends TestCase
     public function testInputAndOutputVariablesAreSeparated(): void
     {
         $outputTableResult = new OutputResult();
-        $outputTableResult->setCustomVariables(['run_id' => '99']);
+        $outputTableResult->addCustomVariable('run_id', '99');
 
         $loadQueueMock = self::createMock(LoadTableQueue::class);
         $loadQueueMock->expects(self::once())
@@ -546,8 +547,11 @@ class OutputResultConverterTest extends TestCase
 
         $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
 
-        self::assertSame(123, $result['output']['tables'][0]['importedRowsCount']);
-        self::assertArrayNotHasKey('importedRowsCount', $result['output']['tables'][1]);
+        self::assertSame(
+            [['name' => 'importedRowsCount', 'value' => 123]],
+            $result['output']['tables'][0]['metrics'],
+        );
+        self::assertArrayNotHasKey('metrics', $result['output']['tables'][1]);
     }
 
     private function getTableInfo(): array
