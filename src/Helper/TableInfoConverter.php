@@ -12,7 +12,8 @@ use Keboola\JobQueueInternalClient\Result\InputOutput\Table;
 
 class TableInfoConverter
 {
-    public static function convertTableInfoToTableResult(TableInfo $tableInfo): Table
+    /** @param array<string, int|string|null> $variables */
+    public static function convertTableInfoToTableResult(TableInfo $tableInfo, array $variables = []): Table
     {
         $columnCollection = new ColumnCollection();
         foreach ($tableInfo->getColumns() as $columnInfo) {
@@ -25,6 +26,7 @@ class TableInfoConverter
             $tableInfo->getName(),
             (string) $tableInfo->getDisplayName(),
             $columnCollection,
+            $variables,
         );
     }
 }

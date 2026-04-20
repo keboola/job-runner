@@ -729,6 +729,9 @@ class RunCommandTest extends AbstractCommandTest
                     'name' => 'b',
                 ],
             ],
+            'metrics' => [
+                ['name' => 'importedRowsCount', 'value' => 1],
+            ],
             'displayName' => 'someTable',
         ], $outputTable);
 

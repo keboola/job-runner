@@ -34,12 +34,25 @@ class OutputResultConverter
         $jobArtifacts = new JobArtifacts();
         $uploadedArtifacts = [];
         $downloadedArtifacts = [];
-        $variables = new VariableCollection();
+        $inputVariables = new VariableCollection();
+        $outputVariables = new VariableCollection();
         foreach ($outputs as $output) {
             $tableQueue = $output->getTableQueue();
             if ($tableQueue) {
-                foreach ($tableQueue->getTableResult()->getTables() as $tableInfo) {
-                    $outputTables->addTable(TableInfoConverter::convertTableInfoToTableResult($tableInfo));
+                $tableResult = $tableQueue->getTableResult();
+                $genericVariables = $tableResult->getGenericVariables();
+                foreach ($tableResult->getTables() as $tableInfo) {
+                    $table = TableInfoConverter::convertTableInfoToTableResult(
+                        $tableInfo,
+                        $genericVariables[$tableInfo->getId()] ?? [],
+                    );
+                    $outputTables->addTable($table);
+                }
+
+                foreach ($tableResult->getCustomVariables() as $name => $value) {
+                    $outputVariables->addVariable(
+                        new Variable((string) $name, is_scalar($value) ? (string) $value : ''),
+                    );
                 }
             }
 
@@ -56,7 +69,7 @@ class OutputResultConverter
             array_push($downloadedArtifacts, ...$downloadedArtifactsOutput);
 
             foreach ($output->getInputVariableValues() as $variableName => $variableValue) {
-                $variables->addVariable(new Variable((string) $variableName, $variableValue));
+                $inputVariables->addVariable(new Variable((string) $variableName, $variableValue));
             }
         }
         $jobResult
@@ -69,8 +82,11 @@ class OutputResultConverter
                     ->setUploaded($uploadedArtifacts)
                     ->setDownloaded($downloadedArtifacts),
             )
-            ->setVariables($variables)
+            ->setVariables($inputVariables)
         ;
+        if ($outputVariables->count() > 0) {
+            $jobResult->setOutputVariables($outputVariables);
+        }
         return $jobResult;
     }
 

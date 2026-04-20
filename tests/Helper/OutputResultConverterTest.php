@@ -440,6 +440,120 @@ class OutputResultConverterTest extends TestCase
         );
     }
 
+    public function testCustomVariablesGoToOutputVariables(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addCustomVariable('my_var', 'hello');
+        $outputTableResult->addCustomVariable('count', 42);
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->expects(self::once())
+            ->method('getTableResult')
+            ->willReturn($outputTableResult)
+        ;
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues([]);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertSame([], $result['variables']);
+        self::assertSame(
+            [
+                ['name' => 'my_var', 'value' => 'hello'],
+                ['name' => 'count', 'value' => '42'],
+            ],
+            $result['output']['variables'],
+        );
+    }
+
+    public function testInputAndOutputVariablesAreSeparated(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addCustomVariable('run_id', '99');
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->expects(self::once())
+            ->method('getTableResult')
+            ->willReturn($outputTableResult)
+        ;
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues(['vault.token' => 'secret']);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertSame(
+            [['name' => 'vault.token', 'value' => 'secret']],
+            $result['variables'],
+        );
+        self::assertSame(
+            [['name' => 'run_id', 'value' => '99']],
+            $result['output']['variables'],
+        );
+    }
+
+    public function testNoOutputVariablesKeyWhenNoCustomVariables(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addGenericVariable('orders', 'importedRowsCount', 42);
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->expects(self::once())
+            ->method('getTableResult')
+            ->willReturn($outputTableResult)
+        ;
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues([]);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertArrayNotHasKey('variables', $result['output']);
+    }
+
+    public function testImportedRowsCountFromGenericVariables(): void
+    {
+        $outputTableResult = new OutputResult();
+        $outputTableResult->addTable($this->getTableInfo()['first']);
+        $outputTableResult->addTable($this->getTableInfo()['second']);
+        $outputTableResult->addGenericVariable('in.c-main.my-first-table', 'importedRowsCount', 123);
+
+        $loadQueueMock = self::createMock(LoadTableQueue::class);
+        $loadQueueMock->method('getTableResult')->willReturn($outputTableResult);
+
+        $output = new Output();
+        $output->setConfigVersion('1');
+        $output->setImages([]);
+        $output->setArtifactsUploaded([]);
+        $output->setArtifactsDownloaded([]);
+        $output->setInputVariableValues([]);
+        $output->setTableQueue($loadQueueMock);
+
+        $result = OutputResultConverter::convertOutputsToResult([$output])->jsonSerialize();
+
+        self::assertSame(
+            [['name' => 'importedRowsCount', 'value' => 123]],
+            $result['output']['tables'][0]['metrics'],
+        );
+        self::assertArrayNotHasKey('metrics', $result['output']['tables'][1]);
+    }
+
     private function getTableInfo(): array
     {
         return [
