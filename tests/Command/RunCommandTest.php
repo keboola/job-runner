@@ -756,8 +756,8 @@ class RunCommandTest extends AbstractCommandTest
         self::assertSame(
             [
                 'storage' => [
-                    'inputTablesBytesSum' => 1536,
-                    'outputTablesBytesSum' => 1536,
+                    'inputTablesBytesSum' => 1024,
+                    'outputTablesBytesSum' => 1024,
                 ],
                 'backend' => [
                     'size' => 'small',

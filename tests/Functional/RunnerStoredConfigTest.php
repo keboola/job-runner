@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\DevBranches;
@@ -145,8 +146,12 @@ class RunnerStoredConfigTest extends BaseFunctionalTest
             $return = $command->run(new StringInput(''), new NullOutput());
 
             self::assertEquals(0, $return);
-            self::assertTrue($this->getClient()->tableExists(sprintf('out.c-%s-executor-test.output', $branchId)));
-            $csvData = $this->getClient()->getTableDataPreview(sprintf('out.c-%s-executor-test.output', $branchId));
+            $branchClient = new BranchAwareClient($branchId, [
+                'url' => (string) getenv('STORAGE_API_URL'),
+                'token' => (string) getenv('TEST_STORAGE_API_TOKEN'),
+            ]);
+            self::assertTrue($branchClient->tableExists('out.c-executor-test.output'));
+            $csvData = $branchClient->getTableDataPreview('out.c-executor-test.output');
             $data = Client::parseCsv($csvData);
             usort($data, function ($a, $b) {
                 return strcmp($a['name'], $b['name']);

@@ -389,6 +389,7 @@ class RunnerInlineConfigTest extends BaseFunctionalTest
 
     public function testIncrementalTags(): void
     {
+        self::markTestSkipped('processed_tags is being deprecated');
         $this->clearFiles();
         // Create file
         $root = $this->getTemp()->getTmpFolder();
