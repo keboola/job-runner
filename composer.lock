@@ -1813,16 +1813,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "22.4.0",
+            "version": "22.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "b9a925dd871f12e295347122f82540b3204d9d2a"
+                "reference": "314fde7c2399043ed477e97e47d54f007ad7c971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/b9a925dd871f12e295347122f82540b3204d9d2a",
-                "reference": "b9a925dd871f12e295347122f82540b3204d9d2a",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/314fde7c2399043ed477e97e47d54f007ad7c971",
+                "reference": "314fde7c2399043ed477e97e47d54f007ad7c971",
                 "shasum": ""
             },
             "require": {
@@ -1879,9 +1879,9 @@
             ],
             "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/22.4.0"
+                "source": "https://github.com/keboola/input-mapping/tree/22.5.0"
             },
-            "time": "2026-02-02T13:15:18+00:00"
+            "time": "2026-06-01T15:42:48+00:00"
         },
         {
             "name": "keboola/job-queue-artifacts",
