@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e61d3a5d0dd8f15579b442b5d76d7dba",
+    "content-hash": "d8a602be996b1d49c664b8a0fe65c062",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.383.2",
+            "version": "3.384.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "11c2de39e4511dc99e44f049c7dfc8087e051867"
+                "reference": "c7d34f2d60515bd0c307e462268f75877842da4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/11c2de39e4511dc99e44f049c7dfc8087e051867",
-                "reference": "11c2de39e4511dc99e44f049c7dfc8087e051867",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c7d34f2d60515bd0c307e462268f75877842da4a",
+                "reference": "c7d34f2d60515bd0c307e462268f75877842da4a",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.383.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.384.5"
             },
-            "time": "2026-06-01T18:08:21+00:00"
+            "time": "2026-06-08T18:25:02+00:00"
         },
         {
             "name": "brick/math",
@@ -538,16 +538,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.72.1",
+            "version": "v1.72.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "aa7869016cb9e87e95071bb92579fd22146ababb"
+                "reference": "f1f2f8465106f4b52568b05a6548d3d055f76767"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/aa7869016cb9e87e95071bb92579fd22146ababb",
-                "reference": "aa7869016cb9e87e95071bb92579fd22146ababb",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/f1f2f8465106f4b52568b05a6548d3d055f76767",
+                "reference": "f1f2f8465106f4b52568b05a6548d3d055f76767",
                 "shasum": ""
             },
             "require": {
@@ -599,9 +599,9 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.72.1"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.72.2"
             },
-            "time": "2026-05-12T19:06:48+00:00"
+            "time": "2026-06-02T19:05:53+00:00"
         },
         {
             "name": "google/cloud-kms",
@@ -773,16 +773,16 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.42.5",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "d8f3ffada298d4d92862bc3cf16f1d133f22cfd6"
+                "reference": "500e1d0c616d78ab804be9f4d618ab959ac1e824"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/d8f3ffada298d4d92862bc3cf16f1d133f22cfd6",
-                "reference": "d8f3ffada298d4d92862bc3cf16f1d133f22cfd6",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/500e1d0c616d78ab804be9f4d618ab959ac1e824",
+                "reference": "500e1d0c616d78ab804be9f4d618ab959ac1e824",
                 "shasum": ""
             },
             "require": {
@@ -824,9 +824,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.42.5"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.43.0"
             },
-            "time": "2026-06-01T20:48:15+00:00"
+            "time": "2026-06-04T04:27:21+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -1063,16 +1063,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.11.0",
+            "version": "7.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "c987f8ce84b8434fa430795eca0f3430663da72b"
+                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/c987f8ce84b8434fa430795eca0f3430663da72b",
-                "reference": "c987f8ce84b8434fa430795eca0f3430663da72b",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
+                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
                 "shasum": ""
             },
             "require": {
@@ -1091,7 +1091,7 @@
                 "bamarni/composer-bin-plugin": "^1.8.2",
                 "ext-curl": "*",
                 "guzzle/client-integration-tests": "3.0.2",
-                "guzzlehttp/test-server": "^0.4",
+                "guzzlehttp/test-server": "^0.5",
                 "php-http/message-factory": "^1.1",
                 "phpunit/phpunit": "^8.5.52 || ^9.6.34",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
@@ -1171,7 +1171,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.11.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.11.1"
             },
             "funding": [
                 {
@@ -1187,7 +1187,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-02T12:40:51+00:00"
+            "time": "2026-06-07T22:54:06+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1817,16 +1817,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "22.5.0",
+            "version": "dev-odin/AJDA-2841-2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "314fde7c2399043ed477e97e47d54f007ad7c971"
+                "reference": "23194a9c848876eedc54e0fc7ede49043e2303e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/314fde7c2399043ed477e97e47d54f007ad7c971",
-                "reference": "314fde7c2399043ed477e97e47d54f007ad7c971",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/23194a9c848876eedc54e0fc7ede49043e2303e9",
+                "reference": "23194a9c848876eedc54e0fc7ede49043e2303e9",
                 "shasum": ""
             },
             "require": {
@@ -1834,7 +1834,7 @@
                 "keboola/key-generator": "*@dev",
                 "keboola/php-file-storage-utils": "^0.2",
                 "keboola/staging-provider": "*@dev",
-                "keboola/storage-api-client": "^18.3.0",
+                "keboola/storage-api-client": "^18.9.0",
                 "keboola/storage-api-php-client-branch-wrapper": "^6.0",
                 "php": ">=8.2",
                 "symfony/config": "^5.4|^6.0|^7.0",
@@ -1883,9 +1883,9 @@
             ],
             "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/22.5.0"
+                "source": "https://github.com/keboola/input-mapping/tree/odin/AJDA-2841-2"
             },
-            "time": "2026-06-01T15:42:48+00:00"
+            "time": "2026-06-08T10:38:55+00:00"
         },
         {
             "name": "keboola/job-queue-artifacts",
@@ -2908,16 +2908,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.8.2",
+            "version": "v18.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "e9b5b50c86fd97f25c610a85602f5cc79d7c5386"
+                "reference": "3c4b13701c8dd7b0dc481e28fa2d85e4e30d663a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/e9b5b50c86fd97f25c610a85602f5cc79d7c5386",
-                "reference": "e9b5b50c86fd97f25c610a85602f5cc79d7c5386",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/3c4b13701c8dd7b0dc481e28fa2d85e4e30d663a",
+                "reference": "3c4b13701c8dd7b0dc481e28fa2d85e4e30d663a",
                 "shasum": ""
             },
             "require": {
@@ -2953,9 +2953,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.8.2"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.9.0"
             },
-            "time": "2026-05-22T10:53:45+00:00"
+            "time": "2026-06-03T20:26:35+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -6475,16 +6475,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
                 "shasum": ""
             },
             "require": {
@@ -6536,7 +6536,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -6556,7 +6556,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:59:30+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -6644,16 +6644,16 @@
         },
         {
             "name": "symfony/polyfill-php83",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php83.git",
-                "reference": "8339098cae28673c15cce00d80734af0453054e2"
+                "reference": "796a26abb75ce49f3a84433cd81bf1009d73d5f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/8339098cae28673c15cce00d80734af0453054e2",
-                "reference": "8339098cae28673c15cce00d80734af0453054e2",
+                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/796a26abb75ce49f3a84433cd81bf1009d73d5f8",
+                "reference": "796a26abb75ce49f3a84433cd81bf1009d73d5f8",
                 "shasum": ""
             },
             "require": {
@@ -6700,7 +6700,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-php83/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -6720,7 +6720,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:51:48+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
@@ -11790,10 +11790,18 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-odin/AJDA-2841-2",
+            "alias": "22.4.0",
+            "alias_normalized": "22.4.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
