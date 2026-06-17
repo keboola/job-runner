@@ -1821,12 +1821,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "cf4426c369bc582efbe3d574c9cae9f69365a362"
+                "reference": "6fa9f88b00fc9f03c8366d24bf24050b92357c49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/cf4426c369bc582efbe3d574c9cae9f69365a362",
-                "reference": "cf4426c369bc582efbe3d574c9cae9f69365a362",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/6fa9f88b00fc9f03c8366d24bf24050b92357c49",
+                "reference": "6fa9f88b00fc9f03c8366d24bf24050b92357c49",
                 "shasum": ""
             },
             "require": {
@@ -1885,7 +1885,7 @@
             "support": {
                 "source": "https://github.com/keboola/input-mapping/tree/odin/AJDA-2841-2"
             },
-            "time": "2026-06-17T11:43:25+00:00"
+            "time": "2026-06-17T15:12:30+00:00"
         },
         {
             "name": "keboola/job-queue-artifacts",
