@@ -133,7 +133,8 @@ has been **deliberately masked** and is not visible in the job result or the log
 
 To recover the real error, temporarily dump the **raw** exception in the `catch (Throwable $e)`
 block of `RunCommand::execute()` (`src/Command/RunCommand.php`), **before**
-`ExceptionConverter::convertExceptionToResult()` is called:
+`ExceptionConverter::convertExceptionToResult()` is called. **Warning:** the raw message/data may
+contain secrets (tokens, credentials); run this only locally and redact before sharing logs.
 
 ```php
 } catch (Throwable $e) {
