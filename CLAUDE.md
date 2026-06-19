@@ -114,6 +114,48 @@ Functional tests require:
 - Access to Keboola project for testing
 - Running `internal-api` service (via docker-compose)
 
+### Debugging a masked "Internal Server Error occurred."
+
+When a job fails with the generic message `Internal Server Error occurred.`, the real error
+has been **deliberately masked** and is not visible in the job result or the logs. The chain is:
+
+1. A container that exits non-zero with an exit code other than `1` (and not `137`/`125`) is
+   wrapped by `dockerbundle`'s `Container::handleContainerFailure()`
+   (`vendor/keboola/dockerbundle/src/Docker/Container.php`) as an **`ApplicationException`**. The
+   exception *message* still embeds the real container stderr
+   (`<image> container '<id>' failed: (<exitCode>) <real message>`), and the full stdout/stderr is
+   in its `getData()`.
+2. `ExceptionConverter::convertExceptionToResult()` (`src/Helper/ExceptionConverter.php`) runs the
+   exception through `api-error-control`'s `ExceptionTransformer`. Because an `ApplicationException`
+   is **not** a `UserExceptionInterface`, `getExceptionMessage()` replaces the real text with
+   `Internal Server Error occurred.` and keeps only a generated `exceptionId`. The `_real message_`
+   never reaches the job result or the logged `critical` line.
+
+To recover the real error, temporarily dump the **raw** exception in the `catch (Throwable $e)`
+block of `RunCommand::execute()` (`src/Command/RunCommand.php`), **before**
+`ExceptionConverter::convertExceptionToResult()` is called. **Warning:** the raw message/data may
+contain secrets (tokens, credentials); run this only locally and redact before sharing logs.
+
+```php
+} catch (Throwable $e) {
+    fwrite(STDERR, "\n>>>RAW EXC [" . get_class($e) . "]: " . $e->getMessage() . "\n");
+    if (method_exists($e, 'getData')) {
+        fwrite(STDERR, '>>>RAW DATA: ' . substr(json_encode($e->getData()), 0, 8000) . "\n");
+    }
+    // ... existing handling
+```
+
+Then run the reproducing test and read the `>>>RAW` lines, e.g.:
+
+```bash
+docker compose run --rm dev vendor/bin/phpunit --filter <testName> 2>&1 | grep '>>>RAW'
+```
+
+The same technique works for inspecting the container's progress: iterate
+`$testHandler->getRecords()` in the test and `fwrite(STDERR, ...)` each record's
+`level_name` / `message` / `context` to see the full Storage API call sequence and container
+output. **Always revert this instrumentation before committing** — it is a debugging aid only.
+
 ## Development Prerequisites
 
 For full local development (provisioning infrastructure):
