@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "daa7762dd97bf6ca361205d6ceec1d35",
+    "content-hash": "1f4d9987b6100c69c7c76539d4c8e68e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1818,16 +1818,16 @@
         },
         {
             "name": "keboola/input-mapping",
-            "version": "23.0.0",
+            "version": "dev-odin/AJDA-2714",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/input-mapping.git",
-                "reference": "fffa84a075d7e49002101367ee182cee1ea6b010"
+                "reference": "47a1ae16869e5e1556ced33c80de3f68a64128ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/fffa84a075d7e49002101367ee182cee1ea6b010",
-                "reference": "fffa84a075d7e49002101367ee182cee1ea6b010",
+                "url": "https://api.github.com/repos/keboola/input-mapping/zipball/47a1ae16869e5e1556ced33c80de3f68a64128ea",
+                "reference": "47a1ae16869e5e1556ced33c80de3f68a64128ea",
                 "shasum": ""
             },
             "require": {
@@ -1884,9 +1884,9 @@
             ],
             "description": "Input mapping library for downloading tables and files from Keboola Storage API with support for CSV and Parquet formats",
             "support": {
-                "source": "https://github.com/keboola/input-mapping/tree/23.0.0"
+                "source": "https://github.com/keboola/input-mapping/tree/odin/AJDA-2714"
             },
-            "time": "2026-06-18T08:50:23+00:00"
+            "time": "2026-06-25T18:41:51+00:00"
         },
         {
             "name": "keboola/job-queue-artifacts",
@@ -11792,10 +11792,18 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/input-mapping",
+            "version": "dev-odin/AJDA-2714",
+            "alias": "23.0.0",
+            "alias_normalized": "23.0.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/input-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
