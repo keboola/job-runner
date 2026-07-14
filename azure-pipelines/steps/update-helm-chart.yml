@@ -100,9 +100,7 @@ steps:
                 "helm-chart": helm_chart,
                 "image-tag": image_tag,
                 "extra-tag1": extra_tag1,
-                "automerge": "true",
                 "dry-run": "false",
-                "multi-stage": multi_stage,
                 "metadata": encoded_metadata
             }
             print(f"Dispatching workflow with inputs: {dispatch_inputs}")
