@@ -7,9 +7,6 @@ parameters:
   - name: extra_tag1
     type: string
     default: ""
-  - name: multi_stage
-    type: string
-    default: "false"
 
 steps:
   - task: UsePythonVersion@0
@@ -51,7 +48,6 @@ steps:
         helm_chart = os.environ["HELM_CHART"]
         image_tag = os.environ["IMAGE_TAG"]
         extra_tag1 = os.environ["EXTRA_TAG1"]
-        multi_stage = os.environ["MULTI_STAGE"]
 
         # Get Azure DevOps specific variables
         build_repository_name = os.environ["BUILD_REPOSITORY_NAME"]
@@ -100,9 +96,7 @@ steps:
                 "helm-chart": helm_chart,
                 "image-tag": image_tag,
                 "extra-tag1": extra_tag1,
-                "automerge": "true",
                 "dry-run": "false",
-                "multi-stage": multi_stage,
                 "metadata": encoded_metadata
             }
             print(f"Dispatching workflow with inputs: {dispatch_inputs}")
@@ -121,4 +115,3 @@ steps:
       HELM_CHART: ${{ parameters.helm_chart }}
       IMAGE_TAG: ${{ parameters.image_tag }}
       EXTRA_TAG1: ${{ parameters.extra_tag1 }}
-      MULTI_STAGE: ${{ parameters.multi_stage }}
