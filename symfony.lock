@@ -491,9 +491,6 @@
     "theseer/tokenizer": {
         "version": "1.2.0"
     },
-    "vkartaviy/retry": {
-        "version": "v0.2.2"
-    },
     "webmozart/assert": {
         "version": "1.4.0"
     }

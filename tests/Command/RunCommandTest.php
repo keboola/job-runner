@@ -28,6 +28,7 @@ use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\StorageApiBranch\StorageApiToken;
@@ -774,6 +775,7 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
+            authType: AuthType::STORAGE_TOKEN,
         ));
         $storageClient = $storageClientFactory->createClientWrapper(new ClientOptions())->getBasicClient();
         $componentsApi = new Components($storageClient);
@@ -904,6 +906,7 @@ class RunCommandTest extends AbstractCommandTest
             new ClientOptions(
                 null,
                 (string) getenv('TEST_STORAGE_API_TOKEN'),
+                authType: AuthType::STORAGE_TOKEN,
             ),
         )->getBasicClient();
         $tokenInfo = $storageClient->verifytoken();
@@ -1146,6 +1149,7 @@ class RunCommandTest extends AbstractCommandTest
         $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
+            authType: AuthType::STORAGE_TOKEN,
         ));
 
         $kernel = static::createKernel();

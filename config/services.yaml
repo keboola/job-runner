@@ -86,9 +86,8 @@ services:
             $internalQueueToken: ~
             $storageApiToken: '%env(STORAGE_API_TOKEN)%'
             $applicationToken: ~
-            $options:
-                userAgent: 'QueueRunner'
-                backoffMaxTries: 20
+            $userAgent: 'QueueRunner'
+            $backoffMaxTries: 20
 
     Keboola\StorageApiBranch\Factory\ClientOptions:
         $url: '%env(STORAGE_API_URL)%'
@@ -101,7 +100,4 @@ services:
     Keboola\VaultApiClient\Variables\VariablesApiClient:
         $baseUrl: '%env(VAULT_API_URL)%'
         $token: '%env(STORAGE_API_TOKEN)%'
-        $configuration: !service
-            class: Keboola\VaultApiClient\ApiClientConfiguration
-            arguments:
-                $userAgent: 'QueueRunner'
+        $userAgent: 'QueueRunner'

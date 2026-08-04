@@ -32,6 +32,7 @@ use Keboola\JobQueueInternalClient\Result\JobResult;
 use Keboola\ObjectEncryptor\ObjectEncryptor;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Monolog\Logger;
@@ -244,7 +245,11 @@ class RunCommand extends Command implements SignalableCommandInterface
                 $job->getComponentId(),
                 $job->getProjectId(),
             ));
-            $options = BuildBranchClientOptionsHelper::buildFromJob($job)->setToken($this->storageApiToken);
+            $options = BuildBranchClientOptionsHelper::buildFromJob($job)
+                ->setToken($this->storageApiToken)
+                // STORAGE_API_TOKEN always carries a legacy Storage token, which used to be the
+                // implicit default before branch-wrapper v7 made authType mandatory
+                ->setAuthType(AuthType::STORAGE_TOKEN);
             $loggerService = $this->getLoggerService($options);
             $clientWrapper = $this->getClientWrapper($options);
 
