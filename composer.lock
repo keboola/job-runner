@@ -1667,7 +1667,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "5b132bbb618d0fcd8d375aa83ad6b79ceca248cf"
+                "reference": "28deb318f409b542bab5f0a3cc77b38ec51133b8"
             },
             "require": {
                 "ext-json": "*",
@@ -1759,7 +1759,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2026-07-11T07:32:41+00:00"
+            "time": "2026-08-03T15:07:31+00:00"
         },
         {
             "name": "keboola/gelf-server",
