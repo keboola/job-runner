@@ -1028,7 +1028,12 @@ class RunCommandTest extends AbstractCommandTest
             'capture_stderr_separately' => true],
         );
 
-        self::assertCount(2, $testHandler->getRecords());
+        // the internal API client logs every HTTP request at debug level (here: getJob and the
+        // patch that gets rejected), so count only the runner's own records
+        self::assertCount(2, array_filter(
+            $testHandler->getRecords(),
+            fn(array $record): bool => $record['level'] > Logger::DEBUG,
+        ));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains(sprintf($expectedInfoMessage, $job->getId())));
         self::assertEquals(0, $ret);
