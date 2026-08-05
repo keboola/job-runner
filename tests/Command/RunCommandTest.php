@@ -28,6 +28,7 @@ use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\StorageApiBranch\StorageApiToken;
@@ -774,6 +775,7 @@ class RunCommandTest extends AbstractCommandTest
         $storageClientFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
+            authType: AuthType::STORAGE_TOKEN,
         ));
         $storageClient = $storageClientFactory->createClientWrapper(new ClientOptions())->getBasicClient();
         $componentsApi = new Components($storageClient);
@@ -904,6 +906,7 @@ class RunCommandTest extends AbstractCommandTest
             new ClientOptions(
                 null,
                 (string) getenv('TEST_STORAGE_API_TOKEN'),
+                authType: AuthType::STORAGE_TOKEN,
             ),
         )->getBasicClient();
         $tokenInfo = $storageClient->verifytoken();
@@ -1025,7 +1028,12 @@ class RunCommandTest extends AbstractCommandTest
             'capture_stderr_separately' => true],
         );
 
-        self::assertCount(2, $testHandler->getRecords());
+        // the internal API client logs every HTTP request at debug level (here: getJob and the
+        // patch that gets rejected), so count only the runner's own records
+        self::assertCount(2, array_filter(
+            $testHandler->getRecords(),
+            fn(array $record): bool => $record['level'] > Logger::DEBUG,
+        ));
         self::assertTrue($testHandler->hasInfoThatContains('Running job "' . $job->getId() . '".'));
         self::assertTrue($testHandler->hasInfoThatContains(sprintf($expectedInfoMessage, $job->getId())));
         self::assertEquals(0, $ret);
@@ -1146,6 +1154,7 @@ class RunCommandTest extends AbstractCommandTest
         $storageApiFactory = new StorageClientPlainFactory(new ClientOptions(
             (string) getenv('STORAGE_API_URL'),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
+            authType: AuthType::STORAGE_TOKEN,
         ));
 
         $kernel = static::createKernel();

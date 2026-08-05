@@ -29,6 +29,7 @@ use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Options\ListFilesOptions;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\Temp\Temp;
@@ -172,7 +173,10 @@ abstract class BaseFunctionalTest extends TestCase
 
         if ($basicClientMock) {
             $clientWrapper = $storageClientFactory->createClientWrapper(
-                new ClientOptions(token: (string) getenv('TEST_STORAGE_API_TOKEN')),
+                new ClientOptions(
+                    token: (string) getenv('TEST_STORAGE_API_TOKEN'),
+                    authType: AuthType::STORAGE_TOKEN,
+                ),
             );
             $mockClientWrapper = $this->createMock(ClientWrapper::class);
             $mockClientWrapper->method('getBasicClient')->willReturn($basicClientMock);

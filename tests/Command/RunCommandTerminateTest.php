@@ -9,6 +9,7 @@ use Keboola\JobQueueInternalClient\JobFactory\JobInterface;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\ObjectEncryptor\ObjectEncryptorFactory;
 use Keboola\PermissionChecker\BranchType;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use RuntimeException;
@@ -78,6 +79,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
             new ClientOptions(
                 null,
                 (string) getenv('TEST_STORAGE_API_TOKEN'),
+                authType: AuthType::STORAGE_TOKEN,
             ),
         )->getBasicClient();
         ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();
@@ -203,6 +205,7 @@ class RunCommandTerminateTest extends AbstractCommandTest
             new ClientOptions(
                 null,
                 (string) getenv('TEST_STORAGE_API_TOKEN'),
+                authType: AuthType::STORAGE_TOKEN,
             ),
         )->getBasicClient();
         ['existingJobFactory' => $existingJobFactory, 'client' => $client] = $this->getJobFactoryAndClient();

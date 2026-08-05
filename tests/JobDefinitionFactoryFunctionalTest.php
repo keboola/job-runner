@@ -19,6 +19,7 @@ use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration as StorageConfiguration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApiBranch\ClientWrapper;
+use Keboola\StorageApiBranch\Factory\AuthType;
 use Keboola\StorageApiBranch\Factory\ClientOptions;
 use Keboola\StorageApiBranch\Factory\StorageClientPlainFactory;
 use Keboola\VaultApiClient\Variables\Model\ListOptions;
@@ -50,6 +51,7 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
         self::assertInstanceOf(StorageClientPlainFactory::class, $storageClientFactory);
         $this->clientWrapper = $storageClientFactory->createClientWrapper(new ClientOptions(
             token: self::getRequiredEnv('STORAGE_API_TOKEN'),
+            authType: AuthType::STORAGE_TOKEN,
         ));
 
         $this->component = new ComponentSpecification([

@@ -51,12 +51,10 @@ abstract class AbstractCommandTest extends KernelTestCase
         );
 
         $client = new Client(
-            new NullLogger(),
             $existingJobFactory,
             (string) getenv('JOB_QUEUE_URL'),
             (string) getenv('JOB_QUEUE_TOKEN'),
-            null,
-            null,
+            logger: new NullLogger(),
         );
 
         return [
