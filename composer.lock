@@ -1072,21 +1072,21 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.15.2",
+            "version": "7.15.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "744101956d78b7c1384d0cbf379db13e859167bf"
+                "reference": "ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/744101956d78b7c1384d0cbf379db13e859167bf",
-                "reference": "744101956d78b7c1384d0cbf379db13e859167bf",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc",
+                "reference": "ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^2.5.1",
+                "guzzlehttp/promises": "^2.5.2",
                 "guzzlehttp/psr7": "^2.13",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
@@ -1180,7 +1180,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.15.2"
+                "source": "https://github.com/guzzle/guzzle/tree/7.15.3"
             },
             "funding": [
                 {
@@ -1196,20 +1196,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-26T23:23:20+00:00"
+            "time": "2026-08-05T19:48:21+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "9ad1e4fc607446a055b95870c7f668e93b5cff29"
+                "reference": "2823687acff28b2dbe67b2508a6b300e2c3fa4ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/9ad1e4fc607446a055b95870c7f668e93b5cff29",
-                "reference": "9ad1e4fc607446a055b95870c7f668e93b5cff29",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/2823687acff28b2dbe67b2508a6b300e2c3fa4ce",
+                "reference": "2823687acff28b2dbe67b2508a6b300e2c3fa4ce",
                 "shasum": ""
             },
             "require": {
@@ -1264,7 +1264,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.5.1"
+                "source": "https://github.com/guzzle/promises/tree/2.5.2"
             },
             "funding": [
                 {
@@ -1280,7 +1280,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-08T15:48:39+00:00"
+            "time": "2026-08-05T19:30:54+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2304,16 +2304,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.9.0",
+            "version": "27.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "390d2b4a6ab0bc1b8c65a28edcaf1b1cfb123970"
+                "reference": "2c1ae5ef14912fd67321d15c9ffd69cc2a2bb211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/390d2b4a6ab0bc1b8c65a28edcaf1b1cfb123970",
-                "reference": "390d2b4a6ab0bc1b8c65a28edcaf1b1cfb123970",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/2c1ae5ef14912fd67321d15c9ffd69cc2a2bb211",
+                "reference": "2c1ae5ef14912fd67321d15c9ffd69cc2a2bb211",
                 "shasum": ""
             },
             "require": {
@@ -2325,7 +2325,7 @@
                 "keboola/php-storage-names-sanitizer": "*@dev",
                 "keboola/slicer": "*@dev",
                 "keboola/staging-provider": "*@dev",
-                "keboola/storage-api-client": "^18.5",
+                "keboola/storage-api-client": "^18.9",
                 "keboola/storage-api-php-client-branch-wrapper": "^7.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "php": ">=8.2",
@@ -2372,9 +2372,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.9.0"
+                "source": "https://github.com/keboola/output-mapping/tree/27.10.0"
             },
-            "time": "2026-07-23T19:20:11+00:00"
+            "time": "2026-08-06T06:49:03+00:00"
         },
         {
             "name": "keboola/permission-checker",
