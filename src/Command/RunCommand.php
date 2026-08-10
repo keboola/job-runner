@@ -10,7 +10,6 @@ use App\Helper\OutputResultConverter;
 use App\JobDefinitionFactory;
 use App\LogInfo;
 use App\StorageApiHandler;
-use App\UsageFile;
 use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\DockerBundle\Docker\OutputFilter\OutputFilter;
 use Keboola\DockerBundle\Docker\Runner;
@@ -270,10 +269,6 @@ class RunCommand extends Command implements SignalableCommandInterface
                 $this->instanceLimits,
                 $this->imageFactory,
             );
-            $usageFile = new UsageFile();
-            $usageFile->setQueueClient($this->queueClient);
-            $usageFile->setFormat($component->getConfigurationFormat());
-            $usageFile->setJobId($job->getId());
 
             // run job
             $this->runner->run(
@@ -281,7 +276,6 @@ class RunCommand extends Command implements SignalableCommandInterface
                 'run',
                 $job->isInRunMode() ? JobInterface::MODE_RUN : JobInterface::MODE_DEBUG,
                 $job->getId(),
-                $usageFile,
                 $job->getConfigRowIds(),
                 $outputs,
                 $job->getBackend()->getContainerType(),
