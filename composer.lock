@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c65c5beec94d73f95e4e96d535e3a8a9",
+    "content-hash": "b8dfc4faaccad1c61f133b1e74014ba0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1673,11 +1673,11 @@
         },
         {
             "name": "keboola/dockerbundle",
-            "version": "dev-main",
+            "version": "dev-ondra/AJDA-1938",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/docker-bundle",
-                "reference": "21f79a94c9ef3b9d30630f0bf186fafc1c8fad78"
+                "reference": "1a1af390d0ed9d9179fca27e38c88b8206d17d34"
             },
             "require": {
                 "ext-json": "*",
@@ -1686,10 +1686,10 @@
                 "keboola/gelf-server": "^4.0",
                 "keboola/input-mapping": "^23.0",
                 "keboola/job-queue-artifacts": "^4.0",
-                "keboola/job-queue-job-configuration": "^3.5.1",
+                "keboola/job-queue-job-configuration": "dev-ondra/AJDA-1938",
                 "keboola/oauth-v2-php-client": "^5.0",
                 "keboola/object-encryptor": "^2.2",
-                "keboola/output-mapping": "^27.0",
+                "keboola/output-mapping": "dev-ondra/AJDA-1938 as 27.10.99",
                 "keboola/php-temp": "^2.0",
                 "keboola/php-utils": "^5.0",
                 "keboola/staging-provider": "^12.2.1",
@@ -1712,7 +1712,6 @@
                 "sempro/phpunit-pretty-print": "^1.4",
                 "symfony/dotenv": "^6.4|^7.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "aws/aws-sdk-php": [
@@ -1769,7 +1768,7 @@
                 }
             ],
             "description": "Component for running Docker images in KBC",
-            "time": "2026-08-18T09:27:59+00:00"
+            "time": "2026-09-25T06:59:46+00:00"
         },
         {
             "name": "keboola/gelf-server",
@@ -2045,16 +2044,16 @@
         },
         {
             "name": "keboola/job-queue-job-configuration",
-            "version": "3.7.0",
+            "version": "dev-ondra/AJDA-1938",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/job-queue-job-configuration.git",
-                "reference": "c14cdc8ab5e831f9ccd100669e22502a27c7194a"
+                "reference": "0dafc080ac8c0f53a36934d89ef6a41de321b814"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/c14cdc8ab5e831f9ccd100669e22502a27c7194a",
-                "reference": "c14cdc8ab5e831f9ccd100669e22502a27c7194a",
+                "url": "https://api.github.com/repos/keboola/job-queue-job-configuration/zipball/0dafc080ac8c0f53a36934d89ef6a41de321b814",
+                "reference": "0dafc080ac8c0f53a36934d89ef6a41de321b814",
                 "shasum": ""
             },
             "require": {
@@ -2062,7 +2061,7 @@
                 "ext-zip": "*",
                 "keboola/common-exceptions": "^1.2",
                 "keboola/input-mapping": "^23.2",
-                "keboola/output-mapping": "^27.9",
+                "keboola/output-mapping": "dev-ondra/AJDA-1938",
                 "keboola/staging-provider": "^12.3",
                 "keboola/storage-api-client": "^18.2.5",
                 "php": "^8.2",
@@ -2090,9 +2089,9 @@
             ],
             "support": {
                 "issues": "https://github.com/keboola/job-queue-job-configuration/issues",
-                "source": "https://github.com/keboola/job-queue-job-configuration/tree/3.7.0"
+                "source": "https://github.com/keboola/job-queue-job-configuration/tree/ondra/AJDA-1938"
             },
-            "time": "2026-07-24T11:41:25+00:00"
+            "time": "2026-09-24T12:42:24+00:00"
         },
         {
             "name": "keboola/kbc-manage-api-php-client",
@@ -2304,16 +2303,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.10.1",
+            "version": "dev-ondra/AJDA-1938",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "bbbd03aa5dcb26be52e971fa34137d8fb2a183a5"
+                "reference": "24ded6964738325f61e893529dea63600475c9e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/bbbd03aa5dcb26be52e971fa34137d8fb2a183a5",
-                "reference": "bbbd03aa5dcb26be52e971fa34137d8fb2a183a5",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/24ded6964738325f61e893529dea63600475c9e5",
+                "reference": "24ded6964738325f61e893529dea63600475c9e5",
                 "shasum": ""
             },
             "require": {
@@ -2372,9 +2371,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.10.1"
+                "source": "https://github.com/keboola/output-mapping/tree/ondra/AJDA-1938"
             },
-            "time": "2026-08-27T20:04:17+00:00"
+            "time": "2026-09-25T06:30:09+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -11838,10 +11837,25 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "keboola/job-queue-job-configuration",
+            "version": "dev-ondra/AJDA-1938",
+            "alias": "3.99.0",
+            "alias_normalized": "3.99.0.0"
+        },
+        {
+            "package": "keboola/output-mapping",
+            "version": "dev-ondra/AJDA-1938",
+            "alias": "27.10.99",
+            "alias_normalized": "27.10.99.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "keboola/dockerbundle": 20
+        "keboola/dockerbundle": 20,
+        "keboola/job-queue-job-configuration": 20,
+        "keboola/output-mapping": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
