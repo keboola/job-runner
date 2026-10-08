@@ -401,12 +401,13 @@ class JobDefinitionFactoryFunctionalTest extends KernelTestCase
     private function setupConfigurationWithRows(StorageConfiguration $configuration, array $rows): void
     {
         $componentsApiClient = new Components($this->clientWrapper->getBranchClient());
+        $componentId = $configuration->getComponentId();
+        $configurationId = $configuration->getConfigurationId();
+        self::assertIsString($componentId);
+        self::assertIsString($configurationId);
 
         try {
-            $componentsApiClient->deleteConfiguration(
-                $configuration->getComponentId(),
-                $configuration->getConfigurationId(),
-            );
+            $componentsApiClient->deleteConfiguration($componentId, $configurationId);
         } catch (ClientException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
