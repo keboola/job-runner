@@ -9,6 +9,7 @@ use App\JobDefinitionFactory;
 use App\JobDefinitionParser;
 use Generator;
 use Keboola\Csv\CsvFile;
+use Keboola\DockerBundle\Docker\GitHubApp\GitHubAppTokenClient;
 use Keboola\DockerBundle\Docker\Image\ReplicatedRegistry;
 use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -1174,6 +1175,7 @@ class RunCommandTest extends AbstractCommandTest
             '123',
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             [],
+            new GitHubAppTokenClient('http://oauth-service-api.default.svc.cluster.local', 'application-token'),
         ));
 
         $command = $application->find('app:run');

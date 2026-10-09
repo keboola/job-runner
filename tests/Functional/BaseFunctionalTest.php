@@ -11,6 +11,7 @@ use App\Tests\EncryptorOptionsTrait;
 use App\Tests\TestEnvVarsTrait;
 use Exception;
 use Keboola\Csv\CsvFile;
+use Keboola\DockerBundle\Docker\GitHubApp\GitHubAppTokenClient;
 use Keboola\DockerBundle\Docker\Image\ReplicatedRegistry;
 use Keboola\DockerBundle\Docker\ImageFactory;
 use Keboola\ErrorControl\Monolog\LogProcessor;
@@ -212,6 +213,7 @@ abstract class BaseFunctionalTest extends TestCase
             $job->getId(),
             (string) getenv('TEST_STORAGE_API_TOKEN'),
             ['cpu_count' => 1],
+            new GitHubAppTokenClient('http://oauth-service-api.default.svc.cluster.local', 'application-token'),
         );
     }
 

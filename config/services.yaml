@@ -23,6 +23,9 @@ parameters:
     'env(REPLICATED_REGISTRY_URL)': ''
     'env(REPLICATED_REGISTRY_USERNAME)': ''
     'env(REPLICATED_REGISTRY_PASSWORD)': ''
+    'env(APPLICATION_TOKEN)': ''
+    # oauth-service is called through internal DNS, which does not use the suffix
+    'env(HOSTNAME_SUFFIX)': ''
 
 services:
     # default configuration for services in *this* file
@@ -101,3 +104,14 @@ services:
         $baseUrl: '%env(VAULT_API_URL)%'
         $token: '%env(STORAGE_API_TOKEN)%'
         $userAgent: 'QueueRunner'
+
+    Keboola\ServiceClient\ServiceClient:
+        $hostnameSuffix: '%env(HOSTNAME_SUFFIX)%'
+
+    # Authenticates with APPLICATION_TOKEN when set (development), otherwise with the projected
+    # Connection ServiceAccount token mounted into the job-runner container.
+    App\GitHubAppTokenClientFactory:
+        $applicationToken: '%env(APPLICATION_TOKEN)%'
+
+    Keboola\DockerBundle\Docker\GitHubApp\GitHubAppTokenClient:
+        factory: ['@App\GitHubAppTokenClientFactory', 'create']

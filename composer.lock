@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c65c5beec94d73f95e4e96d535e3a8a9",
+    "content-hash": "201640fa3dc5b6531558529c7f514e00",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2863,16 +2863,16 @@
         },
         {
             "name": "keboola/service-client",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/service-client.git",
-                "reference": "ffef20e14ecc3e9a63fd9085108fcbd89a82e4b5"
+                "reference": "43c4d529b164daf9b008fe4a396847eeb456ae42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/service-client/zipball/ffef20e14ecc3e9a63fd9085108fcbd89a82e4b5",
-                "reference": "ffef20e14ecc3e9a63fd9085108fcbd89a82e4b5",
+                "url": "https://api.github.com/repos/keboola/service-client/zipball/43c4d529b164daf9b008fe4a396847eeb456ae42",
+                "reference": "43c4d529b164daf9b008fe4a396847eeb456ae42",
                 "shasum": ""
             },
             "require": {
@@ -2905,9 +2905,9 @@
             "description": "Service Client provides easy way to get Keboola services URLs",
             "support": {
                 "issues": "https://github.com/keboola/service-client/issues",
-                "source": "https://github.com/keboola/service-client/tree/1.6.1"
+                "source": "https://github.com/keboola/service-client/tree/1.6.2"
             },
-            "time": "2026-05-11T12:33:57+00:00"
+            "time": "2026-08-12T13:54:19+00:00"
         },
         {
             "name": "keboola/slicer",
