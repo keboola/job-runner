@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c96183ee9d0d5bb8a27ef03dac52bde0",
+    "content-hash": "2e7707eefc91db51f2c48eddf437e479",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8944,6 +8944,65 @@
                 "source": "https://github.com/keboola/phpcs-standard/tree/16.1.0"
             },
             "time": "2026-01-23T08:17:00+00:00"
+        },
+        {
+            "name": "keboola/settle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/settle.git",
+                "reference": "d2d85ff1727de65bc0735e562e824e0e3fba15fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/settle/zipball/d2d85ff1727de65bc0735e562e824e0e3fba15fb",
+                "reference": "d2d85ff1727de65bc0735e562e824e0e3fba15fb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "keboola/common-exceptions": "^1.1",
+                "php": "^8.2",
+                "psr/log": "^1.1|^2.0|^3.0",
+                "symfony/config": "^5.2|^6.2|^7.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.34",
+                "keboola/coding-standard": "^16.0",
+                "monolog/monolog": "^2.1",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-symfony": "^2.0",
+                "phpunit/phpunit": "^10.5",
+                "symfony/dotenv": "^6.2|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Settle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Settle provides a function to wait for something to happen.",
+            "keywords": [
+                "keboola",
+                "settle",
+                "wait"
+            ],
+            "support": {
+                "issues": "https://github.com/keboola/settle/issues",
+                "source": "https://github.com/keboola/settle/tree/1.1.0"
+            },
+            "time": "2026-07-01T08:56:46+00:00"
         },
         {
             "name": "masterminds/html5",
