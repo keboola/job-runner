@@ -167,6 +167,11 @@ class RunCommandTest extends AbstractCommandTest
 
         $events = $this->storageClient->listEvents(['runId' => $job->getId()]);
         $messages = array_column($events, 'message');
+        // TEMP debug: dump storage events for CI investigation, revert before merge
+        fwrite(STDERR, "\n>>>EVENTS runId=" . $job->getId() . ': ' . json_encode(array_map(
+            fn($e) => [$e['event'] ?? null, $e['message'] ?? null, $e['component'] ?? null, $e['created'] ?? null],
+            $events,
+        )) . "\n");
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from runner
@@ -388,6 +393,11 @@ class RunCommandTest extends AbstractCommandTest
 
         $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
         $messages = array_column($events, 'message');
+        // TEMP debug: dump storage events for CI investigation, revert before merge
+        fwrite(STDERR, "\n>>>EVENTS runId=" . $job->getRunId() . ': ' . json_encode(array_map(
+            fn($e) => [$e['event'] ?? null, $e['message'] ?? null, $e['component'] ?? null, $e['created'] ?? null],
+            $events,
+        )) . "\n");
         // event from storage
         self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
         // event from storage
