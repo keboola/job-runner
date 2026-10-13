@@ -20,6 +20,7 @@ use Keboola\JobQueueInternalClient\JobFactory\JobObjectEncryptor;
 use Keboola\JobQueueInternalClient\JobPatchData;
 use Keboola\OutputMapping\OutputMappingSettings;
 use Keboola\PermissionChecker\BranchType;
+use Keboola\Settle\SettleFactory;
 use Keboola\StorageApi\Client as StorageClient;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
@@ -35,6 +36,7 @@ use Keboola\StorageApiBranch\StorageApiToken;
 use Keboola\VaultApiClient\Variables\VariablesApiClient;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Psr\Log\NullLogger;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -165,12 +167,12 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $events = $this->storageClient->listEvents(['runId' => $job->getId()]);
-        $messages = array_column($events, 'message');
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
-        // event from runner
-        self::assertContains('Running component keboola.runner-config-test (row 1 of 1)', $messages);
+        $this->assertEventMessagesSettle($job->getId(), [
+            // event from storage
+            'Downloaded file in.c-main.someTable.csv.gz',
+            // event from runner
+            'Running component keboola.runner-config-test (row 1 of 1)',
+        ]);
 
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
@@ -386,18 +388,16 @@ class RunCommandTest extends AbstractCommandTest
         self::assertTrue($testHandler->hasInfoThatContains('Job "' . $job->getId() . '" execution finished.'));
         self::assertEquals(0, $ret);
 
-        $events = $this->storageClient->listEvents(['runId' => $job->getRunId()]);
-        $messages = array_column($events, 'message');
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTable.csv.gz', $messages);
-        // event from storage
-        self::assertContains('Downloaded file in.c-main.someTableNumeric.csv.gz', $messages);
-        // event from runner
-        self::assertContains('Running component keboola.python-transformation (row 1 of 1)', $messages);
-        // event from storage
-        self::assertContains('Imported table out.c-main.modified', $messages);
-        // event from storage
-        self::assertContains('Imported table out.c-main.numericModified', $messages);
+        $this->assertEventMessagesSettle($job->getRunId(), [
+            // events from storage
+            'Downloaded file in.c-main.someTable.csv.gz',
+            'Downloaded file in.c-main.someTableNumeric.csv.gz',
+            // event from runner
+            'Running component keboola.python-transformation (row 1 of 1)',
+            // events from storage
+            'Imported table out.c-main.modified',
+            'Imported table out.c-main.numericModified',
+        ]);
 
         /** @var Job $finishedJob */
         $finishedJob = $client->getJob($job->getId());
@@ -1469,5 +1469,24 @@ class RunCommandTest extends AbstractCommandTest
         /** @var array $preview */
         $preview = $this->storageClient->getTableDataPreview($tableId, ['format' => 'json']);
         self::assertSame($expectedRows, $preview['rows']);
+    }
+
+    /**
+     * Storage events become visible with a delay (observed over a minute), so wait until all expected messages
+     * are listed.
+     *
+     * @param list<string> $expectedMessages
+     */
+    private function assertEventMessagesSettle(string $runId, array $expectedMessages): void
+    {
+        $settle = (new SettleFactory(new NullLogger()))->createSettle(maxAttempts: 30, maxAttemptsDelay: 10);
+        $messages = $settle->settle(
+            comparator: fn(array $messages) => array_diff($expectedMessages, $messages) === [],
+            getCurrentValue: fn() => array_column($this->storageClient->listEvents(['runId' => $runId]), 'message'),
+        );
+
+        foreach ($expectedMessages as $expectedMessage) {
+            self::assertContains($expectedMessage, $messages);
+        }
     }
 }

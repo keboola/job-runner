@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c65c5beec94d73f95e4e96d535e3a8a9",
+    "content-hash": "2e7707eefc91db51f2c48eddf437e479",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2304,16 +2304,16 @@
         },
         {
             "name": "keboola/output-mapping",
-            "version": "27.10.1",
+            "version": "27.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/output-mapping.git",
-                "reference": "bbbd03aa5dcb26be52e971fa34137d8fb2a183a5"
+                "reference": "bea5146f04c73896d217b3cfa938698096ff5b76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/bbbd03aa5dcb26be52e971fa34137d8fb2a183a5",
-                "reference": "bbbd03aa5dcb26be52e971fa34137d8fb2a183a5",
+                "url": "https://api.github.com/repos/keboola/output-mapping/zipball/bea5146f04c73896d217b3cfa938698096ff5b76",
+                "reference": "bea5146f04c73896d217b3cfa938698096ff5b76",
                 "shasum": ""
             },
             "require": {
@@ -2325,7 +2325,7 @@
                 "keboola/php-storage-names-sanitizer": "*@dev",
                 "keboola/slicer": "*@dev",
                 "keboola/staging-provider": "*@dev",
-                "keboola/storage-api-client": "^18.9",
+                "keboola/storage-api-client": "^18.14",
                 "keboola/storage-api-php-client-branch-wrapper": "^7.0",
                 "microsoft/azure-storage-blob": "^1.5",
                 "php": ">=8.2",
@@ -2372,9 +2372,9 @@
             ],
             "description": "Shared component for processing SAPI output mapping and importing data to KBC",
             "support": {
-                "source": "https://github.com/keboola/output-mapping/tree/27.10.1"
+                "source": "https://github.com/keboola/output-mapping/tree/27.11.0"
             },
-            "time": "2026-08-27T20:04:17+00:00"
+            "time": "2026-10-08T07:37:56+00:00"
         },
         {
             "name": "keboola/permission-checker",
@@ -3021,16 +3021,16 @@
         },
         {
             "name": "keboola/storage-api-client",
-            "version": "v18.11.0",
+            "version": "v18.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/storage-api-php-client.git",
-                "reference": "ec7e67eeb0ad78bcf7ad56b3d54bf53aafeb33ab"
+                "reference": "e887861c261dea2109b102b711203031edaf6833"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/ec7e67eeb0ad78bcf7ad56b3d54bf53aafeb33ab",
-                "reference": "ec7e67eeb0ad78bcf7ad56b3d54bf53aafeb33ab",
+                "url": "https://api.github.com/repos/keboola/storage-api-php-client/zipball/e887861c261dea2109b102b711203031edaf6833",
+                "reference": "e887861c261dea2109b102b711203031edaf6833",
                 "shasum": ""
             },
             "require": {
@@ -3067,9 +3067,9 @@
             "homepage": "http://keboola.com",
             "support": {
                 "issues": "https://github.com/keboola/storage-api-php-client/issues",
-                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.11.0"
+                "source": "https://github.com/keboola/storage-api-php-client/tree/v18.14.0"
             },
-            "time": "2026-08-14T08:28:53+00:00"
+            "time": "2026-10-01T14:53:17+00:00"
         },
         {
             "name": "keboola/storage-api-php-client-branch-wrapper",
@@ -8944,6 +8944,65 @@
                 "source": "https://github.com/keboola/phpcs-standard/tree/16.1.0"
             },
             "time": "2026-01-23T08:17:00+00:00"
+        },
+        {
+            "name": "keboola/settle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/settle.git",
+                "reference": "d2d85ff1727de65bc0735e562e824e0e3fba15fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/settle/zipball/d2d85ff1727de65bc0735e562e824e0e3fba15fb",
+                "reference": "d2d85ff1727de65bc0735e562e824e0e3fba15fb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "keboola/common-exceptions": "^1.1",
+                "php": "^8.2",
+                "psr/log": "^1.1|^2.0|^3.0",
+                "symfony/config": "^5.2|^6.2|^7.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.34",
+                "keboola/coding-standard": "^16.0",
+                "monolog/monolog": "^2.1",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-symfony": "^2.0",
+                "phpunit/phpunit": "^10.5",
+                "symfony/dotenv": "^6.2|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Settle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Settle provides a function to wait for something to happen.",
+            "keywords": [
+                "keboola",
+                "settle",
+                "wait"
+            ],
+            "support": {
+                "issues": "https://github.com/keboola/settle/issues",
+                "source": "https://github.com/keboola/settle/tree/1.1.0"
+            },
+            "time": "2026-07-01T08:56:46+00:00"
         },
         {
             "name": "masterminds/html5",
