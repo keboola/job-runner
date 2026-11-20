@@ -89,6 +89,165 @@ class JobDefinitionParserTest extends TestCase
                             'column_metadata' => [],
                             'distribution_key' => [],
                             'write_always' => false,
+                            'import_method' => 'auto',
+                            'tags' => [],
+                            'schema' => [],
+                        ],
+                    ],
+                    'files' => [],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    0 => 'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    1 => 'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+            'processors' => [],
+            'shared_code_row_ids' => [],
+        ];
+
+        $parser = new JobDefinitionParser();
+        $jobDefinition = $parser->parseConfigData(
+            $this->getComponent(),
+            $configData,
+            null,
+            'default',
+        );
+
+        self::assertEquals('keboola.r-transformation', $jobDefinition->getComponentId());
+        self::assertEquals($expected, $jobDefinition->getConfiguration());
+        self::assertNull($jobDefinition->getConfigId());
+        self::assertNull($jobDefinition->getConfigVersion());
+        self::assertNull($jobDefinition->getRowId());
+        self::assertFalse($jobDefinition->isDisabled());
+        self::assertEmpty($jobDefinition->getState());
+        self::assertSame('default', $jobDefinition->getBranchType());
+    }
+
+    public function testSimpleConfigDataWithTableLayout(): void
+    {
+        $configData = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                        ],
+                    ],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                            'time_partitioning' => [
+                                'type' => 'DAY',
+                                'field' => 'created_at',
+                                'expiration_ms' => '86400000',
+                            ],
+                            'clustering' => [
+                                'fields' => ['id'],
+                            ],
+                        ],
+                        [
+                            'source' => 'ranged.csv',
+                            'destination' => 'out.c-docker-test.ranged',
+                            'range_partitioning' => [
+                                'field' => 'id',
+                                'range' => [
+                                    'start' => '0',
+                                    'end' => '100',
+                                    'interval' => '10',
+                                ],
+                            ],
+                            'clustering' => [
+                                'fields' => ['id', 'name'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'parameters' => [
+                'script' => [
+                    'data <- read.csv(file = "/data/in/tables/transpose.csv");',
+                    'tdata <- t(data[, !(names(data) %in% ("name"))])',
+                ],
+            ],
+        ];
+
+        $expected = [
+            'storage' => [
+                'input' => [
+                    'tables' => [
+                        [
+                            'source' => 'in.c-docker-test.source',
+                            'destination' => 'transpose.csv',
+                            'columns' => [],
+                            'where_values' => [],
+                            'where_operator' => 'eq',
+                            'column_types' => [],
+                            'overwrite' => false,
+                            'keep_internal_timestamp_column' => true,
+                        ],
+                    ],
+                    'files' => [],
+                ],
+                'output' => [
+                    'tables' => [
+                        [
+                            'source' => 'transpose.csv',
+                            'destination' => 'out.c-docker-test.transposed',
+                            'time_partitioning' => [
+                                'type' => 'DAY',
+                                'field' => 'created_at',
+                                'expiration_ms' => '86400000',
+                            ],
+                            'clustering' => [
+                                'fields' => ['id'],
+                            ],
+                            'incremental' => false,
+                            'primary_key' => [],
+                            'columns' => [],
+                            'delete_where_values' => [],
+                            'delete_where_operator' => 'eq',
+                            'delimiter' => ',',
+                            'enclosure' => '"',
+                            'metadata' => [],
+                            'column_metadata' => [],
+                            'distribution_key' => [],
+                            'write_always' => false,
+                            'import_method' => 'auto',
+                            'tags' => [],
+                            'schema' => [],
+                        ],
+                        [
+                            'source' => 'ranged.csv',
+                            'destination' => 'out.c-docker-test.ranged',
+                            'range_partitioning' => [
+                                'field' => 'id',
+                                'range' => [
+                                    'start' => '0',
+                                    'end' => '100',
+                                    'interval' => '10',
+                                ],
+                            ],
+                            'clustering' => [
+                                'fields' => ['id', 'name'],
+                            ],
+                            'incremental' => false,
+                            'primary_key' => [],
+                            'columns' => [],
+                            'delete_where_values' => [],
+                            'delete_where_operator' => 'eq',
+                            'delimiter' => ',',
+                            'enclosure' => '"',
+                            'metadata' => [],
+                            'column_metadata' => [],
+                            'distribution_key' => [],
+                            'write_always' => false,
+                            'import_method' => 'auto',
                             'tags' => [],
                             'schema' => [],
                         ],
@@ -194,6 +353,7 @@ class JobDefinitionParserTest extends TestCase
                                     'column_metadata' => [],
                                     'distribution_key' => [],
                                     'write_always' => false,
+                                    'import_method' => 'auto',
                                     'tags' => [],
                                     'schema' => [],
                                 ],
@@ -420,6 +580,7 @@ class JobDefinitionParserTest extends TestCase
                             'column_metadata' => [],
                             'distribution_key' => [],
                             'write_always' => false,
+                            'import_method' => 'auto',
                             'tags' => [],
                             'schema' => [],
                         ],
