@@ -222,6 +222,7 @@ class RunCommand extends Command implements SignalableCommandInterface
                     $span->meta['job.projectId'] = $job->getProjectId();
                     $span->meta['job.branchId'] = $job->getBranchId();
                     $span->meta['job.componentId'] = $job->getComponentId();
+                    $span->meta['job.componentVersion'] = $job->getTag();
                     $span->meta['job.configId'] = $job->getConfigId();
                 }
             }
